@@ -33,8 +33,8 @@ public class CartaoService {
         Cartao cartao = new Cartao();
         
         cartao.setNumero(cartaoDTO.getNumero());
-        cartao.setTipo(cartaoDTO.getTipo());
-        cartao.setBandeira(cartaoDTO.getBandeira());
+        cartao.setValidade(cartaoDTO.getValidade());
+        cartao.setCvv(cartaoDTO.getCvv());
         cartaoRepository.save(cartao);
         return convertToDTO(cartao);
     }

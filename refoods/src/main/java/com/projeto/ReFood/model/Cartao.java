@@ -14,7 +14,9 @@ public class Cartao {
     @Column(nullable = false)
     private String numero;
     @Column(nullable = false)
-    private EnumTipoCartao tipo; //('Crédito', 'Débito')
+    private String validade;
+    @Column(nullable = false)
+    private String cvv;
     @Column(nullable = false)
     private String bandeira;
     
