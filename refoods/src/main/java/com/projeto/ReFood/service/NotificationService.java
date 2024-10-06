@@ -4,7 +4,7 @@ import com.projeto.ReFood.repository.NotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.projeto.ReFood.dto.NotificationDTO;
-import com.projeto.ReFood.model.Notificacao;
+import com.projeto.ReFood.model.Notification;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,47 +24,47 @@ public class NotificationService {
                 .collect(Collectors.toList());
     }
     
-    public NotificationDTO getNotificacaoById(int idNotificacao) {
-        Optional<Notificacao> notificacao = notificationRepository.findById(idNotificacao);
-        return notificacao.map(this::convertToDTO).orElse(null);
+    public NotificationDTO getNotificationById(int idNotification) {
+        Optional<Notification> notification = notificationRepository.findById(idNotification);
+        return notification.map(this::convertToDTO).orElse(null);
     }
     
-    public NotificationDTO createNotificacao(NotificationDTO notificationDTO) {
-        Notificacao notificacao = new Notificacao();
+    public NotificationDTO createNotification(NotificationDTO notificationDTO) {
+        Notification notification = new Notification();
         
-        notificacao.setMensagem(notificationDTO.getMensagem());
-        notificacao.setDataEnvio(notificationDTO.getDataEnvio());
-        notificationRepository.save(notificacao);
-        return convertToDTO(notificacao);
+        notification.setMsg_notification(notificationDTO.getMsg_notification());
+        notification.setSend_date(notificationDTO.getSend_date());
+        notificationRepository.save(notification);
+        return convertToDTO(notification);
     }
     
-    public NotificationDTO updateNotificacao(int idNotificacao, NotificationDTO notificationDTO) {
-        Optional<Notificacao> notificacaoOptional = notificationRepository.findById(idNotificacao);
+    public NotificationDTO updateNotification(int idNotification, NotificationDTO notificationDTO) {
+        Optional<Notification> notificationOptional = notificationRepository.findById(idNotification);
         
-        if (notificacaoOptional.isPresent()) {
-            Notificacao notificacao = notificacaoOptional.get();
+        if (notificationOptional.isPresent()) {
+            Notification notification = notificationOptional.get();
             
-            notificacao.setMensagem(notificationDTO.getMensagem());
-            notificacao.setDataEnvio(notificationDTO.getDataEnvio());
+            notification.setMsg_notification(notificationDTO.getMsg_notification());
+            notification.setSend_date(notificationDTO.getSend_date());
             
-            notificationRepository.save(notificacao);
+            notificationRepository.save(notification);
             
-            return convertToDTO(notificacao);
+            return convertToDTO(notification);
         }
         
         return null;
     }
     
-    public void deleteNotificacao(int idNotificacao) {
-        notificationRepository.deleteById(idNotificacao);
+    public void deleteNotification(int idNotification) {
+        notificationRepository.deleteById(idNotification);
     }
     
-    private NotificationDTO convertToDTO(Notificacao notificacao) {
+    private NotificationDTO convertToDTO(Notification notification) {
         NotificationDTO notificationDTO = new NotificationDTO();
         
-        notificationDTO.setIdNotificacao(notificacao.getIdNotificacao());
-        notificationDTO.setMensagem(notificacao.getMensagem());
-        notificationDTO.setDataEnvio(notificacao.getDataEnvio());
+        notificationDTO.setId_notification(notification.getId_notification());
+        notificationDTO.setMsg_notification(notification.getMsg_notification());
+        notificationDTO.setSend_date(notification.getSend_date());
         
         return notificationDTO;
     }

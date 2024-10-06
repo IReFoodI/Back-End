@@ -17,7 +17,7 @@ public class Contact {
     private String phone;
     
     @ManyToOne
-    @JoinColumn(name = "id_restaurant", nullable = false)
+    @JoinColumn(name = "fk_id_restaurant", nullable = false)
     private Restaurant fkid_restaurant_contact;
 
 }

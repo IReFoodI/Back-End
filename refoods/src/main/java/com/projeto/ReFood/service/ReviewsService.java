@@ -1,7 +1,7 @@
 package com.projeto.ReFood.service;
 
 import com.projeto.ReFood.dto.ReviewsDTO;
-import com.projeto.ReFood.model.Avaliacao;
+import com.projeto.ReFood.model.Reviews;
 import com.projeto.ReFood.repository.ReviewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ public class ReviewsService {
     @Autowired
     private ReviewsRepository reviewsRepository;
     
-    public List<ReviewsDTO> getAllAvaliacoes(){
+    public List<ReviewsDTO> getAllReviews(){
         return reviewsRepository
                 .findAll()
                 .stream()
@@ -24,49 +24,49 @@ public class ReviewsService {
                 .collect(Collectors.toList());
     }
     
-    public ReviewsDTO getAvaliacaoById(int id_avaliacao){
-        Optional<Avaliacao> avaliacao = reviewsRepository.findById(id_avaliacao);
-        return avaliacao.map(this::convertToDTO).orElse(null);
+    public ReviewsDTO getReviewsById(int id_reviews){
+        Optional<Reviews> reviews = reviewsRepository.findById(id_reviews);
+        return reviews.map(this::convertToDTO).orElse(null);
     }
     
-    public ReviewsDTO createAvaliacao(ReviewsDTO reviewsDTO){
-        Avaliacao avaliacao = new Avaliacao();
+    public ReviewsDTO createReviews(ReviewsDTO reviewsDTO){
+      Reviews reviews = new Reviews();
         
-        avaliacao.setNota_avaliacao(reviewsDTO.getNota_avaliacao());
-        avaliacao.setData_avaliacao(reviewsDTO.getData_avaliacao());
-        avaliacao.setComentario_avaliacao(reviewsDTO.getComentario_avaliacao());
-        reviewsRepository.save(avaliacao);
-        return convertToDTO(avaliacao);
+        reviews.setRating_note(reviewsDTO.getRating_note());
+        reviews.setRating_date(reviewsDTO.getRating_date());
+        reviews.setRating_comment(reviewsDTO.getRating_comment());
+        reviewsRepository.save(reviews);
+        return convertToDTO(reviews);
     }
     
-    public ReviewsDTO updateAvaliacao(int id_avaliacao, ReviewsDTO reviewsDTO){
-        Optional<Avaliacao> avaliacaoOptional = reviewsRepository.findById(id_avaliacao);
+    public ReviewsDTO updateReviews(int id_reviews, ReviewsDTO reviewsDTO){
+        Optional<Reviews> reviewsOptional = reviewsRepository.findById(id_reviews);
         
-        if(avaliacaoOptional.isPresent()){
-            Avaliacao avaliacao = avaliacaoOptional.get();
+        if(reviewsOptional.isPresent()){
+          Reviews reviews = reviewsOptional.get();
 
-            avaliacao.setNota_avaliacao(reviewsDTO.getNota_avaliacao());
-            avaliacao.setData_avaliacao(reviewsDTO.getData_avaliacao());
-            avaliacao.setComentario_avaliacao(reviewsDTO.getComentario_avaliacao());
-            reviewsRepository.save(avaliacao);
+            reviews.setRating_note(reviewsDTO.getRating_note());
+            reviews.setRating_date(reviewsDTO.getRating_date());
+            reviews.setRating_comment(reviewsDTO.getRating_comment());
+            reviewsRepository.save(reviews);
             
-            return convertToDTO(avaliacao);
+            return convertToDTO(reviews);
         }
         
         return null;
     }
     
-    public void deleteAvaliacao(int id_avaliacao){
-        reviewsRepository.deleteById(id_avaliacao);
+    public void deleteReviews(int id_reviews){
+        reviewsRepository.deleteById(id_reviews);
     }
     
-    private ReviewsDTO convertToDTO(Avaliacao avaliacao){
+    private ReviewsDTO convertToDTO(Reviews reviews){
         ReviewsDTO reviewsDTO = new ReviewsDTO();
         
-        reviewsDTO.setId_avaliacoes(avaliacao.getId_avaliacoes());
-        reviewsDTO.setNota_avaliacao(avaliacao.getNota_avaliacao());
-        reviewsDTO.setData_avaliacao(avaliacao.getData_avaliacao());
-        reviewsDTO.setComentario_avaliacao(avaliacao.getComentario_avaliacao());
+        reviewsDTO.setId_reviews(reviews.getId_reviews());
+        reviewsDTO.setRating_note(reviews.getRating_note());
+        reviewsDTO.setRating_date(reviews.getRating_date());
+        reviewsDTO.setRating_comment(reviews.getRating_comment());
         
         return reviewsDTO;
     }

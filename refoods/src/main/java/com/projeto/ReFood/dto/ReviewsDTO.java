@@ -1,19 +1,19 @@
 package com.projeto.ReFood.dto;
 
-import com.projeto.ReFood.model.Restaurante;
-import com.projeto.ReFood.model.Usuario;
+import com.projeto.ReFood.model.Restaurant;
+import com.projeto.ReFood.model.User;
 import lombok.Data;
 import java.util.Date;
 
 @Data
 public class ReviewsDTO {
 
-    private int id_avaliacoes;
-    private int nota_avaliacao;
-    private Date data_avaliacao;
-    private String comentario_avaliacao;
+  private int id_reviews;
+  private int rating_note;
+  private Date rating_date;
+  private String rating_comment;
 
-    private Usuario fk_id_usuarios;
-    private Restaurante fk_id_restaurantes;
+  private User fkid_userReview;
+  private Restaurant fkid_restaurantReview;
 
 }

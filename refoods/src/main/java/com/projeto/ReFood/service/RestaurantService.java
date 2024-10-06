@@ -4,7 +4,7 @@ import com.projeto.ReFood.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.projeto.ReFood.dto.RestaurantDTO;
-import com.projeto.ReFood.model.Restaurante;
+import com.projeto.ReFood.model.Restaurant;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +16,7 @@ public class RestaurantService {
     @Autowired
     private RestaurantRepository restaurantRepository;
     
-    public List<RestaurantDTO> getAllRestaurantes() {
+    public List<RestaurantDTO> getAllRestaurants() {
         return restaurantRepository
                 .findAll()
                 .stream()
@@ -24,47 +24,47 @@ public class RestaurantService {
                 .collect(Collectors.toList());
     }
     
-    public RestaurantDTO getRestauranteById(int idRestaurante) {
-        Optional<Restaurante> restaurante = restaurantRepository.findById(idRestaurante);
-        return restaurante.map(this::convertToDTO).orElse(null);
+    public RestaurantDTO getRestaurantById(int idRestaurant) {
+        Optional<Restaurant> restaurant = restaurantRepository.findById(idRestaurant);
+        return restaurant.map(this::convertToDTO).orElse(null);
     }
     
-    public RestaurantDTO createRestaurante(RestaurantDTO restaurantDTO) {
-        Restaurante restaurante = new Restaurante();
+    public RestaurantDTO createRestaurant(RestaurantDTO restaurantDTO) {
+        Restaurant restaurant = new Restaurant();
         
-        restaurante.setNome(restaurantDTO.getNome());
-        restaurante.setEndereco(restaurantDTO.getEndereco());
-        restaurantRepository.save(restaurante);
-        return convertToDTO(restaurante);
+        restaurant.setFantasy(restaurantDTO.getFantasy());
+        restaurant.setEmail(restaurantDTO.getEmail());
+        restaurantRepository.save(restaurant);
+        return convertToDTO(restaurant);
     }
     
-    public RestaurantDTO updateRestaurante(int idRestaurante, RestaurantDTO restaurantDTO) {
-        Optional<Restaurante> restauranteOptional = restaurantRepository.findById(idRestaurante);
+    public RestaurantDTO updateRestaurant(int idRestaurant, RestaurantDTO restaurantDTO) {
+        Optional<Restaurant> restaurantOptional = restaurantRepository.findById(idRestaurant);
         
-        if (restauranteOptional.isPresent()) {
-            Restaurante restaurante = restauranteOptional.get();
+        if (restaurantOptional.isPresent()) {
+            Restaurant restaurant = restaurantOptional.get();
             
-            restaurante.setNome(restaurantDTO.getNome());
-            restaurante.setEndereco(restaurantDTO.getEndereco());
+            restaurant.setFantasy(restaurantDTO.getFantasy());
+            restaurant.setEmail(restaurantDTO.getEmail());
             
-            restaurantRepository.save(restaurante);
+            restaurantRepository.save(restaurant);
             
-            return convertToDTO(restaurante);
+            return convertToDTO(restaurant);
         }
         
         return null;
     }
     
-    public void deleteRestaurante(int idRestaurante) {
-        restaurantRepository.deleteById(idRestaurante);
+    public void deleteRestaurant(int idRestaurant) {
+        restaurantRepository.deleteById(idRestaurant);
     }
     
-    private RestaurantDTO convertToDTO(Restaurante restaurante) {
+    private RestaurantDTO convertToDTO(Restaurant restaurant) {
         RestaurantDTO restaurantDTO = new RestaurantDTO();
         
-        restaurantDTO.setIdRestaurante(restaurante.getIdRestaurante());
-        restaurantDTO.setNome(restaurante.getNome());
-        restaurantDTO.setEndereco(restaurante.getEndereco());
+        restaurantDTO.setId_restaurant(restaurant.getId_restaurant());
+        restaurantDTO.setFantasy(restaurant.getFantasy());
+        restaurantDTO.setEmail(restaurant.getEmail());
         
         return restaurantDTO;
     }

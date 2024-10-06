@@ -3,8 +3,6 @@ package com.projeto.ReFood.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.Date;
-
 @Entity
 @Data
 @Table(name="users_notifications")

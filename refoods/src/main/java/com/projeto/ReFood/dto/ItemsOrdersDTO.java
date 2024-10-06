@@ -1,18 +1,20 @@
 package com.projeto.ReFood.dto;
 
-import com.projeto.ReFood.model.Pedido;
-import com.projeto.ReFood.model.Produto;
+
+import com.projeto.ReFood.model.Order;
+import com.projeto.ReFood.model.Product;
+
 import lombok.Data;
 
 @Data
 public class ItemsOrdersDTO {
     
-    private int id_itens_pedido;
-    private int quantidade;
-    private float valor_unidade;
+    private int id_items_orders;
+    private int amount;
+    private float unit_value;
     private float subtotal;
     
-    private Pedido fk_id_pedidos;
-    private Produto fk_id_produtos;
+    private Order fkid_orderItemsOrders;
+    private Product fkid_product_itemsOders;
 
 }

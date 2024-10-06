@@ -4,7 +4,7 @@ import com.projeto.ReFood.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.projeto.ReFood.dto.ProductDTO;
-import com.projeto.ReFood.model.Produto;
+import com.projeto.ReFood.model.Product;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +16,7 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
     
-    public List<ProductDTO> getAllProdutos() {
+    public List<ProductDTO> getAllProducts() {
         return productRepository
                 .findAll()
                 .stream()
@@ -24,47 +24,47 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
     
-    public ProductDTO getProdutoById(int idProduto) {
-        Optional<Produto> produto = productRepository.findById(idProduto);
-        return produto.map(this::convertToDTO).orElse(null);
+    public ProductDTO getProductById(int idProduct) {
+        Optional<Product> product = productRepository.findById(idProduct);
+        return product.map(this::convertToDTO).orElse(null);
     }
     
-    public ProductDTO createProduto(ProductDTO productDTO) {
-        Produto produto = new Produto();
+    public ProductDTO createProduct(ProductDTO productDTO) {
+        Product product = new Product();
         
-        produto.setNome(productDTO.getNome());
-        produto.setPreco(productDTO.getPreco());
-        productRepository.save(produto);
-        return convertToDTO(produto);
+        product.setName_prod(productDTO.getName_prod());
+        product.setValue_prod(productDTO.getValue_prod());
+        productRepository.save(product);
+        return convertToDTO(product);
     }
     
-    public ProductDTO updateProduto(int idProduto, ProductDTO productDTO) {
-        Optional<Produto> produtoOptional = productRepository.findById(idProduto);
+    public ProductDTO updateProduct(int idProduct, ProductDTO productDTO) {
+        Optional<Product> productOptional = productRepository.findById(idProduct);
         
-        if (produtoOptional.isPresent()) {
-            Produto produto = produtoOptional.get();
+        if (productOptional.isPresent()) {
+            Product product = productOptional.get();
             
-            produto.setNome(productDTO.getNome());
-            produto.setPreco(productDTO.getPreco());
+            product.setName_prod(productDTO.getName_prod());
+            product.setValue_prod(productDTO.getValue_prod());
             
-            productRepository.save(produto);
+            productRepository.save(product);
             
-            return convertToDTO(produto);
+            return convertToDTO(product);
         }
         
         return null;
     }
     
-    public void deleteProduto(int idProduto) {
-        productRepository.deleteById(idProduto);
+    public void deleteProduct(int idProduct) {
+        productRepository.deleteById(idProduct);
     }
     
-    private ProductDTO convertToDTO(Produto produto) {
+    private ProductDTO convertToDTO(Product product) {
         ProductDTO productDTO = new ProductDTO();
         
-        productDTO.setIdProduto(produto.getIdProduto());
-        productDTO.setNome(produto.getNome());
-        productDTO.setPreco(produto.getPreco());
+        productDTO.setId_product(product.getId_product());
+        productDTO.setName_prod(product.getName_prod());
+        productDTO.setValue_prod(product.getValue_prod());
         
         return productDTO;
     }

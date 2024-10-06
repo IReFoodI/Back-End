@@ -4,7 +4,7 @@ import com.projeto.ReFood.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.projeto.ReFood.dto.OrderDTO;
-import com.projeto.ReFood.model.Pedido;
+import com.projeto.ReFood.model.Order;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +16,7 @@ public class OrderService {
     @Autowired
     private OrderRepository orderRepository;
     
-    public List<OrderDTO> getAllPedidos() {
+    public List<OrderDTO> getAllorders() {
         return orderRepository
                 .findAll()
                 .stream()
@@ -24,47 +24,47 @@ public class OrderService {
                 .collect(Collectors.toList());
     }
     
-    public OrderDTO getPedidoById(int idPedido) {
-        Optional<Pedido> pedido = orderRepository.findById(idPedido);
-        return pedido.map(this::convertToDTO).orElse(null);
+    public OrderDTO getorderById(int idOrder) {
+        Optional<Order> order = orderRepository.findById(idOrder);
+        return order.map(this::convertToDTO).orElse(null);
     }
     
-    public OrderDTO createPedido(OrderDTO orderDTO) {
-        Pedido pedido = new Pedido();
+    public OrderDTO createorder(OrderDTO orderDTO) {
+      Order order = new Order();
         
-        pedido.setValorTotal(orderDTO.getValorTotal());
-        pedido.setDataPedido(orderDTO.getDataPedido());
-        orderRepository.save(pedido);
-        return convertToDTO(pedido);
+        order.setTotal_value(orderDTO.getTotal_value());
+        order.setOrder_date(orderDTO.getOrder_date());
+        orderRepository.save(order);
+        return convertToDTO(order);
     }
     
-    public OrderDTO updatePedido(int idPedido, OrderDTO orderDTO) {
-        Optional<Pedido> pedidoOptional = orderRepository.findById(idPedido);
+    public OrderDTO updateorder(int idorder, OrderDTO orderDTO) {
+        Optional<Order> orderOptional = orderRepository.findById(idorder);
         
-        if (pedidoOptional.isPresent()) {
-            Pedido pedido = pedidoOptional.get();
+        if (orderOptional.isPresent()) {
+            Order order = orderOptional.get();
             
-            pedido.setValorTotal(orderDTO.getValorTotal());
-            pedido.setDataPedido(orderDTO.getDataPedido());
+            order.setTotal_value(orderDTO.getTotal_value());
+            order.setOrder_date(orderDTO.getOrder_date());
             
-            orderRepository.save(pedido);
+            orderRepository.save(order);
             
-            return convertToDTO(pedido);
+            return convertToDTO(order);
         }
         
         return null;
     }
     
-    public void deletePedido(int idPedido) {
-        orderRepository.deleteById(idPedido);
+    public void deleteorder(int idorder) {
+        orderRepository.deleteById(idorder);
     }
     
-    private OrderDTO convertToDTO(Pedido pedido) {
+    private OrderDTO convertToDTO(Order order) {
         OrderDTO orderDTO = new OrderDTO();
         
-        orderDTO.setIdPedido(pedido.getIdPedido());
-        orderDTO.setValorTotal(pedido.getValorTotal());
-        orderDTO.setDataPedido(pedido.getDataPedido());
+        orderDTO.setId_order(order.getId_order());
+        orderDTO.setTotal_value(order.getTotal_value());
+        orderDTO.setOrder_date(order.getOrder_date());
         
         return orderDTO;
     }

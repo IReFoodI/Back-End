@@ -1,15 +1,15 @@
 package com.projeto.ReFood.dto;
 
-import com.projeto.ReFood.model.Restaurante;
+import com.projeto.ReFood.model.Restaurant;
 import lombok.Data;
 
 @Data
 public class ContactDTO {
-    
-    private int id_contatos;
-    private String descricao;
-    private String numero;
-    
-    private Restaurante fk_id_restaurante;
+
+  private int id_contact;
+  private String description;
+  private String phone;
+
+  private Restaurant fkid_restaurant_contact;
 
 }

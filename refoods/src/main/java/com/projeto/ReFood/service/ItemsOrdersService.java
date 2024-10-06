@@ -32,8 +32,8 @@ public class ItemsOrdersService {
     public ItemsOrdersDTO createItensPedido(ItemsOrdersDTO itemsOrdersDTO) {
         ItemsOrders itemsOrders = new ItemsOrders();
         
-        itemsOrders.setQuantidade(itemsOrdersDTO.getQuantidade());
-        itemsOrders.setDescricao(itemsOrdersDTO.getDescricao());
+        itemsOrders.setAmount(itemsOrdersDTO.getAmount());
+        itemsOrders.setUnit_value(itemsOrdersDTO.getUnit_value());
         itemsOrdersRepository.save(itemsOrders);
         return convertToDTO(itemsOrders);
     }
@@ -44,8 +44,8 @@ public class ItemsOrdersService {
         if (itensPedidoOptional.isPresent()) {
             ItemsOrders itemsOrders = itensPedidoOptional.get();
             
-            itemsOrders.setQuantidade(itemsOrdersDTO.getQuantidade());
-            itemsOrders.setDescricao(itemsOrdersDTO.getDescricao());
+            itemsOrders.setAmount(itemsOrdersDTO.getAmount());
+            itemsOrders.setUnit_value(itemsOrdersDTO.getUnit_value());
             
             itemsOrdersRepository.save(itemsOrders);
             
@@ -62,9 +62,9 @@ public class ItemsOrdersService {
     private ItemsOrdersDTO convertToDTO(ItemsOrders itemsOrders) {
         ItemsOrdersDTO itemsOrdersDTO = new ItemsOrdersDTO();
         
-        itemsOrdersDTO.setIdItensPedido(itemsOrders.getIdItensPedido());
-        itemsOrdersDTO.setQuantidade(itemsOrders.getQuantidade());
-        itemsOrdersDTO.setDescricao(itemsOrders.getDescricao());
+        itemsOrdersDTO.setId_items_orders(itemsOrders.getId_items_orders());
+        itemsOrdersDTO.setAmount(itemsOrders.getAmount());
+        itemsOrdersDTO.setUnit_value(itemsOrders.getUnit_value());
         
         return itemsOrdersDTO;
     }

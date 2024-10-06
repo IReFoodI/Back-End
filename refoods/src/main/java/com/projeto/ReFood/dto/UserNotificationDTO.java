@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class UserNotificationDTO {
     
-    private int fkid_user;
-    private int fkid_notification;
+    private int fk_id_user;
+    private int fk_id_notification;
 }

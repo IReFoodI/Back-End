@@ -4,7 +4,7 @@ import com.projeto.ReFood.repository.ContactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.projeto.ReFood.dto.ContactDTO;
-import com.projeto.ReFood.model.Contato;
+import com.projeto.ReFood.model.Contact;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +16,7 @@ public class ContactService {
     @Autowired
     private ContactRepository contactRepository;
     
-    public List<ContactDTO> getAllContatos() {
+    public List<ContactDTO> getAllContacts() {
         return contactRepository
                 .findAll()
                 .stream()
@@ -24,50 +24,49 @@ public class ContactService {
                 .collect(Collectors.toList());
     }
     
-    public ContactDTO getContatoById(int idContato) {
-        Optional<Contato> contato = contactRepository.findById(idContato);
-        return contato.map(this::convertToDTO).orElse(null);
+    public ContactDTO getContactById(int idContact) {
+        Optional<Contact> contact = contactRepository.findById(idContact);
+        return contact.map(this::convertToDTO).orElse(null);
     }
     
-    public ContactDTO createContato(ContactDTO contactDTO) {
-        Contato contato = new Contato();
+    public ContactDTO createContact(ContactDTO contactDTO) {
+        Contact contact = new Contact();
         
-        contato.setLogin(contactDTO.getLogin());
-        contato.setEmail(contactDTO.getEmail());
-        contato.setFuncao(contactDTO.getFuncao());
-        contactRepository.save(contato);
-        return convertToDTO(contato);
+        contact.setId_contact(contactDTO.getId_contact());
+        contact.setDescription(contactDTO.getDescription());
+        contact.setPhone(contactDTO.getPhone());
+        contactRepository.save(contact);
+        return convertToDTO(contact);
     }
     
-    public ContactDTO updateContato(int id_contato, ContactDTO contactDTO) {
-        Optional<Contato> contatoOptional = contactRepository.findById(id_contato);
+    public ContactDTO updateContact(int id_contact, ContactDTO contactDTO) {
+        Optional<Contact> contactOptional = contactRepository.findById(id_contact);
         
-        if (contatoOptional.isPresent()) {
-            Contato contato = contatoOptional.get();
+        if (contactOptional.isPresent()) {
+            Contact contact = contactOptional.get();
             
-            contato.set(contactDTO.getLogin());
-            contato.setEmail(contactDTO.getEmail());
-            contato.setFuncao(contactDTO.getFuncao());
+            contact.setId_contact(contactDTO.getId_contact());
+            contact.setDescription(contactDTO.getDescription());
+            contact.setPhone(contactDTO.getPhone());
             
-            contactRepository.save(contato);
+            contactRepository.save(contact);
             
-            return convertToDTO(contato);
+            return convertToDTO(contact);
         }
         
         return null;
     }
     
-    public void deleteContato(int id_contato) {
-        contactRepository.deleteById(id_contato);
+    public void deleteContact(int id_contact) {
+        contactRepository.deleteById(id_contact);
     }
     
-    private ContactDTO convertToDTO(Contato contato) {
+    private ContactDTO convertToDTO(Contact contact) {
         ContactDTO contactDTO = new ContactDTO();
         
-        contactDTO.setIdContato(contato.getIdContato());
-        contactDTO.setLogin(contato.getLogin());
-        contactDTO.setEmail(contato.getEmail());
-        contactDTO.setFuncao(contato.getFuncao());
+        contactDTO.setId_contact(contact.getId_contact());
+        contactDTO.setDescription(contact.getDescription());
+        contactDTO.setPhone(contact.getPhone());
         
         return contactDTO;
     }

@@ -1,23 +1,24 @@
 package com.projeto.ReFood.dto;
 
-import com.projeto.ReFood.model.Restaurante;
-import com.projeto.ReFood.model.Usuario;
+import com.projeto.ReFood.model.Restaurant;
+import com.projeto.ReFood.model.User;
+
 import lombok.Data;
 
 @Data
 public class AddressDTO {
-    
-    private int id_endereco;
-    private String cep;
-    private String estado;
-    private String bairro;
-    private String rua;
-    private String numero;
-    private String complemento;
-    private String tipo;
-    private boolean is_padrao; //default = false
-    
-    private Usuario fk_id_usuario;
-    private Restaurante fk_id_restaurante;
+
+  private int id_address;
+  private String cep;
+  private String state;
+  private String district;
+  private String street;
+  private String number;
+  private String complement;
+  private String address_type;
+  private boolean standard; // default = false
+
+  private User fkid_user_address;
+  private Restaurant fkid_restaurant_address;
 
 }

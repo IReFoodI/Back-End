@@ -1,7 +1,7 @@
 package com.projeto.ReFood.service;
 
 import com.projeto.ReFood.dto.CardDTO;
-import com.projeto.ReFood.model.Cartao;
+import com.projeto.ReFood.model.Card;
 import com.projeto.ReFood.repository.CardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,49 +24,49 @@ public class CardService {
                 .collect(Collectors.toList());
     }
     
-    public CardDTO getCartaoById(int id_cartao){
-        Optional<Cartao> cartao = cardRepository.findById(id_cartao);
-        return cartao.map(this::convertToDTO).orElse(null);
+    public CardDTO getCardById(int id_card){
+        Optional<Card> card = cardRepository.findById(id_card);
+        return card.map(this::convertToDTO).orElse(null);
     }
     
-    public CardDTO createCartao(CardDTO cardDTO){
-        Cartao cartao = new Cartao();
+    public CardDTO createCard(CardDTO cardDTO){
+        Card card = new Card();
         
-        cartao.setNumero(cardDTO.getNumero());
-        cartao.setTipo(cardDTO.getTipo());
-        cartao.setBandeira(cardDTO.getBandeira());
-        cardRepository.save(cartao);
-        return convertToDTO(cartao);
+        card.setNumber(cardDTO.getNumber());
+        card.setValidity(cardDTO.getValidity());
+        card.setCvv(cardDTO.getCvv());
+        cardRepository.save(card);
+        return convertToDTO(card);
     }
     
-    public CardDTO updateCartao(int id_cartao, CardDTO cardDTO){
-        Optional<Cartao> cartaoOptional = cardRepository.findById(id_cartao);
+    public CardDTO updateCard(int id_card, CardDTO cardDTO){
+        Optional<Card> cardOptional = cardRepository.findById(id_card);
         
-        if(cartaoOptional.isPresent()){
-            Cartao cartao = cartaoOptional.get();
+        if(cardOptional.isPresent()){
+            Card card = cardOptional.get();
 
-            cartao.setNumero(cardDTO.getNumero());
-            cartao.setTipo(cardDTO.getTipo());
-            cartao.setBandeira(cardDTO.getBandeira());
-            cardRepository.save(cartao);
+            card.setNumber(cardDTO.getNumber());
+            card.setValidity(cardDTO.getValidity());
+            card.setCvv(cardDTO.getCvv());
+            cardRepository.save(card);
             
-            return convertToDTO(cartao);
+            return convertToDTO(card);
         }
         
         return null;
     }
     
-    public void deleteCartao(int id_cartao){
-        cardRepository.deleteById(id_cartao);
+    public void deleteCard(int id_card){
+        cardRepository.deleteById(id_card);
     }
     
-    private CardDTO convertToDTO(Cartao cartao){
+    private CardDTO convertToDTO(Card card){
         CardDTO cardDTO = new CardDTO();
         
-        cardDTO.setId_cartao(cartao.getId_cartao());
-        cardDTO.setNumero(cartao.getNumero());
-        cardDTO.setTipo(cartao.getTipo());
-        cardDTO.setBandeira(cartao.getBandeira());
+        cardDTO.setId_card(card.getId_card());
+        cardDTO.setNumber(card.getNumber());
+        cardDTO.setValidity(card.getValidity());
+        cardDTO.setCvv(card.getCvv());
         return cardDTO;
     }
 }

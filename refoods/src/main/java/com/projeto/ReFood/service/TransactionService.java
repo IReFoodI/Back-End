@@ -4,7 +4,7 @@ import com.projeto.ReFood.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.projeto.ReFood.dto.TransactionDTO;
-import com.projeto.ReFood.model.Transacao;
+import com.projeto.ReFood.model.Transaction;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,47 +24,47 @@ public class TransactionService {
                 .collect(Collectors.toList());
     }
     
-    public TransactionDTO getTransacaoById(int idTransacao) {
-        Optional<Transacao> transacao = transactionRepository.findById(idTransacao);
-        return transacao.map(this::convertToDTO).orElse(null);
+    public TransactionDTO getTransactionById(int idTransaction) {
+        Optional<Transaction> transaction = transactionRepository.findById(idTransaction);
+        return transaction.map(this::convertToDTO).orElse(null);
     }
     
-    public TransactionDTO createTransacao(TransactionDTO transactionDTO) {
-        Transacao transacao = new Transacao();
+    public TransactionDTO createTransaction(TransactionDTO transactionDTO) {
+        Transaction transaction = new Transaction();
         
-        transacao.setTipo(transactionDTO.getTipo());
-        transacao.setValor(transactionDTO.getValor());
-        transactionRepository.save(transacao);
-        return convertToDTO(transacao);
+        transaction.setTransaction_date(transactionDTO.getTransaction_date());
+        transaction.setTransaction_value(transactionDTO.getTransaction_value());
+        transactionRepository.save(transaction);
+        return convertToDTO(transaction);
     }
     
-    public TransactionDTO updateTransacao(int idTransacao, TransactionDTO transactionDTO) {
-        Optional<Transacao> transacaoOptional = transactionRepository.findById(idTransacao);
+    public TransactionDTO updateTransaction(int idTransaction, TransactionDTO transactionDTO) {
+        Optional<Transaction> transactionOptional = transactionRepository.findById(idTransaction);
         
-        if (transacaoOptional.isPresent()) {
-            Transacao transacao = transacaoOptional.get();
+        if (transactionOptional.isPresent()) {
+            Transaction transaction = transactionOptional.get();
             
-            transacao.setTipo(transactionDTO.getTipo());
-            transacao.setValor(transactionDTO.getValor());
+            transaction.setTransaction_date(transactionDTO.getTransaction_date());
+            transaction.setTransaction_value(transactionDTO.getTransaction_value());
             
-            transactionRepository.save(transacao);
+            transactionRepository.save(transaction);
             
-            return convertToDTO(transacao);
+            return convertToDTO(transaction);
         }
         
         return null;
     }
     
-    public void deleteTransacao(int idTransacao) {
-        transactionRepository.deleteById(idTransacao);
+    public void deleteTransaction(int idTransaction) {
+        transactionRepository.deleteById(idTransaction);
     }
     
-    private TransactionDTO convertToDTO(Transacao transacao) {
+    private TransactionDTO convertToDTO(Transaction transaction) {
         TransactionDTO transactionDTO = new TransactionDTO();
         
-        transactionDTO.setIdTransacao(transacao.getIdTransacao());
-        transactionDTO.setTipo(transacao.getTipo());
-        transactionDTO.setValor(transacao.getValor());
+        transactionDTO.setId_transaction(transaction.getId_transaction());
+        transactionDTO.setTransaction_date(transaction.getTransaction_date());
+        transactionDTO.setTransaction_value(transaction.getTransaction_value());
         
         return transactionDTO;
     }

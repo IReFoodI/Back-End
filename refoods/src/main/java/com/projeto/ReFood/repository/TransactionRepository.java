@@ -1,6 +1,7 @@
 package com.projeto.ReFood.repository;
 
-import com.projeto.ReFood.model.Transacao;
+import com.projeto.ReFood.model.Transaction;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface TransactionRepository extends JpaRepository<Transacao, Integer> {}
+public interface TransactionRepository extends JpaRepository<Transaction, Integer> {}

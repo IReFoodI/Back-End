@@ -4,7 +4,7 @@ import com.projeto.ReFood.repository.HistoricalOrdersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.projeto.ReFood.dto.HistoricalOrdersDTO;
-import com.projeto.ReFood.model.HistoricoPedido;
+import com.projeto.ReFood.model.HistoricalOrders;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +16,7 @@ public class HistoricalOrdersService {
     @Autowired
     private HistoricalOrdersRepository historicalOrdersRepository;
     
-    public List<HistoricalOrdersDTO> getAllHistoricoPedidos() {
+    public List<HistoricalOrdersDTO> getAllHistoricalOrders() {
         return historicalOrdersRepository
                 .findAll()
                 .stream()
@@ -24,47 +24,47 @@ public class HistoricalOrdersService {
                 .collect(Collectors.toList());
     }
     
-    public HistoricalOrdersDTO getHistoricoPedidoById(int idHistoricoPedido) {
-        Optional<HistoricoPedido> historicoPedido = historicalOrdersRepository.findById(idHistoricoPedido);
-        return historicoPedido.map(this::convertToDTO).orElse(null);
+    public HistoricalOrdersDTO getHistoricalOrdersById(int idHistoricalOrders) {
+        Optional<HistoricalOrders> historicalOrders = historicalOrdersRepository.findById(idHistoricalOrders);
+        return historicalOrders.map(this::convertToDTO).orElse(null);
     }
     
-    public HistoricalOrdersDTO createHistoricoPedido(HistoricalOrdersDTO historicalOrdersDTO) {
-        HistoricoPedido historicoPedido = new HistoricoPedido();
+    public HistoricalOrdersDTO createHistoricalOrders(HistoricalOrdersDTO historicalOrdersDTO) {
+        HistoricalOrders historicalOrders = new HistoricalOrders();
         
-        historicoPedido.setDescricao(historicalOrdersDTO.getDescricao());
-        historicoPedido.setData(historicalOrdersDTO.getData());
-        historicalOrdersRepository.save(historicoPedido);
-        return convertToDTO(historicoPedido);
+        historicalOrders.setOrder_status(historicalOrdersDTO.getOrder_status());
+        historicalOrders.setDate_mod(historicalOrdersDTO.getDate_mod());
+        historicalOrdersRepository.save(historicalOrders);
+        return convertToDTO(historicalOrders);
     }
     
-    public HistoricalOrdersDTO updateHistoricoPedido(int idHistoricoPedido, HistoricalOrdersDTO historicalOrdersDTO) {
-        Optional<HistoricoPedido> historicoPedidoOptional = historicalOrdersRepository.findById(idHistoricoPedido);
+    public HistoricalOrdersDTO updateHistoricalOrders(int idHistoricalOrders, HistoricalOrdersDTO historicalOrdersDTO) {
+        Optional<HistoricalOrders> historicalOrdersOptional = historicalOrdersRepository.findById(idHistoricalOrders);
         
-        if (historicoPedidoOptional.isPresent()) {
-            HistoricoPedido historicoPedido = historicoPedidoOptional.get();
+        if (historicalOrdersOptional.isPresent()) {
+            HistoricalOrders historicalOrders = historicalOrdersOptional.get();
             
-            historicoPedido.setDescricao(historicalOrdersDTO.getDescricao());
-            historicoPedido.setData(historicalOrdersDTO.getData());
+            historicalOrders.setOrder_status(historicalOrdersDTO.getOrder_status());
+            historicalOrders.setDate_mod(historicalOrdersDTO.getDate_mod());
             
-            historicalOrdersRepository.save(historicoPedido);
+            historicalOrdersRepository.save(historicalOrders);
             
-            return convertToDTO(historicoPedido);
+            return convertToDTO(historicalOrders);
         }
         
         return null;
     }
     
-    public void deleteHistoricoPedido(int idHistoricoPedido) {
-        historicalOrdersRepository.deleteById(idHistoricoPedido);
+    public void deleteHistoricalOrders(int idHistoricalOrders) {
+        historicalOrdersRepository.deleteById(idHistoricalOrders);
     }
     
-    private HistoricalOrdersDTO convertToDTO(HistoricoPedido historicoPedido) {
+    private HistoricalOrdersDTO convertToDTO(HistoricalOrders historicalOrders) {
         HistoricalOrdersDTO historicalOrdersDTO = new HistoricalOrdersDTO();
         
-        historicalOrdersDTO.setIdHistoricoPedido(historicoPedido.getIdHistoricoPedido());
-        historicalOrdersDTO.setDescricao(historicoPedido.getDescricao());
-        historicalOrdersDTO.setData(historicoPedido.getData());
+        historicalOrdersDTO.setId_history(historicalOrders.getId_history());
+        historicalOrdersDTO.setOrder_status(historicalOrders.getOrder_status());
+        historicalOrdersDTO.setDate_mod(historicalOrders.getDate_mod());
         
         return historicalOrdersDTO;
     }

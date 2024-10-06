@@ -1,21 +1,23 @@
 package com.projeto.ReFood.dto;
 
-import com.projeto.ReFood.model.Endereco;
+
+import com.projeto.ReFood.model.Address;
 import com.projeto.ReFood.model.EnumOrderStatus;
-import com.projeto.ReFood.model.Restaurante;
-import com.projeto.ReFood.model.Usuario;
+import com.projeto.ReFood.model.Restaurant;
+import com.projeto.ReFood.model.User;
+
 import lombok.Data;
 import java.util.Date;
 
 @Data
 public class OrderDTO {
     
-    private int id_pedido;
-    private Date data_pedido;
-    private EnumOrderStatus status_pedido;
-    private float preco_total;
+    private int id_order;
+    private Date order_date;
+    private EnumOrderStatus order_status;
+    private float total_value;
     
-    private Usuario fk_id_usuario;
-    private Restaurante fk_id_restaurante;
-    private Endereco fk_id_endereco_entrega;
+    private User fkid_userOrder;
+    private Restaurant fkid_restaurantOrder;
+    private Address fkid_addressOrder;
 }

@@ -1,20 +1,21 @@
 package com.projeto.ReFood.dto;
 
-import com.projeto.ReFood.model.Cartao;
+import com.projeto.ReFood.model.Card;
 import com.projeto.ReFood.model.EnumOrderStatus;
-import com.projeto.ReFood.model.Pedido;
+import com.projeto.ReFood.model.Order;
+
 import lombok.Data;
 import java.util.Date;
 
 @Data
 public class TransactionDTO {
     
-    private int id_transacao;
-    private Date data;
-    private float valor;
-    private EnumOrderStatus status;
+    private int id_transaction;
+    private Date transaction_date;
+    private float transaction_value;
+    private EnumOrderStatus transaction_status;
     
-    private Cartao fk_id_cartao;
-    private Pedido fk_id_pedido;
+    private Card fkid_card_transaction;
+    private Order fkid_orderTransaction;
 
 }
