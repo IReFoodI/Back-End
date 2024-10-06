@@ -9,39 +9,39 @@ import com.projeto.ReFood.dto.ContactDTO;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/contatos")
+@RequestMapping("/api/contacts")
 public class ContactController {
     
     @Autowired
     private ContactService contactService;
     
     @GetMapping
-    public List<ContactDTO> getAllContatos() {
-        return contactService.getAllContatos();
+    public List<ContactDTO> getAllContacts() {
+        return contactService.getAllContacts();
     }
     
-    @GetMapping("/{id_contato}")
-    public ResponseEntity<ContactDTO> getContatoById(@PathVariable int id_contato) {
-        ContactDTO contactDTO = contactService.getContatoById(id_contato);
+    @GetMapping("/{id_contact}")
+    public ResponseEntity<ContactDTO> getContactById(@PathVariable int id_contact) {
+        ContactDTO contactDTO = contactService.getContactById(id_contact);
         
         return contactDTO != null ? ResponseEntity.ok(contactDTO) : ResponseEntity.notFound().build();
     }
     
     @PostMapping
-    public ContactDTO createContato(@RequestBody ContactDTO contactDTO) {
-        return contactService.createContato(contactDTO);
+    public ContactDTO createContact(@RequestBody ContactDTO contactDTO) {
+        return contactService.createContact(contactDTO);
     }
     
-    @PutMapping("/{id_contato}")
-    public ResponseEntity<ContactDTO> updateContato(@PathVariable int id_contato, @RequestBody ContactDTO contactDTO) {
-        ContactDTO updateContato = contactService.updateContato(id_contato, contactDTO);
+    @PutMapping("/{id_contact}")
+    public ResponseEntity<ContactDTO> updateContact(@PathVariable int id_contact, @RequestBody ContactDTO contactDTO) {
+        ContactDTO updateContact = contactService.updateContact(id_contact, contactDTO);
         
-        return updateContato != null ? ResponseEntity.ok(updateContato) : ResponseEntity.notFound().build();
+        return updateContact != null ? ResponseEntity.ok(updateContact) : ResponseEntity.notFound().build();
     }
     
-    @DeleteMapping("/{id_contato}")
-    public ResponseEntity<Void> deleteContato(@PathVariable int id_contato) {
-        contactService.deleteContato(id_contato);
+    @DeleteMapping("/{id_contact}")
+    public ResponseEntity<Void> deleteContact(@PathVariable int id_contact) {
+        contactService.deleteContact(id_contact);
         
         return ResponseEntity.noContent().build();
     }

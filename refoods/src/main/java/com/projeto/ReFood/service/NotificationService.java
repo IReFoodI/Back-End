@@ -16,7 +16,7 @@ public class NotificationService {
     @Autowired
     private NotificationRepository notificationRepository;
     
-    public List<NotificationDTO> getAllNotificacoes() {
+    public List<NotificationDTO> getAllNotifications() {
         return notificationRepository
                 .findAll()
                 .stream()

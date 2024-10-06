@@ -16,7 +16,7 @@ public class AddressService {
     @Autowired
     private AddressRepository addressRepository;
     
-    public List<AddressDTO> getAllAddresss() {
+    public List<AddressDTO> getAllAddress() {
         return addressRepository
                 .findAll()
                 .stream()
@@ -24,7 +24,7 @@ public class AddressService {
                 .collect(Collectors.toList());
     }
     
-    public AddressDTO getEddressById(int idAddress) {
+    public AddressDTO getAddressById(int idAddress) {
         Optional<Address> address = addressRepository.findById(idAddress);
         return address.map(this::convertToDTO).orElse(null);
     }
@@ -39,11 +39,11 @@ public class AddressService {
         return convertToDTO(address);
     }
     
-    public AddressDTO updateEddress(int idEddress, AddressDTO addressDTO) {
-        Optional<Address> eddressOptional = addressRepository.findById(idEddress);
+    public AddressDTO updateAddress(int idAddress, AddressDTO addressDTO) {
+        Optional<Address> addressOptional = addressRepository.findById(idAddress);
         
-        if (eddressOptional.isPresent()) {
-            Address address = eddressOptional.get();
+        if (addressOptional.isPresent()) {
+            Address address = addressOptional.get();
             
             address.setStreet(addressDTO.getStreet());
             address.setNumber(addressDTO.getNumber());

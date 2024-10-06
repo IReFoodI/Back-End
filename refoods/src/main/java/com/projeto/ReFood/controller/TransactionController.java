@@ -9,39 +9,39 @@ import com.projeto.ReFood.dto.TransactionDTO;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/transacoes")
+@RequestMapping("/api/transactions")
 public class TransactionController {
     
     @Autowired
     private TransactionService transactionService;
     
     @GetMapping
-    public List<TransactionDTO> getAllTransacoes() {
-        return transactionService.getAllTransacoes();
+    public List<TransactionDTO> getAllTransactions() {
+        return transactionService.getAllTransactions();
     }
     
-    @GetMapping("/{id_transacao}")
-    public ResponseEntity<TransactionDTO> getTransacaoById(@PathVariable int id_transacao) {
-        TransactionDTO transactionDTO = transactionService.getTransacaoById(id_transacao);
+    @GetMapping("/{id_transaction}")
+    public ResponseEntity<TransactionDTO> getTransactionById(@PathVariable int id_transaction) {
+        TransactionDTO transactionDTO = transactionService.getTransactionById(id_transaction);
         
         return transactionDTO != null ? ResponseEntity.ok(transactionDTO) : ResponseEntity.notFound().build();
     }
     
     @PostMapping
-    public TransactionDTO createTransacao(@RequestBody TransactionDTO transactionDTO) {
-        return transactionService.createTransacao(transactionDTO);
+    public TransactionDTO createTransaction(@RequestBody TransactionDTO transactionDTO) {
+        return transactionService.createTransaction(transactionDTO);
     }
     
-    @PutMapping("/{id_transacao}")
-    public ResponseEntity<TransactionDTO> updateTransacao(@PathVariable int id_transacao, @RequestBody TransactionDTO transactionDTO) {
-        TransactionDTO updateTransacao = transactionService.updateTransacao(id_transacao, transactionDTO);
+    @PutMapping("/{id_transaction}")
+    public ResponseEntity<TransactionDTO> updateTransaction(@PathVariable int id_transaction, @RequestBody TransactionDTO transactionDTO) {
+        TransactionDTO updateTransaction = transactionService.updateTransaction(id_transaction, transactionDTO);
         
-        return updateTransacao != null ? ResponseEntity.ok(updateTransacao) : ResponseEntity.notFound().build();
+        return updateTransaction != null ? ResponseEntity.ok(updateTransaction) : ResponseEntity.notFound().build();
     }
     
-    @DeleteMapping("/{id_transacao}")
-    public ResponseEntity<Void> deleteTransacao(@PathVariable int id_transacao) {
-        transactionService.deleteTransacao(id_transacao);
+    @DeleteMapping("/{id_transaction}")
+    public ResponseEntity<Void> deleteTransaction(@PathVariable int id_transaction) {
+        transactionService.deleteTransaction(id_transaction);
         
         return ResponseEntity.noContent().build();
     }

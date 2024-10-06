@@ -16,7 +16,7 @@ public class CardService {
     @Autowired
     private CardRepository cardRepository;
     
-    public List<CardDTO> getAllCartoes(){
+    public List<CardDTO> getAllCards(){
         return cardRepository
                 .findAll()
                 .stream()

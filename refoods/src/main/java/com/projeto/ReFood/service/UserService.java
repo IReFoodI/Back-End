@@ -16,7 +16,7 @@ public class UserService {
   @Autowired
   private UserRepository userRepository;
 
-  public List<UserDTO> getAllUser() {
+  public List<UserDTO> getAllUsers() {
     return userRepository
         .findAll()
         .stream()

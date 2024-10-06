@@ -16,7 +16,7 @@ public class OrderService {
     @Autowired
     private OrderRepository orderRepository;
     
-    public List<OrderDTO> getAllorders() {
+    public List<OrderDTO> getAllOrders() {
         return orderRepository
                 .findAll()
                 .stream()
@@ -24,12 +24,12 @@ public class OrderService {
                 .collect(Collectors.toList());
     }
     
-    public OrderDTO getorderById(int idOrder) {
+    public OrderDTO getOrderById(int idOrder) {
         Optional<Order> order = orderRepository.findById(idOrder);
         return order.map(this::convertToDTO).orElse(null);
     }
     
-    public OrderDTO createorder(OrderDTO orderDTO) {
+    public OrderDTO createOrder(OrderDTO orderDTO) {
       Order order = new Order();
         
         order.setTotal_value(orderDTO.getTotal_value());
@@ -38,7 +38,7 @@ public class OrderService {
         return convertToDTO(order);
     }
     
-    public OrderDTO updateorder(int idorder, OrderDTO orderDTO) {
+    public OrderDTO updateOrder(int idorder, OrderDTO orderDTO) {
         Optional<Order> orderOptional = orderRepository.findById(idorder);
         
         if (orderOptional.isPresent()) {
@@ -55,7 +55,7 @@ public class OrderService {
         return null;
     }
     
-    public void deleteorder(int idorder) {
+    public void deleteOrder(int idorder) {
         orderRepository.deleteById(idorder);
     }
     

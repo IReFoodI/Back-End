@@ -9,39 +9,39 @@ import com.projeto.ReFood.dto.ReviewsDTO;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/avaliacoes")
+@RequestMapping("/api/reviews")
 public class ReviewsController {
     
     @Autowired
     private ReviewsService reviewsService;
     
     @GetMapping
-    public List<ReviewsDTO> getAllAvaliacoes() {
-        return reviewsService.getAllAvaliacoes();
+    public List<ReviewsDTO> getAllReviews() {
+        return reviewsService.getAllReviews();
     }
     
-    @GetMapping("/{id_avaliacao}")
-    public ResponseEntity<ReviewsDTO> getAvaliacaoById(@PathVariable int id_avaliacao) {
-        ReviewsDTO reviewsDTO = reviewsService.getAvaliacaoById(id_avaliacao);
+    @GetMapping("/{id_reviews}")
+    public ResponseEntity<ReviewsDTO> getReviewsById(@PathVariable int id_reviews) {
+        ReviewsDTO reviewsDTO = reviewsService.getReviewsById(id_reviews);
         
         return reviewsDTO != null ? ResponseEntity.ok(reviewsDTO) : ResponseEntity.notFound().build();
     }
     
     @PostMapping
-    public ReviewsDTO createAvaliacao(@RequestBody ReviewsDTO reviewsDTO) {
-        return reviewsService.createAvaliacao(reviewsDTO);
+    public ReviewsDTO createReviews(@RequestBody ReviewsDTO reviewsDTO) {
+        return reviewsService.createReviews(reviewsDTO);
     }
     
-    @PutMapping("/{id_avaliacao}")
-    public ResponseEntity<ReviewsDTO> updateAvaliacao(@PathVariable int id_avaliacao, @RequestBody ReviewsDTO reviewsDTO) {
-        ReviewsDTO updateAvaliacao = reviewsService.updateAvaliacao(id_avaliacao, reviewsDTO);
+    @PutMapping("/{id_reviews}")
+    public ResponseEntity<ReviewsDTO> updateReviews(@PathVariable int id_reviews, @RequestBody ReviewsDTO reviewsDTO) {
+        ReviewsDTO updateReviews = reviewsService.updateReviews(id_reviews, reviewsDTO);
         
-        return updateAvaliacao != null ? ResponseEntity.ok(updateAvaliacao) : ResponseEntity.notFound().build();
+        return updateReviews != null ? ResponseEntity.ok(updateReviews) : ResponseEntity.notFound().build();
     }
     
-    @DeleteMapping("/{id_avaliacao}")
-    public ResponseEntity<Void> deleteAvaliacao(@PathVariable int id_avaliacao) {
-        reviewsService.deleteAvaliacao(id_avaliacao);
+    @DeleteMapping("/{id_reviews}")
+    public ResponseEntity<Void> deleteReviews(@PathVariable int id_reviews) {
+        reviewsService.deleteReviews(id_reviews);
         
         return ResponseEntity.noContent().build();
     }

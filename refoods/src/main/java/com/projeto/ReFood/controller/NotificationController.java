@@ -9,39 +9,39 @@ import com.projeto.ReFood.dto.NotificationDTO;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/notificacoes")
+@RequestMapping("/api/notifications")
 public class NotificationController {
     
     @Autowired
     private NotificationService notificationService;
     
     @GetMapping
-    public List<NotificationDTO> getAllNotificacoes() {
-        return notificationService.getAllNotificacoes();
+    public List<NotificationDTO> getAllNotifications() {
+        return notificationService.getAllNotifications();
     }
     
-    @GetMapping("/{id_notificacao}")
-    public ResponseEntity<NotificationDTO> getNotificacaoById(@PathVariable int id_notificacao) {
-        NotificationDTO notificationDTO = notificationService.getNotificacaoById(id_notificacao);
+    @GetMapping("/{id_notification}")
+    public ResponseEntity<NotificationDTO> getNotificationById(@PathVariable int id_notification) {
+        NotificationDTO notificationDTO = notificationService.getNotificationById(id_notification);
         
         return notificationDTO != null ? ResponseEntity.ok(notificationDTO) : ResponseEntity.notFound().build();
     }
     
     @PostMapping
-    public NotificationDTO createNotificacao(@RequestBody NotificationDTO notificationDTO) {
-        return notificationService.createNotificacao(notificationDTO);
+    public NotificationDTO createNotification(@RequestBody NotificationDTO notificationDTO) {
+        return notificationService.createNotification(notificationDTO);
     }
     
-    @PutMapping("/{id_notificacao}")
-    public ResponseEntity<NotificationDTO> updateNotificacao(@PathVariable int id_notificacao, @RequestBody NotificationDTO notificationDTO) {
-        NotificationDTO updateNotificacao = notificationService.updateNotificacao(id_notificacao, notificationDTO);
+    @PutMapping("/{id_notification}")
+    public ResponseEntity<NotificationDTO> updateNotification(@PathVariable int id_notification, @RequestBody NotificationDTO notificationDTO) {
+        NotificationDTO updateNotification = notificationService.updateNotification(id_notification, notificationDTO);
         
-        return updateNotificacao != null ? ResponseEntity.ok(updateNotificacao) : ResponseEntity.notFound().build();
+        return updateNotification != null ? ResponseEntity.ok(updateNotification) : ResponseEntity.notFound().build();
     }
     
-    @DeleteMapping("/{id_notificacao}")
-    public ResponseEntity<Void> deleteNotificacao(@PathVariable int id_notificacao) {
-        notificationService.deleteNotificacao(id_notificacao);
+    @DeleteMapping("/{id_notification}")
+    public ResponseEntity<Void> deleteNotification(@PathVariable int id_notification) {
+        notificationService.deleteNotification(id_notification);
         
         return ResponseEntity.noContent().build();
     }

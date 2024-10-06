@@ -9,39 +9,39 @@ import com.projeto.ReFood.dto.CardDTO;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/cartoes")
+@RequestMapping("/api/cards")
 public class CardController {
     
     @Autowired
     private CardService cardService;
     
     @GetMapping
-    public List<CardDTO> getAllCartoes() {
-        return cardService.getAllCartoes();
+    public List<CardDTO> getAllCards() {
+        return cardService.getAllCards();
     }
     
-    @GetMapping("/{id_cartao}")
-    public ResponseEntity<CardDTO> getCartaoById(@PathVariable int id_cartao) {
-        CardDTO cardDTO = cardService.getCartaoById(id_cartao);
+    @GetMapping("/{id_card}")
+    public ResponseEntity<CardDTO> getCardById(@PathVariable int id_card) {
+        CardDTO cardDTO = cardService.getCardById(id_card);
         
         return cardDTO != null ? ResponseEntity.ok(cardDTO) : ResponseEntity.notFound().build();
     }
     
     @PostMapping
-    public CardDTO createCartao(@RequestBody CardDTO cardDTO) {
-        return cardService.createCartao(cardDTO);
+    public CardDTO createCard(@RequestBody CardDTO cardDTO) {
+        return cardService.createCard(cardDTO);
     }
     
-    @PutMapping("/{id_cartao}")
-    public ResponseEntity<CardDTO> updateCartao(@PathVariable int id_cartao, @RequestBody CardDTO cardDTO) {
-        CardDTO updateCartao = cardService.updateCartao(id_cartao, cardDTO);
+    @PutMapping("/{id_card}")
+    public ResponseEntity<CardDTO> updateCard(@PathVariable int id_card, @RequestBody CardDTO cardDTO) {
+        CardDTO updateCard = cardService.updateCard(id_card, cardDTO);
         
-        return updateCartao != null ? ResponseEntity.ok(updateCartao) : ResponseEntity.notFound().build();
+        return updateCard != null ? ResponseEntity.ok(updateCard) : ResponseEntity.notFound().build();
     }
     
-    @DeleteMapping("/{id_cartao}")
-    public ResponseEntity<Void> deleteCartao(@PathVariable int id_cartao) {
-        cardService.deleteCartao(id_cartao);
+    @DeleteMapping("/{id_card}")
+    public ResponseEntity<Void> deleteCard(@PathVariable int id_card) {
+        cardService.deleteCard(id_card);
         
         return ResponseEntity.noContent().build();
     }

@@ -9,39 +9,39 @@ import com.projeto.ReFood.dto.RestaurantDTO;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/restaurantes")
+@RequestMapping("/api/restaurants")
 public class RestaurantController {
     
     @Autowired
     private RestaurantService restaurantService;
     
     @GetMapping
-    public List<RestaurantDTO> getAllRestaurantes() {
-        return restaurantService.getAllRestaurantes();
+    public List<RestaurantDTO> getAllRestaurants() {
+        return restaurantService.getAllRestaurants();
     }
     
-    @GetMapping("/{id_restaurante}")
-    public ResponseEntity<RestaurantDTO> getRestauranteById(@PathVariable int id_restaurante) {
-        RestaurantDTO restaurantDTO = restaurantService.getRestauranteById(id_restaurante);
+    @GetMapping("/{id_restaurant}")
+    public ResponseEntity<RestaurantDTO> getRestaurantById(@PathVariable int id_restaurant) {
+        RestaurantDTO restaurantDTO = restaurantService.getRestaurantById(id_restaurant);
         
         return restaurantDTO != null ? ResponseEntity.ok(restaurantDTO) : ResponseEntity.notFound().build();
     }
     
     @PostMapping
-    public RestaurantDTO createRestaurante(@RequestBody RestaurantDTO restaurantDTO) {
-        return restaurantService.createRestaurante(restaurantDTO);
+    public RestaurantDTO createRestaurant(@RequestBody RestaurantDTO restaurantDTO) {
+        return restaurantService.createRestaurant(restaurantDTO);
     }
     
-    @PutMapping("/{id_restaurante}")
-    public ResponseEntity<RestaurantDTO> updateRestaurante(@PathVariable int id_restaurante, @RequestBody RestaurantDTO restaurantDTO) {
-        RestaurantDTO updateRestaurante = restaurantService.updateRestaurante(id_restaurante, restaurantDTO);
+    @PutMapping("/{id_restaurant}")
+    public ResponseEntity<RestaurantDTO> updateRestaurant(@PathVariable int id_restaurant, @RequestBody RestaurantDTO restaurantDTO) {
+        RestaurantDTO updateRestaurant = restaurantService.updateRestaurant(id_restaurant, restaurantDTO);
         
-        return updateRestaurante != null ? ResponseEntity.ok(updateRestaurante) : ResponseEntity.notFound().build();
+        return updateRestaurant != null ? ResponseEntity.ok(updateRestaurant) : ResponseEntity.notFound().build();
     }
     
-    @DeleteMapping("/{id_restaurante}")
-    public ResponseEntity<Void> deleteRestaurante(@PathVariable int id_restaurante) {
-        restaurantService.deleteRestaurante(id_restaurante);
+    @DeleteMapping("/{id_restaurant}")
+    public ResponseEntity<Void> deleteRestaurant(@PathVariable int id_restaurant) {
+        restaurantService.deleteRestaurant(id_restaurant);
         
         return ResponseEntity.noContent().build();
     }

@@ -16,7 +16,7 @@ public class TransactionService {
     @Autowired
     private TransactionRepository transactionRepository;
     
-    public List<TransactionDTO> getAllTransacoes() {
+    public List<TransactionDTO> getAllTransactions() {
         return transactionRepository
                 .findAll()
                 .stream()

@@ -9,39 +9,39 @@ import com.projeto.ReFood.dto.AddressDTO;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/enderecos")
+@RequestMapping("/api/addresses")
 public class AddressController {
     
     @Autowired
     private AddressService addressService;
     
     @GetMapping
-    public List<AddressDTO> getAllEnderecos() {
-        return addressService.getAllEnderecos();
+    public List<AddressDTO> getAllAddress() {
+        return addressService.getAllAddress();
     }
     
-    @GetMapping("/{id_endereco}")
-    public ResponseEntity<AddressDTO> getEnderecoById(@PathVariable int id_endereco) {
-        AddressDTO addressDTO = addressService.getEnderecoById(id_endereco);
+    @GetMapping("/{id_address}")
+    public ResponseEntity<AddressDTO> getAddressById(@PathVariable int id_address) {
+        AddressDTO addressDTO = addressService.getAddressById(id_address);
         
         return addressDTO != null ? ResponseEntity.ok(addressDTO) : ResponseEntity.notFound().build();
     }
     
     @PostMapping
-    public AddressDTO createEndereco(@RequestBody AddressDTO addressDTO) {
-        return addressService.createEndereco(addressDTO);
+    public AddressDTO createAddress(@RequestBody AddressDTO addressDTO) {
+        return addressService.createAddress(addressDTO);
     }
     
-    @PutMapping("/{id_endereco}")
-    public ResponseEntity<AddressDTO> updateEndereco(@PathVariable int id_endereco, @RequestBody AddressDTO addressDTO) {
-        AddressDTO updateEndereco = addressService.updateEndereco(id_endereco, addressDTO);
+    @PutMapping("/{id_address}")
+    public ResponseEntity<AddressDTO> updateAddress(@PathVariable int id_address, @RequestBody AddressDTO addressDTO) {
+        AddressDTO updateAddress = addressService.updateAddress(id_address, addressDTO);
         
-        return updateEndereco != null ? ResponseEntity.ok(updateEndereco) : ResponseEntity.notFound().build();
+        return updateAddress != null ? ResponseEntity.ok(updateAddress) : ResponseEntity.notFound().build();
     }
     
-    @DeleteMapping("/{id_endereco}")
-    public ResponseEntity<Void> deleteEndereco(@PathVariable int id_endereco) {
-        addressService.deleteEndereco(id_endereco);
+    @DeleteMapping("/{id_address}")
+    public ResponseEntity<Void> deleteAddress(@PathVariable int id_address) {
+        addressService.deleteAddress(id_address);
         
         return ResponseEntity.noContent().build();
     }

@@ -9,39 +9,39 @@ import com.projeto.ReFood.dto.OrderDTO;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/pedidos")
+@RequestMapping("/api/orders")
 public class OrderController {
     
     @Autowired
     private OrderService orderService;
     
     @GetMapping
-    public List<OrderDTO> getAllPedidos() {
-        return orderService.getAllPedidos();
+    public List<OrderDTO> getAllOrders() {
+        return orderService.getAllOrders();
     }
     
-    @GetMapping("/{id_pedido}")
-    public ResponseEntity<OrderDTO> getPedidoById(@PathVariable int id_pedido) {
-        OrderDTO orderDTO = orderService.getPedidoById(id_pedido);
+    @GetMapping("/{id_order}")
+    public ResponseEntity<OrderDTO> getOrdersById(@PathVariable int id_order) {
+        OrderDTO orderDTO = orderService.getOrderById(id_order);
         
         return orderDTO != null ? ResponseEntity.ok(orderDTO) : ResponseEntity.notFound().build();
     }
     
     @PostMapping
-    public OrderDTO createPedido(@RequestBody OrderDTO orderDTO) {
-        return orderService.createPedido(orderDTO);
+    public OrderDTO createOrders(@RequestBody OrderDTO orderDTO) {
+        return orderService.createOrder(orderDTO);
     }
     
-    @PutMapping("/{id_pedido}")
-    public ResponseEntity<OrderDTO> updatePedido(@PathVariable int id_pedido, @RequestBody OrderDTO orderDTO) {
-        OrderDTO updatePedido = orderService.updatePedido(id_pedido, orderDTO);
+    @PutMapping("/{id_order}")
+    public ResponseEntity<OrderDTO> updateOrder(@PathVariable int id_order, @RequestBody OrderDTO orderDTO) {
+        OrderDTO updateOrder = orderService.updateOrder(id_order, orderDTO);
         
-        return updatePedido != null ? ResponseEntity.ok(updatePedido) : ResponseEntity.notFound().build();
+        return updateOrder != null ? ResponseEntity.ok(updateOrder) : ResponseEntity.notFound().build();
     }
     
-    @DeleteMapping("/{id_pedido}")
-    public ResponseEntity<Void> deletePedido(@PathVariable int id_pedido) {
-        orderService.deletePedido(id_pedido);
+    @DeleteMapping("/{id_order}")
+    public ResponseEntity<Void> deleteOrder(@PathVariable int id_order) {
+        orderService.deleteOrder(id_order);
         
         return ResponseEntity.noContent().build();
     }
