@@ -20,11 +20,11 @@ public class Card {
     @Column(nullable = false)
     private String cvv;
     
-    @ManyToOne
-    @JoinColumn(name = "fk_id_user")
-    private User fkid_user_card;
+    // @ManyToOne
+    // @JoinColumn(name = "fk_id_user")
+    // private User fkid_user_card;
     
-    @OneToMany(mappedBy = "fkid_card_transaction")
-    private Set<Transaction> cardTransaction;
+    // @OneToMany(mappedBy = "fkid_card_transaction")
+    // private Set<Transaction> cardTransaction;
 
 }

@@ -20,11 +20,11 @@ public class Reviews {
     @Column
     private String rating_comment;
     
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "fk_id_user", referencedColumnName = "id_user")
-    private User fkid_userReview;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "fk_id_restaurant", referencedColumnName = "id_restaurant")
-    private Restaurant fkid_restaurantReview;
+    // @OneToOne(cascade = CascadeType.ALL)
+    // @JoinColumn(name = "fk_id_user", referencedColumnName = "id_user")
+    // private User fkid_userReview;
+    // @OneToOne(cascade = CascadeType.ALL)
+    // @JoinColumn(name = "fk_id_restaurant", referencedColumnName = "id_restaurant")
+    // private Restaurant fkid_restaurantReview;
 
 }

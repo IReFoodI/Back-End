@@ -28,14 +28,15 @@ public class Address {
     @Column(nullable = false)
     private boolean standard; //default = false
     
-    @ManyToOne
-    @JoinColumn(name = "fk_id_user")
-    private User fkid_user_address;
-    @ManyToOne
-    @JoinColumn(name = "fk_id_restaurant")
-    private Restaurant fkid_restaurant_address;
+    // @ManyToOne
+    // @JoinColumn(name = "fk_id_user")
+    // private User fkid_user_address;
     
-    @OneToOne(mappedBy = "fkid_addressOrder")
-    private Order addressOrder;
+    // @ManyToOne
+    // @JoinColumn(name = "fk_id_restaurant")
+    // private Restaurant fkid_restaurant_address;
+    
+    // @OneToOne(mappedBy = "fkid_addressOrder")
+    // private Order addressOrder;
 
 }

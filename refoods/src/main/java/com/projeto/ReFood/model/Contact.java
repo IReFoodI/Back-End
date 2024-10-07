@@ -16,8 +16,8 @@ public class Contact {
     @Column(nullable = false)
     private String phone;
     
-    @ManyToOne
-    @JoinColumn(name = "fk_id_restaurant", nullable = false)
-    private Restaurant fkid_restaurant_contact;
+    // @ManyToOne
+    // @JoinColumn(name = "fk_id_restaurant", nullable = false)
+    // private Restaurant fkid_restaurant_contact;
 
 }

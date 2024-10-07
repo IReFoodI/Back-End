@@ -18,12 +18,12 @@ public class ItemsOrders {
     @Column(nullable = false)
     private float subtotal;
     
-    @OneToOne
-    @JoinColumn(name = "fk_id_order", referencedColumnName = "id_order")
-    private Order fkid_orderItemsOrders;
+    // @OneToOne
+    // @JoinColumn(name = "fk_id_order", referencedColumnName = "id_order")
+    // private Order fkid_orderItemsOrders;
     
-    @ManyToOne
-    @JoinColumn(name = "id_product", nullable = false)
-    private Product fkid_product_itemsOders;
+    // @ManyToOne
+    // @JoinColumn(name = "id_product", nullable = false)
+    // private Product fkid_product_itemsOders;
 
 }

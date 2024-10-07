@@ -22,7 +22,8 @@ public class Notification {
     
 //    @JoinColumn(name = "fk_id_user", referencedColumnName = "id_user")
 //    private User fk_id_user;
-    @OneToMany(mappedBy = "fk_id_notification")
-    private Set<UserNotification> usersNotifications;
+
+    // @OneToMany(mappedBy = "fk_id_notification")
+    // private Set<UserNotification> usersNotifications;
 
 }

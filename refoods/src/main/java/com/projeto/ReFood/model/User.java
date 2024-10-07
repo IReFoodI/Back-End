@@ -31,20 +31,20 @@ public class User {
     private Date last_login;
     
     
-    @OneToMany(mappedBy = "fk_id_user")
-    private Set<UserNotification> usersNotifications;
-    @OneToMany(mappedBy = "fkid_user_address")
-    private Set<Address> userAdress;
-    @OneToMany(mappedBy = "fkid_user_fav")
-    private Set<Favorite> userFav;
-    @OneToMany(mappedBy = "fkid_user_card")
-    private Set<Card> usersCard;
+    // @OneToMany(mappedBy = "fk_id_user")
+    // private Set<UserNotification> usersNotifications;
+    // @OneToMany(mappedBy = "fkid_user_address")
+    // private Set<Address> userAdress;
+    // @OneToMany(mappedBy = "fkid_user_fav")
+    // private Set<Favorite> userFav;
+    // @OneToMany(mappedBy = "fkid_user_card")
+    // private Set<Card> usersCard;
     
-    @OneToOne(mappedBy = "fkid_userReview")
-    private Reviews userReview;
-    @OneToOne(mappedBy = "fkid_userOrder")
-    private Order userOrder;
-    @OneToOne(mappedBy = "fkid_userHistoricalOrders")
-    private HistoricalOrders userOrdersOrders;
+    // @OneToOne(mappedBy = "fkid_userReview")
+    // private Reviews userReview;
+    // @OneToOne(mappedBy = "fkid_userOrder")
+    // private Order userOrder;
+    // @OneToOne(mappedBy = "fkid_userHistoricalOrders")
+    // private HistoricalOrders userOrdersOrders;
     
 }

@@ -35,19 +35,19 @@ public class Restaurant {
     @Column
     private float average_rating; //default 0
     
-    @OneToMany(mappedBy = "fkid_restaurant_contact")
-    private Set<Contact> restaurantContact;
-    @OneToMany(mappedBy = "fkid_restaurant_address")
-    private Set<Address> restaurantAdress;
-    @OneToMany(mappedBy = "fkid_restaurant_prod")
-    private Set<Product> restaurantProd;
+    // @OneToMany(mappedBy = "fkid_restaurant_contact")
+    // private Set<Contact> restaurantContact;
+    // @OneToMany(mappedBy = "fkid_restaurant_address")
+    // private Set<Address> restaurantAdress;
+    // @OneToMany(mappedBy = "fkid_restaurant_prod")
+    // private Set<Product> restaurantProd;
     
-    @OneToOne(mappedBy = "fkid_restaurantReview")
-    private Reviews restaurantReview;
-    @OneToOne(mappedBy = "fkid_restaurantFav")
-    private Favorite restaurantFav;
-    @OneToOne(mappedBy = "fkid_restaurantOrder")
-    private Order restaurantOrder;
-    @OneToOne(mappedBy = "fkid_restaurantHistoricalOrders")
-    private HistoricalOrders historicalOrdersReview;
+    // @OneToOne(mappedBy = "fkid_restaurantReview")
+    // private Reviews restaurantReview;
+    // @OneToOne(mappedBy = "fkid_restaurantFav")
+    // private Favorite restaurantFav;
+    // @OneToOne(mappedBy = "fkid_restaurantOrder")
+    // private Order restaurantOrder;
+    // @OneToOne(mappedBy = "fkid_restaurantHistoricalOrders")
+    // private HistoricalOrders historicalOrdersReview;
 }
