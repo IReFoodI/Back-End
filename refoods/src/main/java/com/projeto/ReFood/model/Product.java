@@ -29,11 +29,11 @@ public class Product {
   @Column(nullable = false)
   private boolean active;
 
-  // @ManyToOne
-  // @JoinColumn(name = "id_restaurant", nullable = false)
-  // private Restaurant fkid_restaurant_prod;
+  @ManyToOne
+  @JoinColumn(name = "id_restaurant", nullable = false)
+  private Restaurant fkid_restaurant_prod;
 
-  // @OneToMany(mappedBy = "fkid_restaurant_prod")
-  // private Set<ItemsOrders> productItemsOders;
+  @OneToMany(mappedBy = "fkid_product_itemsOrders", cascade = CascadeType.ALL)
+  private Set<ItemsOrders> itemsOrders;
 
 }

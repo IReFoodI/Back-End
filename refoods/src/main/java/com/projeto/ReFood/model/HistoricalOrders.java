@@ -18,14 +18,16 @@ public class HistoricalOrders {
     @Column(nullable = false)
     private Date date_mod;
     
-    // @OneToOne(cascade = CascadeType.ALL)
-    // @JoinColumn(name = "fk_id_order", referencedColumnName = "id_order")
-    // private Order fkid_orderHistoricalOrders;
-    // @OneToOne(cascade = CascadeType.ALL)
-    // @JoinColumn(name = "fk_id_restaurant", referencedColumnName = "id_restaurant")
-    // private Restaurant fkid_restaurantHistoricalOrders;
-    // @OneToOne(cascade = CascadeType.ALL)
-    // @JoinColumn(name = "fk_id_user", referencedColumnName = "id_user")
-    // private User fkid_userHistoricalOrders;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_id_order", referencedColumnName = "id_order")
+    private Order fkid_orderHistoricalOrders;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_id_restaurant", referencedColumnName = "id_restaurant")
+    private Restaurant fkid_restaurantHistoricalOrders;
+    
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_id_user", referencedColumnName = "id_user")
+    private User fkid_userHistoricalOrders;
 
 }

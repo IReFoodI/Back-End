@@ -16,10 +16,11 @@ public class Favorite {
     @Column(nullable = false)
     private Date addition_date;
     
-    // @ManyToOne
-    // @JoinColumn(name = "fk_id_user")
-    // private User fkid_user_fav;
-    // @OneToOne(cascade = CascadeType.ALL)
-    // @JoinColumn(name = "fk_id_restaurant", referencedColumnName = "id_restaurant")
-    // private Restaurant fkid_restaurantFav;
+    @ManyToOne
+    @JoinColumn(name = "fk_id_user")
+    private User fkid_user_fav;
+    
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_id_restaurant", referencedColumnName = "id_restaurant")
+    private Restaurant fkid_restaurantFav;
 }

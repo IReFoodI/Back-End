@@ -13,11 +13,11 @@ public class Contact {
     private int id_contact;
     @Column(nullable = false)
     private String description;
-    @Column(nullable = false)
+    @Column(nullable = false, length = 15)
     private String phone;
     
-    // @ManyToOne
-    // @JoinColumn(name = "fk_id_restaurant", nullable = false)
-    // private Restaurant fkid_restaurant_contact;
+    @ManyToOne
+    @JoinColumn(name = "fk_id_restaurant", nullable = false)
+    private Restaurant fkid_restaurant_contact;
 
 }

@@ -20,12 +20,12 @@ public class Transaction {
     @Column(nullable = false)
     private EnumTransactionStatus transaction_status;
     
-    // @ManyToOne
-    // @JoinColumn(name = "fk_id_card")
-    // private Card fkid_card_transaction;
+    @ManyToOne
+    @JoinColumn(name = "fk_id_card")
+    private Card fkid_card_transaction;
     
-    // @OneToOne(cascade = CascadeType.ALL)
-    // @JoinColumn(name = "fk_id_order", referencedColumnName = "id_order")
-    // private Order fkid_orderTransaction;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_id_order", referencedColumnName = "id_order")
+    private Order fkid_orderTransaction;
 
 }
