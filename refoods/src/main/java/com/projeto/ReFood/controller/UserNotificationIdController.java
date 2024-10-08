@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/usersnotifications")
-public class UserNotificationController {
+public class UserNotificationIdController {
     
     @Autowired
     private HistoricalOrdersService historicalOrdersService;

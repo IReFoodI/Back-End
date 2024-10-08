@@ -1,48 +1,48 @@
-// package com.projeto.ReFood.controller;
+package com.projeto.ReFood.controller;
 
-// import com.projeto.ReFood.service.FavoriteService;
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.http.ResponseEntity;
-// import org.springframework.web.bind.annotation.*;
-// import com.projeto.ReFood.dto.FavoriteDTO;
+import com.projeto.ReFood.service.FavoriteService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import com.projeto.ReFood.dto.FavoriteDTO;
 
-// import java.util.List;
+import java.util.List;
 
-// @RestController
-// @RequestMapping("/api/favoritos")
-// public class FavoriteController {
+@RestController
+@RequestMapping("/api/favorites")
+public class FavoriteController {
     
-//     @Autowired
-//     private FavoriteService favoriteService;
+    @Autowired
+    private FavoriteService favoriteService;
     
-//     @GetMapping
-//     public List<FavoriteDTO> getAllFavoritos() {
-//         return favoriteService.getAllFavoritos();
-//     }
+    @GetMapping
+    public List<FavoriteDTO> getAllFavorites() {
+        return favoriteService.getAllFavorites();
+    }
     
-//     @GetMapping("/{id_favorito}")
-//     public ResponseEntity<FavoriteDTO> getFavoritoById(@PathVariable int id_favorito) {
-//         FavoriteDTO favoriteDTO = favoriteService.getFavoritoById(id_favorito);
+    @GetMapping("/{id_favorite}")
+    public ResponseEntity<FavoriteDTO> getFavoriteById(@PathVariable int id_favorite) {
+        FavoriteDTO favoriteDTO = favoriteService.getFavoriteById(id_favorite);
         
-//         return favoriteDTO != null ? ResponseEntity.ok(favoriteDTO) : ResponseEntity.notFound().build();
-//     }
+        return favoriteDTO != null ? ResponseEntity.ok(favoriteDTO) : ResponseEntity.notFound().build();
+    }
     
-//     @PostMapping
-//     public FavoriteDTO createFavorito(@RequestBody FavoriteDTO favoriteDTO) {
-//         return favoriteService.createFavorito(favoriteDTO);
-//     }
+    @PostMapping
+    public FavoriteDTO createFavorite(@RequestBody FavoriteDTO favoriteDTO) {
+        return favoriteService.createFavorite(favoriteDTO);
+    }
     
-//     @PutMapping("/{id_favorito}")
-//     public ResponseEntity<FavoriteDTO> updateFavorito(@PathVariable int id_favorito, @RequestBody FavoriteDTO favoriteDTO) {
-//         FavoriteDTO updateFavorito = favoriteService.updateFavorito(id_favorito, favoriteDTO);
+    @PutMapping("/{id_favorite}")
+    public ResponseEntity<FavoriteDTO> updateFavorite(@PathVariable int id_favorite, @RequestBody FavoriteDTO favoriteDTO) {
+        FavoriteDTO updateFavorite = favoriteService.updateFavorite(id_favorite, favoriteDTO);
         
-//         return updateFavorito != null ? ResponseEntity.ok(updateFavorito) : ResponseEntity.notFound().build();
-//     }
+        return updateFavorite != null ? ResponseEntity.ok(updateFavorite) : ResponseEntity.notFound().build();
+    }
     
-//     @DeleteMapping("/{id_favorito}")
-//     public ResponseEntity<Void> deleteFavorito(@PathVariable int id_favorito) {
-//         favoriteService.deleteFavorito(id_favorito);
+    @DeleteMapping("/{id_favorite}")
+    public ResponseEntity<Void> deleteFavorite(@PathVariable int id_favorite) {
+        favoriteService.deleteFavorite(id_favorite);
         
-//         return ResponseEntity.noContent().build();
-//     }
-// }
+        return ResponseEntity.noContent().build();
+    }
+}
