@@ -20,11 +20,6 @@ public class Notification {
   @Column(nullable = false)
   private Date send_date;
 
-  // @ManyToOne
-  // @JoinColumn(name = "fk_id_user", referencedColumnName = "id_user")
-  // private User fk_id_user;
-
-  // @OneToMany(mappedBy = "fk_id_notification")
-  // private Set<UserNotification> usersNotifications;
-
+  @OneToMany(mappedBy = "notification") // Alterado para referenciar corretamente
+  private Set<UserNotification> usersNotifications;
 }

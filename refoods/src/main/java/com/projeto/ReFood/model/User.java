@@ -29,9 +29,6 @@ public class User {
     private Date date_creation;
     @Column(nullable = false)
     private Date last_login;
-    
-    // @OneToMany(mappedBy = "fk_id_user")
-    // private Set<UserNotification> usersNotifications;
 
     @OneToMany(mappedBy = "fkid_user_address")
     private Set<Address> userAdress;
@@ -50,5 +47,8 @@ public class User {
     
     @OneToOne(mappedBy = "fkid_userHistoricalOrders")
     private HistoricalOrders userOrdersOrders;
+
+    @OneToMany(mappedBy = "fk_id_user")
+    private Set<UserNotification> usersNotifications;
     
 }
