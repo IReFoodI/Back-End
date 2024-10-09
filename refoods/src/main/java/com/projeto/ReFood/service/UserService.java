@@ -1,6 +1,7 @@
 package com.projeto.ReFood.service;
 
 import com.projeto.ReFood.dto.UserDTO;
+import com.projeto.ReFood.exception.EmailAlreadyExistsException;
 import com.projeto.ReFood.model.User;
 import com.projeto.ReFood.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.time.LocalDateTime;
 
 @Service
 public class UserService {
@@ -30,14 +32,29 @@ public class UserService {
   }
 
   public UserDTO createUser(UserDTO userDTO) {
-    User user = new User();
 
+    if (userDTO.getName() == null || userDTO.getSurname() == null ||
+        userDTO.getCpf() == null || userDTO.getEmail() == null ||
+        userDTO.getPhone() == null || userDTO.getPassword() == null) {
+      throw new IllegalArgumentException("Todos os campos devem ser preenchidos.");
+    }
+
+    if (userRepository.existsByEmail(userDTO.getEmail())) {
+      throw new EmailAlreadyExistsException("O email já está cadastrado.");
+    }
+
+    User user = new User();
     user.setName(userDTO.getName());
     user.setSurname(userDTO.getSurname());
     user.setCpf(userDTO.getCpf());
     user.setEmail(userDTO.getEmail());
     user.setPhone(userDTO.getPhone());
-    userRepository.save(user);
+    user.setPassword(userDTO.getPassword());
+    user.setDate_creation(LocalDateTime.now());
+    user.setLast_login(null);
+
+    user = userRepository.save(user);
+
     return convertToDTO(user);
   }
 
@@ -74,7 +91,10 @@ public class UserService {
     userDTO.setCpf(user.getCpf());
     userDTO.setEmail(user.getEmail());
     userDTO.setPhone(user.getPhone());
+    userDTO.setDate_creation(user.getDate_creation());
+    userDTO.setLast_login(user.getLast_login());
 
     return userDTO;
   }
+
 }

@@ -3,7 +3,7 @@ package com.projeto.ReFood.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.util.Set;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -26,9 +26,8 @@ public class User {
     @Column(nullable = false)
     private String phone;
     @Column(nullable = false)
-    private Date date_creation;
-    @Column(nullable = false)
-    private Date last_login;
+    private LocalDateTime  date_creation;
+    private LocalDateTime  last_login;
 
     @OneToMany(mappedBy = "fkid_user_address")
     private Set<Address> userAdress;
