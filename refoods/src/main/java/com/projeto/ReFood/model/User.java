@@ -40,7 +40,7 @@ public class User {
     private Set<Card> usersCard;
     
     @OneToOne(mappedBy = "fkid_userReview")
-    private Reviews userReview;
+    private Review userReview;
 
     @OneToOne(mappedBy = "fkid_userOrder")
     private Order userOrder;

@@ -20,9 +20,9 @@ public class HistoricalOrdersController {
         return historicalOrdersService.getAllHistoricalOrders();
     }
     
-    @GetMapping("/{historical_order_id}")
-    public ResponseEntity<HistoricalOrdersDTO> getHistoricalOrderById(@PathVariable int historical_order_id) {
-        HistoricalOrdersDTO historicalOrdersDTO = historicalOrdersService.getHistoricalOrdersById(historical_order_id);
+    @GetMapping("/{id_historical_order}")
+    public ResponseEntity<HistoricalOrdersDTO> getHistoricalOrderById(@PathVariable int id_historical_order) {
+        HistoricalOrdersDTO historicalOrdersDTO = historicalOrdersService.getHistoricalOrdersById(id_historical_order);
         
         return historicalOrdersDTO != null ? ResponseEntity.ok(historicalOrdersDTO) : ResponseEntity.notFound().build();
     }
@@ -32,16 +32,16 @@ public class HistoricalOrdersController {
         return historicalOrdersService.createHistoricalOrders(historicalOrdersDTO);
     }
     
-    @PutMapping("/{historical_order_id}")
-    public ResponseEntity<HistoricalOrdersDTO> updateHistoricalOrder(@PathVariable int historical_order_id, @RequestBody HistoricalOrdersDTO historicalOrdersDTO) {
-        HistoricalOrdersDTO updatedHistoricalOrder = historicalOrdersService.updateHistoricalOrders(historical_order_id, historicalOrdersDTO);
+    @PutMapping("/{id_historical_order}")
+    public ResponseEntity<HistoricalOrdersDTO> updateHistoricalOrder(@PathVariable int id_historical_order, @RequestBody HistoricalOrdersDTO historicalOrdersDTO) {
+        HistoricalOrdersDTO updatedHistoricalOrder = historicalOrdersService.updateHistoricalOrders(id_historical_order, historicalOrdersDTO);
         
         return updatedHistoricalOrder != null ? ResponseEntity.ok(updatedHistoricalOrder) : ResponseEntity.notFound().build();
     }
     
-    @DeleteMapping("/{historical_order_id}")
-    public ResponseEntity<Void> deleteHistoricalOrder(@PathVariable int historical_order_id) {
-        historicalOrdersService.deleteHistoricalOrders(historical_order_id);
+    @DeleteMapping("/{id_historical_order}")
+    public ResponseEntity<Void> deleteHistoricalOrder(@PathVariable int id_historical_order) {
+        historicalOrdersService.deleteHistoricalOrders(id_historical_order);
         
         return ResponseEntity.noContent().build();
     }

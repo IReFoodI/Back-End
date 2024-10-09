@@ -8,11 +8,11 @@ import java.util.Date;
 @Entity
 @Data
 @Table(name="reviews")
-public class Reviews {
+public class Review {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_reviews;
+    private int id_review;
     @Column(nullable = false)
     private int rating_note;
     @Column(nullable = false)

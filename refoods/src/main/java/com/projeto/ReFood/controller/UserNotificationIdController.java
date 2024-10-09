@@ -1,7 +1,7 @@
 package com.projeto.ReFood.controller;
 
-import com.projeto.ReFood.dto.HistoricalOrdersDTO;
-import com.projeto.ReFood.service.HistoricalOrdersService;
+import com.projeto.ReFood.dto.UserNotificationIdDTO;
+import com.projeto.ReFood.service.UserNotificationIdService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,40 +9,40 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/usersnotifications")
+@RequestMapping("/api/usernotifications")
 public class UserNotificationIdController {
-    
+
     @Autowired
-    private HistoricalOrdersService historicalOrdersService;
-    
+    private UserNotificationIdService userNotificationIdService;
+
     @GetMapping
-    public List<HistoricalOrdersDTO> getAllHistoricalOrders() {
-        return historicalOrdersService.getAllHistoricalOrders();
+    public List<UserNotificationIdDTO> getAllUserNotifications() {
+        return userNotificationIdService.getAllUserNotifications();
     }
-    
-    @GetMapping("/{id_historico}")
-    public ResponseEntity<HistoricalOrdersDTO> getHistoricalOrderById(@PathVariable int id_historico) {
-        HistoricalOrdersDTO historicalOrdersDTO = historicalOrdersService.getHistoricalOrdersById(id_historico);
-        
-        return historicalOrdersDTO != null ? ResponseEntity.ok(historicalOrdersDTO) : ResponseEntity.notFound().build();
+
+    @GetMapping("/{fk_id_user}/{fk_id_notification}")
+    public ResponseEntity<UserNotificationIdDTO> getUserNotificationById(@PathVariable int fk_id_user, @PathVariable int fk_id_notification) {
+        UserNotificationIdDTO userNotificationIdDTO = userNotificationIdService.getUserNotificationById(fk_id_user, fk_id_notification);
+        return userNotificationIdDTO != null ? ResponseEntity.ok(userNotificationIdDTO) : ResponseEntity.notFound().build();
     }
-    
+
     @PostMapping
-    public HistoricalOrdersDTO createHistoricalOrder(@RequestBody HistoricalOrdersDTO historicalOrdersDTO) {
-        return historicalOrdersService.createHistoricalOrders(historicalOrdersDTO);
+    public UserNotificationIdDTO createUserNotification(@RequestBody UserNotificationIdDTO userNotificationIdDTO) {
+        return userNotificationIdService.createUserNotification(userNotificationIdDTO);
     }
-    
-    @PutMapping("/{id_historico}")
-    public ResponseEntity<HistoricalOrdersDTO> updateHistoricalOrder(@PathVariable int id_historico, @RequestBody HistoricalOrdersDTO historicalOrdersDTO) {
-        HistoricalOrdersDTO updateHistoricalOrder = historicalOrdersService.updateHistoricalOrders(id_historico, historicalOrdersDTO);
-        
-        return updateHistoricalOrder != null ? ResponseEntity.ok(updateHistoricalOrder) : ResponseEntity.notFound().build();
+
+    @PutMapping("/{fk_id_user}/{fk_id_notification}")
+    public ResponseEntity<UserNotificationIdDTO> updateUserNotification(
+            @PathVariable int fk_id_user,
+            @PathVariable int fk_id_notification,
+            @RequestBody UserNotificationIdDTO userNotificationIdDTO) {
+        UserNotificationIdDTO updatedUserNotification = userNotificationIdService.updateUserNotification(fk_id_user, fk_id_notification, userNotificationIdDTO);
+        return updatedUserNotification != null ? ResponseEntity.ok(updatedUserNotification) : ResponseEntity.notFound().build();
     }
-    
-    @DeleteMapping("/{id_historico}")
-    public ResponseEntity<Void> deleteHistoricalOrder(@PathVariable int id_historico) {
-        historicalOrdersService.deleteHistoricalOrders(id_historico);
-        
+
+    @DeleteMapping("/{fk_id_user}/{fk_id_notification}")
+    public ResponseEntity<Void> deleteUserNotification(@PathVariable int fk_id_user, @PathVariable int fk_id_notification) {
+        userNotificationIdService.deleteUserNotification(fk_id_user, fk_id_notification);
         return ResponseEntity.noContent().build();
     }
 }

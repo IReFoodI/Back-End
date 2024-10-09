@@ -16,7 +16,7 @@ public class ItemsOrdersService {
     @Autowired
     private ItemsOrdersRepository itemsOrdersRepository;
     
-    public List<ItemsOrdersDTO> getAllItensPedidos() {
+    public List<ItemsOrdersDTO> getAllItemsOrders() {
         return itemsOrdersRepository
                 .findAll()
                 .stream()
@@ -24,12 +24,12 @@ public class ItemsOrdersService {
                 .collect(Collectors.toList());
     }
     
-    public ItemsOrdersDTO getItensPedidoById(int idItensPedido) {
-        Optional<ItemsOrders> itensPedido = itemsOrdersRepository.findById(idItensPedido);
-        return itensPedido.map(this::convertToDTO).orElse(null);
+    public ItemsOrdersDTO getItemOrderById(int idItemOrder) {
+        Optional<ItemsOrders> itemOrder = itemsOrdersRepository.findById(idItemOrder);
+        return itemOrder.map(this::convertToDTO).orElse(null);
     }
     
-    public ItemsOrdersDTO createItensPedido(ItemsOrdersDTO itemsOrdersDTO) {
+    public ItemsOrdersDTO createItemOrder(ItemsOrdersDTO itemsOrdersDTO) {
         ItemsOrders itemsOrders = new ItemsOrders();
         
         itemsOrders.setAmount(itemsOrdersDTO.getAmount());
@@ -38,11 +38,11 @@ public class ItemsOrdersService {
         return convertToDTO(itemsOrders);
     }
     
-    public ItemsOrdersDTO updateItensPedido(int idItensPedido, ItemsOrdersDTO itemsOrdersDTO) {
-        Optional<ItemsOrders> itensPedidoOptional = itemsOrdersRepository.findById(idItensPedido);
+    public ItemsOrdersDTO updateItemOrder(int idItemOrder, ItemsOrdersDTO itemsOrdersDTO) {
+        Optional<ItemsOrders> itemOrderOptional = itemsOrdersRepository.findById(idItemOrder);
         
-        if (itensPedidoOptional.isPresent()) {
-            ItemsOrders itemsOrders = itensPedidoOptional.get();
+        if (itemOrderOptional.isPresent()) {
+            ItemsOrders itemsOrders = itemOrderOptional.get();
             
             itemsOrders.setAmount(itemsOrdersDTO.getAmount());
             itemsOrders.setUnit_value(itemsOrdersDTO.getUnit_value());
@@ -55,8 +55,8 @@ public class ItemsOrdersService {
         return null;
     }
     
-    public void deleteItensPedido(int idItensPedido) {
-        itemsOrdersRepository.deleteById(idItensPedido);
+    public void deleteItemOrder(int idItemOrder) {
+        itemsOrdersRepository.deleteById(idItemOrder);
     }
     
     private ItemsOrdersDTO convertToDTO(ItemsOrders itemsOrders) {

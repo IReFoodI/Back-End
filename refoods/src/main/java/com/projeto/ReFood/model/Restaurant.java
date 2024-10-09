@@ -46,7 +46,7 @@ public class Restaurant {
     private Set<Product> restaurantProd;
     
     @OneToOne(mappedBy = "fkid_restaurantReview")
-    private Reviews restaurantReview;
+    private Review restaurantReview;
 
     @OneToOne(mappedBy = "fkid_restaurantFav")
     private Favorite restaurantFav;

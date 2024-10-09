@@ -9,41 +9,40 @@ import com.projeto.ReFood.dto.ItemsOrdersDTO;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/itenspedido")
+@RequestMapping("/api/itemsorders")
 public class ItemsOrdersController {
     
     @Autowired
     private ItemsOrdersService itemsOrdersService;
     
     @GetMapping
-    public List<ItemsOrdersDTO> getAllItensPedido() {
-        return itemsOrdersService.getAllItensPedidos();
+    public List<ItemsOrdersDTO> getAllItemsOrders() {
+        return itemsOrdersService.getAllItemsOrders();
     }
     
-    @GetMapping("/{id_itens_pedido}")
-    public ResponseEntity<ItemsOrdersDTO> getItemPedidoById(@PathVariable int id_itens_pedido) {
-        ItemsOrdersDTO itemsOrdersDTO = itemsOrdersService.getItensPedidoById(id_itens_pedido);
+    @GetMapping("/{id_items_order}")
+    public ResponseEntity<ItemsOrdersDTO> getItemOrderById(@PathVariable int id_items_order) {
+        ItemsOrdersDTO itemsOrdersDTO = itemsOrdersService.getItemOrderById(id_items_order);
         
         return itemsOrdersDTO != null ? ResponseEntity.ok(itemsOrdersDTO) : ResponseEntity.notFound().build();
     }
     
     @PostMapping
-    public ItemsOrdersDTO createItemPedido(@RequestBody ItemsOrdersDTO itemsOrdersDTO) {
-        return itemsOrdersService.createItensPedido(itemsOrdersDTO);
+    public ItemsOrdersDTO createItemOrder(@RequestBody ItemsOrdersDTO itemsOrdersDTO) {
+        return itemsOrdersService.createItemOrder(itemsOrdersDTO);
     }
     
-    @PutMapping("/{id_itens_pedido}")
-    public ResponseEntity<ItemsOrdersDTO> updateItemPedido(@PathVariable int id_itens_pedido, @RequestBody ItemsOrdersDTO itemsOrdersDTO) {
-        ItemsOrdersDTO updateItemPedido = itemsOrdersService.updateItensPedido(id_itens_pedido, itemsOrdersDTO);
+    @PutMapping("/{id_items_order}")
+    public ResponseEntity<ItemsOrdersDTO> updateItemOrder(@PathVariable int id_items_order, @RequestBody ItemsOrdersDTO itemsOrdersDTO) {
+        ItemsOrdersDTO updatedItemOrder = itemsOrdersService.updateItemOrder(id_items_order, itemsOrdersDTO);
         
-        return updateItemPedido != null ? ResponseEntity.ok(updateItemPedido) : ResponseEntity.notFound().build();
+        return updatedItemOrder != null ? ResponseEntity.ok(updatedItemOrder) : ResponseEntity.notFound().build();
     }
     
-    @DeleteMapping("/{id_itens_pedido}")
-    public ResponseEntity<Void> deleteItemPedido(@PathVariable int id_itens_pedido) {
-        itemsOrdersService.deleteItensPedido(id_itens_pedido);
+    @DeleteMapping("/{id_items_order}")
+    public ResponseEntity<Void> deleteItemOrder(@PathVariable int id_items_order) {
+        itemsOrdersService.deleteItemOrder(id_items_order);
         
         return ResponseEntity.noContent().build();
     }
 }
-
