@@ -9,39 +9,39 @@ import com.projeto.ReFood.dto.HistoricalOrdersDTO;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/historicospedidos")
+@RequestMapping("/api/historicalorders")
 public class HistoricalOrdersController {
     
     @Autowired
     private HistoricalOrdersService historicalOrdersService;
     
     @GetMapping
-    public List<HistoricalOrdersDTO> getAllHistoricosPedidos() {
+    public List<HistoricalOrdersDTO> getAllHistoricalOrders() {
         return historicalOrdersService.getAllHistoricalOrders();
     }
     
-    @GetMapping("/{id_historico}")
-    public ResponseEntity<HistoricalOrdersDTO> getHistoricalOrdersById(@PathVariable int id_historico) {
-        HistoricalOrdersDTO historicalOrdersDTO = historicalOrdersService.getHistoricalOrdersById(id_historico);
+    @GetMapping("/{historical_order_id}")
+    public ResponseEntity<HistoricalOrdersDTO> getHistoricalOrderById(@PathVariable int historical_order_id) {
+        HistoricalOrdersDTO historicalOrdersDTO = historicalOrdersService.getHistoricalOrdersById(historical_order_id);
         
         return historicalOrdersDTO != null ? ResponseEntity.ok(historicalOrdersDTO) : ResponseEntity.notFound().build();
     }
     
     @PostMapping
-    public HistoricalOrdersDTO createHistoricalOrders(@RequestBody HistoricalOrdersDTO historicalOrdersDTO) {
+    public HistoricalOrdersDTO createHistoricalOrder(@RequestBody HistoricalOrdersDTO historicalOrdersDTO) {
         return historicalOrdersService.createHistoricalOrders(historicalOrdersDTO);
     }
     
-    @PutMapping("/{id_historico}")
-    public ResponseEntity<HistoricalOrdersDTO> updateHistoricalOrders(@PathVariable int id_historico, @RequestBody HistoricalOrdersDTO historicalOrdersDTO) {
-        HistoricalOrdersDTO updateHistoricalOrders = historicalOrdersService.updateHistoricalOrders(id_historico, historicalOrdersDTO);
+    @PutMapping("/{historical_order_id}")
+    public ResponseEntity<HistoricalOrdersDTO> updateHistoricalOrder(@PathVariable int historical_order_id, @RequestBody HistoricalOrdersDTO historicalOrdersDTO) {
+        HistoricalOrdersDTO updatedHistoricalOrder = historicalOrdersService.updateHistoricalOrders(historical_order_id, historicalOrdersDTO);
         
-        return updateHistoricalOrders != null ? ResponseEntity.ok(updateHistoricalOrders) : ResponseEntity.notFound().build();
+        return updatedHistoricalOrder != null ? ResponseEntity.ok(updatedHistoricalOrder) : ResponseEntity.notFound().build();
     }
     
-    @DeleteMapping("/{id_historico}")
-    public ResponseEntity<Void> deleteHistoricalOrders(@PathVariable int id_historico) {
-        historicalOrdersService.deleteHistoricalOrders(id_historico);
+    @DeleteMapping("/{historical_order_id}")
+    public ResponseEntity<Void> deleteHistoricalOrder(@PathVariable int historical_order_id) {
+        historicalOrdersService.deleteHistoricalOrders(historical_order_id);
         
         return ResponseEntity.noContent().build();
     }
