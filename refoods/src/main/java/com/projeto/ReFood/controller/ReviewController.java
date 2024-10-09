@@ -22,7 +22,7 @@ public class ReviewController {
     
     @GetMapping("/{id_review}")
     public ResponseEntity<ReviewDTO> getReviewsById(@PathVariable int id_reviews) {
-        ReviewDTO reviewsDTO = reviewsService.getReviewsById(id_reviews);
+        ReviewDTO reviewsDTO = reviewsService.getReviewById(id_reviews);
         
         return reviewsDTO != null ? ResponseEntity.ok(reviewsDTO) : ResponseEntity.notFound().build();
     }
