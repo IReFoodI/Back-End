@@ -1,19 +1,26 @@
 package com.projeto.ReFood.dto;
 
-import lombok.Data;
 import java.time.LocalDateTime;
 
-@Data
-public class UserDTO {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
-  private int id_user;
-  private String name;
-  private String surname;
-  private String cpf;
-  private String email;
-  private String phone;
-  private String password;
-  private LocalDateTime  date_creation;
-  private LocalDateTime  last_login;
+public record UserDTO(
+    Long userId,
 
+    @NotBlank(message = "O nome é obrigatório.") String name,
+
+    @NotBlank(message = "O sobrenome é obrigatório.") String surname,
+
+    @NotBlank(message = "O CPF é obrigatório.") String cpf,
+
+    @NotBlank(message = "O e-mail é obrigatório.") String email,
+
+    @NotBlank(message = "O telefone é obrigatório.") String phone,
+
+    @NotBlank(message = "A senha é obrigatória.") String password,
+
+    @NotNull(message = "A data de criação é obrigatória.") LocalDateTime dateCreation,
+
+    LocalDateTime lastLogin) {
 }

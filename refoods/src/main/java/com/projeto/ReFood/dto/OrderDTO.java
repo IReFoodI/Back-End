@@ -1,23 +1,29 @@
 package com.projeto.ReFood.dto;
 
-
-import com.projeto.ReFood.model.Address;
 import com.projeto.ReFood.model.EnumOrderStatus;
-import com.projeto.ReFood.model.Restaurant;
-import com.projeto.ReFood.model.User;
 
-import lombok.Data;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.Date;
 
-@Data
-public class OrderDTO {
-    
-    private int id_order;
-    private Date order_date;
-    private EnumOrderStatus order_status;
-    private float total_value;
-    
-    private User fkid_userOrder;
-    private Restaurant fkid_restaurantOrder;
-    private Address fkid_addressOrder;
-}
+public record OrderDTO(
+    Long orderId,
+
+    @NotNull(message = "A data do pedido não pode ser nula.")
+    Date orderDate,
+
+    @NotNull(message = "O status do pedido não pode ser nulo.")
+    EnumOrderStatus orderStatus,
+
+    @NotNull(message = "O valor total não pode ser nulo.")
+    float totalValue,
+
+    @NotNull(message = "O ID do usuário não pode ser nulo.")
+    Long userId,
+
+    @NotNull(message = "O ID do restaurante não pode ser nulo.")
+    Long restaurantId,
+
+    @NotNull(message = "O ID do endereço não pode ser nulo.")
+    Long addressId
+) {}

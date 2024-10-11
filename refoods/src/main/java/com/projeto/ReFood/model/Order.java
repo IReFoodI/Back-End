@@ -1,43 +1,52 @@
 package com.projeto.ReFood.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Data
-@Table(name="orders")
+@Table(name = "tb_orders")
 public class Order {
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_order;
-    @Column(nullable = false)
-    private Date order_date;
-    @Column(nullable = false)
-    private EnumOrderStatus order_status;
-    @Column(nullable = false)
-    private float total_value;
-    
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "fk_id_user", referencedColumnName = "id_user")
-    private User fkid_userOrder;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "fk_id_restaurant", referencedColumnName = "id_restaurant")
-    private Restaurant fkid_restaurantOrder;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "order_id")
+  private Long orderId;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "fk_id_address", referencedColumnName = "id_address")
-    private Address fkid_addressOrder;
-    
-    @OneToOne(mappedBy = "fkid_orderItemsOrders")
-    private ItemsOrders orderItemsOrders;
+  @NotNull(message = "A data do pedido não pode ser nula.")
+  @Column(nullable = false)
+  private Date orderDate;
 
-    @OneToOne(mappedBy = "fkid_orderHistoricalOrders")
-    private HistoricalOrders historicalOrdersOrders;
-    
-    @OneToOne(mappedBy = "fkid_orderTransaction")
-    private Transaction orderTransaction;
+  @NotNull(message = "O status do pedido não pode ser nulo.")
+  @Column(nullable = false)
+  private EnumOrderStatus orderStatus;
+
+  @NotNull(message = "O valor total não pode ser nulo.")
+  @Column(nullable = false)
+  private float totalValue;
+
+  @ManyToOne
+  @JoinColumn(name = "user_id", nullable = false)
+  private User user;
+
+  @ManyToOne
+  @JoinColumn(name = "restaurant_id", nullable = false)
+  private Restaurant restaurant;
+
+  @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+  private Set<OrderItem> orderOrderItems;
+
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "address_id", nullable = false)
+  private Address associatedAddress;
+
+  @OneToOne(mappedBy = "associatedHistoricalOrder")
+  private HistoricalOrder associatedHistoricalOrder;
+
+  @OneToOne(mappedBy = "associatedOrder")
+  private Transaction associatedTransaction;
 
 }

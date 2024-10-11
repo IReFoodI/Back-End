@@ -1,21 +1,21 @@
 package com.projeto.ReFood.dto;
 
-import com.projeto.ReFood.model.Card;
-import com.projeto.ReFood.model.EnumOrderStatus;
-import com.projeto.ReFood.model.Order;
-
-import lombok.Data;
 import java.util.Date;
 
-@Data
-public class TransactionDTO {
-    
-    private int id_transaction;
-    private Date transaction_date;
-    private float transaction_value;
-    private EnumOrderStatus transaction_status;
-    
-    private Card fkid_card_transaction;
-    private Order fkid_orderTransaction;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
+public record TransactionDTO(
+
+    Long transactionId,
+
+    @NotNull(message = "A data da transação é obrigatória.") Date transactionDate,
+
+    @NotNull(message = "O valor da transação é obrigatório.") float transactionValue,
+
+    @NotBlank(message = "O status da transação é obrigatório.") String transactionStatus,
+
+    @NotNull(message = "O ID do cartão é obrigatório.") Long cardId,
+
+    @NotNull(message = "O ID do pedido associado é obrigatório.") Long orderId) {
 }

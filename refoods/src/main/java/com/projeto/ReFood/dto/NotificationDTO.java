@@ -1,17 +1,20 @@
 package com.projeto.ReFood.dto;
 
-import com.projeto.ReFood.model.UserNotification;
-import lombok.Data;
-import java.util.Date;
+import java.time.LocalDateTime;
 
-@Data
-public class NotificationDTO {
-    
-    private int id_notification;
-    private String msg_notification;
-    private boolean msg_read;
-    private Date send_date;
-    
-    private UserNotification usersNotifications;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
+public record NotificationDTO(
+    Long notificationId,
+
+    @NotBlank(message = "A mensagem da notificação não pode estar vazia.") String msgNotification,
+
+    boolean msgRead,
+
+    @NotNull(message = "A data de envio não pode ser nula.") LocalDateTime sendDate,
+
+    @NotNull(message = "O ID do usuário não pode ser nulo.") Long userId,
+
+    @NotNull(message = "O ID do restaurante não pode ser nulo.") Long restaurantId) {
 }

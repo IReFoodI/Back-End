@@ -1,59 +1,83 @@
 package com.projeto.ReFood.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
 @Entity
 @Data
-@Table(name="restaurants")
+@Table(name = "tb_restaurants")
 public class Restaurant {
-    
-    @Id
+
+  @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_restaurant;
+    @Column(name = "restaurant_id")
+    private Long restaurantId;
+
+    @NotBlank(message = "CNPJ não pode estar vazio.")
     @Column(nullable = false)
     private String cnpj;
+
+    @NotBlank(message = "Nome fantasia não pode estar vazio.")
     @Column(nullable = false)
     private String fantasy;
+
+    @NotBlank(message = "Email não pode estar vazio.")
     @Column(nullable = false)
     private String email;
+
+    @NotBlank(message = "Senha não pode estar vazia.")
     @Column(nullable = false)
     private String password;
+
     @Temporal(TemporalType.TIMESTAMP)
-    private Date date_creation;
-    @Column
-    private String url_banner;
-    @Column
-    private String url_logo;
-    @Column
-    private int quantity_evaluations; //default 0
-    @Column
-    private int total_evaluations; //default 0
-    @Column
-    private float average_rating; //default 0
-    
-    @OneToMany(mappedBy = "fkid_restaurant_contact")
-    private List<Contact> restaurantContact;
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime dateCreation = LocalDateTime.now();
 
-    @OneToMany(mappedBy = "fkid_restaurant_address")
-    private Set<Address> restaurantAdress;
+    @Column
+    private LocalDateTime lastLogin;
 
-    @OneToMany(mappedBy = "fkid_restaurant_prod")
-    private Set<Product> restaurantProd;
-    
-    @OneToOne(mappedBy = "fkid_restaurantReview")
-    private Review restaurantReview;
+    @Column
+    private String urlBanner;
 
-    @OneToOne(mappedBy = "fkid_restaurantFav")
-    private Favorite restaurantFav;
+    @Column
+    private String urlLogo;
 
-    @OneToOne(mappedBy = "fkid_restaurantOrder")
-    private Order restaurantOrder;
-    
-    @OneToOne(mappedBy = "fkid_restaurantHistoricalOrders")
-    private HistoricalOrders historicalOrdersReview;
+    @Column
+    private int quantityEvaluations = 0; // default 0
+
+    @Column
+    private int totalEvaluations = 0; // default 0
+
+    @Column
+    private float averageRating = 0.0f; // default 0
+
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Contact> restaurantContacts;
+
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Address> restaurantAddresses;
+
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Product> restaurantProducts;
+
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Review> restaurantReviews;
+
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Favorite> restaurantFavorites;
+
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Order> restaurantOrders;
+
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<HistoricalOrder> restaurantHistoricalOrders;
+
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Notification> restaurantNotifications;
+
 }

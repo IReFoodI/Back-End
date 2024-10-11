@@ -1,25 +1,37 @@
 package com.projeto.ReFood.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import java.util.Date;
-import java.util.Set;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
-@Table(name = "notifications")
+@Table(name = "tb_notifications")
 public class Notification {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int id_notification;
-  @Column
-  private String msg_notification;
-  @Column(nullable = false)
-  private boolean msg_read;
-  @Column(nullable = false)
-  private Date send_date;
+  @Column(name = "notification_id") // not blank
+  private Long notificationId;
 
-  @OneToMany(mappedBy = "notification") // Alterado para referenciar corretamente
-  private Set<UserNotification> usersNotifications;
+  @NotBlank(message = "A mensagem da notificação não pode estar vazia.")
+  @Column(nullable = false)
+  private String msgNotification;
+
+  @Column(nullable = false)
+  private boolean msgRead = false; // Padrão é não lida
+
+  @NotNull(message = "A data de envio não pode ser nula.")
+  @Column(nullable = false)
+  private LocalDateTime sendDate;
+
+  @ManyToOne
+  @JoinColumn(name = "user_id", nullable = false)
+  private User user;
+
+  @ManyToOne
+  @JoinColumn(name = "restaurant_id", nullable = false)
+  private Restaurant restaurant;
 }
