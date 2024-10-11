@@ -1,8 +1,10 @@
 package com.projeto.ReFood.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import java.util.Set;
 import java.time.LocalDateTime;
@@ -26,18 +28,22 @@ public class User {
   private String surname;
 
   @NotBlank(message = "O CPF é obrigatório.")
+  @Pattern(regexp = "\\d{11}", message = "O CPF deve conter 11 dígitos numéricos.")
   @Column(nullable = false, unique = true)
   private String cpf;
 
   @NotBlank(message = "O e-mail é obrigatório.")
+  @Email(message = "O e-mail deve ser um endereço de e-mail válido.")
   @Column(nullable = false, unique = true)
   private String email;
 
   @NotBlank(message = "A senha é obrigatória.")
+  // @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$", message = "A senha deve ter pelo menos 8 caracteres, incluindo pelo menos uma letra maiúscula, uma letra minúscula e um número.")
   @Column(nullable = false)
   private String password;
 
   @NotBlank(message = "O telefone é obrigatório.")
+  @Pattern(regexp = "\\d{10,15}", message = "O telefone deve conter entre 10 e 15 dígitos numéricos.")
   @Column(nullable = false)
   private String phone;
 
