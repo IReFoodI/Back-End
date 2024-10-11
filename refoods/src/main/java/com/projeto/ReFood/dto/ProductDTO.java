@@ -1,22 +1,32 @@
 package com.projeto.ReFood.dto;
 
-import lombok.Data;
 import java.util.Date;
 
-import com.projeto.ReFood.model.Restaurant;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
-@Data
-public class ProductDTO {
+public record ProductDTO(
+    Long productId,
 
-  private int id_product;
-  private String name_prod;
-  private String description_prod;
-  private String url_img_prod;
-  private float value_prod;
-  private int discount; // % check: descontoPerc >= 0 and descontoPerc <= 100
-  private Date addition_date;
-  private boolean active;
+    @NotBlank(message = "O nome do produto não pode estar vazio.")
+    String nameProd,
 
-  private Restaurant fkid_restaurant_prod;
+    String descriptionProd,
 
-}
+    String urlImgProd,
+
+    @NotNull(message = "O valor do produto não pode ser nulo.")
+    float valueProd,
+
+    @NotNull(message = "O desconto deve ser um valor válido.")
+    int discount,
+
+    @NotNull(message = "A data de adição não pode ser nula.")
+    Date additionDate,
+
+    @NotNull(message = "O status ativo deve ser especificado.")
+    boolean active,
+
+    @NotNull(message = "O ID do restaurante não pode ser nulo.")
+    Long restaurantId
+) {}

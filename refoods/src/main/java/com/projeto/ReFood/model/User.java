@@ -1,54 +1,77 @@
 package com.projeto.ReFood.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import java.util.Set;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
-@Table(name="users")
+@Table(name = "tb_users")
 public class User {
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_user;
-    @Column(nullable = false)
-    private String name;
-    @Column(nullable = false)
-    private String surname;
-    @Column(nullable = false)
-    private String cpf;
-    @Column(nullable = false)
-    private String email;
-    @Column(nullable = false)
-    private String password;
-    @Column(nullable = false)
-    private String phone;
-    @Column(nullable = false)
-    private Date date_creation;
-    @Column(nullable = false)
-    private Date last_login;
 
-    @OneToMany(mappedBy = "fkid_user_address")
-    private Set<Address> userAdress;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "user_id")
+  private Long userId;
 
-    @OneToMany(mappedBy = "fkid_user_fav")
-    private Set<Favorite> userFav;
+  @NotBlank(message = "O nome é obrigatório.")
+  @Column(nullable = false)
+  private String name;
 
-    @OneToMany(mappedBy = "fkid_user_card")
-    private Set<Card> usersCard;
-    
-    @OneToOne(mappedBy = "fkid_userReview")
-    private Review userReview;
+  @NotBlank(message = "O sobrenome é obrigatório.")
+  @Column(nullable = false)
+  private String surname;
 
-    @OneToOne(mappedBy = "fkid_userOrder")
-    private Order userOrder;
-    
-    @OneToOne(mappedBy = "fkid_userHistoricalOrders")
-    private HistoricalOrders userOrdersOrders;
+  @NotBlank(message = "O CPF é obrigatório.")
+  @Pattern(regexp = "\\d{11}", message = "O CPF deve conter 11 dígitos numéricos.")
+  @Column(nullable = false, unique = true)
+  private String cpf;
 
-    @OneToMany(mappedBy = "fk_id_user")
-    private Set<UserNotification> usersNotifications;
-    
+  @NotBlank(message = "O e-mail é obrigatório.")
+  @Email(message = "O e-mail deve ser um endereço de e-mail válido.")
+  @Column(nullable = false, unique = true)
+  private String email;
+
+  @NotBlank(message = "A senha é obrigatória.")
+  // @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$", message = "A senha deve ter pelo menos 8 caracteres, incluindo pelo menos uma letra maiúscula, uma letra minúscula e um número.")
+  @Column(nullable = false)
+  private String password;
+
+  @NotBlank(message = "O telefone é obrigatório.")
+  @Pattern(regexp = "\\d{10,15}", message = "O telefone deve conter entre 10 e 15 dígitos numéricos.")
+  @Column(nullable = false)
+  private String phone;
+
+  @NotNull(message = "A data de criação é obrigatória.")
+  @Column(name = "date_creation", nullable = false)
+  private LocalDateTime dateCreation;
+
+  @Column(name = "last_login")
+  private LocalDateTime lastLogin;
+
+  @OneToMany(mappedBy = "user")
+  private Set<Address> userAddresses;
+
+  @OneToMany(mappedBy = "user")
+  private Set<Favorite> userFavorites;
+
+  @OneToMany(mappedBy = "user")
+  private Set<Card> userCards;
+
+  @OneToMany(mappedBy = "user")
+  private Set<Notification> userNotifications;
+
+  @OneToMany(mappedBy = "user")
+  private Set<Order> userOrders;
+
+  @OneToMany(mappedBy = "user")
+  private Set<Review> userReviews;
+
+  @OneToMany(mappedBy = "user")
+  private Set<HistoricalOrder> userHistoricalOrders;
 }

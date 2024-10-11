@@ -1,47 +1,58 @@
 package com.projeto.ReFood.controller;
 
 import com.projeto.ReFood.dto.UserDTO;
+import com.projeto.ReFood.exception.NotFoundException;
 import com.projeto.ReFood.service.UserService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
-    
-    @Autowired
-    private UserService userService;
-    
-    @GetMapping
-    public List<UserDTO> getAllUsers() {
-        return userService.getAllUsers();
-    }
-    @GetMapping("/{id_user}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable int id_user){
-        UserDTO userDTO = userService.getUserById(id_user);
-        
-        return userDTO != null ? ResponseEntity.ok(userDTO) : ResponseEntity.notFound().build();
-    }
-    
-    @PostMapping
-    public UserDTO createUser(@RequestBody UserDTO userDTO){
-        return userService.createUser(userDTO);
-    }
-    
-    @PutMapping("/{id_user}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable int id_user, @RequestBody UserDTO userDTO){
-        UserDTO updateUser = userService.updateUser(id_user, userDTO);
-        
-        return updateUser != null ? ResponseEntity.ok(updateUser) : ResponseEntity.notFound().build();
-    }
-    
-    @DeleteMapping("/{id_user}")
-    public ResponseEntity<Void> deleteUser(@PathVariable int id_user){
-        userService.deleteUser(id_user);
-        
-        return ResponseEntity.noContent().build();
-    }
+
+  @Autowired
+  private UserService userService;
+
+  @GetMapping
+  public ResponseEntity<List<UserDTO>> listAllUsers() {
+    List<UserDTO> users = userService.getAllUsers();
+    return ResponseEntity.ok(users);
+  }
+
+  @GetMapping("/{userId}")
+  public ResponseEntity<UserDTO> getUserById(@PathVariable Long userId) throws NotFoundException {
+    UserDTO userDTO = userService.getUserById(userId);
+    return ResponseEntity.ok(userDTO);
+  }
+
+  @PostMapping
+  public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO) {
+    UserDTO createdUser = userService.createUser(userDTO);
+    URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+        .path("/{userId}")
+        .buildAndExpand(createdUser.userId())
+        .toUri();
+    return ResponseEntity.created(location).body(createdUser);
+  }
+
+  @PutMapping("/{userId}")
+  public ResponseEntity<UserDTO> updateUser(@PathVariable Long userId, @Valid @RequestBody UserDTO userDTO)
+      throws NotFoundException {
+    UserDTO updatedUser = userService.updateUser(userId, userDTO);
+    return ResponseEntity.ok(updatedUser);
+  }
+
+  @DeleteMapping("/{userId}")
+  public ResponseEntity<Void> deleteUser(@PathVariable Long userId) throws NotFoundException {
+    userService.deleteUser(userId);
+    return ResponseEntity.noContent().build();
+  }
 }

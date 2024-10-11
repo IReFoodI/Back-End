@@ -1,15 +1,15 @@
 package com.projeto.ReFood.dto;
 
-import com.projeto.ReFood.model.Restaurant;
-import lombok.Data;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
-@Data
-public class ContactDTO {
+public record ContactDTO(
+    Long contactId,
 
-  private int id_contact;
-  private String description;
-  private String phone;
+    @NotBlank(message = "A descrição do contato é obrigatória.") @Size(max = 255, message = "A descrição não pode ter mais de 255 caracteres.") String description,
 
-  private Restaurant fkid_restaurant_contact;
+    @NotBlank(message = "O telefone é obrigatório.") @Pattern(regexp = "\\(?\\d{2}\\)?[\\s-]?\\d{4,5}-?\\d{4}", message = "O telefone deve estar no formato correto (ex: (XX) XXXX-XXXX ou (XX) XXXXX-XXXX).") String phone,
 
+    Long restaurantId) {
 }

@@ -1,26 +1,31 @@
 package com.projeto.ReFood.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.util.Date;
 
 @Entity
 @Data
-@Table(name="favorites")
+@Table(name = "tb_favorites")
 public class Favorite {
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_favorite;
-    @Column(nullable = false)
-    private Date addition_date;
-    
-    @ManyToOne
-    @JoinColumn(name = "fk_id_user")
-    private User fkid_user_fav;
-    
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "fk_id_restaurant", referencedColumnName = "id_restaurant")
-    private Restaurant fkid_restaurantFav;
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "favorite_id")
+  private Long favoriteId;
+  
+  @NotNull(message = "A data de adição é obrigatória.")
+  @Temporal(TemporalType.TIMESTAMP) // Para armazenar data e hora
+  @Column(nullable = false)
+  private Date additionDate;
+
+  @ManyToOne
+  @JoinColumn(name = "user_id", nullable = false)
+  private User user;
+
+  @ManyToOne
+  @JoinColumn(name = "restaurant_id", nullable = false)
+  private Restaurant restaurant;
 }

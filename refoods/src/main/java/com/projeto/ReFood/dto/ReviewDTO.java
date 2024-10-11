@@ -1,19 +1,19 @@
 package com.projeto.ReFood.dto;
 
-import com.projeto.ReFood.model.Restaurant;
-import com.projeto.ReFood.model.User;
-import lombok.Data;
 import java.util.Date;
 
-@Data
-public class ReviewDTO {
+import jakarta.validation.constraints.NotNull;
 
-  private int id_review;
-  private int rating_note;
-  private Date rating_date;
-  private String rating_comment;
+public record ReviewDTO(
+    Long reviewId,
 
-  private User fkid_userReview;
-  private Restaurant fkid_restaurantReview;
+    @NotNull(message = "Nota de avaliação não pode ser nula.") int ratingNote,
 
+    @NotNull(message = "Data de avaliação não pode ser nula.") Date ratingDate,
+
+    String ratingComment,
+
+    @NotNull(message = "ID do usuário não pode ser nulo.") Long userId,
+
+    @NotNull(message = "ID do restaurante não pode ser nulo.") Long restaurantId) {
 }

@@ -1,21 +1,25 @@
 package com.projeto.ReFood.dto;
 
-import lombok.Data;
-import java.util.Date;
+import java.time.LocalDateTime;
 
-@Data
-public class RestaurantDTO {
-    
-    private int id_restaurant;
-    private String cnpj;
-    private String fantasy;
-    private String email;
-    private String password;
-    private Date date_creation;
-    private String url_banner;
-    private String url_logo;
-    private int quantity_evaluations; //default 0
-    private int total_evaluations; //default 0
-    private float average_rating; //default 0
+import jakarta.validation.constraints.NotBlank;
 
+public record RestaurantDTO(
+    Long restaurantId,
+
+    @NotBlank(message = "CNPJ não pode estar vazio.") String cnpj,
+
+    @NotBlank(message = "Nome fantasia não pode estar vazio.") String fantasy,
+
+    @NotBlank(message = "Email não pode estar vazio.") String email,
+
+    @NotBlank(message = "Senha não pode estar vazia.") String password,
+
+    String urlBanner,
+    String urlLogo,
+    int quantityEvaluations,
+    int totalEvaluations,
+    float averageRating,
+    LocalDateTime dateCreation,
+    LocalDateTime lastLogin) {
 }

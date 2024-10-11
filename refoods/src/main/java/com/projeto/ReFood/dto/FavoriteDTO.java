@@ -1,17 +1,15 @@
 package com.projeto.ReFood.dto;
 
-import com.projeto.ReFood.model.Restaurant;
-import com.projeto.ReFood.model.User;
-import lombok.Data;
 import java.util.Date;
 
-@Data
-public class FavoriteDTO {
+import jakarta.validation.constraints.NotNull;
 
-  private int id_favorite;
-  private Date addition_date;
+public record FavoriteDTO(
+    Long favoriteId,
 
-  private User fkid_user_fav;
-  private Restaurant fkid_restaurantFav;
+    @NotNull(message = "A data de adição é obrigatória.") Date additionDate,
 
+    @NotNull(message = "O ID do usuário é obrigatório.") Long userId,
+
+    @NotNull(message = "O ID do restaurante é obrigatório.") Long restaurantId) {
 }
