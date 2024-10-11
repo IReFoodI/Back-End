@@ -1,74 +1,139 @@
 package com.projeto.ReFood.service;
 
 import com.projeto.ReFood.repository.AddressRepository;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
+
 import com.projeto.ReFood.dto.AddressDTO;
+import com.projeto.ReFood.exception.NotFoundException;
 import com.projeto.ReFood.model.Address;
+import com.projeto.ReFood.model.Order;
+import com.projeto.ReFood.model.Restaurant;
+import com.projeto.ReFood.model.User;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Validated
 public class AddressService {
-    
-    @Autowired
-    private AddressRepository addressRepository;
-    
-    public List<AddressDTO> getAllAddress() {
-        return addressRepository
-                .findAll()
-                .stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+
+  @Autowired
+  private AddressRepository addressRepository;
+
+  @Transactional(readOnly = true)
+  public List<AddressDTO> getAllAddresses() {
+    return addressRepository
+        .findAll()
+        .stream()
+        .map(this::convertToDTO)
+        .collect(Collectors.toList());
+  }
+
+  @Transactional(readOnly = true)
+  public AddressDTO getAddressById(Long addressId) {
+    Address address = addressRepository.findById(addressId)
+        .orElseThrow(() -> new NotFoundException("Address not found with ID: " + addressId));
+    return convertToDTO(address);
+  }
+
+  @Transactional
+  public AddressDTO createAddress(@Valid AddressDTO addressDTO, User user, Restaurant restaurant, Order order) {
+    Address address = new Address();
+
+    address.setCep(addressDTO.cep());
+    address.setState(addressDTO.state());
+    address.setDistrict(addressDTO.district());
+    address.setStreet(addressDTO.street());
+    address.setNumber(addressDTO.number());
+    address.setComplement(addressDTO.complement());
+    address.setAddressType(addressDTO.addressType());
+    address.setStandard(addressDTO.isStandard());
+
+    if (user != null) {
+      address.setUser(user);
     }
-    
-    public AddressDTO getAddressById(int idAddress) {
-        Optional<Address> address = addressRepository.findById(idAddress);
-        return address.map(this::convertToDTO).orElse(null);
+    if (restaurant != null) {
+      address.setRestaurant(restaurant);
     }
-    
-    public AddressDTO createAddress(AddressDTO addressDTO) {
-        Address address = new Address();
-        
-        address.setStreet(addressDTO.getStreet());
-        address.setNumber(addressDTO.getNumber());
-        address.setDistrict(addressDTO.getDistrict());
-        addressRepository.save(address);
-        return convertToDTO(address);
+    if (order != null) {
+      address.setAssociatedOrder(order);
     }
-    
-    public AddressDTO updateAddress(int idAddress, AddressDTO addressDTO) {
-        Optional<Address> addressOptional = addressRepository.findById(idAddress);
-        
-        if (addressOptional.isPresent()) {
-            Address address = addressOptional.get();
-            
-            address.setStreet(addressDTO.getStreet());
-            address.setNumber(addressDTO.getNumber());
-            address.setDistrict(addressDTO.getDistrict());
-            
-            addressRepository.save(address);
-            
-            return convertToDTO(address);
-        }
-        
-        return null;
+
+    addressRepository.save(address);
+    return convertToDTO(address);
+  }
+
+  @Transactional
+  public AddressDTO updateAddress(Long addressId, @Valid AddressDTO addressDTO) {
+    Address address = addressRepository.findById(addressId)
+        .orElseThrow(() -> new NotFoundException("Address not found with ID: " + addressId));
+
+    address.setStreet(addressDTO.street());
+    address.setNumber(addressDTO.number());
+    address.setDistrict(addressDTO.district());
+    address.setComplement(addressDTO.complement());
+    address.setAddressType(addressDTO.addressType());
+    address.setStandard(addressDTO.isStandard());
+    address.setCep(addressDTO.cep());
+    address.setState(addressDTO.state());
+
+    address = addressRepository.save(address);
+
+    return convertToDTO(address);
+  }
+
+  @Transactional
+  public void deleteAddress(Long addressId) {
+    if (!addressRepository.existsById(addressId)) {
+      throw new NotFoundException("Address not found with ID: " + addressId);
     }
-    
-    public void deleteAddress(int idAddress) {
-        addressRepository.deleteById(idAddress);
+    addressRepository.deleteById(addressId);
+  }
+
+  public AddressDTO convertToDTO(Address address) {
+    return new AddressDTO(
+        address.getAddressId(),
+        address.getCep(),
+        address.getState(),
+        address.getDistrict(),
+        address.getStreet(),
+        address.getNumber(),
+        address.getComplement(),
+        address.getAddressType(),
+        address.isStandard(),
+        address.getUser() != null ? address.getUser().getUserId() : null,
+        address.getRestaurant() != null ? address.getRestaurant().getRestaurantId() : null,
+        address.getAssociatedOrder() != null ? address.getAssociatedOrder().getOrderId() : null);
+  }
+
+  public Address convertToEntity(AddressDTO addressDTO, User user, Restaurant restaurant, Order order) {
+    Address address = new Address();
+    address.setAddressId(addressDTO.addressId());
+    address.setCep(addressDTO.cep());
+    address.setState(addressDTO.state());
+    address.setDistrict(addressDTO.district());
+    address.setStreet(addressDTO.street());
+    address.setNumber(addressDTO.number());
+    address.setComplement(addressDTO.complement());
+    address.setAddressType(addressDTO.addressType());
+    address.setStandard(addressDTO.isStandard());
+
+    if (user != null) {
+      address.setUser(user);
     }
-    
-    private AddressDTO convertToDTO(Address address) {
-        AddressDTO addressDTO = new AddressDTO();
-        
-        addressDTO.setId_address(address.getId_address());
-        addressDTO.setStreet(address.getStreet());
-        addressDTO.setNumber(address.getNumber());
-        addressDTO.setDistrict(address.getDistrict());
-        
-        return addressDTO;
+    if (restaurant != null) {
+      address.setRestaurant(restaurant);
     }
+    if (order != null) {
+      address.setAssociatedOrder(order);
+    }
+    return address;
+  }
 }
