@@ -45,7 +45,7 @@ public class CardService {
   @Transactional
   public CardDTO createCard(@Valid CardDTO cardDTO) {
     Card card = convertToEntity(cardDTO);
-    utilityService.associateUser(card, cardDTO.userId());
+    utilityService.associateUser(card::setUser, cardDTO.userId());
     utilityService.associateTransactions(card, cardDTO.transactionIds());
     card = cardRepository.save(card);
     return convertToDTO(card);
@@ -61,7 +61,7 @@ public class CardService {
     card.setValidity(cardDTO.validity());
     card.setCvv(cardDTO.cvv());
 
-    utilityService.associateUser(card, cardDTO.userId());
+    utilityService.associateUser(card::setUser, cardDTO.userId());
     utilityService.associateTransactions(card, cardDTO.transactionIds());
 
     card = cardRepository.save(card);
@@ -98,7 +98,7 @@ public class CardService {
     card.setHolderName(cardDTO.holderName());
     card.setValidity(cardDTO.validity());
     card.setCvv(cardDTO.cvv());
-    utilityService.associateUser(card, cardDTO.userId());
+    utilityService.associateUser(card::setUser, cardDTO.userId());
     utilityService.associateTransactions(card, cardDTO.transactionIds());
     return card;
   }

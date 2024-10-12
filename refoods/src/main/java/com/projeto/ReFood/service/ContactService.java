@@ -45,7 +45,7 @@ public class ContactService {
   @Transactional
   public ContactDTO createContact(@Valid ContactDTO contactDTO) {
     Contact contact = convertToEntity(contactDTO);
-    utilityService.associateRestaurant(contact, contactDTO.restaurantId());
+    utilityService.associateRestaurant(contact::setRestaurant, contactDTO.restaurantId());
     return convertToDTO(contactRepository.save(contact));
   }
 
@@ -56,7 +56,7 @@ public class ContactService {
 
     contact.setDescription(contactDTO.description());
     contact.setPhone(contactDTO.phone());
-    utilityService.associateRestaurant(contact, contactDTO.restaurantId());
+    utilityService.associateRestaurant(contact::setRestaurant, contactDTO.restaurantId());
 
     return convertToDTO(contactRepository.save(contact));
   }
