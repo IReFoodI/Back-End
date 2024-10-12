@@ -31,10 +31,27 @@ public class FavoriteService {
   }
 
   @Transactional
-  public FavoriteDTO saveFavorite(@Valid FavoriteDTO favoriteDTO) {
-    Favorite favorite = convertToEntity(favoriteDTO);
+  public FavoriteDTO createFavorite(@Valid FavoriteDTO favoriteDTO) {
+    Favorite favorite = new Favorite();
+    favorite.setAdditionDate(favoriteDTO.additionDate());
+
     utilityService.associateUser(favorite::setUser, favoriteDTO.userId());
     utilityService.associateRestaurant(favorite::setRestaurant, favoriteDTO.restaurantId());
+
+    favorite = favoriteRepository.save(favorite);
+    return convertToDTO(favorite);
+  }
+
+  @Transactional
+  public FavoriteDTO updateFavorite(Long favoriteId, @Valid FavoriteDTO favoriteDTO) {
+    Favorite favorite = favoriteRepository.findById(favoriteId)
+        .orElseThrow(() -> new NotFoundException("Favorito não encontrado."));
+
+    favorite.setAdditionDate(favoriteDTO.additionDate());
+
+    utilityService.associateUser(favorite::setUser, favoriteDTO.userId());
+    utilityService.associateRestaurant(favorite::setRestaurant, favoriteDTO.restaurantId());
+
     favorite = favoriteRepository.save(favorite);
     return convertToDTO(favorite);
   }
@@ -53,16 +70,5 @@ public class FavoriteService {
         favorite.getAdditionDate(),
         favorite.getUser().getUserId(),
         favorite.getRestaurant().getRestaurantId());
-  }
-
-  private Favorite convertToEntity(FavoriteDTO favoriteDTO) {
-    Favorite favorite = new Favorite();
-    favorite.setFavoriteId(favoriteDTO.favoriteId());
-    favorite.setAdditionDate(favoriteDTO.additionDate());
-
-    utilityService.associateUser(favorite::setUser, favoriteDTO.userId());
-    utilityService.associateRestaurant(favorite::setRestaurant, favoriteDTO.restaurantId());
-
-    return favorite;
   }
 }
