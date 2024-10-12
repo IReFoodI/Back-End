@@ -1,11 +1,13 @@
 package com.projeto.ReFood.dto;
 
+import com.projeto.ReFood.model.OrderItemPK;
+
 import jakarta.validation.constraints.NotNull;
 
 public record OrderItemDTO(
-    Long itemId,
+    @NotNull(message = "O ID do item do pedido não pode ser nulo.") OrderItemPK orderItemId,
 
-    @NotNull(message = "A quantidade não pode ser nula.") int amount,
+    @NotNull(message = "A quantidade não pode ser nula.") int quantity,
 
     @NotNull(message = "O valor unitário não pode ser nulo.") float unitValue,
 

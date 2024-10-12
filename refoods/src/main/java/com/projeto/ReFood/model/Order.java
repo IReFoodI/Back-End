@@ -43,10 +43,6 @@ public class Order {
   @JoinColumn(name = "restaurant_id", nullable = false)
   private Restaurant restaurant;
 
-  @NotEmpty(message = "O pedido deve conter pelo menos um item.")
-  @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-  private Set<OrderItem> orderOrderItems;
-
   @NotNull(message = "O endereço associado não pode ser nulo.")
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "address_id", nullable = false)
@@ -57,5 +53,9 @@ public class Order {
 
   @OneToOne(mappedBy = "associatedOrder")
   private Transaction associatedTransaction;
+  
+  @NotEmpty(message = "O pedido deve conter pelo menos um item.")
+  @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+  private Set<OrderItem> orderItems;
 
 }

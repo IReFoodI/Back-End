@@ -46,10 +46,13 @@ VALUES
     (NOW(), 2, 50.0, 2, 2, 2);
 
 -- Inserindo dados na tabela tb_order_items
-INSERT INTO tb_order_items (amount, subtotal, unit_value, order_id, product_id)
+INSERT INTO tb_order_items (order_id, product_id, quantity, unit_value, subtotal)
 VALUES 
-    (2, 40.0, 20.0, 1, 1),
-    (1, 30.0, 30.0, 2, 2);
+    (1, 1, 2, 20.0, 40.0), -- 2 unidades do Product One no pedido 1
+    (1, 2, 1, 30.0, 30.0), -- 1 unidade do Product Two no pedido 1
+    (2, 1, 1, 20.0, 20.0), -- 1 unidade do Product One no pedido 2
+    (2, 2, 2, 30.0, 60.0); -- 2 unidades do Product Two no pedido 2
+
 
 -- Inserindo dados na tabela tb_reviews
 INSERT INTO tb_reviews (rating_comment, rating_date, rating_note, restaurant_id, user_id)

@@ -11,12 +11,14 @@ import com.projeto.ReFood.model.Address;
 import com.projeto.ReFood.model.Card;
 import com.projeto.ReFood.model.HistoricalOrder;
 import com.projeto.ReFood.model.Order;
+import com.projeto.ReFood.model.Product;
 import com.projeto.ReFood.model.Restaurant;
 import com.projeto.ReFood.model.Transaction;
 import com.projeto.ReFood.model.User;
 import com.projeto.ReFood.repository.AddressRepository;
 import com.projeto.ReFood.repository.CardRepository;
 import com.projeto.ReFood.repository.OrderRepository;
+import com.projeto.ReFood.repository.ProductRepository;
 import com.projeto.ReFood.repository.RestaurantRepository;
 import com.projeto.ReFood.repository.TransactionRepository;
 import com.projeto.ReFood.repository.UserRepository;
@@ -33,6 +35,7 @@ public class UtilityService {
   private final OrderRepository orderRepository;
   private final AddressRepository addressRepository;
   private final CardRepository cardRepository;
+  private final ProductRepository productRepository;
 
   public boolean isEmailUnique(String email) {
     return !userRepository.existsByEmail(email) && !restaurantRepository.existsByEmail(email);
@@ -101,6 +104,16 @@ public class UtilityService {
       cardSetter.accept(card);
     } else {
       throw new IllegalArgumentException("Card ID cannot be null when associating a card.");
+    }
+  }
+
+  public void associateProduct(Consumer<Product> productSetter, Long productId) {
+    if (productId != null) {
+      Product product = productRepository.findById(productId)
+          .orElseThrow(() -> new NotFoundException("Produto não encontrado com ID: " + productId));
+      productSetter.accept(product);
+    } else {
+      throw new IllegalArgumentException("Product ID cannot be null when associating a product.");
     }
   }
 
