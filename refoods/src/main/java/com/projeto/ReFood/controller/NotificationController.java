@@ -1,48 +1,61 @@
 package com.projeto.ReFood.controller;
 
 import com.projeto.ReFood.service.NotificationService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.projeto.ReFood.dto.NotificationDTO;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.projeto.ReFood.dto.NotificationDTO;
+import com.projeto.ReFood.exception.NotFoundException;
+
+import java.net.URI;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/notifications")
 public class NotificationController {
-    
-    @Autowired
-    private NotificationService notificationService;
-    
-    @GetMapping
-    public List<NotificationDTO> getAllNotifications() {
-        return notificationService.getAllNotifications();
-    }
-    
-    @GetMapping("/{id_notification}")
-    public ResponseEntity<NotificationDTO> getNotificationById(@PathVariable int id_notification) {
-        NotificationDTO notificationDTO = notificationService.getNotificationById(id_notification);
-        
-        return notificationDTO != null ? ResponseEntity.ok(notificationDTO) : ResponseEntity.notFound().build();
-    }
-    
-    @PostMapping
-    public NotificationDTO createNotification(@RequestBody NotificationDTO notificationDTO) {
-        return notificationService.createNotification(notificationDTO);
-    }
-    
-    @PutMapping("/{id_notification}")
-    public ResponseEntity<NotificationDTO> updateNotification(@PathVariable int id_notification, @RequestBody NotificationDTO notificationDTO) {
-        NotificationDTO updateNotification = notificationService.updateNotification(id_notification, notificationDTO);
-        
-        return updateNotification != null ? ResponseEntity.ok(updateNotification) : ResponseEntity.notFound().build();
-    }
-    
-    @DeleteMapping("/{id_notification}")
-    public ResponseEntity<Void> deleteNotification(@PathVariable int id_notification) {
-        notificationService.deleteNotification(id_notification);
-        
-        return ResponseEntity.noContent().build();
-    }
+
+  @Autowired
+  private NotificationService notificationService;
+
+  @GetMapping
+  public ResponseEntity<List<NotificationDTO>> listAllNotifications() {
+    List<NotificationDTO> notifications = notificationService.getAllNotifications();
+    return ResponseEntity.ok(notifications);
+  }
+
+  @GetMapping("/{notificationId}")
+  public ResponseEntity<NotificationDTO> getNotificationById(@PathVariable Long notificationId)
+      throws NotFoundException {
+    NotificationDTO notificationDTO = notificationService.getNotificationById(notificationId);
+    return ResponseEntity.ok(notificationDTO);
+  }
+
+  @PostMapping
+  public ResponseEntity<NotificationDTO> createNotification(@Valid @RequestBody NotificationDTO notificationDTO) {
+    NotificationDTO createdNotification = notificationService.createNotification(notificationDTO);
+    URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+        .path("/{notificationId}")
+        .buildAndExpand(createdNotification.notificationId())
+        .toUri();
+    return ResponseEntity.created(location).body(createdNotification);
+  }
+
+  @PutMapping("/{notificationId}")
+  public ResponseEntity<NotificationDTO> updateNotification(@PathVariable Long notificationId,
+      @Valid @RequestBody NotificationDTO notificationDTO)
+      throws NotFoundException {
+    NotificationDTO updatedNotification = notificationService.updateNotification(notificationId, notificationDTO);
+    return ResponseEntity.ok(updatedNotification);
+  }
+
+  @DeleteMapping("/{notificationId}")
+  public ResponseEntity<Void> deleteNotification(@PathVariable Long notificationId) throws NotFoundException {
+    notificationService.deleteNotification(notificationId);
+    return ResponseEntity.noContent().build();
+  }
 }
