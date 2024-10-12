@@ -8,9 +8,12 @@ import org.springframework.stereotype.Service;
 
 import com.projeto.ReFood.exception.NotFoundException;
 import com.projeto.ReFood.model.Card;
+import com.projeto.ReFood.model.HistoricalOrder;
+import com.projeto.ReFood.model.Order;
 import com.projeto.ReFood.model.Restaurant;
 import com.projeto.ReFood.model.Transaction;
 import com.projeto.ReFood.model.User;
+import com.projeto.ReFood.repository.OrderRepository;
 import com.projeto.ReFood.repository.RestaurantRepository;
 import com.projeto.ReFood.repository.TransactionRepository;
 import com.projeto.ReFood.repository.UserRepository;
@@ -24,6 +27,7 @@ public class UtilityService {
   private final UserRepository userRepository;
   private final RestaurantRepository restaurantRepository;
   private final TransactionRepository transactionRepository;
+  private final OrderRepository orderRepository;
 
   public boolean isEmailUnique(String email) {
     return !userRepository.existsByEmail(email) && !restaurantRepository.existsByEmail(email);
@@ -54,4 +58,14 @@ public class UtilityService {
       card.setCardTransactions(transactions);
     }
   }
+
+      public void associateOrder(HistoricalOrder historicalOrder, Long orderId) { // Novo método
+        if (orderId != null) {
+            Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new NotFoundException("Order not found with ID: " + orderId));
+            historicalOrder.setAssociatedHistoricalOrder(order);
+        } else {
+            throw new IllegalArgumentException("Order ID cannot be null when creating a historical order.");
+        }
+    }
 }
