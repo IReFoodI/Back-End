@@ -17,11 +17,16 @@ public class Card {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "card_id")
   private Long cardId;
-  
+
   @NotBlank(message = "O número do cartão é obrigatório.")
   @Pattern(regexp = "\\d{16}", message = "O número do cartão deve ter 16 dígitos.")
   @Column(nullable = false)
   private String number;
+
+  @NotBlank(message = "O nome do titular do cartão é obrigatório.")
+  @Size(max = 100, message = "O nome do titular pode ter no máximo 100 caracteres.")
+  @Column(nullable = false)
+  private String holderName;
 
   @NotBlank(message = "A validade do cartão é obrigatória.")
   @Pattern(regexp = "(0[1-9]|1[0-2])/\\d{2}", message = "O formato da validade deve ser MM/AA.")
