@@ -3,6 +3,8 @@ package com.projeto.ReFood.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import java.time.LocalDateTime;
 
@@ -17,6 +19,7 @@ public class Notification {
   private Long notificationId;
 
   @NotBlank(message = "A mensagem da notificação não pode estar vazia.")
+  @Size(max = 255, message = "A mensagem da notificação não pode ter mais de 255 caracteres.")
   @Column(nullable = false)
   private String msgNotification;
 
@@ -24,6 +27,7 @@ public class Notification {
   private boolean msgRead = false; // Padrão é não lida
 
   @NotNull(message = "A data de envio não pode ser nula.")
+  @PastOrPresent(message = "A data de envio não pode ser no futuro.")
   @Column(nullable = false)
   private LocalDateTime sendDate;
 

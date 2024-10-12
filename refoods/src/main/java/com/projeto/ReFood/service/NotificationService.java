@@ -1,71 +1,97 @@
 package com.projeto.ReFood.service;
 
 import com.projeto.ReFood.repository.NotificationRepository;
+
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
+
 import com.projeto.ReFood.dto.NotificationDTO;
+import com.projeto.ReFood.exception.NotFoundException;
 import com.projeto.ReFood.model.Notification;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Validated
 public class NotificationService {
-    
-    @Autowired
-    private NotificationRepository notificationRepository;
-    
-    public List<NotificationDTO> getAllNotifications() {
-        return notificationRepository
-                .findAll()
-                .stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+
+  @Autowired
+  private NotificationRepository notificationRepository;
+  @Autowired
+  private UtilityService utilityService;
+
+  @Transactional(readOnly = true)
+  public List<NotificationDTO> getAllNotifications() {
+    return notificationRepository
+        .findAll()
+        .stream()
+        .map(this::convertToDTO)
+        .collect(Collectors.toList());
+  }
+
+  @Transactional(readOnly = true)
+  public NotificationDTO getNotificationById(Long notificationId) {
+    return notificationRepository.findById(notificationId)
+        .map(this::convertToDTO)
+        .orElseThrow(() -> new NotFoundException("Notificação não encontrada."));
+  }
+
+  @Transactional
+  public NotificationDTO createNotification(@Valid NotificationDTO notificationDTO) {
+    Notification notification = convertToEntity(notificationDTO);
+    utilityService.associateUser(notification::setUser, notificationDTO.userId());
+    utilityService.associateRestaurant(notification::setRestaurant, notificationDTO.restaurantId());
+    notification = notificationRepository.save(notification);
+    return convertToDTO(notification);
+  }
+
+  @Transactional
+  public NotificationDTO updateNotification(Long notificationId, @Valid NotificationDTO notificationDTO) {
+    Notification notification = notificationRepository.findById(notificationId)
+        .orElseThrow(() -> new NotFoundException("Notificação não encontrada com ID: " + notificationId));
+
+    notification.setMsgNotification(notificationDTO.msgNotification());
+    notification.setMsgRead(notificationDTO.msgRead());
+    notification.setSendDate(notificationDTO.sendDate());
+
+    utilityService.associateUser(notification::setUser, notificationDTO.userId());
+    utilityService.associateRestaurant(notification::setRestaurant, notificationDTO.restaurantId());
+
+    notification = notificationRepository.save(notification);
+    return convertToDTO(notification);
+  }
+
+  @Transactional
+  public void deleteNotification(Long notificationId) {
+    if (!notificationRepository.existsById(notificationId)) {
+      throw new NotFoundException("Notificação não encontrada.");
     }
-    
-    public NotificationDTO getNotificationById(int idNotification) {
-        Optional<Notification> notification = notificationRepository.findById(idNotification);
-        return notification.map(this::convertToDTO).orElse(null);
-    }
-    
-    public NotificationDTO createNotification(NotificationDTO notificationDTO) {
-        Notification notification = new Notification();
-        
-        notification.setMsg_notification(notificationDTO.getMsg_notification());
-        notification.setSend_date(notificationDTO.getSend_date());
-        notificationRepository.save(notification);
-        return convertToDTO(notification);
-    }
-    
-    public NotificationDTO updateNotification(int idNotification, NotificationDTO notificationDTO) {
-        Optional<Notification> notificationOptional = notificationRepository.findById(idNotification);
-        
-        if (notificationOptional.isPresent()) {
-            Notification notification = notificationOptional.get();
-            
-            notification.setMsg_notification(notificationDTO.getMsg_notification());
-            notification.setSend_date(notificationDTO.getSend_date());
-            
-            notificationRepository.save(notification);
-            
-            return convertToDTO(notification);
-        }
-        
-        return null;
-    }
-    
-    public void deleteNotification(int idNotification) {
-        notificationRepository.deleteById(idNotification);
-    }
-    
-    private NotificationDTO convertToDTO(Notification notification) {
-        NotificationDTO notificationDTO = new NotificationDTO();
-        
-        notificationDTO.setId_notification(notification.getId_notification());
-        notificationDTO.setMsg_notification(notification.getMsg_notification());
-        notificationDTO.setSend_date(notification.getSend_date());
-        
-        return notificationDTO;
-    }
+    notificationRepository.deleteById(notificationId);
+  }
+
+  private NotificationDTO convertToDTO(Notification notification) {
+    return new NotificationDTO(
+        notification.getNotificationId(),
+        notification.getMsgNotification(),
+        notification.isMsgRead(),
+        notification.getSendDate(),
+        notification.getUser().getUserId(),
+        notification.getRestaurant().getRestaurantId());
+  }
+
+  private Notification convertToEntity(NotificationDTO notificationDTO) {
+    Notification notification = new Notification();
+    notification.setNotificationId(notificationDTO.notificationId());
+    notification.setMsgNotification(notificationDTO.msgNotification());
+    notification.setMsgRead(notificationDTO.msgRead());
+    notification.setSendDate(notificationDTO.sendDate());
+    utilityService.associateUser(notification::setUser, notificationDTO.userId());
+    utilityService.associateRestaurant(notification::setRestaurant, notificationDTO.restaurantId());
+    return notification;
+  }
 }
