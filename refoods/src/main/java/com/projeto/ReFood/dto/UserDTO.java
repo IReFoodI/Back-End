@@ -28,7 +28,8 @@ public record UserDTO(
              // message = "A senha deve ter pelo menos 8 caracteres, incluindo pelo menos uma letra maiúscula, uma letra minúscula e um número.") 
              String password,
 
-    @NotNull(message = "A data de criação é obrigatória.") LocalDateTime dateCreation,
+    // @NotNull(message = "A data de criação é obrigatória.") 
+    LocalDateTime dateCreation,
 
     LocalDateTime lastLogin) {
 }
