@@ -1,48 +1,59 @@
 package com.projeto.ReFood.controller;
 
 import com.projeto.ReFood.service.TransactionService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.projeto.ReFood.dto.TransactionDTO;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.projeto.ReFood.dto.TransactionDTO;
+import com.projeto.ReFood.exception.NotFoundException;
+
+import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/transactions")
+@RequestMapping("/api/transaction")
 public class TransactionController {
-    
+
     @Autowired
     private TransactionService transactionService;
-    
+
     @GetMapping
-    public List<TransactionDTO> getAllTransactions() {
-        return transactionService.getAllTransactions();
+    public ResponseEntity<List<TransactionDTO>> listAllTransactions() {
+        List<TransactionDTO> transactions = transactionService.getAllTransactions();
+        return ResponseEntity.ok(transactions);
     }
-    
-    @GetMapping("/{id_transaction}")
-    public ResponseEntity<TransactionDTO> getTransactionById(@PathVariable int id_transaction) {
-        TransactionDTO transactionDTO = transactionService.getTransactionById(id_transaction);
-        
-        return transactionDTO != null ? ResponseEntity.ok(transactionDTO) : ResponseEntity.notFound().build();
+
+    @GetMapping("/{transactionId}")
+    public ResponseEntity<TransactionDTO> getTransactionById(@PathVariable Long transactionId) throws NotFoundException {
+        TransactionDTO transactionDTO = transactionService.getTransactionById(transactionId);
+        return ResponseEntity.ok(transactionDTO);
     }
-    
+
     @PostMapping
-    public TransactionDTO createTransaction(@RequestBody TransactionDTO transactionDTO) {
-        return transactionService.createTransaction(transactionDTO);
+    public ResponseEntity<TransactionDTO> createTransaction(@Valid @RequestBody TransactionDTO transactionDTO) {
+        TransactionDTO createdTransaction = transactionService.createTransaction(transactionDTO);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{transactionId}")
+                .buildAndExpand(createdTransaction.transactionId())
+                .toUri();
+        return ResponseEntity.created(location).body(createdTransaction);
     }
-    
-    @PutMapping("/{id_transaction}")
-    public ResponseEntity<TransactionDTO> updateTransaction(@PathVariable int id_transaction, @RequestBody TransactionDTO transactionDTO) {
-        TransactionDTO updateTransaction = transactionService.updateTransaction(id_transaction, transactionDTO);
-        
-        return updateTransaction != null ? ResponseEntity.ok(updateTransaction) : ResponseEntity.notFound().build();
+
+    @PutMapping("/{transactionId}")
+    public ResponseEntity<TransactionDTO> updateTransaction(@PathVariable Long transactionId, @Valid @RequestBody TransactionDTO transactionDTO)
+            throws NotFoundException {
+        TransactionDTO updatedTransaction = transactionService.updateTransaction(transactionId, transactionDTO);
+        return ResponseEntity.ok(updatedTransaction);
     }
-    
-    @DeleteMapping("/{id_transaction}")
-    public ResponseEntity<Void> deleteTransaction(@PathVariable int id_transaction) {
-        transactionService.deleteTransaction(id_transaction);
-        
+
+    @DeleteMapping("/{transactionId}")
+    public ResponseEntity<Void> deleteTransaction(@PathVariable Long transactionId) throws NotFoundException {
+        transactionService.deleteTransaction(transactionId);
         return ResponseEntity.noContent().build();
     }
 }

@@ -1,48 +1,60 @@
 package com.projeto.ReFood.controller;
 
 import com.projeto.ReFood.service.ProductService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.projeto.ReFood.dto.ProductDTO;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.projeto.ReFood.dto.ProductDTO;
+import com.projeto.ReFood.exception.NotFoundException;
+
+import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping("/api/product")
 public class ProductController {
-    
-    @Autowired
-    private ProductService productService;
-    
-    @GetMapping
-    public List<ProductDTO> getAllProducts() {
-        return productService.getAllProducts();
-    }
-    
-    @GetMapping("/{id_product}")
-    public ResponseEntity<ProductDTO> getProductById(@PathVariable int id_product) {
-        ProductDTO productDTO = productService.getProductById(id_product);
-        
-        return productDTO != null ? ResponseEntity.ok(productDTO) : ResponseEntity.notFound().build();
-    }
-    
-    @PostMapping
-    public ProductDTO createProduct(@RequestBody ProductDTO productDTO) {
-        return productService.createProduct(productDTO);
-    }
-    
-    @PutMapping("/{id_product}")
-    public ResponseEntity<ProductDTO> updateProduct(@PathVariable int id_product, @RequestBody ProductDTO productDTO) {
-        ProductDTO updateProduct = productService.updateProduct(id_product, productDTO);
-        
-        return updateProduct != null ? ResponseEntity.ok(updateProduct) : ResponseEntity.notFound().build();
-    }
-    
-    @DeleteMapping("/{id_product}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable int id_product) {
-        productService.deleteProduct(id_product);
-        
-        return ResponseEntity.noContent().build();
-    }
+
+  @Autowired
+  private ProductService productService;
+
+  @GetMapping
+  public ResponseEntity<List<ProductDTO>> listAllProducts() {
+    List<ProductDTO> products = productService.getAllProducts();
+    return ResponseEntity.ok(products);
+  }
+
+  @GetMapping("/{productId}")
+  public ResponseEntity<ProductDTO> getProductById(@PathVariable Long productId) throws NotFoundException {
+    ProductDTO productDTO = productService.getProductById(productId);
+    return ResponseEntity.ok(productDTO);
+  }
+
+  @PostMapping
+  public ResponseEntity<ProductDTO> createProduct(@Valid @RequestBody ProductDTO productDTO) {
+    ProductDTO createdProduct = productService.createProduct(productDTO);
+    URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+        .path("/{productId}")
+        .buildAndExpand(createdProduct.productId())
+        .toUri();
+    return ResponseEntity.created(location).body(createdProduct);
+  }
+
+  @PutMapping("/{productId}")
+  public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long productId,
+      @Valid @RequestBody ProductDTO productDTO)
+      throws NotFoundException {
+    ProductDTO updatedProduct = productService.updateProduct(productId, productDTO);
+    return ResponseEntity.ok(updatedProduct);
+  }
+
+  @DeleteMapping("/{productId}")
+  public ResponseEntity<Void> deleteProduct(@PathVariable Long productId) throws NotFoundException {
+    productService.deleteProduct(productId);
+    return ResponseEntity.noContent().build();
+  }
 }

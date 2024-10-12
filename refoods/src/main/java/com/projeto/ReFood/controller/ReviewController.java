@@ -1,48 +1,59 @@
 package com.projeto.ReFood.controller;
 
 import com.projeto.ReFood.service.ReviewService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.projeto.ReFood.dto.ReviewDTO;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.projeto.ReFood.dto.ReviewDTO;
+import com.projeto.ReFood.exception.NotFoundException;
+
+import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/reviews")
+@RequestMapping("/api/review")
 public class ReviewController {
-    
-    @Autowired
-    private ReviewService reviewsService;
-    
-    @GetMapping
-    public List<ReviewDTO> getAllReviews() {
-        return reviewsService.getAllReviews();
-    }
-    
-    @GetMapping("/{id_review}")
-    public ResponseEntity<ReviewDTO> getReviewsById(@PathVariable int id_reviews) {
-        ReviewDTO reviewsDTO = reviewsService.getReviewById(id_reviews);
-        
-        return reviewsDTO != null ? ResponseEntity.ok(reviewsDTO) : ResponseEntity.notFound().build();
-    }
-    
-    @PostMapping
-    public ReviewDTO createReviews(@RequestBody ReviewDTO reviewsDTO) {
-        return reviewsService.createReviews(reviewsDTO);
-    }
-    
-    @PutMapping("/{id_review}")
-    public ResponseEntity<ReviewDTO> updateReviews(@PathVariable int id_reviews, @RequestBody ReviewDTO reviewsDTO) {
-        ReviewDTO updateReviews = reviewsService.updateReviews(id_reviews, reviewsDTO);
-        
-        return updateReviews != null ? ResponseEntity.ok(updateReviews) : ResponseEntity.notFound().build();
-    }
-    
-    @DeleteMapping("/{id_review}")
-    public ResponseEntity<Void> deleteReviews(@PathVariable int id_reviews) {
-        reviewsService.deleteReviews(id_reviews);
-        
-        return ResponseEntity.noContent().build();
-    }
+
+  @Autowired
+  private ReviewService reviewService;
+
+  @GetMapping
+  public ResponseEntity<List<ReviewDTO>> listAllReviews() {
+    List<ReviewDTO> reviews = reviewService.getAllReviews();
+    return ResponseEntity.ok(reviews);
+  }
+
+  @GetMapping("/{reviewId}")
+  public ResponseEntity<ReviewDTO> getReviewById(@PathVariable Long reviewId) throws NotFoundException {
+    ReviewDTO reviewDTO = reviewService.getReviewById(reviewId);
+    return ResponseEntity.ok(reviewDTO);
+  }
+
+  @PostMapping
+  public ResponseEntity<ReviewDTO> createReview(@Valid @RequestBody ReviewDTO reviewDTO) {
+    ReviewDTO createdReview = reviewService.createReview(reviewDTO);
+    URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+        .path("/{reviewId}")
+        .buildAndExpand(createdReview.reviewId())
+        .toUri();
+    return ResponseEntity.created(location).body(createdReview);
+  }
+
+  @PutMapping("/{reviewId}")
+  public ResponseEntity<ReviewDTO> updateReview(@PathVariable Long reviewId, @Valid @RequestBody ReviewDTO reviewDTO)
+      throws NotFoundException {
+    ReviewDTO updatedReview = reviewService.updateReview(reviewId, reviewDTO);
+    return ResponseEntity.ok(updatedReview);
+  }
+
+  @DeleteMapping("/{reviewId}")
+  public ResponseEntity<Void> deleteReview(@PathVariable Long reviewId) throws NotFoundException {
+    reviewService.deleteReview(reviewId);
+    return ResponseEntity.noContent().build();
+  }
 }
