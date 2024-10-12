@@ -1,48 +1,59 @@
 package com.projeto.ReFood.controller;
 
 import com.projeto.ReFood.service.OrderService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.projeto.ReFood.dto.OrderDTO;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.projeto.ReFood.dto.OrderDTO;
+import com.projeto.ReFood.exception.NotFoundException;
+
+import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/orders")
+@RequestMapping("/api/order")
 public class OrderController {
-    
-    @Autowired
-    private OrderService orderService;
-    
-    @GetMapping
-    public List<OrderDTO> getAllOrders() {
-        return orderService.getAllOrders();
-    }
-    
-    @GetMapping("/{id_order}")
-    public ResponseEntity<OrderDTO> getOrdersById(@PathVariable int id_order) {
-        OrderDTO orderDTO = orderService.getOrderById(id_order);
-        
-        return orderDTO != null ? ResponseEntity.ok(orderDTO) : ResponseEntity.notFound().build();
-    }
-    
-    @PostMapping
-    public OrderDTO createOrders(@RequestBody OrderDTO orderDTO) {
-        return orderService.createOrder(orderDTO);
-    }
-    
-    @PutMapping("/{id_order}")
-    public ResponseEntity<OrderDTO> updateOrder(@PathVariable int id_order, @RequestBody OrderDTO orderDTO) {
-        OrderDTO updateOrder = orderService.updateOrder(id_order, orderDTO);
-        
-        return updateOrder != null ? ResponseEntity.ok(updateOrder) : ResponseEntity.notFound().build();
-    }
-    
-    @DeleteMapping("/{id_order}")
-    public ResponseEntity<Void> deleteOrder(@PathVariable int id_order) {
-        orderService.deleteOrder(id_order);
-        
-        return ResponseEntity.noContent().build();
-    }
+
+  @Autowired
+  private OrderService orderService;
+
+  @GetMapping
+  public ResponseEntity<List<OrderDTO>> listAllOrders() {
+    List<OrderDTO> orders = orderService.getAllOrders();
+    return ResponseEntity.ok(orders);
+  }
+
+  @GetMapping("/{orderId}")
+  public ResponseEntity<OrderDTO> getOrderById(@PathVariable Long orderId) throws NotFoundException {
+    OrderDTO orderDTO = orderService.getOrderById(orderId);
+    return ResponseEntity.ok(orderDTO);
+  }
+
+  @PostMapping
+  public ResponseEntity<OrderDTO> createOrder(@Valid @RequestBody OrderDTO orderDTO) {
+    OrderDTO createdOrder = orderService.createOrder(orderDTO);
+    URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+        .path("/{orderId}")
+        .buildAndExpand(createdOrder.orderId())
+        .toUri();
+    return ResponseEntity.created(location).body(createdOrder);
+  }
+
+  @PutMapping("/{orderId}")
+  public ResponseEntity<OrderDTO> updateOrder(@PathVariable Long orderId, @Valid @RequestBody OrderDTO orderDTO)
+      throws NotFoundException {
+    OrderDTO updatedOrder = orderService.updateOrder(orderId, orderDTO);
+    return ResponseEntity.ok(updatedOrder);
+  }
+
+  @DeleteMapping("/{orderId}")
+  public ResponseEntity<Void> deleteOrder(@PathVariable Long orderId) throws NotFoundException {
+    orderService.deleteOrder(orderId);
+    return ResponseEntity.noContent().build();
+  }
 }

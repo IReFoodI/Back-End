@@ -14,8 +14,8 @@ public class HistoricalOrder {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "historical_orders_id")
-  private Long historicalOrdersId;
+  @Column(name = "historical_order_id")
+  private Long historicalOrderId;
 
   @NotNull(message = "O status do pedido é obrigatório.")
   @Enumerated(EnumType.STRING)
@@ -26,7 +26,7 @@ public class HistoricalOrder {
   @PastOrPresent(message = "A data de modificação deve ser no passado ou presente.")
   @Temporal(TemporalType.TIMESTAMP)
   @Column(name = "date_mod", nullable = false)
-  private Date dateMod;
+  private Date dateModified;
 
   @ManyToOne
   @JoinColumn(name = "user_id", nullable = false)

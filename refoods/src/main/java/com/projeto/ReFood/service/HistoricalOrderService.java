@@ -53,7 +53,7 @@ public class HistoricalOrderService {
         .orElseThrow(() -> new NotFoundException("Histórico de pedido não encontrado com ID: " + historyId));
 
     historicalOrder.setOrderStatus(historicalOrderDTO.orderStatus());
-    historicalOrder.setDateMod(historicalOrderDTO.dateModified());
+    historicalOrder.setDateModified(historicalOrderDTO.dateModified());
     utilityService.associateUser(historicalOrder::setUser, historicalOrderDTO.userId());
     utilityService.associateRestaurant(historicalOrder::setRestaurant, historicalOrderDTO.restaurantId());
     utilityService.associateOrder(historicalOrder, historicalOrderDTO.orderId());
@@ -72,9 +72,9 @@ public class HistoricalOrderService {
 
   private HistoricalOrderDTO convertToDTO(HistoricalOrder historicalOrder) {
     return new HistoricalOrderDTO(
-        historicalOrder.getHistoricalOrdersId(),
+        historicalOrder.getHistoricalOrderId(),
         historicalOrder.getOrderStatus(),
-        historicalOrder.getDateMod(),
+        historicalOrder.getDateModified(),
         historicalOrder.getAssociatedHistoricalOrder() != null
             ? historicalOrder.getAssociatedHistoricalOrder().getOrderId()
             : null,
@@ -85,7 +85,7 @@ public class HistoricalOrderService {
   private HistoricalOrder convertToEntity(HistoricalOrderDTO historicalOrderDTO) {
     HistoricalOrder historicalOrder = new HistoricalOrder();
     historicalOrder.setOrderStatus(historicalOrderDTO.orderStatus());
-    historicalOrder.setDateMod(historicalOrderDTO.dateModified());
+    historicalOrder.setDateModified(historicalOrderDTO.dateModified());
     utilityService.associateUser(historicalOrder::setUser, historicalOrderDTO.userId());
     utilityService.associateRestaurant(historicalOrder::setRestaurant, historicalOrderDTO.restaurantId());
     utilityService.associateOrder(historicalOrder, historicalOrderDTO.orderId());
