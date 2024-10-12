@@ -64,13 +64,16 @@ public class SecurityConfig {
 
     http.csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/auth/**").permitAll()
-            .requestMatchers("/h2-console/**").permitAll()
-            .requestMatchers(HttpMethod.POST, "/api/user").permitAll()
-            .requestMatchers("/", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-            .requestMatchers(HttpMethod.GET, "/user").hasRole("USER")
-            .requestMatchers(HttpMethod.GET, "/restaurant").hasRole("RESTAURANT")
-            .anyRequest().authenticated())
+            .requestMatchers("/auth/**").permitAll() // login
+            .requestMatchers("/h2-console/**").permitAll() // h2 database
+            .requestMatchers("/", "/swagger-ui/**", "/v3/api-docs/**").permitAll() // swagger
+            .requestMatchers(HttpMethod.GET, "/user").hasRole("USER") 
+            .requestMatchers(HttpMethod.GET, "/restaurant").hasRole("RESTAURANT") // apenas uma rota para testar autenticação
+            .requestMatchers(HttpMethod.POST, "/api/user").permitAll() // create user
+            .requestMatchers(HttpMethod.POST, "/api/restaurant").permitAll() // create restaurant
+            .anyRequest().permitAll() // To permitindo todas as requisições temporariamente para teste
+            // .anyRequest().authenticated() // Bloqueia todas as outras requisições
+        )
         .authenticationProvider(authenticationProvider())
         .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
