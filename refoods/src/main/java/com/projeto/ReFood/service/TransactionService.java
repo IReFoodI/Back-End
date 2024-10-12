@@ -1,71 +1,98 @@
 package com.projeto.ReFood.service;
 
 import com.projeto.ReFood.repository.TransactionRepository;
+
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
+
 import com.projeto.ReFood.dto.TransactionDTO;
+import com.projeto.ReFood.exception.NotFoundException;
+import com.projeto.ReFood.model.EnumTransactionStatus;
 import com.projeto.ReFood.model.Transaction;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Validated
 public class TransactionService {
-    
+
     @Autowired
     private TransactionRepository transactionRepository;
-    
+
+    @Autowired
+    private UtilityService utilityService;
+
+    @Transactional(readOnly = true)
     public List<TransactionDTO> getAllTransactions() {
         return transactionRepository
-                .findAll()
-                .stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+            .findAll()
+            .stream()
+            .map(this::convertToDTO)
+            .collect(Collectors.toList());
     }
-    
-    public TransactionDTO getTransactionById(int idTransaction) {
-        Optional<Transaction> transaction = transactionRepository.findById(idTransaction);
-        return transaction.map(this::convertToDTO).orElse(null);
+
+    @Transactional(readOnly = true)
+    public TransactionDTO getTransactionById(Long transactionId) {
+        return transactionRepository.findById(transactionId)
+            .map(this::convertToDTO)
+            .orElseThrow(() -> new NotFoundException("Transação não encontrada."));
     }
-    
-    public TransactionDTO createTransaction(TransactionDTO transactionDTO) {
-        Transaction transaction = new Transaction();
+
+    @Transactional
+    public TransactionDTO createTransaction(@Valid TransactionDTO transactionDTO) {
+        Transaction transaction = convertToEntity(transactionDTO);
+        utilityService.associateCard(transaction::setCard, transactionDTO.cardId());
+        utilityService.associateOrder(transaction::setAssociatedOrder, transactionDTO.orderId());
         
-        transaction.setTransaction_date(transactionDTO.getTransaction_date());
-        transaction.setTransaction_value(transactionDTO.getTransaction_value());
-        transactionRepository.save(transaction);
+        transaction = transactionRepository.save(transaction);
         return convertToDTO(transaction);
     }
-    
-    public TransactionDTO updateTransaction(int idTransaction, TransactionDTO transactionDTO) {
-        Optional<Transaction> transactionOptional = transactionRepository.findById(idTransaction);
-        
-        if (transactionOptional.isPresent()) {
-            Transaction transaction = transactionOptional.get();
-            
-            transaction.setTransaction_date(transactionDTO.getTransaction_date());
-            transaction.setTransaction_value(transactionDTO.getTransaction_value());
-            
-            transactionRepository.save(transaction);
-            
-            return convertToDTO(transaction);
+
+    @Transactional
+    public TransactionDTO updateTransaction(Long transactionId, @Valid TransactionDTO transactionDTO) {
+        Transaction transaction = transactionRepository.findById(transactionId)
+            .orElseThrow(() -> new NotFoundException("Transação não encontrada com ID: " + transactionId));
+
+        transaction.setTransactionDate(transactionDTO.transactionDate());
+        transaction.setTransactionValue(transactionDTO.transactionValue());
+        transaction.setTransactionStatus(EnumTransactionStatus.valueOf(transactionDTO.transactionStatus()));
+        utilityService.associateCard(transaction::setCard, transactionDTO.cardId());
+        utilityService.associateOrder(transaction::setAssociatedOrder, transactionDTO.orderId());
+
+        transaction = transactionRepository.save(transaction);
+        return convertToDTO(transaction);
+    }
+
+    @Transactional
+    public void deleteTransaction(Long transactionId) {
+        if (!transactionRepository.existsById(transactionId)) {
+            throw new NotFoundException("Transação não encontrada.");
         }
-        
-        return null;
+        transactionRepository.deleteById(transactionId);
     }
-    
-    public void deleteTransaction(int idTransaction) {
-        transactionRepository.deleteById(idTransaction);
-    }
-    
+
     private TransactionDTO convertToDTO(Transaction transaction) {
-        TransactionDTO transactionDTO = new TransactionDTO();
-        
-        transactionDTO.setId_transaction(transaction.getId_transaction());
-        transactionDTO.setTransaction_date(transaction.getTransaction_date());
-        transactionDTO.setTransaction_value(transaction.getTransaction_value());
-        
-        return transactionDTO;
+        return new TransactionDTO(
+            transaction.getTransactionId(),
+            transaction.getTransactionDate(),
+            transaction.getTransactionValue(),
+            transaction.getTransactionStatus().name(),
+            transaction.getCard().getCardId(), 
+            transaction.getAssociatedOrder().getOrderId() 
+        );
+    }
+
+    private Transaction convertToEntity(TransactionDTO transactionDTO) {
+        Transaction transaction = new Transaction();
+        transaction.setTransactionId(transactionDTO.transactionId());
+        transaction.setTransactionDate(transactionDTO.transactionDate());
+        transaction.setTransactionValue(transactionDTO.transactionValue());
+        transaction.setTransactionStatus(EnumTransactionStatus.valueOf(transactionDTO.transactionStatus())); 
+        return transaction;
     }
 }
