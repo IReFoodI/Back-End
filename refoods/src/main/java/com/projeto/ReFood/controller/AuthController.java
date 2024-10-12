@@ -20,14 +20,18 @@ import com.projeto.ReFood.service.CustomUserDetailsService;
 @RequestMapping("/auth")
 public class AuthController {
 
-  @Autowired
-  private AuthenticationManager authenticationManager;
+  private final AuthenticationManager authenticationManager;
+  private final JwtTokenProvider jwtTokenProvider;
+  private final CustomUserDetailsService userDetailsService;
 
   @Autowired
-  private JwtTokenProvider jwtTokenProvider;
-
-  @Autowired
-  private CustomUserDetailsService userDetailsService;
+  public AuthController(AuthenticationManager authenticationManager,
+                        JwtTokenProvider jwtTokenProvider,
+                        CustomUserDetailsService userDetailsService) {
+      this.authenticationManager = authenticationManager;
+      this.jwtTokenProvider = jwtTokenProvider;
+      this.userDetailsService = userDetailsService;
+  }
 
   @PostMapping("/login")
   public ResponseEntity<LoginResponse> createAuthenticationToken(@RequestBody LoginRequest loginRequest) {
