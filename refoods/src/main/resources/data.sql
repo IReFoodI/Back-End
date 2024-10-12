@@ -23,10 +23,9 @@ VALUES
     ('Residential', '87654321', 'Apto 202', 'Jardins', FALSE, '456', 'SP', 'Rua B', NULL, 2);
 
 -- Inserindo dados na tabela tb_cards
-INSERT INTO tb_cards (cvv, number, validity, user_id)
-VALUES 
-    ('123', '4111111111111111', '12/25', 1),
-    ('456', '5500000000000004', '01/24', 2);
+INSERT INTO tb_cards (cvv, number, validity, holder_name, user_id) VALUES 
+('123', '4111111111111111', '12/25', 'Nome do Titular 1', 1), 
+('456', '5500000000000004', '01/24', 'Nome do Titular 2', 2);
 
 -- Inserindo dados na tabela tb_contacts
 INSERT INTO tb_contacts (description, phone, restaurant_id)

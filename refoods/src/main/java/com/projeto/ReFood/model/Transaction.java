@@ -2,8 +2,10 @@ package com.projeto.ReFood.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
@@ -21,11 +23,12 @@ public class Transaction {
   private Date transactionDate;
 
   @NotNull(message = "O valor da transação é obrigatório.")
+  @PositiveOrZero(message = "O valor da transação deve ser maior ou igual a zero.")
   @Column(nullable = false)
-  private float transactionValue;
+  private BigDecimal transactionValue; // Usando BigDecimal para precisão
 
   @NotNull(message = "O status da transação é obrigatório.")
-  @Enumerated(EnumType.STRING) // Assume que EnumTransactionStatus é uma enum.
+  @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   private EnumTransactionStatus transactionStatus;
 

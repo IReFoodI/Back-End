@@ -1,71 +1,108 @@
 package com.projeto.ReFood.service;
 
 import com.projeto.ReFood.repository.ProductRepository;
+
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
+
 import com.projeto.ReFood.dto.ProductDTO;
+import com.projeto.ReFood.exception.NotFoundException;
 import com.projeto.ReFood.model.Product;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
+
 @Service
+@Validated
 public class ProductService {
-    
+
     @Autowired
     private ProductRepository productRepository;
     
+    @Autowired
+    private UtilityService utilityService;
+
+    @Transactional(readOnly = true)
     public List<ProductDTO> getAllProducts() {
         return productRepository
-                .findAll()
-                .stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+            .findAll()
+            .stream()
+            .map(this::convertToDTO)
+            .collect(Collectors.toList());
     }
-    
-    public ProductDTO getProductById(int idProduct) {
-        Optional<Product> product = productRepository.findById(idProduct);
-        return product.map(this::convertToDTO).orElse(null);
+
+    @Transactional(readOnly = true)
+    public ProductDTO getProductById(Long productId) {
+        return productRepository.findById(productId)
+            .map(this::convertToDTO)
+            .orElseThrow(() -> new NotFoundException("Produto não encontrado."));
     }
-    
-    public ProductDTO createProduct(ProductDTO productDTO) {
-        Product product = new Product();
-        
-        product.setName_prod(productDTO.getName_prod());
-        product.setValue_prod(productDTO.getValue_prod());
-        productRepository.save(product);
+
+    @Transactional
+    public ProductDTO createProduct(@Valid ProductDTO productDTO) {
+        Product product = convertToEntity(productDTO);
+        utilityService.associateRestaurant(product::setRestaurant, productDTO.restaurantId());
+        product = productRepository.save(product);
         return convertToDTO(product);
     }
-    
-    public ProductDTO updateProduct(int idProduct, ProductDTO productDTO) {
-        Optional<Product> productOptional = productRepository.findById(idProduct);
-        
-        if (productOptional.isPresent()) {
-            Product product = productOptional.get();
-            
-            product.setName_prod(productDTO.getName_prod());
-            product.setValue_prod(productDTO.getValue_prod());
-            
-            productRepository.save(product);
-            
-            return convertToDTO(product);
+
+    @Transactional
+    public ProductDTO updateProduct(Long productId, @Valid ProductDTO productDTO) {
+        Product product = productRepository.findById(productId)
+            .orElseThrow(() -> new NotFoundException("Produto não encontrado com ID: " + productId));
+
+        product.setNameProduct(productDTO.nameProd());
+        product.setDescriptionProduct(productDTO.descriptionProd());
+        product.setUrlImgProduct(productDTO.urlImgProd());
+        product.setValueProduct(productDTO.valueProd());
+        product.setDiscount(productDTO.discount());
+        product.setAdditionDate(productDTO.additionDate());
+        product.setActive(productDTO.active());
+
+        utilityService.associateRestaurant(product::setRestaurant, productDTO.restaurantId());
+
+        product = productRepository.save(product);
+        return convertToDTO(product);
+    }
+
+    @Transactional
+    public void deleteProduct(Long productId) {
+        if (!productRepository.existsById(productId)) {
+            throw new NotFoundException("Produto não encontrado.");
         }
-        
-        return null;
+        productRepository.deleteById(productId);
     }
-    
-    public void deleteProduct(int idProduct) {
-        productRepository.deleteById(idProduct);
-    }
-    
+
     private ProductDTO convertToDTO(Product product) {
-        ProductDTO productDTO = new ProductDTO();
-        
-        productDTO.setId_product(product.getId_product());
-        productDTO.setName_prod(product.getName_prod());
-        productDTO.setValue_prod(product.getValue_prod());
-        
-        return productDTO;
+        return new ProductDTO(
+            product.getProductId(),
+            product.getNameProduct(),
+            product.getDescriptionProduct(),
+            product.getUrlImgProduct(),
+            product.getValueProduct(),
+            product.getDiscount(),
+            product.getAdditionDate(),
+            product.isActive(),
+            product.getRestaurant().getRestaurantId() // Assumindo que Restaurant tem um método getRestaurantId()
+        );
+    }
+
+    private Product convertToEntity(ProductDTO productDTO) {
+        Product product = new Product();
+        product.setProductId(productDTO.productId());
+        product.setNameProduct(productDTO.nameProd());
+        product.setDescriptionProduct(productDTO.descriptionProd());
+        product.setUrlImgProduct(productDTO.urlImgProd());
+        product.setValueProduct(productDTO.valueProd());
+        product.setDiscount(productDTO.discount());
+        product.setAdditionDate(productDTO.additionDate());
+        product.setActive(productDTO.active());
+        utilityService.associateRestaurant(product::setRestaurant, productDTO.restaurantId());
+        return product;
     }
 }

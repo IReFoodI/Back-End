@@ -1,72 +1,105 @@
 package com.projeto.ReFood.service;
 
 import com.projeto.ReFood.dto.CardDTO;
+import com.projeto.ReFood.exception.NotFoundException;
 import com.projeto.ReFood.model.Card;
+import com.projeto.ReFood.model.Transaction;
 import com.projeto.ReFood.repository.CardRepository;
+
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@Validated
 public class CardService {
-    
-    @Autowired
-    private CardRepository cardRepository;
-    
-    public List<CardDTO> getAllCards(){
-        return cardRepository
-                .findAll()
-                .stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-    }
-    
-    public CardDTO getCardById(int id_card){
-        Optional<Card> card = cardRepository.findById(id_card);
-        return card.map(this::convertToDTO).orElse(null);
-    }
-    
-    public CardDTO createCard(CardDTO cardDTO){
-        Card card = new Card();
-        
-        card.setNumber(cardDTO.getNumber());
-        card.setValidity(cardDTO.getValidity());
-        card.setCvv(cardDTO.getCvv());
-        cardRepository.save(card);
-        return convertToDTO(card);
-    }
-    
-    public CardDTO updateCard(int id_card, CardDTO cardDTO){
-        Optional<Card> cardOptional = cardRepository.findById(id_card);
-        
-        if(cardOptional.isPresent()){
-            Card card = cardOptional.get();
 
-            card.setNumber(cardDTO.getNumber());
-            card.setValidity(cardDTO.getValidity());
-            card.setCvv(cardDTO.getCvv());
-            cardRepository.save(card);
-            
-            return convertToDTO(card);
-        }
-        
-        return null;
+  @Autowired
+  private CardRepository cardRepository;
+  @Autowired
+  private UtilityService utilityService;
+
+  @Transactional(readOnly = true)
+  public List<CardDTO> getAllCards() {
+    return cardRepository
+        .findAll()
+        .stream()
+        .map(this::convertToDTO)
+        .collect(Collectors.toList());
+  }
+
+  @Transactional(readOnly = true)
+  public CardDTO getCardById(Long cardId) {
+    return cardRepository.findById(cardId)
+        .map(this::convertToDTO)
+        .orElseThrow(() -> new NotFoundException("Cartão não encontrado."));
+  }
+
+  @Transactional
+  public CardDTO createCard(@Valid CardDTO cardDTO) {
+    Card card = convertToEntity(cardDTO);
+    utilityService.associateUser(card::setUser, cardDTO.userId());
+    utilityService.associateTransactions(card, cardDTO.transactionIds());
+    card = cardRepository.save(card);
+    return convertToDTO(card);
+  }
+
+  @Transactional
+  public CardDTO updateCard(Long cardId, @Valid CardDTO cardDTO) {
+    Card card = cardRepository.findById(cardId)
+        .orElseThrow(() -> new NotFoundException("Cartão não encontrado com ID: " + cardId));
+
+    card.setNumber(cardDTO.number());
+    card.setHolderName(cardDTO.holderName());
+    card.setValidity(cardDTO.validity());
+    card.setCvv(cardDTO.cvv());
+
+    utilityService.associateUser(card::setUser, cardDTO.userId());
+    utilityService.associateTransactions(card, cardDTO.transactionIds());
+
+    card = cardRepository.save(card);
+    return convertToDTO(card);
+  }
+
+  @Transactional
+  public void deleteCard(Long cardId) {
+    if (!cardRepository.existsById(cardId)) {
+      throw new NotFoundException("Cartão não encontrado.");
     }
-    
-    public void deleteCard(int id_card){
-        cardRepository.deleteById(id_card);
-    }
-    
-    private CardDTO convertToDTO(Card card){
-        CardDTO cardDTO = new CardDTO();
-        
-        cardDTO.setId_card(card.getId_card());
-        cardDTO.setNumber(card.getNumber());
-        cardDTO.setValidity(card.getValidity());
-        cardDTO.setCvv(card.getCvv());
-        return cardDTO;
-    }
+    cardRepository.deleteById(cardId);
+  }
+
+  private CardDTO convertToDTO(Card card) {
+    Set<Long> transactionIds = card.getCardTransactions().stream()
+        .map(Transaction::getTransactionId)
+        .collect(Collectors.toSet());
+
+    return new CardDTO(
+        card.getCardId(),
+        card.getNumber(),
+        card.getHolderName(),
+        card.getValidity(),
+        card.getCvv(),
+        card.getUser().getUserId(),
+        transactionIds);
+  }
+
+  private Card convertToEntity(CardDTO cardDTO) {
+    Card card = new Card();
+    card.setCardId(cardDTO.cardId());
+    card.setNumber(cardDTO.number());
+    card.setHolderName(cardDTO.holderName());
+    card.setValidity(cardDTO.validity());
+    card.setCvv(cardDTO.cvv());
+    utilityService.associateUser(card::setUser, cardDTO.userId());
+    utilityService.associateTransactions(card, cardDTO.transactionIds());
+    return card;
+  }
 }
