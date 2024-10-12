@@ -1,48 +1,59 @@
 package com.projeto.ReFood.controller;
 
 import com.projeto.ReFood.service.AddressService;
+
+import jakarta.validation.Valid;
+
+import com.projeto.ReFood.dto.AddressDTO;
+import com.projeto.ReFood.exception.NotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.projeto.ReFood.dto.AddressDTO;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/addresses")
+@RequestMapping("/api/address")
 public class AddressController {
-    
+
     @Autowired
     private AddressService addressService;
-    
+
     @GetMapping
-    public List<AddressDTO> getAllAddress() {
-        return addressService.getAllAddress();
+    public ResponseEntity<List<AddressDTO>> listAllAddresses() {
+        List<AddressDTO> addresses = addressService.getAllAddresses();
+        return ResponseEntity.ok(addresses);
     }
-    
-    @GetMapping("/{id_address}")
-    public ResponseEntity<AddressDTO> getAddressById(@PathVariable int id_address) {
-        AddressDTO addressDTO = addressService.getAddressById(id_address);
-        
-        return addressDTO != null ? ResponseEntity.ok(addressDTO) : ResponseEntity.notFound().build();
+
+    @GetMapping("/{addressId}")
+    public ResponseEntity<AddressDTO> getAddressById(@PathVariable Long addressId) throws NotFoundException {
+        AddressDTO addressDTO = addressService.getAddressById(addressId);
+        return ResponseEntity.ok(addressDTO);
     }
-    
+
     @PostMapping
-    public AddressDTO createAddress(@RequestBody AddressDTO addressDTO) {
-        return addressService.createAddress(addressDTO);
+    public ResponseEntity<AddressDTO> createAddress(@Valid @RequestBody AddressDTO addressDTO) {
+        AddressDTO createdAddress = addressService.createAddress(addressDTO, null, null, null);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{addressId}")
+                .buildAndExpand(createdAddress.addressId())
+                .toUri();
+        return ResponseEntity.created(location).body(createdAddress);
     }
-    
-    @PutMapping("/{id_address}")
-    public ResponseEntity<AddressDTO> updateAddress(@PathVariable int id_address, @RequestBody AddressDTO addressDTO) {
-        AddressDTO updateAddress = addressService.updateAddress(id_address, addressDTO);
-        
-        return updateAddress != null ? ResponseEntity.ok(updateAddress) : ResponseEntity.notFound().build();
+
+    @PutMapping("/{addressId}")
+    public ResponseEntity<AddressDTO> updateAddress(@PathVariable Long addressId, @Valid @RequestBody AddressDTO addressDTO)
+            throws NotFoundException {
+        AddressDTO updatedAddress = addressService.updateAddress(addressId, addressDTO);
+        return ResponseEntity.ok(updatedAddress);
     }
-    
-    @DeleteMapping("/{id_address}")
-    public ResponseEntity<Void> deleteAddress(@PathVariable int id_address) {
-        addressService.deleteAddress(id_address);
-        
+
+    @DeleteMapping("/{addressId}")
+    public ResponseEntity<Void> deleteAddress(@PathVariable Long addressId) throws NotFoundException {
+        addressService.deleteAddress(addressId);
         return ResponseEntity.noContent().build();
     }
 }
