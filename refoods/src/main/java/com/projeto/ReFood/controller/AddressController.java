@@ -19,41 +19,42 @@ import java.util.List;
 @RequestMapping("/api/address")
 public class AddressController {
 
-    @Autowired
-    private AddressService addressService;
+  @Autowired
+  private AddressService addressService;
 
-    @GetMapping
-    public ResponseEntity<List<AddressDTO>> listAllAddresses() {
-        List<AddressDTO> addresses = addressService.getAllAddresses();
-        return ResponseEntity.ok(addresses);
-    }
+  @GetMapping
+  public ResponseEntity<List<AddressDTO>> listAllAddresses() {
+    List<AddressDTO> addresses = addressService.getAllAddresses();
+    return ResponseEntity.ok(addresses);
+  }
 
-    @GetMapping("/{addressId}")
-    public ResponseEntity<AddressDTO> getAddressById(@PathVariable Long addressId) throws NotFoundException {
-        AddressDTO addressDTO = addressService.getAddressById(addressId);
-        return ResponseEntity.ok(addressDTO);
-    }
+  @GetMapping("/{addressId}")
+  public ResponseEntity<AddressDTO> getAddressById(@PathVariable Long addressId) throws NotFoundException {
+    AddressDTO addressDTO = addressService.getAddressById(addressId);
+    return ResponseEntity.ok(addressDTO);
+  }
 
-    @PostMapping
-    public ResponseEntity<AddressDTO> createAddress(@Valid @RequestBody AddressDTO addressDTO) {
-        AddressDTO createdAddress = addressService.createAddress(addressDTO, null, null, null);
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{addressId}")
-                .buildAndExpand(createdAddress.addressId())
-                .toUri();
-        return ResponseEntity.created(location).body(createdAddress);
-    }
+  @PostMapping
+  public ResponseEntity<AddressDTO> createAddress(@Valid @RequestBody AddressDTO addressDTO) {
+    AddressDTO createdAddress = addressService.createAddress(addressDTO, null, null, null);
+    URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+        .path("/{addressId}")
+        .buildAndExpand(createdAddress.addressId())
+        .toUri();
+    return ResponseEntity.created(location).body(createdAddress);
+  }
 
-    @PutMapping("/{addressId}")
-    public ResponseEntity<AddressDTO> updateAddress(@PathVariable Long addressId, @Valid @RequestBody AddressDTO addressDTO)
-            throws NotFoundException {
-        AddressDTO updatedAddress = addressService.updateAddress(addressId, addressDTO);
-        return ResponseEntity.ok(updatedAddress);
-    }
+  @PutMapping("/{addressId}")
+  public ResponseEntity<AddressDTO> updateAddress(@PathVariable Long addressId,
+      @Valid @RequestBody AddressDTO addressDTO)
+      throws NotFoundException {
+    AddressDTO updatedAddress = addressService.updateAddress(addressId, addressDTO);
+    return ResponseEntity.ok(updatedAddress);
+  }
 
-    @DeleteMapping("/{addressId}")
-    public ResponseEntity<Void> deleteAddress(@PathVariable Long addressId) throws NotFoundException {
-        addressService.deleteAddress(addressId);
-        return ResponseEntity.noContent().build();
-    }
+  @DeleteMapping("/{addressId}")
+  public ResponseEntity<Void> deleteAddress(@PathVariable Long addressId) throws NotFoundException {
+    addressService.deleteAddress(addressId);
+    return ResponseEntity.noContent().build();
+  }
 }

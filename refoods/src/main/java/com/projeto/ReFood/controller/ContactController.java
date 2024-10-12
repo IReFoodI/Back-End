@@ -19,41 +19,42 @@ import java.util.List;
 @RequestMapping("/api/contact")
 public class ContactController {
 
-    @Autowired
-    private ContactService contactService;
+  @Autowired
+  private ContactService contactService;
 
-    @GetMapping
-    public ResponseEntity<List<ContactDTO>> listAllContacts() {
-        List<ContactDTO> contacts = contactService.getAllContacts();
-        return ResponseEntity.ok(contacts);
-    }
+  @GetMapping
+  public ResponseEntity<List<ContactDTO>> listAllContacts() {
+    List<ContactDTO> contacts = contactService.getAllContacts();
+    return ResponseEntity.ok(contacts);
+  }
 
-    @GetMapping("/{contactId}")
-    public ResponseEntity<ContactDTO> getContactById(@PathVariable Long contactId) throws NotFoundException {
-        ContactDTO contactDTO = contactService.getContactById(contactId);
-        return ResponseEntity.ok(contactDTO);
-    }
+  @GetMapping("/{contactId}")
+  public ResponseEntity<ContactDTO> getContactById(@PathVariable Long contactId) throws NotFoundException {
+    ContactDTO contactDTO = contactService.getContactById(contactId);
+    return ResponseEntity.ok(contactDTO);
+  }
 
-    @PostMapping
-    public ResponseEntity<ContactDTO> createContact(@Valid @RequestBody ContactDTO contactDTO) {
-        ContactDTO createdContact = contactService.createContact(contactDTO);
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{contactId}")
-                .buildAndExpand(createdContact.contactId())
-                .toUri();
-        return ResponseEntity.created(location).body(createdContact);
-    }
+  @PostMapping
+  public ResponseEntity<ContactDTO> createContact(@Valid @RequestBody ContactDTO contactDTO) {
+    ContactDTO createdContact = contactService.createContact(contactDTO);
+    URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+        .path("/{contactId}")
+        .buildAndExpand(createdContact.contactId())
+        .toUri();
+    return ResponseEntity.created(location).body(createdContact);
+  }
 
-    @PutMapping("/{contactId}")
-    public ResponseEntity<ContactDTO> updateContact(@PathVariable Long contactId, @Valid @RequestBody ContactDTO contactDTO)
-            throws NotFoundException {
-        ContactDTO updatedContact = contactService.updateContact(contactId, contactDTO);
-        return ResponseEntity.ok(updatedContact);
-    }
+  @PutMapping("/{contactId}")
+  public ResponseEntity<ContactDTO> updateContact(@PathVariable Long contactId,
+      @Valid @RequestBody ContactDTO contactDTO)
+      throws NotFoundException {
+    ContactDTO updatedContact = contactService.updateContact(contactId, contactDTO);
+    return ResponseEntity.ok(updatedContact);
+  }
 
-    @DeleteMapping("/{contactId}")
-    public ResponseEntity<Void> deleteContact(@PathVariable Long contactId) throws NotFoundException {
-        contactService.deleteContact(contactId);
-        return ResponseEntity.noContent().build();
-    }
+  @DeleteMapping("/{contactId}")
+  public ResponseEntity<Void> deleteContact(@PathVariable Long contactId) throws NotFoundException {
+    contactService.deleteContact(contactId);
+    return ResponseEntity.noContent().build();
+  }
 }

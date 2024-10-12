@@ -19,41 +19,44 @@ import java.net.URI;
 @RequestMapping("/api/historical-orders")
 public class HistoricalOrderController {
 
-    @Autowired
-    private HistoricalOrderService historicalOrderService;
+  @Autowired
+  private HistoricalOrderService historicalOrderService;
 
-    @GetMapping
-    public ResponseEntity<List<HistoricalOrderDTO>> listAllHistoricalOrders() {
-        List<HistoricalOrderDTO> historicalOrders = historicalOrderService.getAllHistoricalOrders();
-        return ResponseEntity.ok(historicalOrders);
-    }
+  @GetMapping
+  public ResponseEntity<List<HistoricalOrderDTO>> listAllHistoricalOrders() {
+    List<HistoricalOrderDTO> historicalOrders = historicalOrderService.getAllHistoricalOrders();
+    return ResponseEntity.ok(historicalOrders);
+  }
 
-    @GetMapping("/{historyId}")
-    public ResponseEntity<HistoricalOrderDTO> getHistoricalOrderById(@PathVariable Long historyId) throws NotFoundException {
-        HistoricalOrderDTO historicalOrderDTO = historicalOrderService.getHistoricalOrderById(historyId);
-        return ResponseEntity.ok(historicalOrderDTO);
-    }
+  @GetMapping("/{historyId}")
+  public ResponseEntity<HistoricalOrderDTO> getHistoricalOrderById(@PathVariable Long historyId)
+      throws NotFoundException {
+    HistoricalOrderDTO historicalOrderDTO = historicalOrderService.getHistoricalOrderById(historyId);
+    return ResponseEntity.ok(historicalOrderDTO);
+  }
 
-    @PostMapping
-    public ResponseEntity<HistoricalOrderDTO> createHistoricalOrder(@Valid @RequestBody HistoricalOrderDTO historicalOrderDTO) {
-        HistoricalOrderDTO createdOrder = historicalOrderService.createHistoricalOrder(historicalOrderDTO);
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-            .path("/{historyId}")
-            .buildAndExpand(createdOrder.historicalOrderId())
-            .toUri();
-        return ResponseEntity.created(location).body(createdOrder);
-    }
+  @PostMapping
+  public ResponseEntity<HistoricalOrderDTO> createHistoricalOrder(
+      @Valid @RequestBody HistoricalOrderDTO historicalOrderDTO) {
+    HistoricalOrderDTO createdOrder = historicalOrderService.createHistoricalOrder(historicalOrderDTO);
+    URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+        .path("/{historyId}")
+        .buildAndExpand(createdOrder.historicalOrderId())
+        .toUri();
+    return ResponseEntity.created(location).body(createdOrder);
+  }
 
-    @PutMapping("/{historyId}")
-    public ResponseEntity<HistoricalOrderDTO> updateHistoricalOrder(@PathVariable Long historyId, @Valid @RequestBody HistoricalOrderDTO historicalOrderDTO)
-            throws NotFoundException {
-        HistoricalOrderDTO updatedOrder = historicalOrderService.updateHistoricalOrder(historyId, historicalOrderDTO);
-        return ResponseEntity.ok(updatedOrder);
-    }
+  @PutMapping("/{historyId}")
+  public ResponseEntity<HistoricalOrderDTO> updateHistoricalOrder(@PathVariable Long historyId,
+      @Valid @RequestBody HistoricalOrderDTO historicalOrderDTO)
+      throws NotFoundException {
+    HistoricalOrderDTO updatedOrder = historicalOrderService.updateHistoricalOrder(historyId, historicalOrderDTO);
+    return ResponseEntity.ok(updatedOrder);
+  }
 
-    @DeleteMapping("/{historyId}")
-    public ResponseEntity<Void> deleteHistoricalOrder(@PathVariable Long historyId) throws NotFoundException {
-        historicalOrderService.deleteHistoricalOrder(historyId);
-        return ResponseEntity.noContent().build();
-    }
+  @DeleteMapping("/{historyId}")
+  public ResponseEntity<Void> deleteHistoricalOrder(@PathVariable Long historyId) throws NotFoundException {
+    historicalOrderService.deleteHistoricalOrder(historyId);
+    return ResponseEntity.noContent().build();
+  }
 }

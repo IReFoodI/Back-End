@@ -19,41 +19,41 @@ import java.util.List;
 @RequestMapping("/api/card")
 public class CardController {
 
-    @Autowired
-    private CardService cardService;
+  @Autowired
+  private CardService cardService;
 
-    @GetMapping
-    public ResponseEntity<List<CardDTO>> listAllCards() {
-        List<CardDTO> cards = cardService.getAllCards();
-        return ResponseEntity.ok(cards);
-    }
+  @GetMapping
+  public ResponseEntity<List<CardDTO>> listAllCards() {
+    List<CardDTO> cards = cardService.getAllCards();
+    return ResponseEntity.ok(cards);
+  }
 
-    @GetMapping("/{cardId}")
-    public ResponseEntity<CardDTO> getCardById(@PathVariable Long cardId) throws NotFoundException {
-        CardDTO cardDTO = cardService.getCardById(cardId);
-        return ResponseEntity.ok(cardDTO);
-    }
+  @GetMapping("/{cardId}")
+  public ResponseEntity<CardDTO> getCardById(@PathVariable Long cardId) throws NotFoundException {
+    CardDTO cardDTO = cardService.getCardById(cardId);
+    return ResponseEntity.ok(cardDTO);
+  }
 
-    @PostMapping
-    public ResponseEntity<CardDTO> createCard(@Valid @RequestBody CardDTO cardDTO) {
-        CardDTO createdCard = cardService.createCard(cardDTO);
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{cardId}")
-                .buildAndExpand(createdCard.cardId())
-                .toUri();
-        return ResponseEntity.created(location).body(createdCard);
-    }
+  @PostMapping
+  public ResponseEntity<CardDTO> createCard(@Valid @RequestBody CardDTO cardDTO) {
+    CardDTO createdCard = cardService.createCard(cardDTO);
+    URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+        .path("/{cardId}")
+        .buildAndExpand(createdCard.cardId())
+        .toUri();
+    return ResponseEntity.created(location).body(createdCard);
+  }
 
-    @PutMapping("/{cardId}")
-    public ResponseEntity<CardDTO> updateCard(@PathVariable Long cardId, @Valid @RequestBody CardDTO cardDTO)
-            throws NotFoundException {
-        CardDTO updatedCard = cardService.updateCard(cardId, cardDTO);
-        return ResponseEntity.ok(updatedCard);
-    }
+  @PutMapping("/{cardId}")
+  public ResponseEntity<CardDTO> updateCard(@PathVariable Long cardId, @Valid @RequestBody CardDTO cardDTO)
+      throws NotFoundException {
+    CardDTO updatedCard = cardService.updateCard(cardId, cardDTO);
+    return ResponseEntity.ok(updatedCard);
+  }
 
-    @DeleteMapping("/{cardId}")
-    public ResponseEntity<Void> deleteCard(@PathVariable Long cardId) throws NotFoundException {
-        cardService.deleteCard(cardId);
-        return ResponseEntity.noContent().build();
-    }
+  @DeleteMapping("/{cardId}")
+  public ResponseEntity<Void> deleteCard(@PathVariable Long cardId) throws NotFoundException {
+    cardService.deleteCard(cardId);
+    return ResponseEntity.noContent().build();
+  }
 }
