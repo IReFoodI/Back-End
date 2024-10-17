@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import com.projeto.ReFood.dto.AddressDTO;
 import com.projeto.ReFood.exception.NotFoundException;
 import com.projeto.ReFood.model.Address;
+import com.projeto.ReFood.model.EnumAddressType;
 import com.projeto.ReFood.model.Order;
 import com.projeto.ReFood.model.Restaurant;
 import com.projeto.ReFood.model.User;
@@ -52,7 +53,7 @@ public class AddressService {
     address.setStreet(addressDTO.street());
     address.setNumber(addressDTO.number());
     address.setComplement(addressDTO.complement());
-    address.setAddressType(addressDTO.addressType());
+    address.setAddressType(EnumAddressType.valueOf(addressDTO.addressType()));
     address.setStandard(addressDTO.isStandard());
 
     if (user != null) {
@@ -78,7 +79,7 @@ public class AddressService {
     address.setNumber(addressDTO.number());
     address.setDistrict(addressDTO.district());
     address.setComplement(addressDTO.complement());
-    address.setAddressType(addressDTO.addressType());
+    address.setAddressType(EnumAddressType.valueOf(addressDTO.addressType()));
     address.setStandard(addressDTO.isStandard());
     address.setCep(addressDTO.cep());
     address.setState(addressDTO.state());
@@ -105,7 +106,7 @@ public class AddressService {
         address.getStreet(),
         address.getNumber(),
         address.getComplement(),
-        address.getAddressType(),
+        address.getAddressType().name(),
         address.isStandard(),
         address.getUser() != null ? address.getUser().getUserId() : null,
         address.getRestaurant() != null ? address.getRestaurant().getRestaurantId() : null,
@@ -121,7 +122,7 @@ public class AddressService {
     address.setStreet(addressDTO.street());
     address.setNumber(addressDTO.number());
     address.setComplement(addressDTO.complement());
-    address.setAddressType(addressDTO.addressType());
+    address.setAddressType(EnumAddressType.valueOf(addressDTO.addressType()));
     address.setStandard(addressDTO.isStandard());
 
     if (user != null) {
