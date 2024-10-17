@@ -14,6 +14,7 @@ import com.projeto.ReFood.dto.RestaurantDTO;
 import com.projeto.ReFood.exception.CnpjAlreadyExistsException;
 import com.projeto.ReFood.exception.EmailAlreadyExistsException;
 import com.projeto.ReFood.exception.NotFoundException;
+import com.projeto.ReFood.model.EnumRestaurantCategory;
 import com.projeto.ReFood.model.Restaurant;
 
 import java.time.LocalDateTime;
@@ -109,13 +110,15 @@ public class RestaurantService {
         restaurant.getFantasy(),
         restaurant.getEmail(),
         null, // restaurant.getPassword(), // Não expor a senha?
+        restaurant.getCategory().name(),
         restaurant.getUrlBanner(),
         restaurant.getUrlLogo(),
         restaurant.getQuantityEvaluations(),
         restaurant.getTotalEvaluations(),
         restaurant.getAverageRating(),
         restaurant.getDateCreation(),
-        restaurant.getLastLogin());
+        restaurant.getLastLogin()
+        );
   }
 
   public Restaurant convertToEntity(RestaurantDTO restaurantDTO) {
@@ -125,6 +128,7 @@ public class RestaurantService {
     restaurant.setFantasy(restaurantDTO.fantasy());
     restaurant.setEmail(restaurantDTO.email());
     restaurant.setPassword(restaurantDTO.password());
+    restaurant.setCategory(EnumRestaurantCategory.valueOf(restaurantDTO.category()));
     restaurant.setDateCreation(LocalDateTime.now());
     restaurant.setUrlBanner(restaurantDTO.urlBanner());
     restaurant.setUrlLogo(restaurantDTO.urlLogo());

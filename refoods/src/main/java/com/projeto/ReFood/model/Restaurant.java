@@ -50,6 +50,9 @@ public class Restaurant {
     @Column
     private LocalDateTime lastLogin;
 
+    @Enumerated(EnumType.STRING)
+    private EnumRestaurantCategory category;
+
     @Pattern(regexp = "^(http|https)://.*$", message = "A URL do banner deve ser válida.")
     @Column
     private String urlBanner;
@@ -94,5 +97,8 @@ public class Restaurant {
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Notification> restaurantNotifications;
+
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<RestaurantHours> restaurantHours;
 
 }

@@ -29,6 +29,9 @@ public record RestaurantDTO(
     @Size(min = 6, message = "Senha deve ter no mínimo 6 caracteres.")
     String password,
 
+    @NotBlank(message = "A categoria é obrigatória.") 
+    String category,
+
     @Pattern(regexp = "^(http|https)://.*$", message = "A URL do banner deve ser válida.")
     String urlBanner,
 
