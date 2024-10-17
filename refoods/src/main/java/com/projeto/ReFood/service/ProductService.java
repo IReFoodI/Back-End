@@ -86,6 +86,9 @@ public class ProductService {
             product.getUrlImgProduct(),
             product.getValueProduct(),
             product.getDiscount(),
+            product.getExpirationDate(),
+            product.getQuantity(),
+            product.getCategoryProduct(),
             product.getAdditionDate(),
             product.isActive(),
             product.getRestaurant().getRestaurantId() // Assumindo que Restaurant tem um método getRestaurantId()
@@ -100,6 +103,9 @@ public class ProductService {
         product.setUrlImgProduct(productDTO.urlImgProd());
         product.setValueProduct(productDTO.valueProd());
         product.setDiscount(productDTO.discount());
+        product.setQuantity(productDTO.quantity());
+        product.setExpirationDate(productDTO.expirationDate());
+        product.setCategoryProduct(productDTO.categoryProduct());
         product.setAdditionDate(productDTO.additionDate());
         product.setActive(productDTO.active());
         utilityService.associateRestaurant(product::setRestaurant, productDTO.restaurantId());

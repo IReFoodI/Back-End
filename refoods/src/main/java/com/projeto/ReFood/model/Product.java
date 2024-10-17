@@ -39,7 +39,21 @@ public class Product {
   @Min(value = 0, message = "O desconto não pode ser menor que 0.")
   @Max(value = 100, message = "O desconto não pode ser maior que 100.")
   @Column(name = "discount", nullable = false)
-  private int discount; // % check: descontoPerc >= 0 and descontoPerc <= 100
+  private int discount;
+
+  @NotNull(message = "A data de expiração não pode ser nula.")
+  @Column(name = "expiration_date", nullable = false)
+  private Date expirationDate;
+
+  @NotNull(message = "A quantidade não pode ser nulal.")
+  @Min(value = 0, message = "A quantidade não pode ser negativa.")
+  @Column(name = "quantity", nullable = false)
+  private int quantity;
+
+  @NotNull(message = "A categoria do produto não pode ser nula.")
+  @Enumerated(EnumType.STRING)
+  @Column(name = "category", nullable = false)
+  private EnumProductCategory categoryProduct;
 
   @NotNull(message = "A data de adição não pode ser nula.")
   @Column(name = "addition_date", nullable = false)
