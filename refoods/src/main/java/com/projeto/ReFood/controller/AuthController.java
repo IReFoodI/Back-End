@@ -35,8 +35,7 @@ public class AuthController {
 
   @PostMapping("/login")
   public ResponseEntity<LoginResponse> createAuthenticationToken(@RequestBody LoginRequest loginRequest) {
-    System.out.println("==================================================================");
-    System.out.println("POST /auth/login - INICIO");
+    
     try {
       authenticationManager.authenticate(
           new UsernamePasswordAuthenticationToken(loginRequest.email(), loginRequest.password()));
@@ -52,9 +51,6 @@ public class AuthController {
 
     final UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.email());
     final String jwt = jwtTokenProvider.generateToken(userDetails);
-
-    System.out.println("POST /auth/login - FIM");
-    System.out.println("==================================================================");
 
     return ResponseEntity.ok(new LoginResponse(jwt));
   }

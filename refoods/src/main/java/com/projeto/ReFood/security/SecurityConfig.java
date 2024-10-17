@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -58,15 +57,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                // .requestMatchers("/auth/**").permitAll() // login
-                // .requestMatchers("/h2-console/**").permitAll() // h2 database
-                // .requestMatchers("/", "/swagger-ui/**", "/v3/api-docs/**").permitAll() // swagger
-                .requestMatchers(HttpMethod.GET, "/user").hasRole("USER") // apenas uma rota para testar autenticação
-                .requestMatchers(HttpMethod.GET, "/restaurant").hasRole("RESTAURANT") // apenas uma rota para testar autenticação
-                // .requestMatchers(HttpMethod.POST, "/api/user").permitAll() // create user
-                // .requestMatchers(HttpMethod.POST, "/api/restaurant").permitAll() // create restaurant
-                .anyRequest().permitAll() // permitindo todas as requisições temporariamente para teste
-                //.anyRequest().authenticated() // Bloqueia todas as outras requisições
+                .anyRequest().permitAll()
+                //.anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
