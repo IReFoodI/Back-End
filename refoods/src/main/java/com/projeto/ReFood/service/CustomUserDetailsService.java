@@ -27,14 +27,20 @@ public class CustomUserDetailsService implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    System.out.println("==================================================================");
+    System.out.println("loadUserByUsername - INICIO");
     User user = userRepository.findByEmail(username).orElse(null);
     if (user != null) {
+      System.out.println("loadUserByUsername - USER - FIM");
+      System.out.println("==================================================================");
       return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
           List.of(new SimpleGrantedAuthority("ROLE_USER")));
     }
 
     Restaurant restaurant = restaurantRepository.findByEmail(username).orElse(null);
     if (restaurant != null) {
+      System.out.println("loadUserByUsername - RESTAURANT - FIM");
+      System.out.println("==================================================================");
       return new org.springframework.security.core.userdetails.User(restaurant.getEmail(), restaurant.getPassword(),
           List.of(new SimpleGrantedAuthority("ROLE_RESTAURANT")));
     }

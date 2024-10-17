@@ -18,7 +18,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 
-@Component // 11111111111
+@Component
 public class JwtTokenProvider {
 
   @Value("${jwt.secret:s9duh83yhruhdih94fhuhdc8gf8fiuwdcg38hfhuifgihsdfhgsdjfhihfkp}")

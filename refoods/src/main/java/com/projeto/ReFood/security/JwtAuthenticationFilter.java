@@ -17,7 +17,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@Component // 22222222222
+@Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   private static final String AUTHORIZATION_HEADER = "Authorization";
@@ -35,10 +35,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
+
     String authHeader = request.getHeader(AUTHORIZATION_HEADER);
-    System.out.println("===============================");
-    System.out.println("Auth Header: " + authHeader); // Log do cabeçalho
-    System.out.println("===============================");
 
     if (authHeader == null || !authHeader.startsWith(BEARER_PREFIX)) {
       filterChain.doFilter(request, response);
@@ -46,13 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     String jwt = authHeader.substring(BEARER_PREFIX.length());
-    System.out.println("===============================");
-    System.out.println("JWT Token: " + jwt); // Log do token
-    System.out.println("===============================");
     String username = jwtTokenProvider.extractUsername(jwt);
-    System.out.println("===============================");
-    System.out.println("Username: " + username); // Log do nome de usuário
-    System.out.println("===============================");
 
     if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
       authenticateUser(request, response, jwt, username);
@@ -63,6 +55,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   private void authenticateUser(HttpServletRequest request, HttpServletResponse response, String jwt, String username)
       throws IOException {
+
     try {
       UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
 
@@ -71,10 +64,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             userDetails, null, userDetails.getAuthorities());
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        System.out.println("===============================");
-        System.out.println("Authorities: " + userDetails.getAuthorities()); // Log para verificar as authorities
-        System.out.println("===============================");
       }
+
     } catch (UsernameNotFoundException e) {
       response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Usuário não encontrado");
     } catch (Exception e) {
