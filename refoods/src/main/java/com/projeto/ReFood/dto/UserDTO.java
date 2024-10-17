@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 public record UserDTO(
@@ -25,7 +24,6 @@ public record UserDTO(
              // message = "A senha deve ter pelo menos 8 caracteres, incluindo pelo menos uma letra maiúscula, uma letra minúscula e um número.") 
     String password,
 
-    @NotNull(message = "A data de criação é obrigatória.") 
     LocalDateTime dateCreation,
 
     LocalDateTime lastLogin) {
