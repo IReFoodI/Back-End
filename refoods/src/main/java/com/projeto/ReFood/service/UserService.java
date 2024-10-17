@@ -1,7 +1,6 @@
 package com.projeto.ReFood.service;
 
 import com.projeto.ReFood.dto.UserDTO;
-import com.projeto.ReFood.exception.CpfAlreadyExistsException;
 import com.projeto.ReFood.exception.EmailAlreadyExistsException;
 import com.projeto.ReFood.exception.NotFoundException;
 import com.projeto.ReFood.model.User;
@@ -51,10 +50,6 @@ public class UserService {
       throw new EmailAlreadyExistsException("O email já está cadastrado.");
     }
 
-    if (userRepository.existsByCpf(userDTO.cpf())) {
-      throw new CpfAlreadyExistsException("O CPF já está cadastrado: " + userDTO.cpf());
-    }
-
     User user = convertToEntity(userDTO);
     user.setPassword(passwordEncoder.encode(user.getPassword()));
     user.setDateCreation(LocalDateTime.now());
@@ -72,13 +67,8 @@ public class UserService {
       throw new EmailAlreadyExistsException("O email já está cadastrado.");
     }
 
-    if (!user.getCpf().equals(userDTO.cpf()) && userRepository.existsByCpf(userDTO.cpf())) {
-      throw new CpfAlreadyExistsException("O CPF já está cadastrado: " + userDTO.cpf());
-    }
-
     user.setName(userDTO.name());
     user.setSurname(userDTO.surname());
-    user.setCpf(userDTO.cpf());
     user.setEmail(userDTO.email());
     user.setPhone(userDTO.phone());
 
@@ -98,7 +88,6 @@ public class UserService {
     user.setUserId(userDTO.userId());
     user.setName(userDTO.name());
     user.setSurname(userDTO.surname());
-    user.setCpf(userDTO.cpf());
     user.setEmail(userDTO.email());
     user.setPhone(userDTO.phone());
     user.setPassword(userDTO.password());
@@ -112,7 +101,6 @@ public class UserService {
         user.getUserId(),
         user.getName(),
         user.getSurname(),
-        user.getCpf(),
         user.getEmail(),
         user.getPhone(),
         null, // user.getPassword(), // Não expor a senha

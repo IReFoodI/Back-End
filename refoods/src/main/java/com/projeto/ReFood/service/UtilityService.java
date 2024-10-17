@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.projeto.ReFood.exception.NotFoundException;
 import com.projeto.ReFood.model.Address;
 import com.projeto.ReFood.model.Card;
+import com.projeto.ReFood.model.Cart;
 import com.projeto.ReFood.model.HistoricalOrder;
 import com.projeto.ReFood.model.Order;
 import com.projeto.ReFood.model.Product;
@@ -17,6 +18,7 @@ import com.projeto.ReFood.model.Transaction;
 import com.projeto.ReFood.model.User;
 import com.projeto.ReFood.repository.AddressRepository;
 import com.projeto.ReFood.repository.CardRepository;
+import com.projeto.ReFood.repository.CartRepository;
 import com.projeto.ReFood.repository.OrderRepository;
 import com.projeto.ReFood.repository.ProductRepository;
 import com.projeto.ReFood.repository.RestaurantRepository;
@@ -36,6 +38,7 @@ public class UtilityService {
   private final AddressRepository addressRepository;
   private final CardRepository cardRepository;
   private final ProductRepository productRepository;
+  private final CartRepository cartRepository;
 
   public boolean isEmailUnique(String email) {
     return !userRepository.existsByEmail(email) && !restaurantRepository.existsByEmail(email);
@@ -114,6 +117,16 @@ public class UtilityService {
       productSetter.accept(product);
     } else {
       throw new IllegalArgumentException("Product ID cannot be null when associating a product.");
+    }
+  }
+
+  public void associateCart(Consumer<Cart> cartSetter, Long cartId) {
+    if (cartId != null) {
+      Cart cart = cartRepository.findById(cartId)
+          .orElseThrow(() -> new NotFoundException("Carrinho não encontrado com ID: " + cartId));
+      cartSetter.accept(cart);
+    } else {
+      throw new IllegalArgumentException("Cart ID cannot be null when associating an cart.");
     }
   }
 

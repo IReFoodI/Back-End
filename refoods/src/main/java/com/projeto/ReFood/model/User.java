@@ -23,14 +23,8 @@ public class User {
   @Column(nullable = false)
   private String name;
 
-  @NotBlank(message = "O sobrenome é obrigatório.")
-  @Column(nullable = false)
+  @Column
   private String surname;
-
-  @NotBlank(message = "O CPF é obrigatório.")
-  @Pattern(regexp = "\\d{11}", message = "O CPF deve conter 11 dígitos numéricos.")
-  @Column(nullable = false, unique = true)
-  private String cpf;
 
   @NotBlank(message = "O e-mail é obrigatório.")
   @Email(message = "O e-mail deve ser um endereço de e-mail válido.")
@@ -38,7 +32,9 @@ public class User {
   private String email;
 
   @NotBlank(message = "A senha é obrigatória.")
-  // @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$", message = "A senha deve ter pelo menos 8 caracteres, incluindo pelo menos uma letra maiúscula, uma letra minúscula e um número.")
+  // @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$", message = "A
+  // senha deve ter pelo menos 8 caracteres, incluindo pelo menos uma letra
+  // maiúscula, uma letra minúscula e um número.")
   @Column(nullable = false)
   private String password;
 
@@ -68,6 +64,9 @@ public class User {
 
   @OneToMany(mappedBy = "user")
   private Set<Order> userOrders;
+
+  @OneToMany(mappedBy = "user")
+  private Set<Cart> userCarts;
 
   @OneToMany(mappedBy = "user")
   private Set<Review> userReviews;
