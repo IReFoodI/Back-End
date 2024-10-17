@@ -42,8 +42,9 @@ public class Address {
   private String complement;
 
   @NotBlank(message = "O tipo de endereço é obrigatório.")
+  @Enumerated(EnumType.STRING)
   @Column(nullable = false)
-  private String addressType;
+  private EnumAddressType addressType;
   
   @Column(nullable = false)
   private boolean isStandard; // default = false
