@@ -5,10 +5,10 @@
 
 
 -- Inserindo dados na tabela tb_users
-INSERT INTO tb_users (cpf, date_creation, email, last_login, name, password, phone, surname)
+INSERT INTO tb_users (date_creation, email, last_login, name, password, phone, surname)
 VALUES -- -- as senhas são 123456
-    ('12345678901', NOW(), 'user1@example.com', NOW(), 'User One', '$2y$10$p1IXPiQ29t1mUit/msZV3OY7Dpz2voS6pK4TBQzPEcVC6QbG6cWhe', '1112223333', 'Surname One'),
-    ('98765432100', NOW(), 'user2@example.com', NOW(), 'User Two', '$2y$10$p1IXPiQ29t1mUit/msZV3OY7Dpz2voS6pK4TBQzPEcVC6QbG6cWhe', '4445556666', 'Surname Two');
+    (NOW(), 'user1@example.com', NOW(), 'User One', '$2y$10$p1IXPiQ29t1mUit/msZV3OY7Dpz2voS6pK4TBQzPEcVC6QbG6cWhe', '1112223333', 'Surname One'),
+    (NOW(), 'user2@example.com', NOW(), 'User Two', '$2y$10$p1IXPiQ29t1mUit/msZV3OY7Dpz2voS6pK4TBQzPEcVC6QbG6cWhe', '4445556666', 'Surname Two');
 
 -- Inserindo dados na tabela tb_restaurants
 INSERT INTO tb_restaurants (average_rating, cnpj, date_creation, email, fantasy, last_login, password, quantity_evaluations, total_evaluations, url_banner, url_logo)
@@ -19,13 +19,13 @@ VALUES -- -- as senhas são 123456
 -- Inserindo dados na tabela tb_addresses
 INSERT INTO tb_addresses (address_type, cep, complement, district, is_standard, number, state, street, restaurant_id, user_id)
 VALUES 
-    ('Delivery', '12345678', 'Apto 101', 'Centro', TRUE, '123', 'SP', 'Rua A', 1, 1),
-    ('Residential', '87654321', 'Apto 202', 'Jardins', FALSE, '456', 'SP', 'Rua B', NULL, 2);
+    ('RESTAURANT', '12345678', 'Apto 101', 'Centro', TRUE, '123', 'SP', 'Rua A', 1, NULL),
+    ('USER', '87654321', 'Apto 202', 'Jardins', FALSE, '456', 'SP', 'Rua B', NULL, 2);
 
 -- Inserindo dados na tabela tb_cards
-INSERT INTO tb_cards (cvv, number, validity, holder_name, user_id) VALUES 
-('123', '4111111111111111', '12/25', 'Nome do Titular 1', 1), 
-('456', '5500000000000004', '01/24', 'Nome do Titular 2', 2);
+INSERT INTO tb_cards (cpf, cvv, number, validity, holder_name, user_id) VALUES 
+('40002050000', '123', '4111111111111111', '12/25', 'Nome do Titular 1', 1), 
+('11102050110', '456', '5500000000000004', '01/24', 'Nome do Titular 2', 2);
 
 -- Inserindo dados na tabela tb_contacts
 INSERT INTO tb_contacts (description, phone, restaurant_id)
@@ -34,10 +34,25 @@ VALUES
     ('Contato Alternativo', '4445556666', 2);
 
 -- Inserindo dados na tabela tb_products
-INSERT INTO tb_products (active, addition_date, description_product, discount, name_product, url_img_product, value_product, restaurant_id)
+INSERT INTO tb_products (active, addition_date, description_product, discount, name_product, category, url_img_product, value_product, expiration_date, quantity, restaurant_id)
 VALUES 
-    (TRUE, NOW(), 'Product One', 10, 'Product One', 'product1.jpg', 20.0, 1),
-    (TRUE, NOW(), 'Product Two', 5, 'Product Two', 'product2.jpg', 30.0, 2);
+    (TRUE, NOW(), 'Delicious sweet product', 10, 'Product One', 'DOCE', 'product1.jpg', 20.0, '2024-11-17', 100, 1),
+    (TRUE, NOW(), 'Tasty savory product', 5, 'Product Two', 'SALGADO', 'product2.jpg', 30.0, '2024-11-17', 200, 2);
+
+-- Inserindo dados na tabela tb_cart
+INSERT INTO tb_cart (status, total_value, user_id)
+VALUES
+    ('ABERTO', 0.0, 1),
+    ('ABERTO', 0.0, 2);
+
+-- Inserindo dados na tabela tb_cart_items
+INSERT INTO tb_cart_items (cart_id, product_id, quantity, unit_value, subtotal)
+VALUES 
+    (1, 1, 2, 20.0, 40.0),
+    (1, 2, 1, 30.0, 30.0),
+    (2, 1, 1, 20.0, 20.0),
+    (2, 2, 2, 30.0, 60.0);
+
 
 -- Inserindo dados na tabela tb_orders
 INSERT INTO tb_orders (order_date, order_status, total_value, address_id, restaurant_id, user_id)
