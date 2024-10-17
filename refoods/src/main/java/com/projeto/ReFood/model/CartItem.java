@@ -5,6 +5,7 @@ import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -33,12 +34,14 @@ public class CartItem {
 
   @NotNull(message = "O carrinho não pode ser nulo.")
   @ManyToOne
-  @JoinColumn(name = "cart_id", nullable = false)
+  @MapsId("cartId")
+  @JoinColumn(name = "cart_id", referencedColumnName = "cart_id",nullable = false)
   private Cart cart;
 
   @NotNull(message = "O produto não pode ser nulo.")
   @ManyToOne
-  @JoinColumn(name = "product_id", nullable = false)
+  @MapsId("productId")
+  @JoinColumn(name = "product_id", referencedColumnName = "product_id", nullable = false)
   private Product product;
 
 }
