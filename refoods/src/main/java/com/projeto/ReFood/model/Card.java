@@ -28,6 +28,10 @@ public class Card {
   @Column(nullable = false)
   private String holderName;
 
+  @Pattern(regexp = "\\d{11}", message = "O CPF deve conter 11 dígitos numéricos.")
+  @Column(nullable = false)
+  private String cpf;
+
   @NotBlank(message = "A validade do cartão é obrigatória.")
   @Pattern(regexp = "(0[1-9]|1[0-2])/\\d{2}", message = "O formato da validade deve ser MM/AA.")
   @Column(nullable = false)

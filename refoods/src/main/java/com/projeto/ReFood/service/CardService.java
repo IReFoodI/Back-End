@@ -58,6 +58,7 @@ public class CardService {
 
     card.setNumber(cardDTO.number());
     card.setHolderName(cardDTO.holderName());
+    card.setCpf(cardDTO.cpf());
     card.setValidity(cardDTO.validity());
     card.setCvv(cardDTO.cvv());
 
@@ -85,6 +86,7 @@ public class CardService {
         card.getCardId(),
         card.getNumber(),
         card.getHolderName(),
+        card.getCpf(),
         card.getValidity(),
         card.getCvv(),
         card.getUser().getUserId(),
@@ -96,6 +98,7 @@ public class CardService {
     card.setCardId(cardDTO.cardId());
     card.setNumber(cardDTO.number());
     card.setHolderName(cardDTO.holderName());
+    card.setCpf(cardDTO.cpf());
     card.setValidity(cardDTO.validity());
     card.setCvv(cardDTO.cvv());
     utilityService.associateUser(card::setUser, cardDTO.userId());
