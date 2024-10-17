@@ -16,7 +16,7 @@ VALUES
      NOW(), '$2y$10$p1IXPiQ29t1mUit/msZV3OY7Dpz2voS6pK4TBQzPEcVC6QbG6cWhe', 18, 85,
      'banner5.jpg', 'logo5.jpg'),
 
-    (4.7, 'PADARIA', '15975328000111', NOW(), 'farmacia1@example.com', 'Farmácia Vida',
+    (4.7, 'PADARIA', '15975328000111', NOW(), 'farmacia1@example.com', 'Padaria Vida',
      NOW(), '$2y$10$p1IXPiQ29t1mUit/msZV3OY7Dpz2voS6pK4TBQzPEcVC6QbG6cWhe', 12, 60,
      'banner6.jpg', 'logo6.jpg'),
 
