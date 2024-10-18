@@ -1,16 +1,13 @@
 package com.projeto.ReFood.controller;
 
+import com.projeto.ReFood.exception.Unauthorized;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.projeto.ReFood.dto.LoginRequest;
 import com.projeto.ReFood.dto.LoginResponse;
 import com.projeto.ReFood.security.JwtTokenProvider;
@@ -40,13 +37,9 @@ public class AuthController {
       authenticationManager.authenticate(
           new UsernamePasswordAuthenticationToken(loginRequest.email(), loginRequest.password()));
     } catch (BadCredentialsException e) {
-      return ResponseEntity
-          .status(HttpStatus.UNAUTHORIZED)
-          .body(new LoginResponse("Invalid credentials")); // status 401
+      throw new Unauthorized("Não autorizado");// status 401
     } catch (Exception e) {
-      return ResponseEntity
-          .status(HttpStatus.INTERNAL_SERVER_ERROR)
-          .body(new LoginResponse("An error occurred")); // status 500
+      throw  new RuntimeException("Erro interno");// status 500
     }
 
     final UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.email());
