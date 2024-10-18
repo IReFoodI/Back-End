@@ -45,7 +45,7 @@ public class Product {
   @Column(name = "expiration_date", nullable = false)
   private Date expirationDate;
 
-  @NotNull(message = "A quantidade não pode ser nulal.")
+  @NotNull(message = "A quantidade não pode ser nula.")
   @Min(value = 0, message = "A quantidade não pode ser negativa.")
   @Column(name = "quantity", nullable = false)
   private int quantity;
