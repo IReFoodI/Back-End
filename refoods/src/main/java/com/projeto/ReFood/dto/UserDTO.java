@@ -11,8 +11,6 @@ public record UserDTO(
 
     @NotBlank(message = "O nome é obrigatório.") String name,
 
-    String surname,
-
     @NotBlank(message = "O e-mail é obrigatório.") 
     @Email(message = "O e-mail deve ser um endereço de e-mail válido.") String email,
 
