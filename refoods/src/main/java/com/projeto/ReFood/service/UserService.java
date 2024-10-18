@@ -68,7 +68,6 @@ public class UserService {
     }
 
     user.setName(userDTO.name());
-    user.setSurname(userDTO.surname());
     user.setEmail(userDTO.email());
     user.setPhone(userDTO.phone());
 
@@ -87,7 +86,6 @@ public class UserService {
     User user = new User();
     user.setUserId(userDTO.userId());
     user.setName(userDTO.name());
-    user.setSurname(userDTO.surname());
     user.setEmail(userDTO.email());
     user.setPhone(userDTO.phone());
     user.setPassword(userDTO.password());
@@ -100,7 +98,6 @@ public class UserService {
     return new UserDTO(
         user.getUserId(),
         user.getName(),
-        user.getSurname(),
         user.getEmail(),
         user.getPhone(),
         null, // user.getPassword(), // Não expor a senha
