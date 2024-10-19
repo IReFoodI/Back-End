@@ -35,9 +35,8 @@ public class User {
   @Column(nullable = false)
   private String password;
 
-  @NotBlank(message = "O telefone é obrigatório.")
   @Pattern(regexp = "\\d{10,15}", message = "O telefone deve conter entre 10 e 15 dígitos numéricos.")
-  @Column(nullable = false)
+  @Column(nullable = true)
   private String phone;
 
   @NotNull(message = "A data de criação é obrigatória.")
