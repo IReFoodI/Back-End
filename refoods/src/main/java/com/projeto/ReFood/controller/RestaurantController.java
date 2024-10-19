@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.projeto.ReFood.dto.RestaurantDTO;
-import com.projeto.ReFood.exception.EmailAlreadyExistsException;
-import com.projeto.ReFood.exception.NotFoundException;
+import com.projeto.ReFood.exception.GlobalExceptionHandler.EmailAlreadyExistsException;
 
 import java.net.URI;
 import java.util.List;
@@ -31,7 +30,7 @@ public class RestaurantController {
   }
 
   @GetMapping("/{restaurantId}")
-  public ResponseEntity<RestaurantDTO> getRestaurantById(@PathVariable Long restaurantId) throws NotFoundException {
+  public ResponseEntity<RestaurantDTO> getRestaurantById(@PathVariable Long restaurantId) {
     RestaurantDTO restaurant = restaurantService.getRestaurantById(restaurantId);
     return ResponseEntity.ok(restaurant);
   }
@@ -52,13 +51,13 @@ public class RestaurantController {
 
   @PutMapping("/{restaurantId}")
   public ResponseEntity<RestaurantDTO> updateRestaurant(@PathVariable Long restaurantId,
-      @Valid @RequestBody RestaurantDTO restaurantDTO) throws NotFoundException {
+      @Valid @RequestBody RestaurantDTO restaurantDTO) {
     RestaurantDTO updatedRestaurant = restaurantService.updateRestaurant(restaurantId, restaurantDTO);
     return ResponseEntity.ok(updatedRestaurant);
   }
 
   @DeleteMapping("/{restaurantId}")
-  public ResponseEntity<Void> deleteRestaurant(@PathVariable Long restaurantId) throws NotFoundException {
+  public ResponseEntity<Void> deleteRestaurant(@PathVariable Long restaurantId) {
     restaurantService.deleteRestaurant(restaurantId);
     return ResponseEntity.noContent().build();
   }

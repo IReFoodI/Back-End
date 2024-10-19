@@ -1,7 +1,7 @@
 package com.projeto.ReFood.service;
 
 import com.projeto.ReFood.dto.CartDTO;
-import com.projeto.ReFood.exception.NotFoundException;
+import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
 import com.projeto.ReFood.model.Cart;
 import com.projeto.ReFood.model.EnumCartStatus;
 import com.projeto.ReFood.repository.CartRepository;
@@ -39,7 +39,7 @@ public class CartService {
   public CartDTO getCartById(Long cartId) {
     return cartRepository.findById(cartId)
         .map(this::convertToDTO)
-        .orElseThrow(() -> new NotFoundException("Carrinho não encontrado."));
+        .orElseThrow(() -> new NotFoundException());
   }
 
   @Transactional
@@ -53,7 +53,7 @@ public class CartService {
   @Transactional
   public CartDTO updateCart(Long cartId, @Valid CartDTO cartDTO) {
     Cart cart = cartRepository.findById(cartId)
-        .orElseThrow(() -> new NotFoundException("Carrinho não encontrado com ID: " + cartId));
+        .orElseThrow(() -> new NotFoundException());
 
     cart.setTotalValue(cartDTO.totalValue());
     cart.setStatus(EnumCartStatus.valueOf(cartDTO.status()));
@@ -67,7 +67,7 @@ public class CartService {
   @Transactional
   public void deleteCart(Long cartId) {
     if (!cartRepository.existsById(cartId)) {
-      throw new NotFoundException("Carrinho não encontrado.");
+      throw new NotFoundException();
     }
     cartRepository.deleteById(cartId);
   }

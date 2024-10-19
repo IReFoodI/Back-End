@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import com.projeto.ReFood.dto.NotificationDTO;
-import com.projeto.ReFood.exception.NotFoundException;
+import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
 import com.projeto.ReFood.model.Notification;
 
 import java.util.List;
@@ -38,7 +38,7 @@ public class NotificationService {
   public NotificationDTO getNotificationById(Long notificationId) {
     return notificationRepository.findById(notificationId)
         .map(this::convertToDTO)
-        .orElseThrow(() -> new NotFoundException("Notificação não encontrada."));
+        .orElseThrow(() -> new NotFoundException());
   }
 
   @Transactional
@@ -53,7 +53,7 @@ public class NotificationService {
   @Transactional
   public NotificationDTO updateNotification(Long notificationId, @Valid NotificationDTO notificationDTO) {
     Notification notification = notificationRepository.findById(notificationId)
-        .orElseThrow(() -> new NotFoundException("Notificação não encontrada com ID: " + notificationId));
+        .orElseThrow(() -> new NotFoundException());
 
     notification.setMsgNotification(notificationDTO.msgNotification());
     notification.setMsgRead(notificationDTO.msgRead());
@@ -69,7 +69,7 @@ public class NotificationService {
   @Transactional
   public void deleteNotification(Long notificationId) {
     if (!notificationRepository.existsById(notificationId)) {
-      throw new NotFoundException("Notificação não encontrada.");
+      throw new NotFoundException();
     }
     notificationRepository.deleteById(notificationId);
   }

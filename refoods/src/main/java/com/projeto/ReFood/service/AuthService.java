@@ -3,7 +3,6 @@ package com.projeto.ReFood.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,8 +12,9 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import com.projeto.ReFood.dto.LoginResponse;
-import com.projeto.ReFood.exception.InternalServerErrorException;
-import com.projeto.ReFood.exception.NotFoundException;
+import com.projeto.ReFood.exception.GlobalExceptionHandler.BadCredentialsException;
+import com.projeto.ReFood.exception.GlobalExceptionHandler.InternalServerErrorException;
+import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
 import com.projeto.ReFood.model.CustomUserDetails;
 import com.projeto.ReFood.model.GoogleUserInfo;
 import com.projeto.ReFood.model.User;
@@ -50,9 +50,9 @@ public class AuthService {
     try {
       authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
     } catch (BadCredentialsException e) {
-      throw new BadCredentialsException("Invalid credentials");
+      throw new BadCredentialsException();
     } catch (Exception e) {
-      throw new InternalServerErrorException("An error occurred");
+      throw new InternalServerErrorException();
     }
 
     Optional<User> optionalUser = userRepository.findByEmail(email);
@@ -67,7 +67,7 @@ public class AuthService {
       return ResponseEntity.ok(new LoginResponse(jwt, userDetails.getId(), userDetails.getNome(), email));
     }
 
-    throw new NotFoundException("User not found");
+    throw new NotFoundException();
   }
 
   public ResponseEntity<?> handleGoogleLoginSuccess(String tokenId) {

@@ -1,7 +1,7 @@
 package com.projeto.ReFood.service;
 
 import com.projeto.ReFood.dto.ReviewDTO;
-import com.projeto.ReFood.exception.NotFoundException;
+import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
 import com.projeto.ReFood.model.Review;
 import com.projeto.ReFood.repository.ReviewRepository;
 
@@ -37,7 +37,7 @@ public class ReviewService {
     public ReviewDTO getReviewById(Long reviewId) {
         return reviewRepository.findById(reviewId)
                 .map(this::convertToDTO)
-                .orElseThrow(() -> new NotFoundException("Avaliação não encontrada."));
+                .orElseThrow(() -> new NotFoundException());
     }
 
     @Transactional
@@ -52,7 +52,7 @@ public class ReviewService {
     @Transactional
     public ReviewDTO updateReview(Long reviewId, @Valid ReviewDTO reviewDTO) {
         Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new NotFoundException("Avaliação não encontrada com ID: " + reviewId));
+                .orElseThrow(() -> new NotFoundException());
 
         review.setRatingNote(reviewDTO.ratingNote());
         review.setRatingDate(reviewDTO.ratingDate());
@@ -68,7 +68,7 @@ public class ReviewService {
     @Transactional
     public void deleteReview(Long reviewId) {
         if (!reviewRepository.existsById(reviewId)) {
-            throw new NotFoundException("Avaliação não encontrada.");
+            throw new NotFoundException();
         }
         reviewRepository.deleteById(reviewId);
     }

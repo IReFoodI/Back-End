@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.projeto.ReFood.dto.RestaurantHoursDTO;
-import com.projeto.ReFood.exception.NotFoundException;
 import com.projeto.ReFood.service.RestaurantHoursService;
 
 import jakarta.validation.Valid;
@@ -25,41 +24,41 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/restaurant-hours")
 public class RestaurantHoursController {
 
-    @Autowired
-    private RestaurantHoursService restaurantHoursService;
+  @Autowired
+  private RestaurantHoursService restaurantHoursService;
 
-    @GetMapping
-    public ResponseEntity<List<RestaurantHoursDTO>> listAllHours() {
-        List<RestaurantHoursDTO> hours = restaurantHoursService.getAllHours();
-        return ResponseEntity.ok(hours);
-    }
+  @GetMapping
+  public ResponseEntity<List<RestaurantHoursDTO>> listAllHours() {
+    List<RestaurantHoursDTO> hours = restaurantHoursService.getAllHours();
+    return ResponseEntity.ok(hours);
+  }
 
-    @GetMapping("/{hoursId}")
-    public ResponseEntity<RestaurantHoursDTO> getHoursById(@PathVariable Long hoursId) throws NotFoundException {
-        RestaurantHoursDTO hoursDTO = restaurantHoursService.getHoursById(hoursId);
-        return ResponseEntity.ok(hoursDTO);
-    }
+  @GetMapping("/{hoursId}")
+  public ResponseEntity<RestaurantHoursDTO> getHoursById(@PathVariable Long hoursId) {
+    RestaurantHoursDTO hoursDTO = restaurantHoursService.getHoursById(hoursId);
+    return ResponseEntity.ok(hoursDTO);
+  }
 
-    @PostMapping
-    public ResponseEntity<RestaurantHoursDTO> createHours(@Valid @RequestBody RestaurantHoursDTO hoursDTO) {
-        RestaurantHoursDTO createdHours = restaurantHoursService.createHours(hoursDTO);
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{hoursId}")
-                .buildAndExpand(createdHours.id())
-                .toUri();
-        return ResponseEntity.created(location).body(createdHours);
-    }
+  @PostMapping
+  public ResponseEntity<RestaurantHoursDTO> createHours(@Valid @RequestBody RestaurantHoursDTO hoursDTO) {
+    RestaurantHoursDTO createdHours = restaurantHoursService.createHours(hoursDTO);
+    URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+        .path("/{hoursId}")
+        .buildAndExpand(createdHours.id())
+        .toUri();
+    return ResponseEntity.created(location).body(createdHours);
+  }
 
-    @PutMapping("/{hoursId}")
-    public ResponseEntity<RestaurantHoursDTO> updateHours(@PathVariable Long hoursId, @Valid @RequestBody RestaurantHoursDTO hoursDTO)
-            throws NotFoundException {
-        RestaurantHoursDTO updatedHours = restaurantHoursService.updateHours(hoursId, hoursDTO);
-        return ResponseEntity.ok(updatedHours);
-    }
+  @PutMapping("/{hoursId}")
+  public ResponseEntity<RestaurantHoursDTO> updateHours(@PathVariable Long hoursId,
+      @Valid @RequestBody RestaurantHoursDTO hoursDTO) {
+    RestaurantHoursDTO updatedHours = restaurantHoursService.updateHours(hoursId, hoursDTO);
+    return ResponseEntity.ok(updatedHours);
+  }
 
-    @DeleteMapping("/{hoursId}")
-    public ResponseEntity<Void> deleteHours(@PathVariable Long hoursId) throws NotFoundException {
-        restaurantHoursService.deleteHours(hoursId);
-        return ResponseEntity.noContent().build();
-    }
+  @DeleteMapping("/{hoursId}")
+  public ResponseEntity<Void> deleteHours(@PathVariable Long hoursId) {
+    restaurantHoursService.deleteHours(hoursId);
+    return ResponseEntity.noContent().build();
+  }
 }

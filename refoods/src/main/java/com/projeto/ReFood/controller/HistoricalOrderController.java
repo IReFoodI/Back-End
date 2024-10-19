@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.projeto.ReFood.dto.HistoricalOrderDTO;
-import com.projeto.ReFood.exception.NotFoundException;
 
 import java.util.List;
 import java.net.URI;
@@ -29,8 +28,7 @@ public class HistoricalOrderController {
   }
 
   @GetMapping("/{historyId}")
-  public ResponseEntity<HistoricalOrderDTO> getHistoricalOrderById(@PathVariable Long historyId)
-      throws NotFoundException {
+  public ResponseEntity<HistoricalOrderDTO> getHistoricalOrderById(@PathVariable Long historyId) {
     HistoricalOrderDTO historicalOrderDTO = historicalOrderService.getHistoricalOrderById(historyId);
     return ResponseEntity.ok(historicalOrderDTO);
   }
@@ -48,14 +46,13 @@ public class HistoricalOrderController {
 
   @PutMapping("/{historyId}")
   public ResponseEntity<HistoricalOrderDTO> updateHistoricalOrder(@PathVariable Long historyId,
-      @Valid @RequestBody HistoricalOrderDTO historicalOrderDTO)
-      throws NotFoundException {
+      @Valid @RequestBody HistoricalOrderDTO historicalOrderDTO) {
     HistoricalOrderDTO updatedOrder = historicalOrderService.updateHistoricalOrder(historyId, historicalOrderDTO);
     return ResponseEntity.ok(updatedOrder);
   }
 
   @DeleteMapping("/{historyId}")
-  public ResponseEntity<Void> deleteHistoricalOrder(@PathVariable Long historyId) throws NotFoundException {
+  public ResponseEntity<Void> deleteHistoricalOrder(@PathVariable Long historyId) {
     historicalOrderService.deleteHistoricalOrder(historyId);
     return ResponseEntity.noContent().build();
   }

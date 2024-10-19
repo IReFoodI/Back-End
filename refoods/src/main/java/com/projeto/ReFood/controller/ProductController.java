@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.projeto.ReFood.dto.ProductDTO;
-import com.projeto.ReFood.exception.NotFoundException;
 
 import java.net.URI;
 import java.util.List;
@@ -29,7 +28,7 @@ public class ProductController {
   }
 
   @GetMapping("/{productId}")
-  public ResponseEntity<ProductDTO> getProductById(@PathVariable Long productId) throws NotFoundException {
+  public ResponseEntity<ProductDTO> getProductById(@PathVariable Long productId) {
     ProductDTO productDTO = productService.getProductById(productId);
     return ResponseEntity.ok(productDTO);
   }
@@ -47,13 +46,13 @@ public class ProductController {
   @PutMapping("/{productId}")
   public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long productId,
       @Valid @RequestBody ProductDTO productDTO)
-      throws NotFoundException {
+      {
     ProductDTO updatedProduct = productService.updateProduct(productId, productDTO);
     return ResponseEntity.ok(updatedProduct);
   }
 
   @DeleteMapping("/{productId}")
-  public ResponseEntity<Void> deleteProduct(@PathVariable Long productId) throws NotFoundException {
+  public ResponseEntity<Void> deleteProduct(@PathVariable Long productId) {
     productService.deleteProduct(productId);
     return ResponseEntity.noContent().build();
   }

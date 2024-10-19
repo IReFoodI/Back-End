@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.projeto.ReFood.dto.CardDTO;
-import com.projeto.ReFood.exception.NotFoundException;
 
 import java.net.URI;
 import java.util.List;
@@ -29,7 +28,7 @@ public class CardController {
   }
 
   @GetMapping("/{cardId}")
-  public ResponseEntity<CardDTO> getCardById(@PathVariable Long cardId) throws NotFoundException {
+  public ResponseEntity<CardDTO> getCardById(@PathVariable Long cardId) {
     CardDTO cardDTO = cardService.getCardById(cardId);
     return ResponseEntity.ok(cardDTO);
   }
@@ -45,14 +44,13 @@ public class CardController {
   }
 
   @PutMapping("/{cardId}")
-  public ResponseEntity<CardDTO> updateCard(@PathVariable Long cardId, @Valid @RequestBody CardDTO cardDTO)
-      throws NotFoundException {
+  public ResponseEntity<CardDTO> updateCard(@PathVariable Long cardId, @Valid @RequestBody CardDTO cardDTO) {
     CardDTO updatedCard = cardService.updateCard(cardId, cardDTO);
     return ResponseEntity.ok(updatedCard);
   }
 
   @DeleteMapping("/{cardId}")
-  public ResponseEntity<Void> deleteCard(@PathVariable Long cardId) throws NotFoundException {
+  public ResponseEntity<Void> deleteCard(@PathVariable Long cardId) {
     cardService.deleteCard(cardId);
     return ResponseEntity.noContent().build();
   }

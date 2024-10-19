@@ -1,8 +1,8 @@
 package com.projeto.ReFood.service;
 
 import com.projeto.ReFood.dto.UserDTO;
-import com.projeto.ReFood.exception.EmailAlreadyExistsException;
-import com.projeto.ReFood.exception.NotFoundException;
+import com.projeto.ReFood.exception.GlobalExceptionHandler.EmailAlreadyExistsException;
+import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
 import com.projeto.ReFood.model.User;
 import com.projeto.ReFood.repository.UserRepository;
 
@@ -37,17 +37,17 @@ public class UserService {
   }
 
   @Transactional(readOnly = true)
-  public UserDTO getUserById(Long userId) throws NotFoundException {
+  public UserDTO getUserById(Long userId) {
     return userRepository.findById(userId)
         .map(this::convertToDTO)
-        .orElseThrow(() -> new NotFoundException("Usuário não encontrado com ID: " + userId));
+        .orElseThrow(() -> new NotFoundException());
   }
 
   @Transactional
   public UserDTO createUser(@Valid UserDTO userDTO) {
 
     if (!utilityService.isEmailUnique(userDTO.email())) {
-      throw new EmailAlreadyExistsException("O email já está cadastrado.");
+      throw new EmailAlreadyExistsException();
     }
 
     User user = convertToEntity(userDTO);
@@ -59,12 +59,12 @@ public class UserService {
   }
 
   @Transactional
-  public UserDTO updateUser(Long userId, @Valid UserDTO userDTO) throws NotFoundException {
+  public UserDTO updateUser(Long userId, @Valid UserDTO userDTO) {
     User user = userRepository.findById(userId)
-        .orElseThrow(() -> new NotFoundException("Usuário não encontrado com ID: " + userId));
+        .orElseThrow(() -> new NotFoundException());
 
     if (!utilityService.isEmailUnique(userDTO.email())) {
-      throw new EmailAlreadyExistsException("O email já está cadastrado.");
+      throw new EmailAlreadyExistsException();
     }
 
     user.setName(userDTO.name());
@@ -75,9 +75,9 @@ public class UserService {
   }
 
   @Transactional
-  public void deleteUser(Long userId) throws NotFoundException {
+  public void deleteUser(Long userId) {
     if (!userRepository.existsById(userId)) {
-      throw new NotFoundException("Usuário não encontrado com ID: " + userId);
+      throw new NotFoundException();
     }
     userRepository.deleteById(userId);
   }
@@ -100,7 +100,7 @@ public class UserService {
         user.getName(),
         user.getEmail(),
         user.getPhone(),
-        null, // user.getPassword(), // Não expor a senha
+        null, // Não expor a senha
         user.getDateCreation(),
         user.getLastLogin());
   }

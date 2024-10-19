@@ -1,7 +1,6 @@
 package com.projeto.ReFood.controller;
 
 import com.projeto.ReFood.dto.CartItemDTO;
-import com.projeto.ReFood.exception.NotFoundException;
 import com.projeto.ReFood.model.CartItemPK;
 import com.projeto.ReFood.service.CartItemService;
 
@@ -29,7 +28,7 @@ public class CartItemController {
   }
 
   @GetMapping("/{cartItemId}")
-  public ResponseEntity<CartItemDTO> getCartItemById(@PathVariable CartItemPK cartItemId) throws NotFoundException {
+  public ResponseEntity<CartItemDTO> getCartItemById(@PathVariable CartItemPK cartItemId) {
     CartItemDTO cartItemDTO = cartItemService.getCartItemById(cartItemId);
     return ResponseEntity.ok(cartItemDTO);
   }
@@ -46,13 +45,13 @@ public class CartItemController {
 
   @PutMapping("/{cartItemId}")
   public ResponseEntity<CartItemDTO> updateCartItem(@PathVariable CartItemPK cartItemId,
-      @Valid @RequestBody CartItemDTO cartItemDTO) throws NotFoundException {
+      @Valid @RequestBody CartItemDTO cartItemDTO) {
     CartItemDTO updatedCartItem = cartItemService.updateCartItem(cartItemId, cartItemDTO);
     return ResponseEntity.ok(updatedCartItem);
   }
 
   @DeleteMapping("/{cartItemId}")
-  public ResponseEntity<Void> deleteCartItem(@PathVariable CartItemPK cartItemId) throws NotFoundException {
+  public ResponseEntity<Void> deleteCartItem(@PathVariable CartItemPK cartItemId) {
     cartItemService.deleteCartItem(cartItemId);
     return ResponseEntity.noContent().build();
   }

@@ -1,7 +1,6 @@
 package com.projeto.ReFood.controller;
 
 import com.projeto.ReFood.dto.UserDTO;
-import com.projeto.ReFood.exception.NotFoundException;
 import com.projeto.ReFood.service.UserService;
 
 import jakarta.validation.Valid;
@@ -28,7 +27,7 @@ public class UserController {
   }
 
   @GetMapping("/{userId}")
-  public ResponseEntity<UserDTO> getUserById(@PathVariable Long userId) throws NotFoundException {
+  public ResponseEntity<UserDTO> getUserById(@PathVariable Long userId) {
     UserDTO userDTO = userService.getUserById(userId);
     return ResponseEntity.ok(userDTO);
   }
@@ -44,14 +43,13 @@ public class UserController {
   }
 
   @PutMapping("/{userId}")
-  public ResponseEntity<UserDTO> updateUser(@PathVariable Long userId, @Valid @RequestBody UserDTO userDTO)
-      throws NotFoundException {
+  public ResponseEntity<UserDTO> updateUser(@PathVariable Long userId, @Valid @RequestBody UserDTO userDTO) {
     UserDTO updatedUser = userService.updateUser(userId, userDTO);
     return ResponseEntity.ok(updatedUser);
   }
 
   @DeleteMapping("/{userId}")
-  public ResponseEntity<Void> deleteUser(@PathVariable Long userId) throws NotFoundException {
+  public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
     userService.deleteUser(userId);
     return ResponseEntity.noContent().build();
   }

@@ -26,7 +26,7 @@ public class CustomUserDetailsService implements UserDetailsService {
   }
 
   @Override
-  public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+  public CustomUserDetails loadUserByUsername(String username) {
     User user = userRepository.findByEmail(username).orElse(null);
     if (user != null) {
       return new CustomUserDetails(user.getUserId(), user.getName(), user.getEmail(), user.getPassword(),
@@ -35,7 +35,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     Restaurant restaurant = restaurantRepository.findByEmail(username).orElse(null);
     if (restaurant != null) {
-      return new CustomUserDetails(restaurant.getRestaurantId(), restaurant.getFantasy(), restaurant.getEmail(), restaurant.getPassword(),
+      return new CustomUserDetails(restaurant.getRestaurantId(), restaurant.getFantasy(), restaurant.getEmail(),
+          restaurant.getPassword(),
           List.of(new SimpleGrantedAuthority("ROLE_RESTAURANT")));
     }
 

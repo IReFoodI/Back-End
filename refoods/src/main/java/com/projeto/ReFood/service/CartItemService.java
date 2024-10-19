@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import com.projeto.ReFood.dto.CartItemDTO;
-import com.projeto.ReFood.exception.NotFoundException;
+import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
 import com.projeto.ReFood.model.CartItem;
 import com.projeto.ReFood.model.CartItemPK;
 import com.projeto.ReFood.repository.CartItemRepository;
@@ -38,7 +38,7 @@ public class CartItemService {
   @Transactional(readOnly = true)
   public CartItemDTO getCartItemById(CartItemPK cartItemId) {
     CartItem cartItem = cartItemRepository.findById(cartItemId)
-        .orElseThrow(() -> new NotFoundException("Cart item not found with ID: " + cartItemId));
+        .orElseThrow(() -> new NotFoundException());
     return convertToDTO(cartItem);
   }
 
@@ -52,7 +52,7 @@ public class CartItemService {
   @Transactional
   public CartItemDTO updateCartItem(CartItemPK cartItemId, @Valid CartItemDTO cartItemDTO) {
     CartItem cartItem = cartItemRepository.findById(cartItemId)
-        .orElseThrow(() -> new NotFoundException("Cart item not found with ID: " + cartItemId));
+        .orElseThrow(() -> new NotFoundException());
 
     cartItem.setQuantity(cartItemDTO.quantity());
     cartItem.setUnitValue(cartItemDTO.unitValue());
@@ -67,7 +67,7 @@ public class CartItemService {
   @Transactional
   public void deleteCartItem(CartItemPK cartItemId) {
     if (!cartItemRepository.existsById(cartItemId)) {
-      throw new NotFoundException("Cart item not found with ID: " + cartItemId);
+      throw new NotFoundException();
     }
     cartItemRepository.deleteById(cartItemId);
   }
@@ -78,9 +78,8 @@ public class CartItemService {
         cartItem.getQuantity(),
         cartItem.getUnitValue(),
         cartItem.getSubtotal(),
-        cartItem.getCart().getCartId(), // Assumindo que CartItem tem uma relação com Cart
-        cartItem.getProduct().getProductId() // Assumindo que CartItem tem uma relação com Product
-    );
+        cartItem.getCart().getCartId(),
+        cartItem.getProduct().getProductId());
   }
 
   public CartItem convertToEntity(CartItemDTO cartItemDTO) {

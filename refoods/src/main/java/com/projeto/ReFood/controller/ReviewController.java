@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.projeto.ReFood.dto.ReviewDTO;
-import com.projeto.ReFood.exception.NotFoundException;
 
 import java.net.URI;
 import java.util.List;
@@ -29,7 +28,7 @@ public class ReviewController {
   }
 
   @GetMapping("/{reviewId}")
-  public ResponseEntity<ReviewDTO> getReviewById(@PathVariable Long reviewId) throws NotFoundException {
+  public ResponseEntity<ReviewDTO> getReviewById(@PathVariable Long reviewId) {
     ReviewDTO reviewDTO = reviewService.getReviewById(reviewId);
     return ResponseEntity.ok(reviewDTO);
   }
@@ -45,14 +44,13 @@ public class ReviewController {
   }
 
   @PutMapping("/{reviewId}")
-  public ResponseEntity<ReviewDTO> updateReview(@PathVariable Long reviewId, @Valid @RequestBody ReviewDTO reviewDTO)
-      throws NotFoundException {
+  public ResponseEntity<ReviewDTO> updateReview(@PathVariable Long reviewId, @Valid @RequestBody ReviewDTO reviewDTO) {
     ReviewDTO updatedReview = reviewService.updateReview(reviewId, reviewDTO);
     return ResponseEntity.ok(updatedReview);
   }
 
   @DeleteMapping("/{reviewId}")
-  public ResponseEntity<Void> deleteReview(@PathVariable Long reviewId) throws NotFoundException {
+  public ResponseEntity<Void> deleteReview(@PathVariable Long reviewId) {
     reviewService.deleteReview(reviewId);
     return ResponseEntity.noContent().build();
   }

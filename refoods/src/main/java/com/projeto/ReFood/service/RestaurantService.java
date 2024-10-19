@@ -11,9 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import com.projeto.ReFood.dto.RestaurantDTO;
-import com.projeto.ReFood.exception.CnpjAlreadyExistsException;
-import com.projeto.ReFood.exception.EmailAlreadyExistsException;
-import com.projeto.ReFood.exception.NotFoundException;
+import com.projeto.ReFood.exception.GlobalExceptionHandler.CnpjAlreadyExistsException;
+import com.projeto.ReFood.exception.GlobalExceptionHandler.EmailAlreadyExistsException;
+import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
 import com.projeto.ReFood.model.EnumRestaurantCategory;
 import com.projeto.ReFood.model.Restaurant;
 
@@ -40,21 +40,21 @@ public class RestaurantService {
   }
 
   @Transactional(readOnly = true)
-  public RestaurantDTO getRestaurantById(Long restaurantId) throws NotFoundException {
+  public RestaurantDTO getRestaurantById(Long restaurantId) {
     return restaurantRepository.findById(restaurantId)
         .map(this::convertToDTO)
-        .orElseThrow(() -> new NotFoundException("Restaurante não encontrado com ID: " + restaurantId));
+        .orElseThrow(() -> new NotFoundException());
   }
 
   @Transactional
   public RestaurantDTO createRestaurant(@Valid RestaurantDTO restaurantDTO) {
 
     if (!utilityService.isEmailUnique(restaurantDTO.email())) {
-      throw new EmailAlreadyExistsException("O email já está cadastrado.");
+      throw new EmailAlreadyExistsException();
     }
 
     if (restaurantRepository.existsByCnpj(restaurantDTO.cnpj())) {
-      throw new CnpjAlreadyExistsException("O CNPJ já está cadastrado: " + restaurantDTO.cnpj());
+      throw new CnpjAlreadyExistsException();
     }
 
     Restaurant restaurant = convertToEntity(restaurantDTO);
@@ -67,18 +67,17 @@ public class RestaurantService {
   }
 
   @Transactional
-  public RestaurantDTO updateRestaurant(Long restaurantId, @Valid RestaurantDTO restaurantDTO)
-      throws NotFoundException {
+  public RestaurantDTO updateRestaurant(Long restaurantId, @Valid RestaurantDTO restaurantDTO) {
 
     Restaurant restaurant = restaurantRepository.findById(restaurantId)
-        .orElseThrow(() -> new NotFoundException("Restaurante não encontrado com ID: " + restaurantId));
+        .orElseThrow(() -> new NotFoundException());
 
     if (!utilityService.isEmailUnique(restaurantDTO.email())) {
-      throw new EmailAlreadyExistsException("O email já está cadastrado.");
+      throw new EmailAlreadyExistsException();
     }
 
     if (restaurantRepository.existsByCnpj(restaurantDTO.cnpj())) {
-      throw new CnpjAlreadyExistsException("O CNPJ já está cadastrado: " + restaurantDTO.cnpj());
+      throw new CnpjAlreadyExistsException();
     }
 
     restaurant.setCnpj(restaurantDTO.cnpj());
@@ -96,9 +95,9 @@ public class RestaurantService {
   }
 
   @Transactional
-  public void deleteRestaurant(Long restaurantId) throws NotFoundException {
+  public void deleteRestaurant(Long restaurantId) {
     if (!restaurantRepository.existsById(restaurantId)) {
-      throw new NotFoundException("Restaurante não encontrado com ID: " + restaurantId);
+      throw new NotFoundException();
     }
     restaurantRepository.deleteById(restaurantId);
   }
@@ -109,7 +108,7 @@ public class RestaurantService {
         restaurant.getCnpj(),
         restaurant.getFantasy(),
         restaurant.getEmail(),
-        null, // restaurant.getPassword(), // Não expor a senha?
+        null, // Não expor a senha
         restaurant.getCategory().name(),
         restaurant.getUrlBanner(),
         restaurant.getUrlLogo(),
@@ -117,8 +116,7 @@ public class RestaurantService {
         restaurant.getTotalEvaluations(),
         restaurant.getAverageRating(),
         restaurant.getDateCreation(),
-        restaurant.getLastLogin()
-        );
+        restaurant.getLastLogin());
   }
 
   public Restaurant convertToEntity(RestaurantDTO restaurantDTO) {

@@ -5,7 +5,7 @@ import com.projeto.ReFood.service.AddressService;
 import jakarta.validation.Valid;
 
 import com.projeto.ReFood.dto.AddressDTO;
-import com.projeto.ReFood.exception.NotFoundException;
+import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +29,7 @@ public class AddressController {
   }
 
   @GetMapping("/{addressId}")
-  public ResponseEntity<AddressDTO> getAddressById(@PathVariable Long addressId) throws NotFoundException {
+  public ResponseEntity<AddressDTO> getAddressById(@PathVariable Long addressId) {
     AddressDTO addressDTO = addressService.getAddressById(addressId);
     return ResponseEntity.ok(addressDTO);
   }
@@ -53,7 +53,7 @@ public class AddressController {
   }
 
   @DeleteMapping("/{addressId}")
-  public ResponseEntity<Void> deleteAddress(@PathVariable Long addressId) throws NotFoundException {
+  public ResponseEntity<Void> deleteAddress(@PathVariable Long addressId) {
     addressService.deleteAddress(addressId);
     return ResponseEntity.noContent().build();
   }

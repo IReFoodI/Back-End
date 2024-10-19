@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import com.projeto.ReFood.dto.HistoricalOrderDTO;
-import com.projeto.ReFood.exception.NotFoundException;
+import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
 import com.projeto.ReFood.model.HistoricalOrder;
 
 import java.util.List;
@@ -37,7 +37,7 @@ public class HistoricalOrderService {
   public HistoricalOrderDTO getHistoricalOrderById(Long historyId) {
     return historicalOrderRepository.findById(historyId)
         .map(this::convertToDTO)
-        .orElseThrow(() -> new NotFoundException("Histórico de pedido não encontrado com ID: " + historyId));
+        .orElseThrow(() -> new NotFoundException());
   }
 
   @Transactional
@@ -50,7 +50,7 @@ public class HistoricalOrderService {
   @Transactional
   public HistoricalOrderDTO updateHistoricalOrder(Long historyId, @Valid HistoricalOrderDTO historicalOrderDTO) {
     HistoricalOrder historicalOrder = historicalOrderRepository.findById(historyId)
-        .orElseThrow(() -> new NotFoundException("Histórico de pedido não encontrado com ID: " + historyId));
+        .orElseThrow(() -> new NotFoundException());
 
     historicalOrder.setOrderStatus(historicalOrderDTO.orderStatus());
     historicalOrder.setDateModified(historicalOrderDTO.dateModified());
@@ -65,7 +65,7 @@ public class HistoricalOrderService {
   @Transactional
   public void deleteHistoricalOrder(Long historyId) {
     if (!historicalOrderRepository.existsById(historyId)) {
-      throw new NotFoundException("Histórico de pedido não encontrado com ID: " + historyId);
+      throw new NotFoundException();
     }
     historicalOrderRepository.deleteById(historyId);
   }

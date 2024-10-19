@@ -13,20 +13,20 @@ import com.projeto.ReFood.service.AuthService;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final AuthService authService;
+  private final AuthService authService;
 
-    @Autowired
-    public AuthController(AuthService authService) {
-        this.authService = authService;
-    }
+  @Autowired
+  public AuthController(AuthService authService) {
+    this.authService = authService;
+  }
 
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponse> createAuthenticationToken(@RequestBody LoginRequest loginRequest) {
-        return authService.authenticateUser(loginRequest.email(), loginRequest.password());
-    }
+  @PostMapping("/login")
+  public ResponseEntity<LoginResponse> createAuthenticationToken(@RequestBody LoginRequest loginRequest) {
+    return authService.authenticateUser(loginRequest.email(), loginRequest.password());
+  }
 
-    @PostMapping("/login/success")
-    public ResponseEntity<?> loginSuccess(@RequestBody TokenRequest tokenRequest) {
-        return authService.handleGoogleLoginSuccess(tokenRequest.idToken());
-    }
+  @PostMapping("/login/success")
+  public ResponseEntity<?> loginSuccess(@RequestBody TokenRequest tokenRequest) {
+    return authService.handleGoogleLoginSuccess(tokenRequest.idToken());
+  }
 }
