@@ -13,8 +13,8 @@ VALUES -- -- as senhas são 123456
 -- Inserindo dados na tabela tb_restaurants
 INSERT INTO tb_restaurants (average_rating,category, cnpj, date_creation, email, fantasy, last_login, password, quantity_evaluations, total_evaluations, url_banner, url_logo)
 VALUES -- -- as senhas são 123456
-    (4.5, 'RESTAURANTE', '12345678000195', NOW(), 'restaurant1@example.com', 'Restaurant One', NOW(), '$2y$10$p1IXPiQ29t1mUit/msZV3OY7Dpz2voS6pK4TBQzPEcVC6QbG6cWhe', 10, 50, 'banner1.jpg', 'logo1.jpg'),
-    (4.0, 'RESTAURANTE', '98765432000100', NOW(), 'restaurant2@example.com', 'Restaurant Two', NOW(), '$2y$10$p1IXPiQ29t1mUit/msZV3OY7Dpz2voS6pK4TBQzPEcVC6QbG6cWhe', 20, 100, 'banner2.jpg', 'logo2.jpg');
+    (4.5, 'RESTAURANTE', '12345678000195', NOW(), 'restaurant1@example.com', 'Restaurant One', NOW(), '$2y$10$p1IXPiQ29t1mUit/msZV3OY7Dpz2voS6pK4TBQzPEcVC6QbG6cWhe', 10, 50, 'http://localhost:8080/images/banner.png', 'logo1.jpg'),
+    (4.0, 'RESTAURANTE', '98765432000100', NOW(), 'restaurant2@example.com', 'Restaurant Two', NOW(), '$2y$10$p1IXPiQ29t1mUit/msZV3OY7Dpz2voS6pK4TBQzPEcVC6QbG6cWhe', 20, 100, 'http://localhost:8080/images/banner.png', 'http://localhost:8080/images/logo.png');
 
 -- Inserindo dados na tabela tb_addresses
 INSERT INTO tb_addresses (address_type, cep, complement, district, is_standard, number, state, street, restaurant_id, user_id)

@@ -3,6 +3,7 @@ package com.projeto.ReFood.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.projeto.ReFood.model.EnumDayOfWeek;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -90,4 +91,11 @@ public class RestaurantHoursService {
         utilityService.associateRestaurant(hours::setRestaurant, hoursDTO.restaurantId());
         return hours;
     }
+
+    public List<RestaurantHoursDTO> getHoursByDay(EnumDayOfWeek day) {
+                return restaurantHoursRepository.findByDayOfWeek(day).stream()
+                .map(this::convertToDTO)
+                .toList();
+    }
+
 }
