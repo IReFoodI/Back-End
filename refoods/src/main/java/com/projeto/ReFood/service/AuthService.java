@@ -6,17 +6,16 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import com.projeto.ReFood.dto.GoogleDTO;
 import com.projeto.ReFood.dto.LoginResponse;
 import com.projeto.ReFood.exception.GlobalExceptionHandler.BadCredentialsException;
 import com.projeto.ReFood.exception.GlobalExceptionHandler.InternalServerErrorException;
 import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
 import com.projeto.ReFood.model.CustomUserDetails;
-import com.projeto.ReFood.model.GoogleUserInfo;
 import com.projeto.ReFood.model.User;
 import com.projeto.ReFood.repository.UserRepository;
 import com.projeto.ReFood.security.JwtTokenProvider;
@@ -70,36 +69,30 @@ public class AuthService {
     throw new NotFoundException();
   }
 
-  public ResponseEntity<?> handleGoogleLoginSuccess(String tokenId) {
+  public ResponseEntity<?> handleGoogleLoginSuccess(GoogleDTO googleDTO) {
 
-    GoogleUserInfo googleUserInfo = fetchGoogleUserInfo(tokenId);
-    String email = googleUserInfo.email();
-    String password = googleUserInfo.sub();
+    
+    String email = googleDTO.email();
+    String password = googleDTO.sub();
 
     if (!utilityService.isEmailUnique(email)) {
       return authenticateUser(email, password);
     }
 
-    return createNewGoogleUser(googleUserInfo);
+    return createNewGoogleUser(googleDTO);
   }
 
-  private GoogleUserInfo fetchGoogleUserInfo(String tokenId) {
-    String url = "https://oauth2.googleapis.com/tokeninfo?id_token=" + tokenId;
-    RestTemplate restTemplate = new RestTemplate();
-    return restTemplate.getForObject(url, GoogleUserInfo.class);
-  }
-
-  private ResponseEntity<?> createNewGoogleUser(GoogleUserInfo googleUserInfo) {
+  private ResponseEntity<?> createNewGoogleUser(GoogleDTO googleDTO) {
     User user = new User();
-    user.setName(googleUserInfo.name());
-    user.setEmail(googleUserInfo.email());
-    String password = googleUserInfo.sub();
+    user.setName(googleDTO.name());
+    user.setEmail(googleDTO.email());
+    String password = googleDTO.sub();
     user.setPassword(passwordEncoder.encode(password));
     user.setDateCreation(LocalDateTime.now());
     user.setLastLogin(LocalDateTime.now());
     userRepository.save(user);
 
-    CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(googleUserInfo.email());
+    CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(googleDTO.email());
     String jwt = jwtTokenProvider.generateToken(userDetails);
 
     return ResponseEntity

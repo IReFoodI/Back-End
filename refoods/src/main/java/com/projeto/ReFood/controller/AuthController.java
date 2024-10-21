@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.projeto.ReFood.dto.GoogleDTO;
 import com.projeto.ReFood.dto.LoginRequest;
 import com.projeto.ReFood.dto.LoginResponse;
-import com.projeto.ReFood.model.TokenRequest;
 import com.projeto.ReFood.service.AuthService;
 
 @RestController
@@ -25,8 +25,8 @@ public class AuthController {
     return authService.authenticateUser(loginRequest.email(), loginRequest.password());
   }
 
-  @PostMapping("/login/success")
-  public ResponseEntity<?> loginSuccess(@RequestBody TokenRequest tokenRequest) {
-    return authService.handleGoogleLoginSuccess(tokenRequest.idToken());
+  @PostMapping("/google/success")
+  public ResponseEntity<?> loginSuccess(@RequestBody GoogleDTO googleDTO) {
+    return authService.handleGoogleLoginSuccess(googleDTO);
   }
 }
