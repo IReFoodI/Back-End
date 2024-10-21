@@ -22,10 +22,7 @@ public class User {
   @NotBlank(message = "O nome é obrigatório.")
   @Column(nullable = false)
   private String name;
-
-  @Column
-  private String surname;
-
+  
   @NotBlank(message = "O e-mail é obrigatório.")
   @Email(message = "O e-mail deve ser um endereço de e-mail válido.")
   @Column(nullable = false, unique = true)
@@ -38,9 +35,8 @@ public class User {
   @Column(nullable = false)
   private String password;
 
-  @NotBlank(message = "O telefone é obrigatório.")
   @Pattern(regexp = "\\d{10,15}", message = "O telefone deve conter entre 10 e 15 dígitos numéricos.")
-  @Column(nullable = false)
+  @Column(nullable = true)
   private String phone;
 
   @NotNull(message = "A data de criação é obrigatória.")

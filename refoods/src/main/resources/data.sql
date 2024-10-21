@@ -5,10 +5,10 @@
 
 
 -- Inserindo dados na tabela tb_users
-INSERT INTO tb_users (date_creation, email, last_login, name, password, phone, surname)
+INSERT INTO tb_users (date_creation, email, last_login, name, password, phone)
 VALUES -- -- as senhas são 123456
-    (NOW(), 'user1@example.com', NOW(), 'User One', '$2y$10$p1IXPiQ29t1mUit/msZV3OY7Dpz2voS6pK4TBQzPEcVC6QbG6cWhe', '1112223333', 'Surname One'),
-    (NOW(), 'user2@example.com', NOW(), 'User Two', '$2y$10$p1IXPiQ29t1mUit/msZV3OY7Dpz2voS6pK4TBQzPEcVC6QbG6cWhe', '4445556666', 'Surname Two');
+    (NOW(), 'user1@example.com', NOW(), 'User One', '$2y$10$p1IXPiQ29t1mUit/msZV3OY7Dpz2voS6pK4TBQzPEcVC6QbG6cWhe', '1112223333' ),
+    (NOW(), 'user2@example.com', NOW(), 'User Two', '$2y$10$p1IXPiQ29t1mUit/msZV3OY7Dpz2voS6pK4TBQzPEcVC6QbG6cWhe', '4445556666' );
 
 -- Inserindo dados na tabela tb_restaurants
 INSERT INTO tb_restaurants (average_rating,category, cnpj, date_creation, email, fantasy, last_login, password, quantity_evaluations, total_evaluations, url_banner, url_logo)

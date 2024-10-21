@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import com.projeto.ReFood.dto.FavoriteDTO;
-import com.projeto.ReFood.exception.NotFoundException;
+import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
 import com.projeto.ReFood.model.Favorite;
 
 @Service
@@ -27,7 +27,7 @@ public class FavoriteService {
   public FavoriteDTO getFavoriteById(Long favoriteId) {
     return favoriteRepository.findById(favoriteId)
         .map(this::convertToDTO)
-        .orElseThrow(() -> new NotFoundException("Favorito não encontrado."));
+        .orElseThrow(() -> new NotFoundException());
   }
 
   @Transactional
@@ -45,7 +45,7 @@ public class FavoriteService {
   @Transactional
   public FavoriteDTO updateFavorite(Long favoriteId, @Valid FavoriteDTO favoriteDTO) {
     Favorite favorite = favoriteRepository.findById(favoriteId)
-        .orElseThrow(() -> new NotFoundException("Favorito não encontrado."));
+        .orElseThrow(() -> new NotFoundException());
 
     favorite.setAdditionDate(favoriteDTO.additionDate());
 
@@ -59,7 +59,7 @@ public class FavoriteService {
   @Transactional
   public void deleteFavorite(Long favoriteId) {
     if (!favoriteRepository.existsById(favoriteId)) {
-      throw new NotFoundException("Favorito não encontrado.");
+      throw new NotFoundException();
     }
     favoriteRepository.deleteById(favoriteId);
   }

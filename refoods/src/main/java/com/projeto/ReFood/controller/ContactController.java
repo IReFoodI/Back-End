@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.projeto.ReFood.dto.ContactDTO;
-import com.projeto.ReFood.exception.NotFoundException;
 
 import java.net.URI;
 import java.util.List;
@@ -29,7 +28,7 @@ public class ContactController {
   }
 
   @GetMapping("/{contactId}")
-  public ResponseEntity<ContactDTO> getContactById(@PathVariable Long contactId) throws NotFoundException {
+  public ResponseEntity<ContactDTO> getContactById(@PathVariable Long contactId) {
     ContactDTO contactDTO = contactService.getContactById(contactId);
     return ResponseEntity.ok(contactDTO);
   }
@@ -46,14 +45,13 @@ public class ContactController {
 
   @PutMapping("/{contactId}")
   public ResponseEntity<ContactDTO> updateContact(@PathVariable Long contactId,
-      @Valid @RequestBody ContactDTO contactDTO)
-      throws NotFoundException {
+      @Valid @RequestBody ContactDTO contactDTO) {
     ContactDTO updatedContact = contactService.updateContact(contactId, contactDTO);
     return ResponseEntity.ok(updatedContact);
   }
 
   @DeleteMapping("/{contactId}")
-  public ResponseEntity<Void> deleteContact(@PathVariable Long contactId) throws NotFoundException {
+  public ResponseEntity<Void> deleteContact(@PathVariable Long contactId) {
     contactService.deleteContact(contactId);
     return ResponseEntity.noContent().build();
   }

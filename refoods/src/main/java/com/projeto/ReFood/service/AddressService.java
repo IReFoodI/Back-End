@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import com.projeto.ReFood.dto.AddressDTO;
-import com.projeto.ReFood.exception.NotFoundException;
+import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
 import com.projeto.ReFood.model.Address;
 import com.projeto.ReFood.model.EnumAddressType;
 import com.projeto.ReFood.model.Order;
@@ -39,7 +39,7 @@ public class AddressService {
   @Transactional(readOnly = true)
   public AddressDTO getAddressById(Long addressId) {
     Address address = addressRepository.findById(addressId)
-        .orElseThrow(() -> new NotFoundException("Address not found with ID: " + addressId));
+        .orElseThrow(() -> new NotFoundException());
     return convertToDTO(address);
   }
 
@@ -73,7 +73,7 @@ public class AddressService {
   @Transactional
   public AddressDTO updateAddress(Long addressId, @Valid AddressDTO addressDTO) {
     Address address = addressRepository.findById(addressId)
-        .orElseThrow(() -> new NotFoundException("Address not found with ID: " + addressId));
+        .orElseThrow(() -> new NotFoundException());
 
     address.setStreet(addressDTO.street());
     address.setNumber(addressDTO.number());
@@ -92,7 +92,7 @@ public class AddressService {
   @Transactional
   public void deleteAddress(Long addressId) {
     if (!addressRepository.existsById(addressId)) {
-      throw new NotFoundException("Address not found with ID: " + addressId);
+      throw new NotFoundException();
     }
     addressRepository.deleteById(addressId);
   }

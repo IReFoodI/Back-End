@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import com.projeto.ReFood.dto.ContactDTO;
-import com.projeto.ReFood.exception.NotFoundException;
+import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
 import com.projeto.ReFood.model.Contact;
 
 import java.util.List;
@@ -36,10 +36,10 @@ public class ContactService {
   }
 
   @Transactional(readOnly = true)
-  public ContactDTO getContactById(Long contactId) throws NotFoundException {
+  public ContactDTO getContactById(Long contactId) {
     return contactRepository.findById(contactId)
         .map(this::convertToDTO)
-        .orElseThrow(() -> new NotFoundException("Contato não encontrado com ID: " + contactId));
+        .orElseThrow(() -> new NotFoundException());
   }
 
   @Transactional
@@ -50,9 +50,9 @@ public class ContactService {
   }
 
   @Transactional
-  public ContactDTO updateContact(Long contactId, @Valid ContactDTO contactDTO) throws NotFoundException {
+  public ContactDTO updateContact(Long contactId, @Valid ContactDTO contactDTO) {
     Contact contact = contactRepository.findById(contactId)
-        .orElseThrow(() -> new NotFoundException("Contato não encontrado com ID: " + contactId));
+        .orElseThrow(() -> new NotFoundException());
 
     contact.setDescription(contactDTO.description());
     contact.setPhone(contactDTO.phone());
@@ -62,9 +62,9 @@ public class ContactService {
   }
 
   @Transactional
-  public void deleteContact(Long contactId) throws NotFoundException {
+  public void deleteContact(Long contactId) {
     if (!contactRepository.existsById(contactId)) {
-      throw new NotFoundException("Contato não encontrado com ID: " + contactId);
+      throw new NotFoundException();
     }
     contactRepository.deleteById(contactId);
   }

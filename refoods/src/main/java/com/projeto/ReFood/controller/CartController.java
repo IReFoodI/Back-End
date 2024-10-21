@@ -1,7 +1,6 @@
 package com.projeto.ReFood.controller;
 
 import com.projeto.ReFood.dto.CartDTO;
-import com.projeto.ReFood.exception.NotFoundException;
 import com.projeto.ReFood.service.CartService;
 
 import jakarta.validation.Valid;
@@ -28,7 +27,7 @@ public class CartController {
   }
 
   @GetMapping("/{cartId}")
-  public ResponseEntity<CartDTO> getCartById(@PathVariable Long cartId) throws NotFoundException {
+  public ResponseEntity<CartDTO> getCartById(@PathVariable Long cartId) {
     CartDTO cartDTO = cartService.getCartById(cartId);
     return ResponseEntity.ok(cartDTO);
   }
@@ -44,14 +43,13 @@ public class CartController {
   }
 
   @PutMapping("/{cartId}")
-  public ResponseEntity<CartDTO> updateCart(@PathVariable Long cartId, @Valid @RequestBody CartDTO cartDTO)
-      throws NotFoundException {
+  public ResponseEntity<CartDTO> updateCart(@PathVariable Long cartId, @Valid @RequestBody CartDTO cartDTO) {
     CartDTO updatedCart = cartService.updateCart(cartId, cartDTO);
     return ResponseEntity.ok(updatedCart);
   }
 
   @DeleteMapping("/{cartId}")
-  public ResponseEntity<Void> deleteCart(@PathVariable Long cartId) throws NotFoundException {
+  public ResponseEntity<Void> deleteCart(@PathVariable Long cartId) {
     cartService.deleteCart(cartId);
     return ResponseEntity.noContent().build();
   }

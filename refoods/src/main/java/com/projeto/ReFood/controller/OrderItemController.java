@@ -1,7 +1,6 @@
 package com.projeto.ReFood.controller;
 
 import com.projeto.ReFood.dto.OrderItemDTO;
-import com.projeto.ReFood.exception.NotFoundException;
 import com.projeto.ReFood.model.OrderItemPK;
 import com.projeto.ReFood.service.OrderItemService;
 
@@ -29,7 +28,7 @@ public class OrderItemController {
   }
 
   @GetMapping("/{orderItemId}")
-  public ResponseEntity<OrderItemDTO> getOrderItemById(@PathVariable OrderItemPK orderItemId) throws NotFoundException {
+  public ResponseEntity<OrderItemDTO> getOrderItemById(@PathVariable OrderItemPK orderItemId) {
     OrderItemDTO orderItemDTO = orderItemService.getOrderItemById(orderItemId);
     return ResponseEntity.ok(orderItemDTO);
   }
@@ -46,14 +45,13 @@ public class OrderItemController {
 
   @PutMapping("/{orderItemId}")
   public ResponseEntity<OrderItemDTO> updateOrderItem(@PathVariable OrderItemPK orderItemId,
-      @Valid @RequestBody OrderItemDTO orderItemDTO)
-      throws NotFoundException {
+      @Valid @RequestBody OrderItemDTO orderItemDTO) {
     OrderItemDTO updatedOrderItem = orderItemService.updateOrderItem(orderItemId, orderItemDTO);
     return ResponseEntity.ok(updatedOrderItem);
   }
 
   @DeleteMapping("/{orderItemId}")
-  public ResponseEntity<Void> deleteOrderItem(@PathVariable OrderItemPK orderItemId) throws NotFoundException {
+  public ResponseEntity<Void> deleteOrderItem(@PathVariable OrderItemPK orderItemId) {
     orderItemService.deleteOrderItem(orderItemId);
     return ResponseEntity.noContent().build();
   }

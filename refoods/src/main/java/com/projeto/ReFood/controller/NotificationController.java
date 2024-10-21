@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.projeto.ReFood.dto.NotificationDTO;
-import com.projeto.ReFood.exception.NotFoundException;
 
 import java.net.URI;
 import java.util.List;
@@ -29,8 +28,7 @@ public class NotificationController {
   }
 
   @GetMapping("/{notificationId}")
-  public ResponseEntity<NotificationDTO> getNotificationById(@PathVariable Long notificationId)
-      throws NotFoundException {
+  public ResponseEntity<NotificationDTO> getNotificationById(@PathVariable Long notificationId) {
     NotificationDTO notificationDTO = notificationService.getNotificationById(notificationId);
     return ResponseEntity.ok(notificationDTO);
   }
@@ -47,14 +45,13 @@ public class NotificationController {
 
   @PutMapping("/{notificationId}")
   public ResponseEntity<NotificationDTO> updateNotification(@PathVariable Long notificationId,
-      @Valid @RequestBody NotificationDTO notificationDTO)
-      throws NotFoundException {
+      @Valid @RequestBody NotificationDTO notificationDTO) {
     NotificationDTO updatedNotification = notificationService.updateNotification(notificationId, notificationDTO);
     return ResponseEntity.ok(updatedNotification);
   }
 
   @DeleteMapping("/{notificationId}")
-  public ResponseEntity<Void> deleteNotification(@PathVariable Long notificationId) throws NotFoundException {
+  public ResponseEntity<Void> deleteNotification(@PathVariable Long notificationId) {
     notificationService.deleteNotification(notificationId);
     return ResponseEntity.noContent().build();
   }

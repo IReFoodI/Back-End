@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import com.projeto.ReFood.dto.OrderDTO;
-import com.projeto.ReFood.exception.NotFoundException;
+import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
 import com.projeto.ReFood.model.Order;
 
 import java.util.List;
@@ -38,7 +38,7 @@ public class OrderService {
   public OrderDTO getOrderById(Long orderId) {
     return orderRepository.findById(orderId)
         .map(this::convertToDTO)
-        .orElseThrow(() -> new NotFoundException("Pedido não encontrado."));
+        .orElseThrow(() -> new NotFoundException());
   }
 
   @Transactional
@@ -54,7 +54,7 @@ public class OrderService {
   @Transactional
   public OrderDTO updateOrder(Long orderId, @Valid OrderDTO orderDTO) {
     Order order = orderRepository.findById(orderId)
-        .orElseThrow(() -> new NotFoundException("Pedido não encontrado com ID: " + orderId));
+        .orElseThrow(() -> new NotFoundException());
 
     order.setOrderDate(orderDTO.orderDate());
     order.setOrderStatus(orderDTO.orderStatus());
@@ -71,7 +71,7 @@ public class OrderService {
   @Transactional
   public void deleteOrder(Long orderId) {
     if (!orderRepository.existsById(orderId)) {
-      throw new NotFoundException("Pedido não encontrado.");
+      throw new NotFoundException();
     }
     orderRepository.deleteById(orderId);
   }
