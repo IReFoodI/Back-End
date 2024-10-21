@@ -57,4 +57,10 @@ public class AddressController {
     addressService.deleteAddress(addressId);
     return ResponseEntity.noContent().build();
   }
+
+  @GetMapping("/user/{userId}")
+  public ResponseEntity<List<AddressDTO>> getAddressByUserId(@PathVariable Long userId) throws NotFoundException {
+    List<AddressDTO> addressesDTO = addressService.getAddressesByUserId(userId);
+    return  ResponseEntity.ok(addressesDTO);
+  }
 }

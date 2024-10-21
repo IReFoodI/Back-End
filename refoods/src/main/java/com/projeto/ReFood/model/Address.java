@@ -2,6 +2,7 @@ package com.projeto.ReFood.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -26,6 +27,11 @@ public class Address {
   @Column(nullable = false)
   private String state;
 
+  @NotBlank(message = "A cidade é obrigatória.")
+  @Size(min = 2, message = "A cidade deve ter no mínimo 2 letras.")
+  @Column(nullable = false)
+  private String city;
+
   @NotBlank(message = "O bairro é obrigatório.")
   @Column(nullable = false)
   private String district;
@@ -38,14 +44,18 @@ public class Address {
   @Column(nullable = false)
   private String number;
 
+  @NotBlank(message = "O tipo é obrigatório.")
+  @Column(nullable = false)
+  private String type;
+
   @Column
   private String complement;
 
-  @NotBlank(message = "O tipo de endereço é obrigatório.")
+  @NotNull(message = "O tipo de endereço é obrigatório.")
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   private EnumAddressType addressType;
-  
+
   @Column(nullable = false)
   private boolean isStandard; // default = false
 
