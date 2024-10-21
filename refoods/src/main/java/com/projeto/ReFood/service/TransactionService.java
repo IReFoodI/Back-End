@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import com.projeto.ReFood.dto.TransactionDTO;
-import com.projeto.ReFood.exception.NotFoundException;
+import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
 import com.projeto.ReFood.model.EnumTransactionStatus;
 import com.projeto.ReFood.model.Transaction;
 
@@ -40,7 +40,7 @@ public class TransactionService {
     public TransactionDTO getTransactionById(Long transactionId) {
         return transactionRepository.findById(transactionId)
             .map(this::convertToDTO)
-            .orElseThrow(() -> new NotFoundException("Transação não encontrada."));
+            .orElseThrow(() -> new NotFoundException());
     }
 
     @Transactional
@@ -56,7 +56,7 @@ public class TransactionService {
     @Transactional
     public TransactionDTO updateTransaction(Long transactionId, @Valid TransactionDTO transactionDTO) {
         Transaction transaction = transactionRepository.findById(transactionId)
-            .orElseThrow(() -> new NotFoundException("Transação não encontrada com ID: " + transactionId));
+            .orElseThrow(() -> new NotFoundException());
 
         transaction.setTransactionDate(transactionDTO.transactionDate());
         transaction.setTransactionValue(transactionDTO.transactionValue());
@@ -71,7 +71,7 @@ public class TransactionService {
     @Transactional
     public void deleteTransaction(Long transactionId) {
         if (!transactionRepository.existsById(transactionId)) {
-            throw new NotFoundException("Transação não encontrada.");
+            throw new NotFoundException();
         }
         transactionRepository.deleteById(transactionId);
     }

@@ -1,7 +1,7 @@
 package com.projeto.ReFood.service;
 
 import com.projeto.ReFood.dto.CardDTO;
-import com.projeto.ReFood.exception.NotFoundException;
+import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
 import com.projeto.ReFood.model.Card;
 import com.projeto.ReFood.model.Transaction;
 import com.projeto.ReFood.repository.CardRepository;
@@ -39,7 +39,7 @@ public class CardService {
   public CardDTO getCardById(Long cardId) {
     return cardRepository.findById(cardId)
         .map(this::convertToDTO)
-        .orElseThrow(() -> new NotFoundException("Cartão não encontrado."));
+        .orElseThrow(() -> new NotFoundException());
   }
 
   @Transactional
@@ -54,7 +54,7 @@ public class CardService {
   @Transactional
   public CardDTO updateCard(Long cardId, @Valid CardDTO cardDTO) {
     Card card = cardRepository.findById(cardId)
-        .orElseThrow(() -> new NotFoundException("Cartão não encontrado com ID: " + cardId));
+        .orElseThrow(() -> new NotFoundException());
 
     card.setNumber(cardDTO.number());
     card.setHolderName(cardDTO.holderName());
@@ -72,7 +72,7 @@ public class CardService {
   @Transactional
   public void deleteCard(Long cardId) {
     if (!cardRepository.existsById(cardId)) {
-      throw new NotFoundException("Cartão não encontrado.");
+      throw new NotFoundException();
     }
     cardRepository.deleteById(cardId);
   }

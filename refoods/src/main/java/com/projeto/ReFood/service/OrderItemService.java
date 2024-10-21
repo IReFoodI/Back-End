@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import com.projeto.ReFood.dto.OrderItemDTO;
-import com.projeto.ReFood.exception.NotFoundException;
+import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
 import com.projeto.ReFood.model.OrderItem;
 import com.projeto.ReFood.model.OrderItemPK;
 import com.projeto.ReFood.repository.OrderItemRepository;
@@ -37,7 +37,7 @@ public class OrderItemService {
   @Transactional(readOnly = true)
   public OrderItemDTO getOrderItemById(OrderItemPK orderItemId) {
     OrderItem orderItem = orderItemRepository.findById(orderItemId)
-        .orElseThrow(() -> new NotFoundException("Order item not found with ID: " + orderItemId));
+        .orElseThrow(() -> new NotFoundException());
     return convertToDTO(orderItem);
   }
 
@@ -51,7 +51,7 @@ public class OrderItemService {
   @Transactional
   public OrderItemDTO updateOrderItem(OrderItemPK orderItemId, @Valid OrderItemDTO orderItemDTO) {
     OrderItem orderItem = orderItemRepository.findById(orderItemId)
-        .orElseThrow(() -> new NotFoundException("Order item not found with ID: " + orderItemId));
+        .orElseThrow(() -> new NotFoundException());
 
     orderItem.setQuantity(orderItemDTO.quantity());
     orderItem.setUnitValue(orderItemDTO.unitValue());
@@ -66,7 +66,7 @@ public class OrderItemService {
   @Transactional
   public void deleteOrderItem(OrderItemPK orderItemId) {
     if (!orderItemRepository.existsById(orderItemId)) {
-      throw new NotFoundException("Order item not found with ID: " + orderItemId);
+      throw new NotFoundException();
     }
     orderItemRepository.deleteById(orderItemId);
   }
@@ -77,9 +77,8 @@ public class OrderItemService {
         orderItem.getQuantity(),
         orderItem.getUnitValue(),
         orderItem.getSubtotal(),
-        orderItem.getOrder().getOrderId(), // Assumindo que OrderItem tem uma relação com Order
-        orderItem.getProduct().getProductId() // Assumindo que OrderItem tem uma relação com Product
-    );
+        orderItem.getOrder().getOrderId(),
+        orderItem.getProduct().getProductId());
   }
 
   public OrderItem convertToEntity(OrderItemDTO orderItemDTO) {
