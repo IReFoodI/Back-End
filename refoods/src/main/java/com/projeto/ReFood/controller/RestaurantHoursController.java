@@ -3,6 +3,7 @@ package com.projeto.ReFood.controller;
 import java.net.URI;
 import java.util.List;
 
+
 import com.projeto.ReFood.model.EnumDayOfWeek;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +36,7 @@ public class RestaurantHoursController {
   }
 
     @GetMapping("/{hoursId}")
-    public ResponseEntity<RestaurantHoursDTO> getHoursById(@PathVariable Long hoursId) throws NotFoundException {
+    public ResponseEntity<RestaurantHoursDTO> getHoursById(@PathVariable Long hoursId)  {
         RestaurantHoursDTO hoursDTO = restaurantHoursService.getHoursById(hoursId);
         return ResponseEntity.ok(hoursDTO);
     }
