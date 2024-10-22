@@ -22,8 +22,8 @@ public class FirebaseService {
     bucket.create(imageName, inputStream, "image/jpeg");
   }
 
-  public String getImageUrl(String imageName) {
-    return imageBaseUrl + imageName;
+  public String getImageUrl(String imageName, String firebaseToken) {
+    return imageBaseUrl + imageName + "?alt=media&token=" + firebaseToken;
   }
 
 }
