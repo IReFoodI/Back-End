@@ -18,7 +18,7 @@ public class Address {
   private Long addressId;
 
   @NotBlank(message = "O CEP é obrigatório.")
-  @Pattern(regexp = "\\d{5}-\\d{3}", message = "O formato do CEP deve ser 12345-678.")
+  @Pattern(regexp = "\\d{8}", message = "O formato do CEP deve ser 12345678.")
   @Column(nullable = false)
   private String cep;
 
