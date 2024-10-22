@@ -34,10 +34,10 @@ VALUES
     ('Contato Alternativo', '4445556666', 2);
 
 -- Inserindo dados na tabela tb_products
-INSERT INTO tb_products (active, addition_date, description_product, discount, name_product, category, url_img_product, value_product, expiration_date, quantity, restaurant_id)
+INSERT INTO tb_products (active, addition_date, description_product, sell_price, name_product, category, url_img_product, original_price, expiration_date, quantity, restaurant_id)
 VALUES 
-    (TRUE, NOW(), 'Delicious sweet product', 10, 'Product One', 'DOCE', 'product1.jpg', 20.0, '2024-11-17', 100, 1),
-    (TRUE, NOW(), 'Tasty savory product', 5, 'Product Two', 'SALGADO', 'product2.jpg', 30.0, '2024-11-17', 200, 2);
+    (TRUE, NOW(), 'Delicious sweet product', 10.0, 'Product One', 'DOCE', 'product1.jpg', 20.0, '2024-11-17', 100, 1),
+    (TRUE, NOW(), 'Tasty savory product', 5.0, 'Product Two', 'SALGADO', 'product2.jpg', 30.0, '2024-11-17', 200, 2);
 
 -- Inserindo dados na tabela tb_cart
 INSERT INTO tb_cart (status, total_value, user_id)
