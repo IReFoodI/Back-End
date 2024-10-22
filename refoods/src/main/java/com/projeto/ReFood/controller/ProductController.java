@@ -6,18 +6,21 @@ import com.projeto.ReFood.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.projeto.ReFood.dto.ProductDTO;
 
-import java.io.IOException;
 import java.net.URI;
+import java.util.List;
+
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
+import java.nio.file.StandardCopyOption;
 
 @RestController
 @RequestMapping("/api/product")
@@ -29,6 +32,17 @@ public class ProductController {
   @GetMapping
   public ResponseEntity<List<ProductDTO>> listAllProducts() {
     List<ProductDTO> products = productService.getAllProducts();
+    return ResponseEntity.ok(products);
+  }
+
+  @GetMapping("/restaurant/{restaurantId}")
+  public ResponseEntity<List<ProductDTO>> listProductsByRestaurantId(@PathVariable Long restaurantId) {
+    List<ProductDTO> products = productService.getProductsByRestaurantId(restaurantId);
+
+    if (products.isEmpty()) {
+      return ResponseEntity.noContent().build();
+    }
+
     return ResponseEntity.ok(products);
   }
 
@@ -73,20 +87,49 @@ public class ProductController {
     return ResponseEntity.noContent().build();
   }
 
+
+
   @PostMapping("/upload")
   public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
-    try {
-      // Defina o caminho de destino para a imagem
-      String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-      Path path = Paths.get("uploads2/" + fileName);
-      Files.copy(file.getInputStream(), path);
+    String originalFilename = file.getOriginalFilename();
+    String normalizedFilename = originalFilename.replaceAll(" ", "_").replaceAll("[^a-zA-Z0-9_.]", ""); // Remove caracteres especiais
 
-      // Retorne a URL para salvar no banco de dados
-      String imageUrl = "http://localhost:8080/uploads/" + fileName;
-      return ResponseEntity.ok(imageUrl);
+    // Define o caminho para o diretório de uploads
+    String uploadDirPath = "refoods/src/main/resources/static/images/";
+    File uploadDir = new File(uploadDirPath);
+
+    // Cria o diretório se não existir
+    if (!uploadDir.exists()) {
+      uploadDir.mkdirs();
+    }
+    try {
+      Path destinationPath = uploadDir.toPath().resolve(normalizedFilename);
+      Files.copy(file.getInputStream(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
+      return ResponseEntity.ok("http://localhost:8080/images/" + normalizedFilename);
     } catch (IOException e) {
-      e.printStackTrace();
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao fazer upload da imagem.");
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao fazer upload: " + e.getMessage());
     }
   }
-}
+
+  @GetMapping("/images/uploads/{fileName:.+}")
+  public ResponseEntity<byte[]> getImage(@PathVariable String fileName) {
+    // Define o caminho completo da imagem
+    String imagePath = "refoods/src/main/resources/static/images/" + fileName;
+    File imageFile = new File(imagePath);
+
+    if (!imageFile.exists()) {
+      return ResponseEntity.notFound().build(); // Retorna 404 se a imagem não existir
+    }
+
+    try {
+      byte[] imageBytes = Files.readAllBytes(imageFile.toPath());
+      return ResponseEntity.ok()
+              .contentType(MediaType.IMAGE_JPEG) // Altere para o tipo de imagem correto, se necessário
+              .body(imageBytes);
+    } catch (IOException e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+              .body(null); // Retorna 500 em caso de erro ao ler o arquivo
+    }
+  }
+  }
+

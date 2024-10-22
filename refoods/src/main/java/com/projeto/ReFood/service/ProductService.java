@@ -153,4 +153,12 @@ public class ProductService {
     return convertToDTO(product);
   }
 
+
+  @Transactional(readOnly = true)
+  public List<ProductDTO> getProductsByRestaurantId(Long restaurantId) {
+    return productRepository.findByRestaurant_RestaurantId(restaurantId).stream()
+            .map(this::convertToDTO)
+            .collect(Collectors.toList());
+  }
+
 }

@@ -5,11 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="792016bb-253f-48c4-b9e3-6e6697933102" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/dto/ProductPartialUpdateDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/controller/ProductController.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/controller/ProductController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/dto/ProductDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/dto/ProductDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/model/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/model/Product.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/security/CorsConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/security/CorsConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/repository/ProductRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/repository/ProductRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/service/ProductService.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/service/ProductService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/refoods/src/main/resources/data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/resources/data.sql" afterDir="false" />
     </list>
@@ -56,23 +54,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Application.ReFoodsApplication.executor": "Run",
-    "Maven.ReFoods.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "dev-back/business-menu",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/felip/OneDrive/Documentos/Analise de sistemas/Analise de sistemas2/Analise de sistemas/+praTi/Curso Fullstack Aulas/Repositório Aulas/maisPraTi/class01/6-spring-boot/JWT-OAuth2Demo",
-    "project.structure.last.edited": "Artifacts",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "MavenSettings"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Application.ReFoodsApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.ReFoods.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dev-back/business-menu&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/felip/OneDrive/Documentos/Analise de sistemas/Analise de sistemas2/Analise de sistemas/+praTi/ReFood/Back-End/refoods/src/main/resources/static/images&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;MavenSettings&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\felip\OneDrive\Documentos\Analise de sistemas\Analise de sistemas2\Analise de sistemas\+praTi\ReFood\Back-End\refoods\src\main\resources\static\images" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\felip\OneDrive\Documentos\Analise de sistemas\Analise de sistemas2\Analise de sistemas\+praTi\ReFood\Back-End\refoods\src\main\resources\static\images\images" />
       <recent name="C:\Users\felip\OneDrive\Documentos\Analise de sistemas\Analise de sistemas2\Analise de sistemas\+praTi\ReFood\Back-End\refoods\src\main\resources\static" />
@@ -132,7 +133,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="dev-back/home" />
+                        <option value="dev-back/business-menu" />
                       </list>
                     </value>
                   </entry>
@@ -148,5 +149,12 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Inseridas imagens e ajuste no enum de dias." />
     <option name="LAST_COMMIT_MESSAGE" value="Inseridas imagens e ajuste no enum de dias." />
+  </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="this" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>
