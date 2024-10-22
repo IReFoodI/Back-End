@@ -7,12 +7,15 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import java.util.Set;
+
+import com.projeto.ReFood.security.UserDetailsCommon;
+
 import java.time.LocalDateTime;
 
 @Entity
 @Data
 @Table(name = "tb_users")
-public class User {
+public class User implements UserDetailsCommon {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -69,4 +72,9 @@ public class User {
 
   @OneToMany(mappedBy = "user")
   private Set<HistoricalOrder> userHistoricalOrders;
+
+  @Override
+  public String getEmail() {
+      return email;
+  }
 }

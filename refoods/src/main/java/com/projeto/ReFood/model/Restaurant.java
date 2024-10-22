@@ -13,10 +13,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
+import com.projeto.ReFood.security.UserDetailsCommon;
+
 @Entity
 @Data
 @Table(name = "tb_restaurants")
-public class Restaurant {
+public class Restaurant implements UserDetailsCommon {
 
   @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -100,5 +102,10 @@ public class Restaurant {
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<RestaurantHours> restaurantHours;
+
+    @Override
+    public String getEmail() {
+        return email;
+    }
 
 }
