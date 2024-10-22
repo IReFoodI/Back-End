@@ -10,7 +10,7 @@ public record AddressDTO(
         Long addressId,
 
         @NotBlank(message = "O CEP é obrigatório.")
-        @Pattern(regexp = "\\d{5}-\\d{3}", message = "O formato do CEP deve ser 12345-678.")
+        @Pattern(regexp = "\\d{8}", message = "O formato do CEP deve ser 12345678.")
         String cep,
 
         @NotBlank(message = "O estado é obrigatório.")
