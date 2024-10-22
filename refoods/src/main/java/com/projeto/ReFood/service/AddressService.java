@@ -1,8 +1,10 @@
 package com.projeto.ReFood.service;
 
+import com.projeto.ReFood.exception.GlobalExceptionHandler;
 import com.projeto.ReFood.repository.AddressRepository;
 
 import com.projeto.ReFood.repository.UserRepository;
+import com.projeto.ReFood.security.JwtTokenProvider;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,8 @@ public class AddressService {
     private AddressRepository addressRepository;
     @Autowired
     private UtilityService utilityService;
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
 
     @Transactional(readOnly = true)
     public List<AddressDTO> getAllAddresses() {
@@ -41,23 +45,41 @@ public class AddressService {
     }
 
     @Transactional(readOnly = true)
-    public List<AddressDTO> getAddressesByUserId(Long userId) {
+    public List<AddressDTO> getAddressesByUserId(String token) {
+        Long id = jwtTokenProvider.extractUserId(token);
+
         return addressRepository
-                .findAddressesByUserId(userId)
+                .findAddressesByUserId(id)
                 .stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
+    public AddressDTO getAddressByUserId(String token) {
+        Long id = jwtTokenProvider.extractUserId(token);
+        Address address = addressRepository.findById(id)
+                .orElseThrow(() -> {
+                    return new GlobalExceptionHandler.NotFoundException();
+                });
+        return convertToDTO(address);
+    }
+
+    @Transactional(readOnly = true)
     public AddressDTO getAddressById(Long addressId) {
         Address address = addressRepository.findById(addressId)
-                .orElseThrow(() -> new NotFoundException("Address not found with ID: " + addressId));
+                .orElseThrow(() -> {
+                    return new GlobalExceptionHandler.NotFoundException();
+                });
         return convertToDTO(address);
     }
 
     @Transactional
-    public AddressDTO createAddress(@Valid AddressDTO addressDTO, User user, Restaurant restaurant, Order order) {
+    public AddressDTO createAddress(@Valid AddressDTO addressDTO, String token, User user, Restaurant restaurant, Order order) {
+        Long id = jwtTokenProvider.extractUserId(token);
+
+
+
         Address address = new Address();
 
         address.setCep(addressDTO.cep());
@@ -67,12 +89,21 @@ public class AddressService {
         address.setType(addressDTO.type());
         address.setStreet(addressDTO.street());
         address.setNumber(addressDTO.number());
+        address.setStandard(false);
         address.setComplement(addressDTO.complement());
         address.setAddressType(EnumAddressType.valueOf(addressDTO.addressType().toString()));
-        address.setStandard(addressDTO.isStandard());
 
-        if (addressDTO.userId() != null) {
-            utilityService.associateUser(address::setUser, addressDTO.userId());
+        List<AddressDTO> addresses = getAddressesByUserId(token);
+        if (addresses.isEmpty()) {
+            address.setStandard(true);
+        }
+
+        if (addressDTO.userId() != null || id != null) {
+            Long userId = addressDTO.userId();
+            if (userId == null) {
+                userId = id;
+            }
+            utilityService.associateUser(address::setUser, userId);
         }
         if (user != null) {
             address.setUser(user);
@@ -83,7 +114,6 @@ public class AddressService {
         if (order != null) {
             address.setAssociatedOrder(order);
         }
-
         addressRepository.save(address);
         return convertToDTO(address);
     }
@@ -91,7 +121,9 @@ public class AddressService {
     @Transactional
     public AddressDTO updateAddress(Long addressId, @Valid AddressDTO addressDTO) {
         Address address = addressRepository.findById(addressId)
-                .orElseThrow(() -> new NotFoundException("Endereço não encontrado para o id: " + addressId));
+                .orElseThrow(() -> {
+                    return new NotFoundException();
+                });
 
         address.setStreet(addressDTO.street());
         address.setNumber(addressDTO.number());
@@ -112,7 +144,7 @@ public class AddressService {
     @Transactional
     public void deleteAddress(Long addressId) {
         if (!addressRepository.existsById(addressId)) {
-            throw new NotFoundException("Endereço não encontrado para o id: " + addressId);
+            throw new GlobalExceptionHandler.NotFoundException();
         }
         addressRepository.deleteById(addressId);
     }
