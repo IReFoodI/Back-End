@@ -27,8 +27,21 @@ public class FirebaseController {
   }
 
   @GetMapping("/image/{imageName}")
-  public ResponseEntity<String> getImageUrl(@PathVariable String imageName) {
-    String imageUrl = firebaseService.getImageUrl(imageName);
-    return new ResponseEntity<>(imageUrl, HttpStatus.OK);
+  public ResponseEntity<String> getImageUrl(
+      @PathVariable String imageName,
+      @RequestParam(required = false) String firebaseToken) {
+
+    if (firebaseToken == null || firebaseToken.isEmpty()) {
+      return ResponseEntity.badRequest()
+          .body("Token Firebase é obrigatório.");
+    }
+
+    try {
+      String imageUrl = firebaseService.getImageUrl(imageName, firebaseToken);
+      return ResponseEntity.ok(imageUrl);
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+          .body("Erro ao gerar a URL da imagem: " + e.getMessage());
+    }
   }
 }

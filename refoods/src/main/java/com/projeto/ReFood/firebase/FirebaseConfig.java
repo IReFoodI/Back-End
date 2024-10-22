@@ -12,9 +12,11 @@ import java.io.IOException;
 @Configuration
 public class FirebaseConfig {
 
+  String pathKey = "/refoods/src/main/java/com/projeto/ReFood/firebase/refood-firebase-key.jsonc";
+
   @Bean
   public FirebaseApp initializeFirebase() throws IOException {
-    String serviceAccountPath = System.getProperty("user.dir") + "/refood-firebase-key.json";
+    String serviceAccountPath = System.getProperty("user.dir") + pathKey;
     FileInputStream serviceAccountStream = new FileInputStream(serviceAccountPath);
 
     FirebaseOptions options = FirebaseOptions.builder()
