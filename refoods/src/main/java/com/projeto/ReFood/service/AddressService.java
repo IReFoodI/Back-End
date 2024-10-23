@@ -10,12 +10,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import com.projeto.ReFood.dto.AddressDTO;
+import com.projeto.ReFood.exception.GlobalExceptionHandler.ForbiddenException;
 import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
 import com.projeto.ReFood.model.Address;
 import com.projeto.ReFood.model.EnumAddressType;
 import com.projeto.ReFood.model.Order;
 import com.projeto.ReFood.model.Restaurant;
 import com.projeto.ReFood.model.User;
+import com.projeto.ReFood.model.UserInfo;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +29,9 @@ public class AddressService {
   @Autowired
   private AddressRepository addressRepository;
 
+  @Autowired
+  private AuthService authService;
+
   @Transactional(readOnly = true)
   public List<AddressDTO> getAllAddresses() {
     return addressRepository
@@ -37,10 +42,69 @@ public class AddressService {
   }
 
   @Transactional(readOnly = true)
+  public List<AddressDTO> getAllUserAddresses() {
+    UserInfo currentUserInfo = authService.getCurrentUserInfo();
+
+    if (currentUserInfo.getId() == null) {
+      throw new ForbiddenException();
+    }
+
+    List<Address> addresses;
+
+    if (currentUserInfo.getRole().equals("ROLE_USER")) {
+      addresses = addressRepository.nativeSearchAllByUserId(currentUserInfo.getId());
+
+    } else if (currentUserInfo.getRole().equals("ROLE_RESTAURANT")) {
+      addresses = addressRepository.nativeSearchAllByRestaurantId(currentUserInfo.getId());
+
+    } else {
+      throw new ForbiddenException();
+    }
+
+    List<AddressDTO> addressDTOs = addresses.stream()
+        .map(this::convertToDTO)
+        .collect(Collectors.toList());
+
+    return addressDTOs;
+  }
+
+  @Transactional(readOnly = true)
   public AddressDTO getAddressById(Long addressId) {
     Address address = addressRepository.findById(addressId)
         .orElseThrow(() -> new NotFoundException());
     return convertToDTO(address);
+  }
+
+  @Transactional(readOnly = true)
+  public AddressDTO getUserAddressById(Long addressId) {
+    UserInfo currentUserInfo = authService.getCurrentUserInfo();
+
+    if (currentUserInfo.getId() == null) {
+      throw new ForbiddenException();
+    }
+
+    Address address;
+
+    if (currentUserInfo.getRole().equals("ROLE_USER")) {
+      address = addressRepository
+          .nativeSearchByUserIdAndAddressId(currentUserInfo.getId(), addressId);
+
+    } else if (currentUserInfo.getRole().equals("ROLE_RESTAURANT")) {
+      address = addressRepository
+          .nativeSearchByRestaurantIdAndAddressId(currentUserInfo.getId(), addressId);
+
+    } else {
+      throw new ForbiddenException();
+    }
+
+    if (address == null) {
+      throw new NotFoundException();
+    }
+
+    AddressDTO addressDTO;
+    addressDTO = convertToDTO(address);
+
+    return addressDTO;
   }
 
   @Transactional

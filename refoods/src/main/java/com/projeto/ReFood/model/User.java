@@ -8,14 +8,12 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import java.util.Set;
 
-import com.projeto.ReFood.security.UserDetailsCommon;
-
 import java.time.LocalDateTime;
 
 @Entity
 @Data
 @Table(name = "tb_users")
-public class User implements UserDetailsCommon {
+public class User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,7 +47,7 @@ public class User implements UserDetailsCommon {
   @Column(name = "last_login")
   private LocalDateTime lastLogin;
 
-  @OneToMany(mappedBy = "user")
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Address> userAddresses;
 
   @OneToMany(mappedBy = "user")
@@ -73,8 +71,4 @@ public class User implements UserDetailsCommon {
   @OneToMany(mappedBy = "user")
   private Set<HistoricalOrder> userHistoricalOrders;
 
-  @Override
-  public String getEmail() {
-      return email;
-  }
 }
