@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import java.util.Set;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -46,7 +47,7 @@ public class User {
   @Column(name = "last_login")
   private LocalDateTime lastLogin;
 
-  @OneToMany(mappedBy = "user")
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Address> userAddresses;
 
   @OneToMany(mappedBy = "user")
@@ -69,4 +70,5 @@ public class User {
 
   @OneToMany(mappedBy = "user")
   private Set<HistoricalOrder> userHistoricalOrders;
+
 }
