@@ -1,6 +1,7 @@
 package com.projeto.ReFood.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
@@ -8,7 +9,6 @@ public record AddressDTO(
     Long addressId,
 
     @NotBlank(message = "O CEP é obrigatório.")
-    @Pattern(regexp = "\\d{5}-\\d{3}", message = "O formato do CEP deve ser 12345-678.")
     String cep,
 
     @NotBlank(message = "O estado é obrigatório.")
@@ -26,7 +26,7 @@ public record AddressDTO(
 
     String complement, // opcional
 
-    @NotBlank(message = "O tipo de endereço é obrigatório.")
+    @NotNull(message = "O tipo de endereço é obrigatório.")
     String addressType,
 
     boolean isStandard, // default = false
