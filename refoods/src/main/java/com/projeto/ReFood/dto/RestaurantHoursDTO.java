@@ -16,6 +16,6 @@ public record RestaurantHoursDTO(
     @NotNull(message = "O horário de fechamento não pode ser nulo.")
     String closingTime,
 
-    //@NotNull(message = "O ID do restaurante não pode ser nulo.")
+    @NotNull(message = "O ID do restaurante não pode ser nulo.")
     Long restaurantId
 ) {}
