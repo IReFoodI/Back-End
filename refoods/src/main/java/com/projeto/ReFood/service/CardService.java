@@ -3,18 +3,15 @@ package com.projeto.ReFood.service;
 import com.projeto.ReFood.dto.CardDTO;
 import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
 import com.projeto.ReFood.model.Card;
-import com.projeto.ReFood.model.Transaction;
 import com.projeto.ReFood.repository.CardRepository;
-
+import com.projeto.ReFood.security.JwtTokenProvider;
 import jakarta.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,9 +22,21 @@ public class CardService {
   private CardRepository cardRepository;
   @Autowired
   private UtilityService utilityService;
+  @Autowired
+  private JwtTokenProvider jwtTokenProvider;
 
   @Transactional(readOnly = true)
   public List<CardDTO> getAllCards() {
+    return cardRepository
+        .findAll()
+        .stream()
+        .map(this::convertToDTO)
+        .collect(Collectors.toList());
+  }
+
+  @Transactional(readOnly = true)
+  public List<CardDTO> getAllCardsByUserId(String token) {
+    Long id = jwtTokenProvider.extractUserId(token);
     return cardRepository
         .findAll()
         .stream()
@@ -46,7 +55,7 @@ public class CardService {
   public CardDTO createCard(@Valid CardDTO cardDTO) {
     Card card = convertToEntity(cardDTO);
     utilityService.associateUser(card::setUser, cardDTO.userId());
-    utilityService.associateTransactions(card, cardDTO.transactionIds());
+//    utilityService.associateTransactions(card, cardDTO.transactionIds());
     card = cardRepository.save(card);
     return convertToDTO(card);
   }
@@ -63,7 +72,7 @@ public class CardService {
     card.setCvv(cardDTO.cvv());
 
     utilityService.associateUser(card::setUser, cardDTO.userId());
-    utilityService.associateTransactions(card, cardDTO.transactionIds());
+//    utilityService.associateTransactions(card, cardDTO.transactionIds());
 
     card = cardRepository.save(card);
     return convertToDTO(card);
@@ -78,9 +87,9 @@ public class CardService {
   }
 
   private CardDTO convertToDTO(Card card) {
-    Set<Long> transactionIds = card.getCardTransactions().stream()
-        .map(Transaction::getTransactionId)
-        .collect(Collectors.toSet());
+//    Set<Long> transactionIds = card.getCardTransactions().stream()
+//        .map(Transaction::getTransactionId)
+//        .collect(Collectors.toSet());
 
     return new CardDTO(
         card.getCardId(),
@@ -89,8 +98,9 @@ public class CardService {
         card.getCpf(),
         card.getValidity(),
         card.getCvv(),
-        card.getUser().getUserId(),
-        transactionIds);
+        card.getUser().getUserId()
+//        ,        transactionIds
+    );
   }
 
   private Card convertToEntity(CardDTO cardDTO) {
@@ -102,7 +112,7 @@ public class CardService {
     card.setValidity(cardDTO.validity());
     card.setCvv(cardDTO.cvv());
     utilityService.associateUser(card::setUser, cardDTO.userId());
-    utilityService.associateTransactions(card, cardDTO.transactionIds());
+//    utilityService.associateTransactions(card, cardDTO.transactionIds());
     return card;
   }
 }

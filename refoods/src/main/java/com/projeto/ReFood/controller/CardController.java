@@ -2,6 +2,8 @@ package com.projeto.ReFood.controller;
 
 import com.projeto.ReFood.service.CardService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,23 @@ public class CardController {
     return ResponseEntity.ok(cards);
   }
 
+  @GetMapping("/user")
+  public ResponseEntity<List<CardDTO>> getAllCardsByUserId(@RequestHeader("Authorization") String token) {
+    List<CardDTO> cards = cardService.getAllCardsByUserId(token);
+    return ResponseEntity.ok(cards);
+  }
+
+  //todo mexer aqui depois nesses operation
+  @Operation(
+      summary = "Atualiza um endereço específico do usuário",
+      description = "Atualiza os detalhes de um endereço associado ao usuário autenticado, com base no token de autorização e no ID do endereço fornecidos. O corpo da requisição deve conter as novas informações do endereço.",
+      responses = {
+          @ApiResponse(responseCode = "200", description = "Endereço atualizado com sucesso"),
+          @ApiResponse(responseCode = "404", description = "Endereço ou usuário não encontrado"),
+          @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos na requisição"),
+          @ApiResponse(responseCode = "401", description = "Token de autorização inválido ou não fornecido")
+      }
+  )
   @GetMapping("/{cardId}")
   public ResponseEntity<CardDTO> getCardById(@PathVariable Long cardId) {
     CardDTO cardDTO = cardService.getCardById(cardId);
