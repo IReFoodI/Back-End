@@ -88,8 +88,8 @@ public class AuthService {
       throw new NotFoundException();
     }
 
-    CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(email);
-    String jwt = jwtTokenProvider.generateToken(userDetails);
+      CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(email);
+      String jwt = jwtTokenProvider.generateToken(userDetails, userDetails.getId());
 
     return ResponseEntity.ok(new LoginResponse(jwt, userDetails.getId(),
         userDetails.getNome(), email));
@@ -132,10 +132,10 @@ public class AuthService {
     user.setPassword(passwordEncoder.encode(password));
     user.setDateCreation(LocalDateTime.now());
     user.setLastLogin(LocalDateTime.now());
-    userRepository.save(user);
+    User userResult = userRepository.save(user);
 
     CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(googleDTO.email());
-    String jwt = jwtTokenProvider.generateToken(userDetails);
+    String jwt = jwtTokenProvider.generateToken(userDetails, userResult.getUserId());
 
     return ResponseEntity
         .ok(new LoginResponse(jwt, userDetails.getId(), userDetails.getNome(), userDetails.getEmail()));

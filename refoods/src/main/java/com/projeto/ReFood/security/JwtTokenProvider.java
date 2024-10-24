@@ -49,13 +49,15 @@ public class JwtTokenProvider {
     return new SecretKeySpec(keyBytes, SignatureAlgorithm.HS256.getJcaName());
   }
 
-  public String generateToken(UserDetails userDetails) {
+  public String generateToken(UserDetails userDetails, Long userId) {
     Map<String, Object> claims = new HashMap<>();
     claims.put("roles", userDetails.getAuthorities().stream()
-        .map(GrantedAuthority::getAuthority)
-        .collect(Collectors.toList()));
+            .map(GrantedAuthority::getAuthority)
+            .collect(Collectors.toList()));
+    claims.put("userId", userId);
     return createToken(claims, userDetails.getUsername());
   }
+
 
   private String createToken(Map<String, Object> claims, String subject) {
     return Jwts.builder()
@@ -79,4 +81,9 @@ public class JwtTokenProvider {
   private boolean isTokenExpired(String token) {
     return extractExpiration(token).before(new Date());
   }
+
+  public Long extractUserId(String token) {
+    return extractClaim(token.replaceFirst("Bearer ", ""), claims -> claims.get("userId", Long.class));
+  }
+
 }
