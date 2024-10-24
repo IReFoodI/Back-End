@@ -3,6 +3,8 @@ package com.projeto.ReFood.controller;
 import java.net.URI;
 import java.util.List;
 
+
+import com.projeto.ReFood.model.EnumDayOfWeek;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,11 +35,19 @@ public class RestaurantHoursController {
     return ResponseEntity.ok(hours);
   }
 
-  @GetMapping("/{hoursId}")
-  public ResponseEntity<RestaurantHoursDTO> getHoursById(@PathVariable Long hoursId) {
-    RestaurantHoursDTO hoursDTO = restaurantHoursService.getHoursById(hoursId);
-    return ResponseEntity.ok(hoursDTO);
-  }
+    @GetMapping("/{hoursId}")
+    public ResponseEntity<RestaurantHoursDTO> getHoursById(@PathVariable Long hoursId)  {
+        RestaurantHoursDTO hoursDTO = restaurantHoursService.getHoursById(hoursId);
+        return ResponseEntity.ok(hoursDTO);
+    }
+
+    @GetMapping("/today")
+    public ResponseEntity<List<RestaurantHoursDTO>> getTodayHours() {
+        EnumDayOfWeek today = EnumDayOfWeek.valueOf(java.time.LocalDate.now().getDayOfWeek().name());
+        List<RestaurantHoursDTO> hours = restaurantHoursService.getHoursByDay(today);
+        return ResponseEntity.ok(hours);
+    }
+
 
   @PostMapping
   public ResponseEntity<RestaurantHoursDTO> createHours(@Valid @RequestBody RestaurantHoursDTO hoursDTO) {

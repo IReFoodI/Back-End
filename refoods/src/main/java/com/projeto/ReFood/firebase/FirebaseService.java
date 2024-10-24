@@ -1,5 +1,6 @@
 package com.projeto.ReFood.firebase;
 
+import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.Bucket;
 import com.google.firebase.cloud.StorageClient;
 
@@ -23,11 +24,15 @@ public class FirebaseService {
   }
 
   public String getImageUrl(String imageName) {
-    return imageBaseUrl + imageName;
+    Bucket bucket = StorageClient.getInstance().bucket();
+    Blob blob = bucket.get(imageName);
+
+    if (blob != null) {
+      String token = blob.getMetadata().get("firebaseStorageDownloadTokens");
+      return String.format("%s/%s?alt=media&token=%s", imageBaseUrl, imageName, token);
+    }
+
+    return null;
   }
 
 }
-
-
-
-

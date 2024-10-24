@@ -20,15 +20,19 @@ public class FirebaseController {
       @RequestParam("imageName") String imageName) {
     try {
       firebaseService.upload(imageFile, imageName);
-      return new ResponseEntity<>("Upload successful!", HttpStatus.OK);
+      return ResponseEntity.ok("Upload successful!");
     } catch (IOException e) {
-      return new ResponseEntity<>("Failed to upload image: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+          .body("Failed to upload image: " + e.getMessage());
     }
   }
 
   @GetMapping("/image/{imageName}")
   public ResponseEntity<String> getImageUrl(@PathVariable String imageName) {
     String imageUrl = firebaseService.getImageUrl(imageName);
-    return new ResponseEntity<>(imageUrl, HttpStatus.OK);
+    if (imageUrl != null) {
+      return ResponseEntity.ok(imageUrl);
+    }
+    return ResponseEntity.notFound().build();
   }
 }
