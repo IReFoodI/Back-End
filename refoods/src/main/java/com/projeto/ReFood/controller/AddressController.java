@@ -62,7 +62,6 @@ public class AddressController {
                     @ApiResponse(responseCode = "401", description = "Usuário não autorizado")
             }
     )
-    @PreAuthorize("hasAnyRole('ROLE_USER')")
     @PostMapping
     public ResponseEntity<AddressDTO> createAddress(@RequestHeader("Authorization") String token, @Valid @RequestBody AddressDTO addressDTO) {
         AddressDTO createdAddress = addressService.createAddress(addressDTO, token, null, null, null);
@@ -73,17 +72,52 @@ public class AddressController {
         return ResponseEntity.created(location).body(createdAddress);
     }
 
+    @Operation(
+            summary = "Atualiza um endereço específico do usuário",
+            description = "Atualiza os detalhes de um endereço associado ao usuário autenticado, com base no token de autorização e no ID do endereço fornecidos. O corpo da requisição deve conter as novas informações do endereço.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Endereço atualizado com sucesso"),
+                    @ApiResponse(responseCode = "404", description = "Endereço ou usuário não encontrado"),
+                    @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos na requisição"),
+                    @ApiResponse(responseCode = "401", description = "Token de autorização inválido ou não fornecido")
+            }
+    )
     @PutMapping("/{addressId}")
-    public ResponseEntity<AddressDTO> updateAddress(@PathVariable Long addressId,
-                                                    @Valid @RequestBody AddressDTO addressDTO)
+    public ResponseEntity<AddressDTO> updateAddress(@RequestHeader("Authorization") String token, @PathVariable Long addressId, @Valid @RequestBody AddressDTO addressDTO)
             throws NotFoundException {
-        AddressDTO updatedAddress = addressService.updateAddress(addressId, addressDTO);
+        AddressDTO updatedAddress = addressService.updateAddress(token, addressId, addressDTO);
         return ResponseEntity.ok(updatedAddress);
     }
 
+    @Operation(
+            summary = "Atualiza parcialmente um endereço para definir como padrão",
+            description = "Atualiza o endereço especificado como o endereço padrão do usuário autenticado. O token de autorização deve ser fornecido no cabeçalho da requisição.",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "Endereço atualizado com sucesso para padrão"),
+                    @ApiResponse(responseCode = "404", description = "Endereço ou usuário não encontrado"),
+                    @ApiResponse(responseCode = "401", description = "Token de autorização inválido ou não fornecido")
+            }
+    )
+    @PreAuthorize("hasAnyRole('ROLE_USER')")
+    @PatchMapping("/{addressId}")
+    public ResponseEntity<Void> updatePartialAddress(@RequestHeader("Authorization") String token, @PathVariable Long addressId)
+            throws NotFoundException {
+        addressService.updatePartialAddress(token, addressId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @Operation(
+            summary = "Exclui um endereço",
+            description = "Remove o endereço especificado do usuário autenticado. O token de autorização deve ser fornecido no cabeçalho da requisição.",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "Endereço excluído com sucesso"),
+                    @ApiResponse(responseCode = "404", description = "Endereço ou usuário não encontrado"),
+                    @ApiResponse(responseCode = "401", description = "Token de autorização inválido ou não fornecido")
+            }
+    )
     @DeleteMapping("/{addressId}")
-    public ResponseEntity<Void> deleteAddress(@PathVariable Long addressId) {
-        addressService.deleteAddress(addressId);
+    public ResponseEntity<Void> deleteAddress(@RequestHeader("Authorization") String token, @PathVariable Long addressId) {
+        addressService.deleteAddress(token, addressId);
         return ResponseEntity.noContent().build();
     }
 
@@ -102,10 +136,31 @@ public class AddressController {
         return ResponseEntity.ok(addressesDTO);
     }
 
-    @GetMapping("/user/me")
-    public ResponseEntity<AddressDTO> getPrimaryAddressByUserToken(@RequestHeader("Authorization") String token, @PathVariable Long addressId) throws NotFoundException {
-        AddressDTO addressDTO = addressService.getAddressByUserId(token);
+    @Operation(
+            summary = "Obtém um endereço específico do usuário",
+            description = "Retorna os detalhes de um endereço específico associado ao usuário autenticado, com base no token de autorização fornecido e no ID do endereço.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Endereço retornado com sucesso"),
+                    @ApiResponse(responseCode = "404", description = "Endereço ou usuário não encontrado"),
+                    @ApiResponse(responseCode = "401", description = "Token de autorização inválido ou não fornecido")
+            }
+    )
+    @PreAuthorize("hasAnyRole('ROLE_USER')")
+    @GetMapping("/me/{addressId}")
+    public ResponseEntity<AddressDTO> getAddressByUserToken(@RequestHeader("Authorization") String token, @PathVariable Long addressId) throws NotFoundException {
+        AddressDTO addressDTO = addressService.getAddressByUserIdAndToken(token, addressId);
         return ResponseEntity.ok(addressDTO);
+    }
+
+    @Operation(
+            summary = "Obtém o endereço padrão do usuário",
+            description = "Retorna o endereço padrão associado ao usuário autenticado, usando o token de autorização fornecido. O acesso a este endpoint é restrito a usuários com a função ROLE_USER."
+    )
+    @PreAuthorize("hasAnyRole('ROLE_USER')")
+    @GetMapping("/default")
+    public ResponseEntity<AddressDTO> getAddressDefault(@RequestHeader("Authorization") String token) throws NotFoundException {
+        AddressDTO addressesDTO = addressService.getAddressDefault(token);
+        return ResponseEntity.ok(addressesDTO);
     }
 
 
