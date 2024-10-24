@@ -1,27 +1,18 @@
 package com.projeto.ReFood.service;
 
+import com.projeto.ReFood.dto.AddressDTO;
 import com.projeto.ReFood.exception.GlobalExceptionHandler;
+import com.projeto.ReFood.model.*;
 import com.projeto.ReFood.repository.AddressRepository;
-
-import com.projeto.ReFood.repository.UserRepository;
 import com.projeto.ReFood.security.JwtTokenProvider;
 import jakarta.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
-import com.projeto.ReFood.dto.AddressDTO;
-import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
-import com.projeto.ReFood.model.Address;
-import com.projeto.ReFood.model.EnumAddressType;
-import com.projeto.ReFood.model.Order;
-import com.projeto.ReFood.model.Restaurant;
-import com.projeto.ReFood.model.User;
-
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,9 +47,10 @@ public class AddressService {
     }
 
     @Transactional(readOnly = true)
-    public AddressDTO getAddressByUserId(String token) {
+    public AddressDTO getAddressByUserIdAndToken(String token, long addressId) {
         Long id = jwtTokenProvider.extractUserId(token);
-        Address address = addressRepository.findById(id)
+
+        Address address = addressRepository.findByIdAndUserId(addressId, id)
                 .orElseThrow(() -> {
                     return new GlobalExceptionHandler.NotFoundException();
                 });
@@ -77,7 +69,6 @@ public class AddressService {
     @Transactional
     public AddressDTO createAddress(@Valid AddressDTO addressDTO, String token, User user, Restaurant restaurant, Order order) {
         Long id = jwtTokenProvider.extractUserId(token);
-
 
 
         Address address = new Address();
@@ -119,10 +110,11 @@ public class AddressService {
     }
 
     @Transactional
-    public AddressDTO updateAddress(Long addressId, @Valid AddressDTO addressDTO) {
-        Address address = addressRepository.findById(addressId)
+    public AddressDTO updateAddress(String token, Long addressId, @Valid AddressDTO addressDTO) {
+        Long id = jwtTokenProvider.extractUserId(token);
+        Address address = addressRepository.findByIdAndUserId(addressId, id)
                 .orElseThrow(() -> {
-                    return new NotFoundException();
+                    return new GlobalExceptionHandler.NotFoundException();
                 });
 
         address.setStreet(addressDTO.street());
@@ -132,7 +124,6 @@ public class AddressService {
         address.setCity(addressDTO.city());
         address.setComplement(addressDTO.complement());
         address.setAddressType(EnumAddressType.valueOf(addressDTO.addressType().toString()));
-        address.setStandard(addressDTO.isStandard());
         address.setCep(addressDTO.cep());
         address.setState(addressDTO.state());
 
@@ -142,11 +133,46 @@ public class AddressService {
     }
 
     @Transactional
-    public void deleteAddress(Long addressId) {
+    public void updatePartialAddress(String token, Long addressId) {
+        Long userId = jwtTokenProvider.extractUserId(token);
+        Address address = addressRepository.findByIdAndUserId(addressId, userId)
+                .orElseThrow(() -> {
+                    return new GlobalExceptionHandler.NotFoundException();
+                });
+
+        List<Address> addressList = addressRepository.findAddressesByUserId(userId);
+
+        addressList.forEach((a) -> {
+            if (a.isStandard()) {
+                a.setStandard(false);
+            }
+            if (a.getAddressId().equals(addressId)) {
+                a.setStandard(true);
+            }
+        });
+
+        addressRepository.saveAll(addressList);
+    }
+
+    @Transactional
+    public AddressDTO getAddressDefault(String token) {
+        Long userId = jwtTokenProvider.extractUserId(token);
+        Address address = addressRepository.findByUserIdAndIsStandardTrue(userId)
+                .orElse(null);
+
+        return address != null ? convertToDTO(address) : null;
+    }
+
+
+    @Transactional
+    public void deleteAddress(String token, Long addressId) {
+        Long id = jwtTokenProvider.extractUserId(token);
+        Optional<Address> address = addressRepository.findByIdAndUserId(addressId, id);
+
         if (!addressRepository.existsById(addressId)) {
             throw new GlobalExceptionHandler.NotFoundException();
         }
-        addressRepository.deleteById(addressId);
+        addressRepository.deleteById(address.get().getAddressId());
     }
 
     public AddressDTO convertToDTO(Address address) {
