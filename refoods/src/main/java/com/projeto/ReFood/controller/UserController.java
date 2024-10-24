@@ -1,6 +1,5 @@
 package com.projeto.ReFood.controller;
 
-import com.projeto.ReFood.dto.AddressDTO;
 import com.projeto.ReFood.dto.UserDTO;
 import com.projeto.ReFood.service.UserService;
 

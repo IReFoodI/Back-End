@@ -135,7 +135,7 @@ public class AddressService {
     @Transactional
     public void updatePartialAddress(String token, Long addressId) {
         Long userId = jwtTokenProvider.extractUserId(token);
-        Address address = addressRepository.findByIdAndUserId(addressId, userId)
+        addressRepository.findByIdAndUserId(addressId, userId)
                 .orElseThrow(() -> {
                     return new GlobalExceptionHandler.NotFoundException();
                 });
