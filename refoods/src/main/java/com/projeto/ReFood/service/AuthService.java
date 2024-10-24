@@ -1,14 +1,16 @@
 package com.projeto.ReFood.service;
 
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import com.projeto.ReFood.dto.GoogleDTO;
 import com.projeto.ReFood.dto.LoginResponse;
@@ -16,7 +18,10 @@ import com.projeto.ReFood.exception.GlobalExceptionHandler.BadCredentialsExcepti
 import com.projeto.ReFood.exception.GlobalExceptionHandler.InternalServerErrorException;
 import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
 import com.projeto.ReFood.model.CustomUserDetails;
+import com.projeto.ReFood.model.Restaurant;
 import com.projeto.ReFood.model.User;
+import com.projeto.ReFood.model.UserInfo;
+import com.projeto.ReFood.repository.RestaurantRepository;
 import com.projeto.ReFood.repository.UserRepository;
 import com.projeto.ReFood.security.JwtTokenProvider;
 
@@ -29,6 +34,7 @@ public class AuthService {
   private final UtilityService utilityService;
   private final PasswordEncoder passwordEncoder;
   private final UserRepository userRepository;
+  private final RestaurantRepository restaurantRepository;
 
   @Autowired
   public AuthService(AuthenticationManager authenticationManager,
@@ -36,13 +42,35 @@ public class AuthService {
       CustomUserDetailsService userDetailsService,
       UtilityService utilityService,
       PasswordEncoder passwordEncoder,
-      UserRepository userRepository) {
+      UserRepository userRepository,
+      RestaurantRepository restaurantRepository) {
     this.authenticationManager = authenticationManager;
     this.jwtTokenProvider = jwtTokenProvider;
     this.userDetailsService = userDetailsService;
     this.utilityService = utilityService;
     this.passwordEncoder = passwordEncoder;
     this.userRepository = userRepository;
+    this.restaurantRepository = restaurantRepository;
+  }
+
+  private boolean updateLastLoginForUserOrRestaurant(String email) {
+    Optional<User> optionalUser = userRepository.findByEmail(email);
+    if (optionalUser.isPresent()) {
+      User user = optionalUser.get();
+      user.setLastLogin(LocalDateTime.now());
+      userRepository.save(user);
+      return true;
+    }
+
+    Optional<Restaurant> optionalRestaurant = restaurantRepository.findByEmail(email);
+    if (optionalRestaurant.isPresent()) {
+      Restaurant restaurant = optionalRestaurant.get();
+      restaurant.setLastLogin(LocalDateTime.now());
+      restaurantRepository.save(restaurant);
+      return true;
+    }
+
+    return false;
   }
 
   public ResponseEntity<LoginResponse> authenticateUser(String email, String password) {
@@ -54,24 +82,38 @@ public class AuthService {
       throw new InternalServerErrorException();
     }
 
-    Optional<User> optionalUser = userRepository.findByEmail(email);
-    if (optionalUser.isPresent()) {
-      User user = optionalUser.get();
-      user.setLastLogin(LocalDateTime.now());
-      User userResult = userRepository.save(user);
+    boolean isUserUpdated = updateLastLoginForUserOrRestaurant(email);
 
-      CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(email);
-      String jwt = jwtTokenProvider.generateToken(userDetails, userResult.getUserId());
-
-      return ResponseEntity.ok(new LoginResponse(jwt, userDetails.getId(), userDetails.getNome(), email));
+    if (!isUserUpdated) {
+      throw new NotFoundException();
     }
 
-    throw new NotFoundException();
+      CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(email);
+      String jwt = jwtTokenProvider.generateToken(userDetails, userDetails.getId());
+
+    return ResponseEntity.ok(new LoginResponse(jwt, userDetails.getId(),
+        userDetails.getNome(), email));
+  }
+
+  public UserInfo getCurrentUserInfo() {
+
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    UserInfo currentUserInfo = new UserInfo(null, null);
+
+    if (authentication != null && authentication.isAuthenticated() &&
+        !authentication.getPrincipal().equals("anonymousUser")) {
+
+      CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+      currentUserInfo = new UserInfo(userDetails.getId(),
+          userDetails.getAuthorities().stream().findFirst().get().getAuthority());
+    }
+
+    return currentUserInfo;
   }
 
   public ResponseEntity<?> handleGoogleLoginSuccess(GoogleDTO googleDTO) {
 
-    
     String email = googleDTO.email();
     String password = googleDTO.sub();
 

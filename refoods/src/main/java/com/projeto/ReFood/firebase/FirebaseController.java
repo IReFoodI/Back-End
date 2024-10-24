@@ -20,28 +20,19 @@ public class FirebaseController {
       @RequestParam("imageName") String imageName) {
     try {
       firebaseService.upload(imageFile, imageName);
-      return new ResponseEntity<>("Upload successful!", HttpStatus.OK);
+      return ResponseEntity.ok("Upload successful!");
     } catch (IOException e) {
-      return new ResponseEntity<>("Failed to upload image: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+          .body("Failed to upload image: " + e.getMessage());
     }
   }
 
   @GetMapping("/image/{imageName}")
-  public ResponseEntity<String> getImageUrl(
-      @PathVariable String imageName,
-      @RequestParam(required = false) String firebaseToken) {
-
-    if (firebaseToken == null || firebaseToken.isEmpty()) {
-      return ResponseEntity.badRequest()
-          .body("Token Firebase é obrigatório.");
-    }
-
-    try {
-      String imageUrl = firebaseService.getImageUrl(imageName, firebaseToken);
+  public ResponseEntity<String> getImageUrl(@PathVariable String imageName) {
+    String imageUrl = firebaseService.getImageUrl(imageName);
+    if (imageUrl != null) {
       return ResponseEntity.ok(imageUrl);
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-          .body("Erro ao gerar a URL da imagem: " + e.getMessage());
     }
+    return ResponseEntity.notFound().build();
   }
 }
