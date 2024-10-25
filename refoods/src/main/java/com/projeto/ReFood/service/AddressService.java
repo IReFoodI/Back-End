@@ -221,15 +221,6 @@ public class AddressService {
   }
 
   @Transactional
-  public AddressDTO getAddressDefault(String token) {
-    Long userId = jwtTokenProvider.extractUserId(token);
-    Address address = addressRepository.findByUserIdAndIsStandardTrue(userId)
-        .orElse(null);
-
-    return address != null ? convertToDTO(address) : null;
-  }
-
-  @Transactional
   public void deleteAddress(String token, Long addressId) {
     Long id = jwtTokenProvider.extractUserId(token);
     Optional<Address> address = addressRepository.findByIdAndUserId(addressId, id);

@@ -162,15 +162,4 @@ public class AddressController {
     return ResponseEntity.ok(addressDTO);
   }
 
-  @Operation(
-    summary = "Obtém o endereço padrão do usuário", 
-    description = "Retorna o endereço padrão associado ao usuário autenticado, usando o token de autorização fornecido. O acesso a este endpoint é restrito a usuários com a função ROLE_USER.")
-  @PreAuthorize("hasAnyRole('ROLE_USER')")
-  @GetMapping("/default")
-  public ResponseEntity<AddressDTO> getAddressDefault(@RequestHeader("Authorization") String token)
-      throws NotFoundException {
-    AddressDTO addressesDTO = addressService.getAddressDefault(token);
-    return ResponseEntity.ok(addressesDTO);
-  }
-
 }
