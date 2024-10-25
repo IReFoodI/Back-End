@@ -22,6 +22,5 @@ public record CardDTO(
     @NotBlank(message = "O CVV é obrigatório.") @Size(min = 3, max = 3, message = "O CVV deve ter exatamente 3 dígitos.") String cvv,
 
     Long userId
-//    ,    Set<Long> transactionIds
 ) {
 }
