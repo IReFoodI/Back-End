@@ -37,7 +37,7 @@ public class CardService {
     return cardRepository
         .findCardByUserId(id)
         .stream()
-        .map(this::convertToDTO)
+        .map(card -> convertToDTO(card, id))
         .collect(Collectors.toList());
   }
 
@@ -45,11 +45,11 @@ public class CardService {
   public CardDTO getCardById(String token, Long cardId) {
     UserInfo currentUserInfo = authService.getCurrentUserInfo();
     Long id = jwtTokenProvider.extractUserId(token);
-    if (currentUserInfo.getId() == null) {
+    if (currentUserInfo.getId() == null || id == null) {
       throw new GlobalExceptionHandler.ForbiddenException();
     }
     return cardRepository.findByIdAndUserId(cardId, id)
-        .map(this::convertToDTO)
+        .map(card -> convertToDTO(card, id))
         .orElseThrow(() -> new NotFoundException());
   }
 
@@ -57,21 +57,21 @@ public class CardService {
   public CardDTO createCard(String token, @Valid CardDTO cardDTO) {
     UserInfo currentUserInfo = authService.getCurrentUserInfo();
     Long id = jwtTokenProvider.extractUserId(token);
-    Card card = convertToEntity(cardDTO);
+    Card card = convertToEntity(cardDTO, id);
 
-    if (currentUserInfo.getId() == null) {
+    if (currentUserInfo.getId() == null || id == null) {
       throw new GlobalExceptionHandler.ForbiddenException();
     }
-    utilityService.associateUser(card::setUser, cardDTO.userId());
+    utilityService.associateUser(card::setUser, id);
     card = cardRepository.save(card);
-    return convertToDTO(card);
+    return convertToDTO(card, id);
   }
 
   @Transactional
   public CardDTO updateCard(String token, Long cardId, @Valid CardDTO cardDTO) {
     Long id = jwtTokenProvider.extractUserId(token);
     UserInfo currentUserInfo = authService.getCurrentUserInfo();
-    if (currentUserInfo.getId() == null) {
+    if (currentUserInfo.getId() == null || id == null) {
       throw new GlobalExceptionHandler.ForbiddenException();
     }
     Card card = cardRepository.findByIdAndUserId(cardId, id)
@@ -83,10 +83,10 @@ public class CardService {
     card.setValidity(cardDTO.validity());
     card.setCvv(cardDTO.cvv());
 
-    utilityService.associateUser(card::setUser, cardDTO.userId());
+    utilityService.associateUser(card::setUser, id);
 
     card = cardRepository.save(card);
-    return convertToDTO(card);
+    return convertToDTO(card, id);
   }
 
   @Transactional
@@ -102,7 +102,7 @@ public class CardService {
     cardRepository.deleteById(cardId);
   }
 
-  private CardDTO convertToDTO(Card card) {
+  private CardDTO convertToDTO(Card card, Long id) {
     return new CardDTO(
         card.getCardId(),
         card.getNumber(),
@@ -110,11 +110,11 @@ public class CardService {
         card.getCpf(),
         card.getValidity(),
         card.getCvv(),
-        card.getUser().getUserId()
+        id
     );
   }
 
-  private Card convertToEntity(CardDTO cardDTO) {
+  private Card convertToEntity(CardDTO cardDTO, Long id) {
     Card card = new Card();
     card.setCardId(cardDTO.cardId());
     card.setNumber(cardDTO.number());
@@ -122,7 +122,7 @@ public class CardService {
     card.setCpf(cardDTO.cpf());
     card.setValidity(cardDTO.validity());
     card.setCvv(cardDTO.cvv());
-    utilityService.associateUser(card::setUser, cardDTO.userId());
+    utilityService.associateUser(card::setUser, id);
     return card;
   }
 }
