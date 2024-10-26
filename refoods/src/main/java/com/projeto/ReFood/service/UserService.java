@@ -6,6 +6,7 @@ import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
 import com.projeto.ReFood.model.User;
 import com.projeto.ReFood.repository.UserRepository;
 
+import com.projeto.ReFood.security.JwtTokenProvider;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -26,6 +27,7 @@ public class UserService {
   private final UserRepository userRepository;
   private final UtilityService utilityService;
   private final PasswordEncoder passwordEncoder;
+  private final JwtTokenProvider jwtTokenProvider;
 
   @Transactional(readOnly = true)
   public List<UserDTO> getAllUsers() {
@@ -41,6 +43,24 @@ public class UserService {
     return userRepository.findById(userId)
         .map(this::convertToDTO)
         .orElseThrow(() -> new NotFoundException());
+  }
+
+  @Transactional(readOnly = true)
+  public UserDTO getUserInfoByToken(String token) {
+    System.out.println("tokenaaaaaaaaa " + token);
+    Long userId = jwtTokenProvider.extractUserId(token);
+
+    User user = userRepository.findById(userId)
+        .orElseThrow(() -> new NotFoundException());
+
+    return new UserDTO(
+        user.getUserId(),
+        user.getName(),
+        user.getEmail(),
+        user.getPhone(),
+        null,  // SENHA...
+        user.getDateCreation(),
+        user.getLastLogin());
   }
 
   @Transactional
