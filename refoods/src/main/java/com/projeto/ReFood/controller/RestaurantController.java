@@ -17,7 +17,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/restaurants")
+@RequestMapping("/api/restaurant")
 public class RestaurantController {
 
   @Autowired
@@ -37,16 +37,12 @@ public class RestaurantController {
 
   @PostMapping
   public ResponseEntity<RestaurantDTO> createRestaurant(@Valid @RequestBody RestaurantDTO restaurantDTO) {
-    try {
       RestaurantDTO createdRestaurant = restaurantService.createRestaurant(restaurantDTO);
       URI location = ServletUriComponentsBuilder.fromCurrentRequest()
           .path("/{restaurantId}")
           .buildAndExpand(createdRestaurant.restaurantId())
           .toUri();
       return ResponseEntity.created(location).body(createdRestaurant);
-    } catch (EmailAlreadyExistsException e) {
-      return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
-    }
   }
 
   @PutMapping("/{restaurantId}")

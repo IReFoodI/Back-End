@@ -1,5 +1,7 @@
 package com.projeto.ReFood.service;
 
+import com.projeto.ReFood.dto.AddressDTO;
+import com.projeto.ReFood.model.Address;
 import com.projeto.ReFood.repository.RestaurantRepository;
 
 import jakarta.validation.Valid;
@@ -26,113 +28,121 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RestaurantService {
 
-  private final RestaurantRepository restaurantRepository;
-  private final UtilityService utilityService;
-  private final PasswordEncoder passwordEncoder;
+    private final RestaurantRepository restaurantRepository;
+    private final UtilityService utilityService;
+    private final PasswordEncoder passwordEncoder;
 
-  @Transactional(readOnly = true)
-  public List<RestaurantDTO> getAllRestaurants() {
-    return restaurantRepository
-        .findAll()
-        .stream()
-        .map(this::convertToDTO)
-        .collect(Collectors.toList());
-  }
-
-  @Transactional(readOnly = true)
-  public RestaurantDTO getRestaurantById(Long restaurantId) {
-    return restaurantRepository.findById(restaurantId)
-        .map(this::convertToDTO)
-        .orElseThrow(() -> new NotFoundException());
-  }
-
-  @Transactional
-  public RestaurantDTO createRestaurant(@Valid RestaurantDTO restaurantDTO) {
-
-    if (!utilityService.isEmailUnique(restaurantDTO.email())) {
-      throw new EmailAlreadyExistsException();
+    @Transactional(readOnly = true)
+    public List<RestaurantDTO> getAllRestaurants() {
+        return restaurantRepository
+                .findAll()
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
-    if (restaurantRepository.existsByCnpj(restaurantDTO.cnpj())) {
-      throw new CnpjAlreadyExistsException();
+    @Transactional(readOnly = true)
+    public RestaurantDTO getRestaurantById(Long restaurantId) {
+        return restaurantRepository.findById(restaurantId)
+                .map(this::convertToDTO)
+                .orElseThrow(() -> new NotFoundException());
     }
 
-    Restaurant restaurant = convertToEntity(restaurantDTO);
-    restaurant.setPassword(passwordEncoder.encode(restaurant.getPassword()));
-    restaurant.setDateCreation(LocalDateTime.now());
-    restaurant.setLastLogin(null);
+    @Transactional
+    public RestaurantDTO createRestaurant(@Valid RestaurantDTO restaurantDTO) {
 
-    restaurantRepository.save(restaurant);
-    return convertToDTO(restaurant);
-  }
+        if (!utilityService.isEmailUnique(restaurantDTO.email())) {
+            throw new EmailAlreadyExistsException();
+        }
 
-  @Transactional
-  public RestaurantDTO updateRestaurant(Long restaurantId, @Valid RestaurantDTO restaurantDTO) {
+        if (restaurantRepository.existsByCnpj(restaurantDTO.cnpj())) {
+            throw new CnpjAlreadyExistsException();
+        }
 
-    Restaurant restaurant = restaurantRepository.findById(restaurantId)
-        .orElseThrow(() -> new NotFoundException());
+        Restaurant restaurant = convertToEntity(restaurantDTO);
+        restaurant.setPassword(passwordEncoder.encode(restaurant.getPassword()));
+        restaurant.setDateCreation(LocalDateTime.now());
+        restaurant.setLastLogin(null);
 
-    if (!utilityService.isEmailUnique(restaurantDTO.email())) {
-      throw new EmailAlreadyExistsException();
+        restaurant = restaurantRepository.save(restaurant);
+
+        utilityService.addAddressToRestaurant(restaurant, restaurantDTO.address());
+
+        return convertToDTO(restaurant);
     }
 
-    if (restaurantRepository.existsByCnpj(restaurantDTO.cnpj())) {
-      throw new CnpjAlreadyExistsException();
+    @Transactional
+    public RestaurantDTO updateRestaurant(Long restaurantId, @Valid RestaurantDTO restaurantDTO) {
+
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new NotFoundException());
+
+        if (!utilityService.isEmailUnique(restaurantDTO.email())) {
+            throw new EmailAlreadyExistsException();
+        }
+
+        if (restaurantRepository.existsByCnpj(restaurantDTO.cnpj())) {
+            throw new CnpjAlreadyExistsException();
+        }
+
+        restaurant.setCnpj(restaurantDTO.cnpj());
+        restaurant.setEmail(restaurantDTO.email());
+        restaurant.setFantasy(restaurantDTO.fantasy());
+        restaurant.setPassword(passwordEncoder.encode(restaurantDTO.password()));
+        restaurant.setUrlBanner(restaurantDTO.urlBanner());
+        restaurant.setUrlLogo(restaurantDTO.urlLogo());
+        restaurant.setQuantityEvaluations(restaurantDTO.quantityEvaluations());
+        restaurant.setTotalEvaluations(restaurantDTO.totalEvaluations());
+        restaurant.setAverageRating(restaurantDTO.averageRating());
+
+        Restaurant updatedRestaurant = restaurantRepository.save(restaurant);
+        return convertToDTO(updatedRestaurant);
     }
 
-    restaurant.setCnpj(restaurantDTO.cnpj());
-    restaurant.setEmail(restaurantDTO.email());
-    restaurant.setFantasy(restaurantDTO.fantasy());
-    restaurant.setPassword(passwordEncoder.encode(restaurantDTO.password()));
-    restaurant.setUrlBanner(restaurantDTO.urlBanner());
-    restaurant.setUrlLogo(restaurantDTO.urlLogo());
-    restaurant.setQuantityEvaluations(restaurantDTO.quantityEvaluations());
-    restaurant.setTotalEvaluations(restaurantDTO.totalEvaluations());
-    restaurant.setAverageRating(restaurantDTO.averageRating());
-
-    Restaurant updatedRestaurant = restaurantRepository.save(restaurant);
-    return convertToDTO(updatedRestaurant);
-  }
-
-  @Transactional
-  public void deleteRestaurant(Long restaurantId) {
-    if (!restaurantRepository.existsById(restaurantId)) {
-      throw new NotFoundException();
+    @Transactional
+    public void deleteRestaurant(Long restaurantId) {
+        if (!restaurantRepository.existsById(restaurantId)) {
+            throw new NotFoundException();
+        }
+        restaurantRepository.deleteById(restaurantId);
     }
-    restaurantRepository.deleteById(restaurantId);
-  }
 
-  public RestaurantDTO convertToDTO(Restaurant restaurant) {
-    return new RestaurantDTO(
-        restaurant.getRestaurantId(),
-        restaurant.getCnpj(),
-        restaurant.getFantasy(),
-        restaurant.getEmail(),
-        null, // Não expor a senha
-        restaurant.getCategory().name(),
-        restaurant.getUrlBanner(),
-        restaurant.getUrlLogo(),
-        restaurant.getQuantityEvaluations(),
-        restaurant.getTotalEvaluations(),
-        restaurant.getAverageRating(),
-        restaurant.getDateCreation(),
-        restaurant.getLastLogin());
-  }
+    public RestaurantDTO convertToDTO(Restaurant restaurant) {
+        return new RestaurantDTO(
+                restaurant.getRestaurantId(),
+                restaurant.getFantasy(),
+                restaurant.getCnpj(),
+                restaurant.getCategory().toString(),
+                restaurant.getEmail(),
+                restaurant.getPhone(),
+                null, // Não expor a senha
+                restaurant.getUrlBanner(),
+                restaurant.getUrlLogo(),
+                restaurant.getQuantityEvaluations(),
+                restaurant.getTotalEvaluations(),
+                restaurant.getAverageRating(),
+                null,
+                restaurant.getDateCreation(),
+                restaurant.getLastLogin()
+        );
+    }
 
-  public Restaurant convertToEntity(RestaurantDTO restaurantDTO) {
-    Restaurant restaurant = new Restaurant();
-    restaurant.setRestaurantId(restaurantDTO.restaurantId());
-    restaurant.setCnpj(restaurantDTO.cnpj());
-    restaurant.setFantasy(restaurantDTO.fantasy());
-    restaurant.setEmail(restaurantDTO.email());
-    restaurant.setPassword(restaurantDTO.password());
-    restaurant.setCategory(EnumRestaurantCategory.valueOf(restaurantDTO.category()));
-    restaurant.setDateCreation(LocalDateTime.now());
-    restaurant.setUrlBanner(restaurantDTO.urlBanner());
-    restaurant.setUrlLogo(restaurantDTO.urlLogo());
-    restaurant.setQuantityEvaluations(restaurantDTO.quantityEvaluations());
-    restaurant.setTotalEvaluations(restaurantDTO.totalEvaluations());
-    restaurant.setAverageRating(restaurantDTO.averageRating());
-    return restaurant;
-  }
+
+    public Restaurant convertToEntity(RestaurantDTO restaurantDTO) {
+        Restaurant restaurant = new Restaurant();
+        restaurant.setRestaurantId(restaurantDTO.restaurantId());
+        restaurant.setCnpj(restaurantDTO.cnpj());
+        restaurant.setFantasy(restaurantDTO.fantasy());
+        restaurant.setEmail(restaurantDTO.email());
+        restaurant.setPhone(restaurantDTO.phone());
+        restaurant.setPassword(restaurantDTO.password());
+        restaurant.setCategory(EnumRestaurantCategory.valueOf(restaurantDTO.category()));
+        restaurant.setDateCreation(LocalDateTime.now());
+        restaurant.setUrlBanner(restaurantDTO.urlBanner());
+        restaurant.setUrlLogo(restaurantDTO.urlLogo());
+        restaurant.setQuantityEvaluations(restaurantDTO.quantityEvaluations());
+        restaurant.setTotalEvaluations(restaurantDTO.totalEvaluations());
+        restaurant.setAverageRating(restaurantDTO.averageRating());
+        return restaurant;
+    }
 }

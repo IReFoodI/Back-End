@@ -69,5 +69,4 @@ public class Address {
 
   @OneToOne(mappedBy = "associatedAddress")
   private Order associatedOrder;
-
 }
