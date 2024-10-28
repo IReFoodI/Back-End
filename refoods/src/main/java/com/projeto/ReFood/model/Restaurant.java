@@ -71,6 +71,9 @@ public class Restaurant {
     @Column(nullable = false,length = 15)
     private String phone;
 
+    @Size(min = 20, message = "A descrição deve ter no mínimo 20 caracteres")
+    String description;
+
     @Min(value = 0, message = "A avaliação média deve ser no mínimo 0.")
     @Max(value = 5, message = "A avaliação média deve ser no máximo 5.")
     @Column(nullable = false)

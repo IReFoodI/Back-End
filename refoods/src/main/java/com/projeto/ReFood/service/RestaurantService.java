@@ -1,23 +1,20 @@
 package com.projeto.ReFood.service;
 
-import com.projeto.ReFood.dto.AddressDTO;
-import com.projeto.ReFood.model.Address;
-import com.projeto.ReFood.repository.RestaurantRepository;
-
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
-
 import com.projeto.ReFood.dto.RestaurantDTO;
+import com.projeto.ReFood.dto.RestaurantUpdateDTO;
 import com.projeto.ReFood.exception.GlobalExceptionHandler.CnpjAlreadyExistsException;
 import com.projeto.ReFood.exception.GlobalExceptionHandler.EmailAlreadyExistsException;
 import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
 import com.projeto.ReFood.model.EnumRestaurantCategory;
 import com.projeto.ReFood.model.Restaurant;
+import com.projeto.ReFood.repository.RestaurantRepository;
+import com.projeto.ReFood.security.JwtTokenProvider;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,6 +28,7 @@ public class RestaurantService {
     private final RestaurantRepository restaurantRepository;
     private final UtilityService utilityService;
     private final PasswordEncoder passwordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional(readOnly = true)
     public List<RestaurantDTO> getAllRestaurants() {
@@ -42,8 +40,9 @@ public class RestaurantService {
     }
 
     @Transactional(readOnly = true)
-    public RestaurantDTO getRestaurantById(Long restaurantId) {
-        return restaurantRepository.findById(restaurantId)
+    public RestaurantDTO getRestaurantById(String token) {
+        Long userId = jwtTokenProvider.extractUserId(token);
+        return restaurantRepository.findById(userId)
                 .map(this::convertToDTO)
                 .orElseThrow(() -> new NotFoundException());
     }
@@ -72,31 +71,29 @@ public class RestaurantService {
     }
 
     @Transactional
-    public RestaurantDTO updateRestaurant(Long restaurantId, @Valid RestaurantDTO restaurantDTO) {
-
-        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+    public RestaurantUpdateDTO updateRestaurant(String token, @Valid RestaurantUpdateDTO restaurantDTO) {
+        Long userId = jwtTokenProvider.extractUserId(token);
+        Restaurant restaurant = restaurantRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException());
 
-        if (!utilityService.isEmailUnique(restaurantDTO.email())) {
-            throw new EmailAlreadyExistsException();
-        }
+//        if (!utilityService.isEmailUnique(restaurantDTO.email())) {
+//            throw new EmailAlreadyExistsException();
+//        }
 
-        if (restaurantRepository.existsByCnpj(restaurantDTO.cnpj())) {
-            throw new CnpjAlreadyExistsException();
-        }
+//        if (restaurantRepository.existsByCnpj(restaurantDTO.cnpj())) {
+//            throw new CnpjAlreadyExistsException();
+//        }
 
         restaurant.setCnpj(restaurantDTO.cnpj());
-        restaurant.setEmail(restaurantDTO.email());
+        restaurant.setCategory(EnumRestaurantCategory.valueOf(restaurantDTO.category()));
         restaurant.setFantasy(restaurantDTO.fantasy());
-        restaurant.setPassword(passwordEncoder.encode(restaurantDTO.password()));
+        restaurant.setPhone(restaurantDTO.phone());
         restaurant.setUrlBanner(restaurantDTO.urlBanner());
         restaurant.setUrlLogo(restaurantDTO.urlLogo());
-        restaurant.setQuantityEvaluations(restaurantDTO.quantityEvaluations());
-        restaurant.setTotalEvaluations(restaurantDTO.totalEvaluations());
-        restaurant.setAverageRating(restaurantDTO.averageRating());
+        restaurant.setDescription(restaurantDTO.description());
 
         Restaurant updatedRestaurant = restaurantRepository.save(restaurant);
-        return convertToDTO(updatedRestaurant);
+        return convertToDTOUpdate(updatedRestaurant);
     }
 
     @Transactional
@@ -121,10 +118,24 @@ public class RestaurantService {
                 restaurant.getQuantityEvaluations(),
                 restaurant.getTotalEvaluations(),
                 restaurant.getAverageRating(),
+                restaurant.getDescription(),
                 null,
                 restaurant.getDateCreation(),
                 restaurant.getLastLogin()
         );
+    }
+
+    public RestaurantUpdateDTO convertToDTOUpdate(Restaurant restaurant) {
+        return new RestaurantUpdateDTO(
+                restaurant.getRestaurantId(),
+                restaurant.getFantasy(),
+                restaurant.getCnpj(),
+                restaurant.getCategory().toString(),
+                restaurant.getPhone(),
+                restaurant.getUrlBanner(),
+                restaurant.getUrlLogo(),
+                restaurant.getDescription()
+                );
     }
 
 
@@ -141,6 +152,7 @@ public class RestaurantService {
         restaurant.setUrlBanner(restaurantDTO.urlBanner());
         restaurant.setUrlLogo(restaurantDTO.urlLogo());
         restaurant.setQuantityEvaluations(restaurantDTO.quantityEvaluations());
+        restaurant.setDescription(restaurantDTO.description());
         restaurant.setTotalEvaluations(restaurantDTO.totalEvaluations());
         restaurant.setAverageRating(restaurantDTO.averageRating());
         return restaurant;

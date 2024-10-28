@@ -48,7 +48,10 @@ public record RestaurantDTO(
         @Max(value = 5, message = "A avaliação média deve ser no máximo 5.")
         float averageRating,
 
-        @NotNull(message = "Obrigatório")
+        @Min(value = 20, message = "A descrição deve ter no mínimo 20 caracteres")
+        String description,
+
+        @NotNull(message = "O endereço é obrigatório")
         @Valid()
         AddressDTO address,
 
