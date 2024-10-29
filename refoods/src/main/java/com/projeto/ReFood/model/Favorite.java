@@ -15,11 +15,6 @@ public class Favorite {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "favorite_id")
   private Long favoriteId;
-  
-  @NotNull(message = "A data de adição é obrigatória.")
-  @Temporal(TemporalType.TIMESTAMP) // Para armazenar data e hora
-  @Column(nullable = false)
-  private Date additionDate;
 
   @ManyToOne
   @JoinColumn(name = "user_id", nullable = false)
