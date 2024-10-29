@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 
 import com.projeto.ReFood.dto.GoogleDTO;
 import com.projeto.ReFood.dto.LoginResponse;
+import com.projeto.ReFood.exception.BadRequestException;
 import com.projeto.ReFood.exception.GlobalExceptionHandler.BadCredentialsException;
 import com.projeto.ReFood.exception.GlobalExceptionHandler.InternalServerErrorException;
 import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
@@ -79,19 +80,51 @@ public class AuthService {
     } catch (BadCredentialsException e) {
       throw new BadCredentialsException();
     } catch (Exception e) {
-      System.out.println("deu ruim2");
       throw new InternalServerErrorException();
     }
 
     boolean isUserUpdated = updateLastLoginForUserOrRestaurant(email);
-    System.out.println("isUserUpdated " + isUserUpdated);
 
     if (!isUserUpdated) {
       throw new NotFoundException();
     }
 
-      CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(email);
-      String jwt = jwtTokenProvider.generateToken(userDetails, userDetails.getId());
+    CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(email);
+
+    String role = userDetails.getAuthorities().stream().findFirst().get().getAuthority();
+    if (!role.equals("ROLE_USER")) {
+      throw new BadRequestException("Essa conta não é de usuário");
+    }
+
+    String jwt = jwtTokenProvider.generateToken(userDetails, userDetails.getId());
+
+    return ResponseEntity.ok(new LoginResponse(jwt, userDetails.getId(),
+        userDetails.getNome(), email));
+  }
+
+  public ResponseEntity<LoginResponse> authenticateRestaurant(String email, String password) {
+    try {
+      authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+    } catch (BadCredentialsException e) {
+      throw new BadCredentialsException();
+    } catch (Exception e) {
+      throw new InternalServerErrorException();
+    }
+
+    boolean isUserUpdated = updateLastLoginForUserOrRestaurant(email);
+
+    if (!isUserUpdated) {
+      throw new NotFoundException();
+    }
+
+    CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(email);
+
+    String role = userDetails.getAuthorities().stream().findFirst().get().getAuthority();
+    if (!role.equals("ROLE_RESTAURANT")) {
+      throw new BadRequestException("Essa conta não é de restaurante");
+    }
+    
+    String jwt = jwtTokenProvider.generateToken(userDetails, userDetails.getId());
 
     return ResponseEntity.ok(new LoginResponse(jwt, userDetails.getId(),
         userDetails.getNome(), email));

@@ -13,10 +13,10 @@ VALUES -- -- as senhas são 123456Bb*
 -- Inserindo dados na tabela tb_restaurants
 -- as senhas são 123456Bb*
 INSERT INTO tb_restaurants (cnpj, fantasy, email, password, date_creation, last_login, category, url_banner, url_logo, quantity_evaluations, total_evaluations, phone, description, average_rating) 
-VALUES ('12345678000195', 'Restaurante A', 'contato@restaurantea.com.br', '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', NOW(), NULL, 'RESTAURANTE', 'https://example.com/bannerA.jpg', 'https://example.com/logoA.jpg', 0, 0, '1234567890', 'Descrição do Restaurante A com mais de 20 caracteres.', 0.0);
+VALUES ('12345678000195', 'Restaurante A', 'restaurant1@example.com', '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', NOW(), NULL, 'RESTAURANTE', 'https://example.com/bannerA.jpg', 'https://example.com/logoA.jpg', 0, 0, '1234567890', 'Descrição do Restaurante A com mais de 20 caracteres.', 0.0);
 -- as senhas são 123456Bb*
 INSERT INTO tb_restaurants (cnpj, fantasy, email, password, date_creation, last_login, category, url_banner, url_logo, quantity_evaluations, total_evaluations, phone, description, average_rating) 
-VALUES ('98765432000100', 'Restaurante B', 'contato@restauranteb.com.br', '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', NOW(), NOW(), 'RESTAURANTE', 'https://example.com/bannerB.jpg', 'https://example.com/logoB.jpg', 5, 15, '0987654321', 'Descrição do Restaurante B com mais de 20 caracteres.', 4.5);
+VALUES ('98765432000100', 'Restaurante B', 'restaurant2@example.com', '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', NOW(), NOW(), 'RESTAURANTE', 'https://example.com/bannerB.jpg', 'https://example.com/logoB.jpg', 5, 15, '0987654321', 'Descrição do Restaurante B com mais de 20 caracteres.', 4.5);
 
 -- Inserindo dados na tabela tb_addresses
 INSERT INTO tb_addresses (address_type, cep, complement, district, is_standard, number, state, street, city, type, restaurant_id, user_id)
