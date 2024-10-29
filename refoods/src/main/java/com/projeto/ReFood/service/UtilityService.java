@@ -4,6 +4,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.function.Consumer;
 
+import com.projeto.ReFood.security.JwtTokenProvider;
 import org.springframework.stereotype.Service;
 
 import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
@@ -39,6 +40,7 @@ public class UtilityService {
   private final CardRepository cardRepository;
   private final ProductRepository productRepository;
   private final CartRepository cartRepository;
+  private final JwtTokenProvider jwtTokenProvider;
 
   public boolean isEmailUnique(String email) {
     return !userRepository.existsByEmail(email) && !restaurantRepository.existsByEmail(email);
