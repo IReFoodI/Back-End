@@ -1,8 +1,6 @@
 package com.projeto.ReFood.model;
 
-import com.projeto.ReFood.dto.AddressDTO;
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 

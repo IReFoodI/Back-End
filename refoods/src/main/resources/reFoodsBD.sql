@@ -127,6 +127,7 @@ CREATE TABLE "cards" (
   "number" varchar(16) NOT NULL,
   "validity" varchar(5) NOT NULL,
   "cvv" varchar(3) NOT NULL,
+  "holder_name" varchar(255) NOT NULL,
   "fk_id_user" int NOT NULL
 );
 

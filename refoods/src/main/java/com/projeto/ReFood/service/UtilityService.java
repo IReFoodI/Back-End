@@ -26,14 +26,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UtilityService {
 
-    private final UserRepository userRepository;
-    private final RestaurantRepository restaurantRepository;
-    private final TransactionRepository transactionRepository;
-    private final OrderRepository orderRepository;
-    private final AddressRepository addressRepository;
-    private final CardRepository cardRepository;
-    private final ProductRepository productRepository;
-    private final CartRepository cartRepository;
+  private final UserRepository userRepository;
+  private final RestaurantRepository restaurantRepository;
+  private final TransactionRepository transactionRepository;
+  private final OrderRepository orderRepository;
+  private final AddressRepository addressRepository;
+  private final CardRepository cardRepository;
+  private final ProductRepository productRepository;
+  private final CartRepository cartRepository;
 
     public boolean isEmailUnique(String email) {
         return !userRepository.existsByEmail(email) && !restaurantRepository.existsByEmail(email);

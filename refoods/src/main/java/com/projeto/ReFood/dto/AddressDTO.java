@@ -1,13 +1,10 @@
 package com.projeto.ReFood.dto;
 
-import com.projeto.ReFood.model.Address;
 import com.projeto.ReFood.model.EnumAddressType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-
-import java.util.Set;
 
 
 public record AddressDTO(
