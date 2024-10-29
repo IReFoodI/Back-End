@@ -15,17 +15,18 @@ public class FirebaseController {
   @Autowired
   private FirebaseService firebaseService;
 
-  @PostMapping("/upload")
-  public ResponseEntity<String> uploadImage(@RequestParam("imageFile") MultipartFile imageFile,
-      @RequestParam("imageName") String imageName) {
-    try {
-      firebaseService.upload(imageFile, imageName);
-      return ResponseEntity.ok("Upload successful!");
-    } catch (IOException e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-          .body("Failed to upload image: " + e.getMessage());
-    }
-  }
+  // @PostMapping("/upload")
+  // public ResponseEntity<String> uploadImage(@RequestParam("imageFile")
+  // MultipartFile imageFile,
+  // @RequestParam("imageName") String imageName) {
+  // try {
+  // firebaseService.upload(imageFile, imageName);
+  // return ResponseEntity.ok("Upload successful!");
+  // } catch (IOException e) {
+  // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+  // .body("Failed to upload image: " + e.getMessage());
+  // }
+  // }
 
   @GetMapping("/image/{imageName}")
   public ResponseEntity<String> getImageUrl(@PathVariable String imageName) {
@@ -35,4 +36,15 @@ public class FirebaseController {
     }
     return ResponseEntity.notFound().build();
   }
+
+  @PostMapping("/upload")
+  public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
+    try {
+      String imageUrl = firebaseService.upload(file);
+      return new ResponseEntity<>(imageUrl, HttpStatus.OK);
+    } catch (IOException e) {
+      return new ResponseEntity<>("Error uploading image: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
 }

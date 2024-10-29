@@ -12,6 +12,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.projeto.ReFood.dto.FavoriteDTO;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/favorites")
@@ -20,10 +21,22 @@ public class FavoriteController {
   @Autowired
   private FavoriteService favoriteService;
 
+  @GetMapping
+  public ResponseEntity<List<FavoriteDTO>> getAllFavorites() {
+    List<FavoriteDTO> favorites = favoriteService.getAllFavorites();
+    return ResponseEntity.ok(favorites);
+  }
+
   @GetMapping("/{favoriteId}")
   public ResponseEntity<FavoriteDTO> getFavoriteById(@PathVariable Long favoriteId) {
     FavoriteDTO favoriteDTO = favoriteService.getFavoriteById(favoriteId);
     return ResponseEntity.ok(favoriteDTO);
+  }
+
+  @GetMapping("/user/{userId}")
+  public ResponseEntity<List<FavoriteDTO>> getFavoritesByUserId(@PathVariable Long userId) {
+    List<FavoriteDTO> favorites = favoriteService.getFavoriteByUserId(userId);
+    return ResponseEntity.ok(favorites);
   }
 
   @PostMapping
