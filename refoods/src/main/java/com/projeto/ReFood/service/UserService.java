@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,14 +41,17 @@ public class UserService {
 
   @Transactional(readOnly = true)
   public UserDTO getUserById(Long userId) {
-    return userRepository.findById(userId)
+    System.out.println(userId);
+    Optional<User> response = userRepository.findById(userId);
+    System.out.println(response);
+    UserDTO dto = userRepository.findById(userId)
         .map(this::convertToDTO)
         .orElseThrow(() -> new NotFoundException());
+    return dto;
   }
 
   @Transactional(readOnly = true)
   public UserDTO getUserInfoByToken(String token) {
-    System.out.println("tokenaaaaaaaaa " + token);
     Long userId = jwtTokenProvider.extractUserId(token);
 
     User user = userRepository.findById(userId)
@@ -58,7 +62,7 @@ public class UserService {
         user.getName(),
         user.getEmail(),
         user.getPhone(),
-        null,  // SENHA...
+        null, // SENHA...
         user.getDateCreation(),
         user.getLastLogin());
   }

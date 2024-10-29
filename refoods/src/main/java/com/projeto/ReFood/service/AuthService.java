@@ -79,10 +79,12 @@ public class AuthService {
     } catch (BadCredentialsException e) {
       throw new BadCredentialsException();
     } catch (Exception e) {
+      System.out.println("deu ruim2");
       throw new InternalServerErrorException();
     }
 
     boolean isUserUpdated = updateLastLoginForUserOrRestaurant(email);
+    System.out.println("isUserUpdated " + isUserUpdated);
 
     if (!isUserUpdated) {
       throw new NotFoundException();
