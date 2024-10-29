@@ -24,7 +24,8 @@ import java.util.stream.Collectors;
 @Service
 @Validated
 @RequiredArgsConstructor
-public class RestaurantService {
+public class
+RestaurantService {
 
   private final RestaurantRepository restaurantRepository;
   private final UtilityService utilityService;

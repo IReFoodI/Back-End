@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size;
 public record AddressDTO(
         Long addressId,
 
-    @NotBlank(message = "O CEP é obrigatório.")
+        @NotBlank(message = "O CEP é obrigatório.")
     String cep,
 
         @NotBlank(message = "O estado é obrigatório.")
@@ -34,8 +34,8 @@ public record AddressDTO(
 
         String complement, // opcional
 
-    @NotNull(message = "O tipo de endereço é obrigatório.")
-    String addressType,
+        @NotNull(message = "O tipo de endereço é obrigatório.") @NotNull(message = "O tipo de endereço é obrigatório.")
+        EnumAddressType addressType,
 
         boolean isStandard, // default = false
 
