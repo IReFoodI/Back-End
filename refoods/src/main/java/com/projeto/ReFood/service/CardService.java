@@ -91,7 +91,7 @@ public class CardService {
 
   @Transactional
   public void deleteCard(String token, Long cardId) {
-    Long id = jwtTokenProvider.extractUserId(token);
+    //Long id = jwtTokenProvider.extractUserId(token);
     UserInfo currentUserInfo = authService.getCurrentUserInfo();
     if (currentUserInfo.getId() == null) {
       throw new GlobalExceptionHandler.ForbiddenException();

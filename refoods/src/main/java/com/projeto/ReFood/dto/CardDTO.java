@@ -1,7 +1,5 @@
 package com.projeto.ReFood.dto;
 
-import java.util.Set;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;

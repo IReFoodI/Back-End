@@ -25,6 +25,8 @@ CREATE TABLE "restaurants" (
   "date_creation" date NOT NULL,
   "url_banner" varchar(255),
   "url_logo" varchar(255),
+  "description" varchar(255),
+  "category" varchar(255) NOT NULL,
   "quantity_evaluations" int DEFAULT 0,
   "total_evaluations" int DEFAULT 0,
   "average_rating" decimal(1,1) DEFAULT 0

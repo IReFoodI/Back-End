@@ -1,6 +1,5 @@
 package com.projeto.ReFood.controller;
 
-import com.projeto.ReFood.dto.RestaurantDTO;
 import com.projeto.ReFood.service.FavoriteService;
 
 import jakarta.validation.Valid;

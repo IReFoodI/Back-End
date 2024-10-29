@@ -1,7 +1,5 @@
 package com.projeto.ReFood.dto;
 
-import java.util.Date;
-
 import jakarta.validation.constraints.NotNull;
 
 public record FavoriteDTO(
