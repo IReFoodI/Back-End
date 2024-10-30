@@ -79,8 +79,16 @@ RestaurantService {
 
     utilityService.addAddressToRestaurant(restaurant, restaurantDTO.address());
 
+        Restaurant restaurant = convertToEntity(restaurantDTO);
+        restaurant.setPassword(passwordEncoder.encode(restaurant.getPassword()));
+        restaurant.setDateCreation(LocalDateTime.now());
+        restaurant.setUrlBanner("https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/644020ab-f6c8-4871-be38-f1e70ccbabd4_banner.png?alt=media");
+        restaurant.setUrlLogo("https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/2234dc33-7c9f-42c5-a1e4-57e9f96ebb3e_perfil.png?alt=media");
+        restaurant.setLastLogin(null);
+
     return convertToDTO(restaurant);
   }
+
 
   @Transactional
   public RestaurantUpdateDTO updateRestaurant(String token, @Valid RestaurantUpdateDTO restaurantDTO) {
