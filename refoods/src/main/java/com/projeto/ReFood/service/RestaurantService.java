@@ -48,7 +48,7 @@ public class RestaurantService {
   }
 
   @Transactional(readOnly = true)
-  public RestaurantDTO getUserInfoByToken(String token) {
+  public RestaurantDTO getRestaurantInfoByToken(String token) {
     Long userId = jwtTokenProvider.extractUserId(token);
 
     Restaurant restaurant = restaurantRepository.findById(userId)

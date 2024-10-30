@@ -38,7 +38,6 @@ public class TokenController {
     @SuppressWarnings("unchecked")
     ArrayList<String> roles = jwtTokenProvider.extractClaim(token, claims -> claims.get("roles", ArrayList.class));
     String role = roles.get(0);
-    //Claims tokenClaims = jwtTokenProvider.extractClaim(token, claims -> claims);
     if (role.equals("ROLE_USER")) {
       try {
         UserDTO userDTO = userService.getUserInfoByToken(token);
@@ -50,7 +49,7 @@ public class TokenController {
       }
     } else if (role.equals("ROLE_RESTAURANT")) {
       try {
-        RestaurantDTO restaurantDTO = restaurantService.getUserInfoByToken(token);
+        RestaurantDTO restaurantDTO = restaurantService.getRestaurantInfoByToken(token);
         return ResponseEntity.ok(restaurantDTO);
       } catch (InvalidBearerTokenException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Restaurante não autenticado");
