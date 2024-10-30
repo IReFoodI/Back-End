@@ -3,7 +3,6 @@ package com.projeto.ReFood.dto;
 import com.projeto.ReFood.model.EnumAddressType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 
@@ -11,8 +10,7 @@ public record AddressDTO(
         Long addressId,
 
         @NotBlank(message = "O CEP é obrigatório.")
-        @Pattern(regexp = "\\d{8}", message = "O formato do CEP deve ser 12345678.")
-        String cep,
+    String cep,
 
         @NotBlank(message = "O estado é obrigatório.")
         @Size(min = 2, max = 2, message = "O estado deve ter exatamente 2 letras.")
@@ -36,7 +34,7 @@ public record AddressDTO(
 
         String complement, // opcional
 
-        @NotNull(message = "O tipo de endereço é obrigatório.")
+        @NotNull(message = "O tipo de endereço é obrigatório.") @NotNull(message = "O tipo de endereço é obrigatório.")
         EnumAddressType addressType,
 
         boolean isStandard, // default = false

@@ -5,13 +5,21 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.Set;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "tb_users")
 public class User {
 
@@ -48,6 +56,7 @@ public class User {
   private LocalDateTime lastLogin;
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  @EqualsAndHashCode.Exclude
   private Set<Address> userAddresses;
 
   @OneToMany(mappedBy = "user")
@@ -60,6 +69,7 @@ public class User {
   private Set<Notification> userNotifications;
 
   @OneToMany(mappedBy = "user")
+  @EqualsAndHashCode.Exclude
   private Set<Order> userOrders;
 
   @OneToMany(mappedBy = "user")

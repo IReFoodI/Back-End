@@ -20,9 +20,14 @@ public class AuthController {
     this.authService = authService;
   }
 
-  @PostMapping("/login")
-  public ResponseEntity<LoginResponse> createAuthenticationToken(@RequestBody LoginRequest loginRequest) {
+  @PostMapping("user/login")
+  public ResponseEntity<LoginResponse> createUserAuthenticationToken(@RequestBody LoginRequest loginRequest) {
     return authService.authenticateUser(loginRequest.email(), loginRequest.password());
+  }
+  
+  @PostMapping("restaurant/login")
+  public ResponseEntity<LoginResponse> createRestaurantAuthenticationToken(@RequestBody LoginRequest loginRequest) {
+    return authService.authenticateRestaurant(loginRequest.email(), loginRequest.password());
   }
 
   @PostMapping("/google/success")

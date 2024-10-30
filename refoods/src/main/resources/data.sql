@@ -11,12 +11,13 @@ VALUES -- -- as senhas são 123456Bb*
     (NOW(), 'user2@example.com', NOW(), 'User Two', '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', '4445556666' );
 
 -- Inserindo dados na tabela tb_restaurants
--- as senhas são 123456Bb*
-INSERT INTO tb_restaurants (cnpj, fantasy, email, password, date_creation, last_login, category, url_banner, url_logo, quantity_evaluations, total_evaluations, phone, description, average_rating) 
-VALUES ('12345678000195', 'Restaurante A', 'contato@restaurantea.com.br', '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', NOW(), NULL, 'RESTAURANTE', 'https://example.com/bannerA.jpg', 'https://example.com/logoA.jpg', 0, 0, '1234567890', 'Descrição do Restaurante A com mais de 20 caracteres.', 0.0);
--- as senhas são 123456Bb*
-INSERT INTO tb_restaurants (cnpj, fantasy, email, password, date_creation, last_login, category, url_banner, url_logo, quantity_evaluations, total_evaluations, phone, description, average_rating) 
-VALUES ('98765432000100', 'Restaurante B', 'contato@restauranteb.com.br', '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', NOW(), NOW(), 'RESTAURANTE', 'https://example.com/bannerB.jpg', 'https://example.com/logoB.jpg', 5, 15, '0987654321', 'Descrição do Restaurante B com mais de 20 caracteres.', 4.5);
+INSERT INTO tb_restaurants (
+    average_rating, category, cnpj, date_creation, email, fantasy,
+    last_login, password, quantity_evaluations, total_evaluations,
+    url_banner, url_logo
+)VALUES -- -- as senhas são 123456Bb*
+    (4.5, 'RESTAURANTE', '12345678000195', NOW(), 'restaurant1@example.com', 'Restaurant One', NOW(), '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', 10, 50, 'banner1.jpg', 'logo1.jpg'),
+    (4.0, 'RESTAURANTE', '98765432000100', NOW(), 'restaurant2@example.com', 'Restaurant Two', NOW(), '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', 20, 100, 'banner2.jpg', 'logo2.jpg');
 
 -- Inserindo dados na tabela tb_addresses
 INSERT INTO tb_addresses (address_type, cep, complement, district, is_standard, number, state, street, city, type, restaurant_id, user_id)

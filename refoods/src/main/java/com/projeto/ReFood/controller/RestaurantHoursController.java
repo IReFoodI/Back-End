@@ -35,19 +35,24 @@ public class RestaurantHoursController {
     return ResponseEntity.ok(hours);
   }
 
-    @GetMapping("/{hoursId}")
-    public ResponseEntity<RestaurantHoursDTO> getHoursById(@PathVariable Long hoursId)  {
-        RestaurantHoursDTO hoursDTO = restaurantHoursService.getHoursById(hoursId);
-        return ResponseEntity.ok(hoursDTO);
-    }
+  @GetMapping("/{hoursId}")
+  public ResponseEntity<RestaurantHoursDTO> getHoursById(@PathVariable Long hoursId)  {
+      RestaurantHoursDTO hoursDTO = restaurantHoursService.getHoursById(hoursId);
+      return ResponseEntity.ok(hoursDTO);
+  }
 
-    @GetMapping("/today")
-    public ResponseEntity<List<RestaurantHoursDTO>> getTodayHours() {
-        EnumDayOfWeek today = EnumDayOfWeek.valueOf(java.time.LocalDate.now().getDayOfWeek().name());
-        List<RestaurantHoursDTO> hours = restaurantHoursService.getHoursByDay(today);
-        return ResponseEntity.ok(hours);
-    }
+  @GetMapping("/today")
+  public ResponseEntity<List<RestaurantHoursDTO>> getTodayHours() {
+      EnumDayOfWeek today = EnumDayOfWeek.valueOf(java.time.LocalDate.now().getDayOfWeek().name());
+      List<RestaurantHoursDTO> hours = restaurantHoursService.getHoursByDay(today);
+      return ResponseEntity.ok(hours);
+  }
 
+  @GetMapping("/restaurant/{restaurantId}")
+  public ResponseEntity<List<RestaurantHoursDTO>> getRestaurantHours(@PathVariable Long restaurantId) {
+    List<RestaurantHoursDTO> hours = restaurantHoursService.getHoursByRestaurant(restaurantId);
+    return ResponseEntity.ok(hours);
+  }
 
   @PostMapping
   public ResponseEntity<RestaurantHoursDTO> createHours(@Valid @RequestBody RestaurantHoursDTO hoursDTO) {

@@ -3,12 +3,17 @@ package com.projeto.ReFood.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "tb_addresses")
 public class Address {
 
@@ -18,7 +23,6 @@ public class Address {
   private Long addressId;
 
   @NotBlank(message = "O CEP é obrigatório.")
-  @Pattern(regexp = "\\d{8}", message = "O formato do CEP deve ser 12345678.")
   @Column(nullable = false)
   private String cep;
 
@@ -51,6 +55,7 @@ public class Address {
   @Column
   private String complement;
 
+  @NotNull(message = "O tipo de endereço é obrigatório.")
   @NotNull(message = "O tipo de endereço é obrigatório.")
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)

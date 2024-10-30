@@ -159,4 +159,15 @@ public class GlobalExceptionHandler {
       errors.addAll(fieldMessages);
     }
   }
+
+  public static class BadRequestException extends RuntimeException {
+    public BadRequestException(String message) {
+      super(message);
+    }
+  }
+
+  @ExceptionHandler(BadRequestException.class)
+  public ResponseEntity<CustomError> handleBadRequest(HttpServletRequest request, BadRequestException ex) {
+    return createErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), request);
+  }
 }

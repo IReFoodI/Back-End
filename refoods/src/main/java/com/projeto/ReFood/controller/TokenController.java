@@ -1,10 +1,11 @@
 package com.projeto.ReFood.controller;
 
+import com.projeto.ReFood.dto.RestaurantDTO;
 import com.projeto.ReFood.dto.UserDTO;
 import com.projeto.ReFood.exception.GlobalExceptionHandler;
 import com.projeto.ReFood.security.JwtTokenProvider;
+import com.projeto.ReFood.service.RestaurantService;
 import com.projeto.ReFood.service.UserService;
-// import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,9 @@ public class TokenController {
   private UserService userService;
 
   @Autowired
+  private RestaurantService restaurantService;
+
+  @Autowired
   private JwtTokenProvider jwtTokenProvider;
 
   @GetMapping("/info")
@@ -34,7 +38,6 @@ public class TokenController {
     @SuppressWarnings("unchecked")
     ArrayList<String> roles = jwtTokenProvider.extractClaim(token, claims -> claims.get("roles", ArrayList.class));
     String role = roles.get(0);
-    //Claims tokenClaims = jwtTokenProvider.extractClaim(token, claims -> claims);
     if (role.equals("ROLE_USER")) {
       try {
         UserDTO userDTO = userService.getUserInfoByToken(token);
@@ -45,8 +48,14 @@ public class TokenController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
       }
     } else if (role.equals("ROLE_RESTAURANT")) {
-//    Fazer a parte de manter logado pro restaurante
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Restaurante não encontrado");
+      try {
+        RestaurantDTO restaurantDTO = restaurantService.getRestaurantInfoByToken(token);
+        return ResponseEntity.ok(restaurantDTO);
+      } catch (InvalidBearerTokenException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Restaurante não autenticado");
+      } catch (GlobalExceptionHandler.NotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Restaurante não encontrado");
+      }
     }
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário ou restaurante não encontrado");
   }
