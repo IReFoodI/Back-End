@@ -25,6 +25,8 @@ CREATE TABLE "restaurants" (
   "date_creation" date NOT NULL,
   "url_banner" varchar(255),
   "url_logo" varchar(255),
+  "description" varchar(255),
+  "category" varchar(255) NOT NULL,
   "quantity_evaluations" int DEFAULT 0,
   "total_evaluations" int DEFAULT 0,
   "average_rating" decimal(1,1) DEFAULT 0
@@ -42,9 +44,11 @@ CREATE TABLE "addresses" (
   "cep" varchar(9) NOT NULL,
   "state" varchar(2) NOT NULL,
   "district" varchar(255) NOT NULL,
+  "city" varchar(255) NOT NULL,
   "street" varchar(255) NOT NULL,
   "number" varchar(255) NOT NULL,
   "complement" text,
+  "type" varchar(255) NOT NULL,
   "address_type" varchar(255) NOT NULL,
   "standard" boolean DEFAULT false,
   "fk_id_user" int,
@@ -123,6 +127,7 @@ CREATE TABLE "cards" (
   "number" varchar(16) NOT NULL,
   "validity" varchar(5) NOT NULL,
   "cvv" varchar(3) NOT NULL,
+  "holder_name" varchar(255) NOT NULL,
   "fk_id_user" int NOT NULL
 );
 

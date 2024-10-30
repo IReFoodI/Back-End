@@ -1,12 +1,7 @@
 package com.projeto.ReFood.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -18,7 +13,7 @@ import java.util.Set;
 @Table(name = "tb_restaurants")
 public class Restaurant {
 
-  @Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "restaurant_id")
     private Long restaurantId;
@@ -40,7 +35,7 @@ public class Restaurant {
     private String email;
 
     @NotBlank(message = "Senha não pode estar vazia.")
-    @Size(min = 6, message = "Senha deve ter no mínimo 6 caracteres.")
+    @Size(min = 8, message = "Senha deve ter no mínimo 8 caracteres.")
     @Column(nullable = false)
     private String password;
 
@@ -68,6 +63,14 @@ public class Restaurant {
     @Min(value = 0, message = "O total de avaliações deve ser no mínimo 0.")
     @Column(nullable = false)
     private int totalEvaluations = 0;
+
+    @NotBlank(message = "Telefone não pode estar vazio.")
+    @Pattern(regexp = "\\d{10,15}", message = "O telefone deve conter entre 10 e 15 dígitos.")
+    @Column(nullable = false,length = 15)
+    private String phone;
+
+    @Size(min = 20, message = "A descrição deve ter no mínimo 20 caracteres")
+    String description;
 
     @Min(value = 0, message = "A avaliação média deve ser no mínimo 0.")
     @Max(value = 5, message = "A avaliação média deve ser no máximo 5.")

@@ -11,9 +11,8 @@ public record ContactDTO(
     @Size(max = 255, message = "A descrição não pode ter mais de 255 caracteres.") 
     String description,
 
-    @NotBlank(message = "O telefone é obrigatório.") 
-    @Pattern(regexp = "\\(?\\d{2}\\)?[\\s-]?\\d{4,5}-?\\d{4}", 
-    message = "O telefone deve estar no formato correto (ex: (XX) XXXX-XXXX ou (XX) XXXXX-XXXX).") 
+    @NotBlank(message = "O telefone é obrigatório.")
+    @Pattern(regexp = "\\d{11}", message = "Telefone deve conter exatamente 11 dígitos.")
     String phone,
 
     Long restaurantId) {

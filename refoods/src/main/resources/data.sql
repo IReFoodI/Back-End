@@ -6,21 +6,23 @@
 
 -- Inserindo dados na tabela tb_users
 INSERT INTO tb_users (date_creation, email, last_login, name, password, phone)
-VALUES -- -- as senhas são 123456
-    (NOW(), 'user1@example.com', NOW(), 'User One', '$2y$10$p1IXPiQ29t1mUit/msZV3OY7Dpz2voS6pK4TBQzPEcVC6QbG6cWhe', '1112223333' ),
-    (NOW(), 'user2@example.com', NOW(), 'User Two', '$2y$10$p1IXPiQ29t1mUit/msZV3OY7Dpz2voS6pK4TBQzPEcVC6QbG6cWhe', '4445556666' );
+VALUES -- -- as senhas são 123456Bb*
+    (NOW(), 'user1@example.com', NOW(), 'User One', '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', '1112223333' ),
+    (NOW(), 'user2@example.com', NOW(), 'User Two', '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', '4445556666' );
 
 -- Inserindo dados na tabela tb_restaurants
-INSERT INTO tb_restaurants (average_rating,category, cnpj, date_creation, email, fantasy, last_login, password, quantity_evaluations, total_evaluations, url_banner, url_logo)
-VALUES -- -- as senhas são 123456
-    (4.5, 'RESTAURANTE', '12345678000195', NOW(), 'restaurant1@example.com', 'Restaurant One', NOW(), '$2y$10$p1IXPiQ29t1mUit/msZV3OY7Dpz2voS6pK4TBQzPEcVC6QbG6cWhe', 10, 50, 'http://localhost:8080/images/banner.png', 'http://localhost:8080/images/logo.png'),
-    (4.0, 'RESTAURANTE', '98765432000100', NOW(), 'restaurant2@example.com', 'Restaurant Two', NOW(), '$2y$10$p1IXPiQ29t1mUit/msZV3OY7Dpz2voS6pK4TBQzPEcVC6QbG6cWhe', 20, 100, 'http://localhost:8080/images/banner.png', 'http://localhost:8080/images/logo.png');
+-- as senhas são 123456Bb*
+INSERT INTO tb_restaurants (cnpj, fantasy, email, password, date_creation, last_login, category, url_banner, url_logo, quantity_evaluations, total_evaluations, phone, description, average_rating) 
+VALUES ('12345678000195', 'Restaurante A', 'restaurant1@example.com', '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', NOW(), NULL, 'RESTAURANTE', 'https://example.com/bannerA.jpg', 'https://example.com/logoA.jpg', 0, 0, '1234567890', 'Descrição do Restaurante A com mais de 20 caracteres.', 0.0);
+-- as senhas são 123456Bb*
+INSERT INTO tb_restaurants (cnpj, fantasy, email, password, date_creation, last_login, category, url_banner, url_logo, quantity_evaluations, total_evaluations, phone, description, average_rating) 
+VALUES ('98765432000100', 'Restaurante B', 'restaurant2@example.com', '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', NOW(), NOW(), 'RESTAURANTE', 'https://example.com/bannerB.jpg', 'https://example.com/logoB.jpg', 5, 15, '0987654321', 'Descrição do Restaurante B com mais de 20 caracteres.', 4.5);
 
 -- Inserindo dados na tabela tb_addresses
-INSERT INTO tb_addresses (address_type, cep, complement, district, is_standard, number, state, street, restaurant_id, user_id)
-VALUES 
-    ('RESTAURANT', '12345678', 'Apto 101', 'Centro', TRUE, '123', 'SP', 'Rua A', 1, NULL),
-    ('USER', '87654321', 'Apto 202', 'Jardins', FALSE, '456', 'SP', 'Rua B', NULL, 2);
+INSERT INTO tb_addresses (address_type, cep, complement, district, is_standard, number, state, street, city, type, restaurant_id, user_id)
+VALUES
+    ('RESTAURANT', '12345678', 'Apto 101', 'Centro', TRUE, '123', 'SP', 'Rua A', 'Aurora do Pará', 'Casa', 1, NULL ),
+    ('USER', '87654321', 'Apto 202', 'Jardins', TRUE, '456', 'SP', 'Rua B', 'Capanema', 'Trabalho', NULL, 2);
 
 -- Inserindo dados na tabela tb_cards
 INSERT INTO tb_cards (cpf, cvv, number, validity, holder_name, user_id) VALUES 
@@ -76,10 +78,10 @@ VALUES
     ('Nice service', NOW(), 4, 2, 2);
 
 -- Inserindo dados na tabela tb_favorites
-INSERT INTO tb_favorites (addition_date, restaurant_id, user_id)
+INSERT INTO tb_favorites (restaurant_id, user_id)
 VALUES 
-    (NOW(), 1, 1),
-    (NOW(), 2, 2);
+    (1, 1),
+    (2, 2);
 
 -- Inserindo dados na tabela tb_historical_orders
 INSERT INTO tb_historical_orders (date_mod, order_status, order_id, restaurant_id, user_id) 
