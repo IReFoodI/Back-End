@@ -107,7 +107,7 @@ public class AddressController {
       @ApiResponse(responseCode = "404", description = "Endereço ou usuário não encontrado"),
       @ApiResponse(responseCode = "401", description = "Token de autorização inválido ou não fornecido")
   })
-  @PreAuthorize("hasAnyRole('ROLE_USER')")
+  @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_RESTAURANT')")
   @PatchMapping("/{addressId}")
   public ResponseEntity<Void> updatePartialAddress(@RequestHeader("Authorization") String token,
       @PathVariable Long addressId)
@@ -138,7 +138,7 @@ public class AddressController {
       @ApiResponse(responseCode = "200", description = "Endereços retornados com sucesso"),
       @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
   })
-  @PreAuthorize("hasAnyRole('ROLE_USER')")
+  @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_RESTAURANT')")
   @GetMapping("/user")
   public ResponseEntity<List<AddressDTO>> getAddressByUserId(@RequestHeader("Authorization") String token)
       throws NotFoundException {
@@ -154,7 +154,7 @@ public class AddressController {
       @ApiResponse(responseCode = "404", description = "Endereço ou usuário não encontrado"),
       @ApiResponse(responseCode = "401", description = "Token de autorização inválido ou não fornecido")
   })
-  @PreAuthorize("hasAnyRole('ROLE_USER')")
+  @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_RESTAURANT')")
   @GetMapping("/me/{addressId}")
   public ResponseEntity<AddressDTO> getAddressByUserToken(@RequestHeader("Authorization") String token,
       @PathVariable Long addressId) throws NotFoundException {
@@ -165,7 +165,7 @@ public class AddressController {
   @Operation(
     summary = "Obtém o endereço padrão do usuário", 
     description = "Retorna o endereço padrão associado ao usuário autenticado, usando o token de autorização fornecido. O acesso a este endpoint é restrito a usuários com a função ROLE_USER.")
-  @PreAuthorize("hasAnyRole('ROLE_USER')")
+  @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_RESTAURANT')")
   @GetMapping("/default")
   public ResponseEntity<AddressDTO> getAddressDefault(@RequestHeader("Authorization") String token)
       throws NotFoundException {
