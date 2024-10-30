@@ -91,10 +91,18 @@ public class RestaurantHoursService {
         return hours;
     }
 
+    @Transactional
     public List<RestaurantHoursDTO> getHoursByDay(EnumDayOfWeek day) {
                 return restaurantHoursRepository.findByDayOfWeek(day).stream()
                 .map(this::convertToDTO)
                 .toList();
     }
+
+  @Transactional(readOnly = true)
+  public List<RestaurantHoursDTO> getHoursByRestaurant(Long restaurantId) {
+    return restaurantHoursRepository.findByRestaurantId(restaurantId).stream()
+            .map(this::convertToDTO)
+            .toList();
+  }
 
 }
