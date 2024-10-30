@@ -20,6 +20,7 @@ import com.projeto.ReFood.model.User;
 import com.projeto.ReFood.model.UserInfo;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -45,12 +46,22 @@ public class AddressService {
   @Transactional(readOnly = true)
   public List<AddressDTO> getAddressesByUserId(String token) {
     Long id = jwtTokenProvider.extractUserId(token);
-
-    return addressRepository
-        .findAddressesByUserId(id)
-        .stream()
-        .map(this::convertToDTO)
-        .collect(Collectors.toList());
+    String role = jwtTokenProvider.extractUserRoles(token).toString();
+    if(Objects.equals(role, "[ROLE_USER]")) {
+      return addressRepository
+              .findAddressesByUserId(id)
+              .stream()
+              .map(this::convertToDTO)
+              .collect(Collectors.toList());
+    }
+    if(Objects.equals(role, "[ROLE_RESTAURANT]")) {
+      return addressRepository
+              .findAddressesByRestaurantId(id)
+              .stream()
+              .map(this::convertToDTO)
+              .collect(Collectors.toList());
+    }
+    return null;
   }
 
   @Transactional(readOnly = true)
@@ -136,7 +147,7 @@ public class AddressService {
   public AddressDTO createAddress(@Valid AddressDTO addressDTO, String token, User user, Restaurant restaurant,
       Order order) {
     Long id = jwtTokenProvider.extractUserId(token);
-
+    String role = jwtTokenProvider.extractUserRoles(token).toString();
     Address address = new Address();
 
     address.setCep(addressDTO.cep());
@@ -155,12 +166,23 @@ public class AddressService {
       address.setStandard(true);
     }
 
-    if (addressDTO.userId() != null || id != null) {
-      Long userId = addressDTO.userId();
-      if (userId == null) {
-        userId = id;
+    if(Objects.equals(role, "[ROLE_USER]")) {
+      if (addressDTO.userId() != null || id != null) {
+        Long userId = addressDTO.userId();
+        if (userId == null) {
+          userId = id;
+        }
+        utilityService.associateUser(address::setUser, userId);
       }
-      utilityService.associateUser(address::setUser, userId);
+    } else
+      if(Objects.equals(role, "[ROLE_RESTAURANT]")) {
+      if (addressDTO.restaurantId() != null || id != null) {
+        Long restaurantId = addressDTO.restaurantId();
+        if (restaurantId == null) {
+          restaurantId = id;
+        }
+        utilityService.associateRestaurant(address::setRestaurant, restaurantId);
+      }
     }
     if (user != null) {
       address.setUser(user);
@@ -178,10 +200,19 @@ public class AddressService {
   @Transactional
   public AddressDTO updateAddress(String token, Long addressId, @Valid AddressDTO addressDTO) {
     Long id = jwtTokenProvider.extractUserId(token);
-    Address address = addressRepository.findByIdAndUserId(addressId, id)
-        .orElseThrow(() -> {
-          return new NotFoundException();
-        });
+    String role = jwtTokenProvider.extractUserRoles(token).toString();
+    Address address;
+    if(Objects.equals(role, "[ROLE_USER]")) {
+      address = addressRepository.findByIdAndUserId(addressId, id)
+              .orElseThrow(() -> {
+                return new NotFoundException();
+              });
+    } else {
+      address = addressRepository.findByIdAndRestaurantId(addressId, id)
+                .orElseThrow(() -> {
+              return new NotFoundException();
+            });
+    }
 
     address.setStreet(addressDTO.street());
     address.setNumber(addressDTO.number());
