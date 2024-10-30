@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+
 public record AddressDTO(
         Long addressId,
 
@@ -19,7 +20,6 @@ public record AddressDTO(
         @Size(min = 2, message = "A cidade deve ter no mínimo 2 letras.")
         String city,
 
-        @NotBlank(message = "O tipo é obrigatória.")
         @Size(min = 2, message = "O tipo deve ter no mínimo 2 letras.")
         String type,
 
@@ -43,4 +43,21 @@ public record AddressDTO(
         Long restaurantId,
         Long associatedOrderId
 ) {
+//    public static AddressDTO fromEntity(Address address) {
+//        return new AddressDTO(
+//                address.getAddressId(),
+//                address.getCep(),
+//                address.getState(),
+//                address.getCity(),
+//                address.getType(),
+//                address.getDistrict(),
+//                address.getStreet(),
+//                address.getNumber(),
+//                address.getComplement(),
+//                address.getAddressType(),
+//                address.isStandard(),
+//                address.getUser() != null ? address.getUser().getUserId() : null,
+//                address.getRestaurant() != null ? address.getRestaurant().getRestaurantId() : null,
+//                address.getAssociatedOrder() != null ? address.getAssociatedOrder().getOrderId() : null);
+//    }
 }

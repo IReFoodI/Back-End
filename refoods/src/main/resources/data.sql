@@ -21,7 +21,7 @@ INSERT INTO tb_restaurants (
 
 -- Inserindo dados na tabela tb_addresses
 INSERT INTO tb_addresses (address_type, cep, complement, district, is_standard, number, state, street, city, type, restaurant_id, user_id)
-VALUES 
+VALUES
     ('RESTAURANT', '12345678', 'Apto 101', 'Centro', TRUE, '123', 'SP', 'Rua A', 'Aurora do Pará', 'Casa', 1, NULL ),
     ('USER', '87654321', 'Apto 202', 'Jardins', TRUE, '456', 'SP', 'Rua B', 'Capanema', 'Trabalho', NULL, 2);
 
@@ -79,10 +79,10 @@ VALUES
     ('Nice service', NOW(), 4, 2, 2);
 
 -- Inserindo dados na tabela tb_favorites
-INSERT INTO tb_favorites (addition_date, restaurant_id, user_id)
+INSERT INTO tb_favorites (restaurant_id, user_id)
 VALUES 
-    (NOW(), 1, 1),
-    (NOW(), 2, 2);
+    (1, 1),
+    (2, 2);
 
 -- Inserindo dados na tabela tb_historical_orders
 INSERT INTO tb_historical_orders (date_mod, order_status, order_id, restaurant_id, user_id) 

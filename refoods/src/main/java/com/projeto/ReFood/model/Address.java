@@ -4,10 +4,16 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "tb_addresses")
 public class Address {
 
@@ -68,5 +74,4 @@ public class Address {
 
   @OneToOne(mappedBy = "associatedAddress")
   private Order associatedOrder;
-
 }

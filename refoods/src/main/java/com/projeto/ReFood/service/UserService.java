@@ -6,6 +6,7 @@ import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
 import com.projeto.ReFood.model.User;
 import com.projeto.ReFood.repository.UserRepository;
 
+import com.projeto.ReFood.security.JwtTokenProvider;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,6 +28,7 @@ public class UserService {
   private final UserRepository userRepository;
   private final UtilityService utilityService;
   private final PasswordEncoder passwordEncoder;
+  private final JwtTokenProvider jwtTokenProvider;
 
   @Transactional(readOnly = true)
   public List<UserDTO> getAllUsers() {
@@ -38,9 +41,30 @@ public class UserService {
 
   @Transactional(readOnly = true)
   public UserDTO getUserById(Long userId) {
-    return userRepository.findById(userId)
+    System.out.println(userId);
+    Optional<User> response = userRepository.findById(userId);
+    System.out.println(response);
+    UserDTO dto = userRepository.findById(userId)
         .map(this::convertToDTO)
         .orElseThrow(() -> new NotFoundException());
+    return dto;
+  }
+
+  @Transactional(readOnly = true)
+  public UserDTO getUserInfoByToken(String token) {
+    Long userId = jwtTokenProvider.extractUserId(token);
+
+    User user = userRepository.findById(userId)
+        .orElseThrow(() -> new NotFoundException());
+
+    return new UserDTO(
+        user.getUserId(),
+        user.getName(),
+        user.getEmail(),
+        user.getPhone(),
+        null, // SENHA...
+        user.getDateCreation(),
+        user.getLastLogin());
   }
 
   @Transactional
