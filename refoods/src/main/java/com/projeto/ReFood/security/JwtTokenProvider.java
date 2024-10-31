@@ -86,7 +86,7 @@ public class JwtTokenProvider {
   public Long extractUserId(String token) {
     return extractClaim(token.replaceFirst("Bearer ", ""), claims -> claims.get("userId", Long.class));
   }
-  
+
   @SuppressWarnings("rawtypes")
   public List extractUserRoles(String token) {
     return extractClaim(token.replaceFirst("Bearer ", ""), claims -> claims.get("roles", List.class));

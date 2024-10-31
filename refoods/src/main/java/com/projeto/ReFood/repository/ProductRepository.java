@@ -10,7 +10,12 @@ import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
+  List<Product> findByRestaurant_RestaurantId(Long restaurantId);
+
 
   @Query("SELECT p FROM Product p WHERE (p.nameProduct LIKE %:search% OR p.descriptionProduct LIKE %:search%) AND p.active=true")
   List<Product> searchProductByFilter(@Param("search") String search);
 }
+
+
+

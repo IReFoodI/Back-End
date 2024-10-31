@@ -1,15 +1,12 @@
 package com.projeto.ReFood.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.util.Date;
-import java.util.Set;
 
 @Entity
 @Data
@@ -32,14 +29,12 @@ public class Product {
   private String urlImgProduct;
 
   @NotNull(message = "O valor do produto não pode ser nulo.")
-  @Column(name = "value_product", nullable = false)
-  private float valueProduct;
+  @Column(name = "original_price", nullable = false)
+  private float originalPrice;
 
-  @NotNull(message = "O desconto deve ser um valor válido.")
-  @Min(value = 0, message = "O desconto não pode ser menor que 0.")
-  @Max(value = 100, message = "O desconto não pode ser maior que 100.")
-  @Column(name = "discount", nullable = false)
-  private int discount;
+  @NotNull(message = "O valor de venda não pode ser nulo.")
+  @Column(name = "sell_price", nullable = false)
+  private float sellPrice;
 
   @NotNull(message = "A data de expiração não pode ser nula.")
   @Column(name = "expiration_date", nullable = false)
@@ -68,8 +63,5 @@ public class Product {
   @JoinColumn(name = "restaurant_id", nullable = false)
   private Restaurant restaurant;
 
-  @NotEmpty(message = "O pedido deve conter pelo menos um item.")
-  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-  private Set<OrderItem> orderItems;
 
 }

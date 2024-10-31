@@ -40,47 +40,47 @@ VALUES
     ('Contato Alternativo', '1308006645', 1);
 
 -- -- Inserindo dados na tabela tb_products
-INSERT INTO tb_products (active, addition_date, description_product, sell_price, name_product, category, url_img_product, original_price, expiration_date, quantity, restaurant_id)
+INSERT INTO tb_products (active, addition_date, description_product, discount, name_product, category, url_img_product, value_product, expiration_date, quantity, restaurant_id)
 VALUES 
     (TRUE, NOW(), 'Bolo de cenoura com cobertura de chocolate, delicioso e fresquinho', 15, 'Bolo de Cenoura com Chocolate', 'DOCE', 
     'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
     18.0, '2024-11-17', 50, 1),
-    (TRUE, NOW(), 'Pão francês crocante por fora e macio por dentro', 1, 'Pão Francês', 'SALGADO', 
+    (TRUE, NOW(), 'Pão francês crocante por fora e macio por dentro', 0, 'Pão Francês', 'SALGADO', 
     'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
     1.5, '2024-11-17', 300, 1),
-    (TRUE, NOW(), 'Pastel assado de frango com catupiry', 6, 'Pastel de Frango com Catupiry', 'SALGADO', 
+    (TRUE, NOW(), 'Pastel assado de frango com catupiry', 10, 'Pastel de Frango com Catupiry', 'SALGADO', 
     'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
     5.0, '2024-11-17', 150, 1),
-    (TRUE, NOW(), 'Biscoito caseiro amanteigado, derrete na boca', 7, 'Biscoito Amanteigado', 'DOCE', 
+    (TRUE, NOW(), 'Biscoito caseiro amanteigado, derrete na boca', 5, 'Biscoito Amanteigado', 'DOCE', 
     'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
     8.0, '2024-11-17', 80, 1),
-    (TRUE, NOW(), 'Pão doce recheado com creme de baunilha', 3.5, 'Pão Doce com Creme', 'DOCE', 
+    (TRUE, NOW(), 'Pão doce recheado com creme de baunilha', 12, 'Pão Doce com Creme', 'DOCE', 
     'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
     4.0, '2024-11-17', 100, 1),
-    (TRUE, NOW(), 'Croissant folhado e amanteigado, perfeito para o café da manhã', 6.0, 'Croissant', 'SALGADO', 
+    (TRUE, NOW(), 'Croissant folhado e amanteigado, perfeito para o café da manhã', 8, 'Croissant', 'SALGADO', 
     'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
     6.0, '2024-11-17', 70, 1),
-    (TRUE, NOW(), 'Sonho com recheio de doce de leite', 4.2, 'Sonho de Doce de Leite', 'DOCE', 
+    (TRUE, NOW(), 'Sonho com recheio de doce de leite', 15, 'Sonho de Doce de Leite', 'DOCE', 
     'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
     4.5, '2024-11-17', 60, 1),
-    (TRUE, NOW(), 'Torta de maçã com massa crocante e recheio cremoso', 12, 'Torta de Maçã', 'DOCE', 
+    (TRUE, NOW(), 'Torta de maçã com massa crocante e recheio cremoso', 10, 'Torta de Maçã', 'DOCE', 
     'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
     12.0, '2024-11-17', 30, 1),
-    (TRUE, NOW(), 'Empadão de palmito, delicioso e bem temperado', 20, 'Empadão de Palmito', 'SALGADO', 
+    (TRUE, NOW(), 'Empadão de palmito, delicioso e bem temperado', 8, 'Empadão de Palmito', 'SALGADO', 
     'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
     20.0, '2024-11-17', 20, 1),
-    (TRUE, NOW(), 'Enroladinho de salsicha, ideal para lanches rápidos', 3, 'Enroladinho de Salsicha', 'SALGADO', 
+    (TRUE, NOW(), 'Enroladinho de salsicha, ideal para lanches rápidos', 5, 'Enroladinho de Salsicha', 'SALGADO', 
     'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
     3.0, '2024-11-17', 200, 1),
-    (TRUE, NOW(), 'Rosquinha de coco com açúcar por cima', 3, 'Rosquinha de Coco', 'DOCE', 
+    (TRUE, NOW(), 'Rosquinha de coco com açúcar por cima', 10, 'Rosquinha de Coco', 'DOCE', 
     'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
     3.5, '2024-11-17', 90, 1),
-    (TRUE, NOW(), 'Quiche de queijo com espinafre', 12.9, 'Quiche de Queijo e Espinafre', 'SALGADO', 
+    (TRUE, NOW(), 'Quiche de queijo com espinafre', 7, 'Quiche de Queijo e Espinafre', 'SALGADO', 
     'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
     15.0, '2024-11-17', 40, 1);
 
 -- -- Inserindo dados na tabela tb_cart
-INSERT INTO tb_cart (total_value, user_id)
+INSERT INTO tb_cart (status, total_value, user_id)
 VALUES
     (0.0, 1),
     (0.0, 2),
