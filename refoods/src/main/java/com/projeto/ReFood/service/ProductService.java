@@ -42,6 +42,14 @@ public class ProductService {
         .orElseThrow(() -> new NotFoundException());
   }
 
+  @Transactional(readOnly = true)
+  public List<ProductDTO> getFilteredProducts(String product) {
+    return productRepository.searchProductByFilter(product)
+        .stream()
+        .map(this::convertToDTO)
+        .collect(Collectors.toList());
+  }
+
   @Transactional
   public ProductDTO createProduct(@Valid ProductDTO productDTO) {
     Product product = convertToEntity(productDTO);

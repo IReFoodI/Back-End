@@ -32,6 +32,11 @@ public class ProductController {
     ProductDTO productDTO = productService.getProductById(productId);
     return ResponseEntity.ok(productDTO);
   }
+  @GetMapping("/search")
+  public ResponseEntity<List<ProductDTO>> getProductById(@RequestParam String produto) {
+    List<ProductDTO> productDTO = productService.getFilteredProducts(produto);
+    return ResponseEntity.ok(productDTO);
+  }
 
   @PostMapping
   public ResponseEntity<ProductDTO> createProduct(@Valid @RequestBody ProductDTO productDTO) {
