@@ -11,6 +11,6 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
 
-  @Query("SELECT p FROM Product p WHERE p.nameProduct LIKE %:search% OR p.descriptionProduct LIKE %:search%")
-  List<Product> searchProductByFilter(@Param("product") String product);
+  @Query("SELECT p FROM Product p WHERE (p.nameProduct LIKE %:search% OR p.descriptionProduct LIKE %:search%) AND p.active=true")
+  List<Product> searchProductByFilter(@Param("search") String search);
 }
