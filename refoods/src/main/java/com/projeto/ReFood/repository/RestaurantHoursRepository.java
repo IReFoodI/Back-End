@@ -7,7 +7,6 @@ import com.projeto.ReFood.model.RestaurantHours;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.Arrays;
 import java.util.List;
 
 public interface RestaurantHoursRepository extends JpaRepository<RestaurantHours, Long> {

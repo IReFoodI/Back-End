@@ -8,10 +8,9 @@ VALUES -- -- as senhas são 123456Bb*
 
 -- Inserindo dados na tabela tb_restaurants
 INSERT INTO tb_restaurants (
-
-    average_rating, category, cnpj, date_creation, email, fantasy,
-    last_login, password, quantity_evaluations, total_evaluations,
-    url_banner, url_logo, phone
+    average_rating, category, cnpj, date_creation, email, fantasy, last_login,
+    password, quantity_evaluations, total_evaluations, phone,
+    url_banner, url_logo
 )VALUES -- -- as senhas são 123456Bb*
     (4.5, 'PADARIA', '42342342300195', NOW(), 'bakeryshop@email.com', 'Bakery Shop', NOW(), 
     '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', 1327, 1328, '1308006666',
@@ -20,11 +19,6 @@ INSERT INTO tb_restaurants (
 
 
 -- -- Inserindo dados na tabela tb_addresses
-    (4.5, 'RESTAURANTE', '12345678000195', NOW(), 'restaurant1@example.com', 'Restaurant One', NOW(), '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', 10, 50, 'http://localhost:8080/images/banner.png', 'http://localhost:8080/images/logo.png', '0800556666'),
-    (4.0, 'RESTAURANTE', '98765432000100', NOW(), 'restaurant2@example.com', 'Restaurant Two', NOW(), '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', 20, 100, 'banner2.jpg', 'logo2.jpg', '4445550800');
-
-
--- Inserindo dados na tabela tb_addresses
 INSERT INTO tb_addresses (address_type, cep, complement, district, is_standard, number, state, street, city, type, restaurant_id, user_id)
 VALUES
     ('USER', '11045123', 'Apto 101', 'Jardins', TRUE, '12', 'SP', 'Rua Dom', 'Santos', 'Casa', NULL, 1 ),
@@ -45,14 +39,48 @@ VALUES
     ('Contato Principal', '1308006633', 1),
     ('Contato Alternativo', '1308006645', 1);
 
--- Inserindo dados na tabela tb_products
+-- -- Inserindo dados na tabela tb_products
 INSERT INTO tb_products (active, addition_date, description_product, sell_price, name_product, category, url_img_product, original_price, expiration_date, quantity, restaurant_id)
 VALUES 
-    (TRUE, NOW(), 'Delicious sweet product', 10.0, 'Product One', 'DOCE', 'http://localhost:8080/images/banner.png', 20.0, '2024-11-17', 100, 1),
-    (TRUE, NOW(), 'Tasty savory product', 5.0, 'Product Two', 'SALGADO', 'product2.jpg', 30.0, '2024-11-17', 200, 2);
+    (TRUE, NOW(), 'Bolo de cenoura com cobertura de chocolate, delicioso e fresquinho', 15, 'Bolo de Cenoura com Chocolate', 'DOCE', 
+    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
+    18.0, '2024-11-17', 50, 1),
+    (TRUE, NOW(), 'Pão francês crocante por fora e macio por dentro', 1, 'Pão Francês', 'SALGADO', 
+    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
+    1.5, '2024-11-17', 300, 1),
+    (TRUE, NOW(), 'Pastel assado de frango com catupiry', 6, 'Pastel de Frango com Catupiry', 'SALGADO', 
+    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
+    5.0, '2024-11-17', 150, 1),
+    (TRUE, NOW(), 'Biscoito caseiro amanteigado, derrete na boca', 7, 'Biscoito Amanteigado', 'DOCE', 
+    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
+    8.0, '2024-11-17', 80, 1),
+    (TRUE, NOW(), 'Pão doce recheado com creme de baunilha', 3.5, 'Pão Doce com Creme', 'DOCE', 
+    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
+    4.0, '2024-11-17', 100, 1),
+    (TRUE, NOW(), 'Croissant folhado e amanteigado, perfeito para o café da manhã', 6.0, 'Croissant', 'SALGADO', 
+    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
+    6.0, '2024-11-17', 70, 1),
+    (TRUE, NOW(), 'Sonho com recheio de doce de leite', 4.2, 'Sonho de Doce de Leite', 'DOCE', 
+    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
+    4.5, '2024-11-17', 60, 1),
+    (TRUE, NOW(), 'Torta de maçã com massa crocante e recheio cremoso', 12, 'Torta de Maçã', 'DOCE', 
+    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
+    12.0, '2024-11-17', 30, 1),
+    (TRUE, NOW(), 'Empadão de palmito, delicioso e bem temperado', 20, 'Empadão de Palmito', 'SALGADO', 
+    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
+    20.0, '2024-11-17', 20, 1),
+    (TRUE, NOW(), 'Enroladinho de salsicha, ideal para lanches rápidos', 3, 'Enroladinho de Salsicha', 'SALGADO', 
+    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
+    3.0, '2024-11-17', 200, 1),
+    (TRUE, NOW(), 'Rosquinha de coco com açúcar por cima', 3, 'Rosquinha de Coco', 'DOCE', 
+    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
+    3.5, '2024-11-17', 90, 1),
+    (TRUE, NOW(), 'Quiche de queijo com espinafre', 12.9, 'Quiche de Queijo e Espinafre', 'SALGADO', 
+    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
+    15.0, '2024-11-17', 40, 1);
 
--- Inserindo dados na tabela tb_cart
-INSERT INTO tb_cart (status, total_value, user_id)
+-- -- Inserindo dados na tabela tb_cart
+INSERT INTO tb_cart (total_value, user_id)
 VALUES
     (0.0, 1),
     (0.0, 2),
