@@ -35,9 +35,9 @@ public class ProductController {
     return ResponseEntity.ok(products);
   }
 
-  @GetMapping("/restaurant/{restaurantId}")
-  public ResponseEntity<List<ProductDTO>> listProductsByRestaurantId(@PathVariable Long restaurantId) {
-    List<ProductDTO> products = productService.getProductsByRestaurantId(restaurantId);
+  @GetMapping("/restaurant")
+  public ResponseEntity<List<ProductDTO>> listProductsByRestaurantId(@RequestHeader("Authorization") String token) {
+    List<ProductDTO> products = productService.getProductsByRestaurantId(token);
 
     if (products.isEmpty()) {
       return ResponseEntity.noContent().build();
@@ -53,8 +53,9 @@ public class ProductController {
   }
 
   @PostMapping
-  public ResponseEntity<ProductDTO> createProduct(@Valid @RequestBody ProductDTO productDTO) {
-    ProductDTO createdProduct = productService.createProduct(productDTO);
+  public ResponseEntity<ProductDTO> createProduct(@RequestHeader("Authorization") String token,@Valid @RequestBody ProductDTO productDTO) {
+
+    ProductDTO createdProduct = productService.createProduct(productDTO, token);
     URI location = ServletUriComponentsBuilder.fromCurrentRequest()
             .path("/{productId}")
             .buildAndExpand(createdProduct.productId())

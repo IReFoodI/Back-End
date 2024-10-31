@@ -2,6 +2,7 @@ package com.projeto.ReFood.service;
 
 import com.projeto.ReFood.dto.ProductPartialUpdateDTO;
 import com.projeto.ReFood.repository.ProductRepository;
+import com.projeto.ReFood.security.JwtTokenProvider;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,11 @@ public class ProductService {
   @Autowired
   private UtilityService utilityService;
 
+  @Autowired
+  private JwtTokenProvider jwtTokenProvider;
+
+
+
   @Transactional(readOnly = true)
   public List<ProductDTO> getAllProducts() {
     return productRepository.findAll().stream()
@@ -41,11 +47,33 @@ public class ProductService {
   }
 
   @Transactional
-  public ProductDTO createProduct(@Valid ProductDTO productDTO) {
+  public ProductDTO createProduct(@Valid ProductDTO productDTO, String token) {
+    System.out.println("entrou");
+    System.out.println(token);
+    System.out.println(productDTO);
+    Long restaurantId = jwtTokenProvider.extractUserId(token);
+    productDTO = new ProductDTO(
+            productDTO.productId(),
+            productDTO.nameProd(),
+            productDTO.descriptionProd(),
+            productDTO.urlImgProd(),
+            productDTO.originalPrice(),
+            productDTO.sellPrice(),
+            productDTO.expirationDate(),
+            productDTO.quantity(),
+            productDTO.categoryProduct(),
+            productDTO.additionDate(),
+            productDTO.active(),
+            restaurantId
+    );
+    System.out.println("novo "+productDTO);
+
     Product product = convertToEntity(productDTO);
-    utilityService.associateRestaurant(product::setRestaurant, productDTO.restaurantId());
-    product = productRepository.save(product);
-    return convertToDTO(product);
+    System.out.println(product);
+      utilityService.associateRestaurant(product::setRestaurant, productDTO.restaurantId());
+    System.out.println("DDD");
+      product = productRepository.save(product);
+      return convertToDTO(product);
   }
 
   @Transactional
@@ -155,7 +183,8 @@ public class ProductService {
 
 
   @Transactional(readOnly = true)
-  public List<ProductDTO> getProductsByRestaurantId(Long restaurantId) {
+  public List<ProductDTO> getProductsByRestaurantId(String token) {
+    Long restaurantId = jwtTokenProvider.extractUserId(token);
     return productRepository.findByRestaurant_RestaurantId(restaurantId).stream()
             .map(this::convertToDTO)
             .collect(Collectors.toList());
