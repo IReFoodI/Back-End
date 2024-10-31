@@ -12,12 +12,14 @@ VALUES -- -- as senhas são 123456Bb*
 
 -- Inserindo dados na tabela tb_restaurants
 INSERT INTO tb_restaurants (
+
     average_rating, category, cnpj, date_creation, email, fantasy,
     last_login, password, quantity_evaluations, total_evaluations,
     url_banner, url_logo, phone
 )VALUES -- -- as senhas são 123456Bb*
     (4.5, 'RESTAURANTE', '12345678000195', NOW(), 'restaurant1@example.com', 'Restaurant One', NOW(), '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', 10, 50, 'http://localhost:8080/images/banner.png', 'http://localhost:8080/images/logo.png', '0800556666'),
     (4.0, 'RESTAURANTE', '98765432000100', NOW(), 'restaurant2@example.com', 'Restaurant Two', NOW(), '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', 20, 100, 'banner2.jpg', 'logo2.jpg', '4445550800');
+
 
 -- Inserindo dados na tabela tb_addresses
 INSERT INTO tb_addresses (address_type, cep, complement, district, is_standard, number, state, street, city, type, restaurant_id, user_id)
@@ -37,10 +39,10 @@ VALUES
     ('Contato Alternativo', '4445556666', 2);
 
 -- Inserindo dados na tabela tb_products
-INSERT INTO tb_products (active, addition_date, description_product, discount, name_product, category, url_img_product, value_product, expiration_date, quantity, restaurant_id)
+INSERT INTO tb_products (active, addition_date, description_product, sell_price, name_product, category, url_img_product, original_price, expiration_date, quantity, restaurant_id)
 VALUES 
-    (TRUE, NOW(), 'Delicious sweet product', 10, 'Product One', 'DOCE', 'product1.jpg', 20.0, '2024-11-17', 100, 1),
-    (TRUE, NOW(), 'Tasty savory product', 5, 'Product Two', 'SALGADO', 'product2.jpg', 30.0, '2024-11-17', 200, 2);
+    (TRUE, NOW(), 'Delicious sweet product', 10.0, 'Product One', 'DOCE', 'http://localhost:8080/images/banner.png', 20.0, '2024-11-17', 100, 1),
+    (TRUE, NOW(), 'Tasty savory product', 5.0, 'Product Two', 'SALGADO', 'product2.jpg', 30.0, '2024-11-17', 200, 2);
 
 -- Inserindo dados na tabela tb_cart
 INSERT INTO tb_cart (status, total_value, user_id)
