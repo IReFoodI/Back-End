@@ -6,10 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="792016bb-253f-48c4-b9e3-6e6697933102" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/ReFoodsApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/ReFoodsApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/controller/ProductController.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/controller/ProductController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/service/ProductService.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/service/ProductService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/refoods/src/main/resources/data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/resources/data.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,7 +22,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="dev-back/business-address" />
+        <entry key="$PROJECT_DIR$" value="dev-back/business-menu" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -60,7 +56,7 @@
     "Application.ReFoodsApplication.executor": "Run",
     "Maven.ReFoods.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "dev-back/business-menu",
+    "git-widget-placeholder": "#18 on dev-back/business-menu",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/felip/OneDrive/Documentos/Analise de sistemas/Analise de sistemas2/Analise de sistemas/+praTi/ReFood/Back-End/refoods/src/main/resources/static/images",

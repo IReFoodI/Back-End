@@ -48,9 +48,7 @@ public class ProductService {
 
   @Transactional
   public ProductDTO createProduct(@Valid ProductDTO productDTO, String token) {
-    System.out.println("entrou");
-    System.out.println(token);
-    System.out.println(productDTO);
+
     Long restaurantId = jwtTokenProvider.extractUserId(token);
     productDTO = new ProductDTO(
             productDTO.productId(),
@@ -66,12 +64,9 @@ public class ProductService {
             productDTO.active(),
             restaurantId
     );
-    System.out.println("novo "+productDTO);
 
     Product product = convertToEntity(productDTO);
-    System.out.println(product);
       utilityService.associateRestaurant(product::setRestaurant, productDTO.restaurantId());
-    System.out.println("DDD");
       product = productRepository.save(product);
       return convertToDTO(product);
   }
