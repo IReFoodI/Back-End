@@ -16,7 +16,7 @@ INSERT INTO tb_restaurants (
     last_login, password, quantity_evaluations, total_evaluations,
     url_banner, url_logo, phone
 )VALUES -- -- as senhas são 123456Bb*
-    (4.5, 'RESTAURANTE', '12345678000195', NOW(), 'restaurant1@example.com', 'Restaurant One', NOW(), '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', 10, 50, 'banner1.jpg', 'logo1.jpg', '0800556666'),
+    (4.5, 'RESTAURANTE', '12345678000195', NOW(), 'restaurant1@example.com', 'Restaurant One', NOW(), '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', 10, 50, 'http://localhost:8080/images/banner.png', 'http://localhost:8080/images/logo.png', '0800556666'),
     (4.0, 'RESTAURANTE', '98765432000100', NOW(), 'restaurant2@example.com', 'Restaurant Two', NOW(), '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', 20, 100, 'banner2.jpg', 'logo2.jpg', '4445550800');
 
 -- Inserindo dados na tabela tb_addresses

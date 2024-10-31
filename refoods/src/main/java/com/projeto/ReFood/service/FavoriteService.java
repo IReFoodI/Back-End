@@ -2,6 +2,7 @@ package com.projeto.ReFood.service;
 
 import com.projeto.ReFood.repository.FavoriteRepository;
 
+import com.projeto.ReFood.security.JwtTokenProvider;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class FavoriteService {
   @Autowired
   private UtilityService utilityService;
 
+  @Autowired
+  private JwtTokenProvider jwtTokenProvider;
+
   @Transactional(readOnly = true)
   public List<FavoriteDTO> getAllFavorites() {
     return favoriteRepository
@@ -43,7 +47,8 @@ public class FavoriteService {
   }
 
   @Transactional(readOnly = true)
-  public List<FavoriteDTO> getFavoriteByUserId(Long userId) {
+  public List<FavoriteDTO> getFavoriteByUserId(String token) {
+    Long userId = jwtTokenProvider.extractUserId(token);
     return favoriteRepository.findByUser_UserId(userId)
             .stream()
             .map(this::convertToDTO)
@@ -51,13 +56,14 @@ public class FavoriteService {
   }
 
   @Transactional
-  public FavoriteDTO createFavorite(@Valid FavoriteDTO favoriteDTO) {
+  public FavoriteDTO createFavorite(@Valid Long restaurantId, String token) {
     Favorite favorite = new Favorite();
-
-    utilityService.associateUser(favorite::setUser, favoriteDTO.userId());
-    utilityService.associateRestaurant(favorite::setRestaurant, favoriteDTO.restaurantId());
+    Long userID = jwtTokenProvider.extractUserId(token);
+    utilityService.associateUser(favorite::setUser, userID);
+    utilityService.associateRestaurant(favorite::setRestaurant, restaurantId);
 
     favorite = favoriteRepository.save(favorite);
+
     return convertToDTO(favorite);
   }
 
