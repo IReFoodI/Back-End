@@ -33,15 +33,15 @@ public class FavoriteController {
     return ResponseEntity.ok(favoriteDTO);
   }
 
-  @GetMapping("/user/{userId}")
-  public ResponseEntity<List<FavoriteDTO>> getFavoritesByUserId(@PathVariable Long userId) {
-    List<FavoriteDTO> favorites = favoriteService.getFavoriteByUserId(userId);
+  @GetMapping("/user")
+  public ResponseEntity<List<FavoriteDTO>> getFavoritesByUserId(@RequestHeader("Authorization") String token) {
+    List<FavoriteDTO> favorites = favoriteService.getFavoriteByUserId(token);
     return ResponseEntity.ok(favorites);
   }
 
   @PostMapping
-  public ResponseEntity<FavoriteDTO> createFavorite(@Valid @RequestBody FavoriteDTO favoriteDTO) {
-    FavoriteDTO createdFavorite = favoriteService.createFavorite(favoriteDTO);
+  public ResponseEntity<FavoriteDTO> createFavorite(@RequestHeader("Authorization") String token,@Valid @RequestBody Long restaurantId) {
+    FavoriteDTO createdFavorite = favoriteService.createFavorite(restaurantId, token);
     URI location = ServletUriComponentsBuilder.fromCurrentRequest()
         .path("/{favoriteId}")
         .buildAndExpand(createdFavorite.favoriteId())

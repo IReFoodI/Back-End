@@ -6,7 +6,7 @@ INSERT INTO tb_restaurants (
 VALUES
     (4.8, 'RESTAURANTE', '74125896000144', NOW(), 'cafe1@example.com', 'Cafe Gourmet',
      NOW(), '$2y$10$p1IXPiQ29t1mUit/msZV3OY7Dpz2voS6pK4TBQzPEcVC6QbG6cWhe', 15, 75,'91993559449', 'teste aqui é 1',
-     'http://localhost:8080/images/logo.png', 'logo3.jpg'),
+     'banner3.jpg', 'logo3.jpg'),
 
     (4.3, 'SUPERMERCADO', '85236974000122', NOW(), 'market1@example.com', 'Supermercado Tudo',
      NOW(), '$2y$10$p1IXPiQ29t1mUit/msZV3OY7Dpz2voS6pK4TBQzPEcVC6QbG6cWhe', 25, 120,'91993559449', 'teste aqui é 1',

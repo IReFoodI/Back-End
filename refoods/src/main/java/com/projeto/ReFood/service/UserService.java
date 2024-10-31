@@ -41,9 +41,7 @@ public class UserService {
 
   @Transactional(readOnly = true)
   public UserDTO getUserById(Long userId) {
-    System.out.println(userId);
     Optional<User> response = userRepository.findById(userId);
-    System.out.println(response);
     UserDTO dto = userRepository.findById(userId)
         .map(this::convertToDTO)
         .orElseThrow(() -> new NotFoundException());
