@@ -3,7 +3,6 @@ package com.projeto.ReFood.service;
 import com.projeto.ReFood.dto.CartDTO;
 import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
 import com.projeto.ReFood.model.Cart;
-import com.projeto.ReFood.model.EnumCartStatus;
 import com.projeto.ReFood.repository.CartRepository;
 
 import jakarta.validation.Valid;
@@ -56,7 +55,6 @@ public class CartService {
         .orElseThrow(() -> new NotFoundException());
 
     cart.setTotalValue(cartDTO.totalValue());
-    cart.setStatus(EnumCartStatus.valueOf(cartDTO.status()));
 
     utilityService.associateUser(cart::setUser, cartDTO.userId());
 
@@ -75,7 +73,6 @@ public class CartService {
   private CartDTO convertToDTO(Cart cart) {
     return new CartDTO(
         cart.getCartId(),
-        cart.getStatus().name(),
         cart.getTotalValue(),
         cart.getUser().getUserId());
   }
@@ -84,7 +81,6 @@ public class CartService {
     Cart cart = new Cart();
     cart.setCartId(cartDTO.cartId());
     cart.setTotalValue(cartDTO.totalValue());
-    cart.setStatus(EnumCartStatus.valueOf(cartDTO.status()));
     utilityService.associateUser(cart::setUser, cartDTO.userId());
     return cart;
   }
