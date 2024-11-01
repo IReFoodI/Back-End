@@ -1,10 +1,12 @@
 package com.projeto.ReFood.service;
 
 import com.projeto.ReFood.dto.CartDTO;
+import com.projeto.ReFood.dto.CartItemsDto;
 import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
 import com.projeto.ReFood.model.Cart;
 import com.projeto.ReFood.repository.CartRepository;
 
+import jakarta.persistence.Tuple;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,38 @@ public class CartService {
 
   @Autowired
   private UtilityService utilityService;
+
+  @Transactional(readOnly = true)
+  public List<CartItemsDto> getCartDetailsByUserId(Long userId) {
+    List<Tuple> cartItemsTuples = cartRepository.getCartItemsByUserId(userId);
+
+    if (cartItemsTuples.isEmpty()) {
+        throw new NotFoundException();
+    }
+
+    List<CartItemsDto> cartItems = cartItemsTuples.stream()
+        .map(tuple -> new CartItemsDto(
+            tuple.get(0, Long.class), // cartId
+            tuple.get(1, Long.class), // productId
+            tuple.get(2, String.class), // nameProduct
+            tuple.get(3, Integer.class), // quantity
+            tuple.get(4, Float.class), // unitValue
+            tuple.get(5, Float.class)  // subtotal
+        ))
+        .collect(Collectors.toList());
+
+    return cartItems;
+  }
+
+  @Transactional
+  public void clearCart(Long cartId) {
+    Cart cart = cartRepository.findById(cartId)
+        .orElseThrow(() -> new NotFoundException());
+
+    cart.getCartItems().clear();
+    cart.setTotalValue(0);
+    cartRepository.save(cart);
+  }
 
   @Transactional(readOnly = true)
   public List<CartDTO> getAllCarts() {
@@ -84,4 +118,5 @@ public class CartService {
     utilityService.associateUser(cart::setUser, cartDTO.userId());
     return cart;
   }
+
 }

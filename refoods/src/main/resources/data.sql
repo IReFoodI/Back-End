@@ -82,11 +82,9 @@ VALUES
 -- -- Inserindo dados na tabela tb_cart
 INSERT INTO tb_cart (total_value, user_id)
 VALUES
-    (0.0, 1),
-    (0.0, 2),
     (120.0, 1),
-    (75.0, 2),
-    (0.0, 1);
+    (75.0, 2);
+
 
 -- -- Inserindo dados na tabela tb_cart_items
 INSERT INTO tb_cart_items (cart_id, product_id, quantity, unit_value, subtotal)
@@ -95,13 +93,13 @@ VALUES
     (1, 2, 1, 30.0, 30.0),
     (2, 1, 1, 20.0, 20.0),
     (2, 2, 2, 30.0, 60.0),
-    (3, 1, 1, 20.0, 20.0),
-    (3, 3, 3, 5.0, 15.0),
-    (3, 5, 2, 4.0, 8.0),
-    (4, 4, 1, 8.0, 8.0),
-    (4, 2, 2, 1.5, 3.0),
-    (5, 6, 4, 6.0, 24.0),
-    (5, 9, 3, 3.5, 10.5);
+    (1, 4, 1, 20.0, 20.0),
+    (1, 3, 3, 5.0, 15.0),
+    (2, 5, 2, 4.0, 8.0),
+    (2, 4, 1, 8.0, 8.0),
+    (1, 5, 2, 1.5, 3.0),
+    (1, 6, 4, 6.0, 24.0),
+    (1, 9, 3, 3.5, 10.5);
 
 -- -- Inserindo dados na tabela tb_orders
 INSERT INTO tb_orders (order_date, order_status, total_value, address_id, restaurant_id, user_id)
