@@ -4,6 +4,7 @@ import com.projeto.ReFood.dto.CartDTO;
 import com.projeto.ReFood.dto.CartItemsDto;
 import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
 import com.projeto.ReFood.model.Cart;
+import com.projeto.ReFood.repository.CartItemRepository;
 import com.projeto.ReFood.repository.CartRepository;
 
 import jakarta.persistence.Tuple;
@@ -27,12 +28,20 @@ public class CartService {
   @Autowired
   private UtilityService utilityService;
 
+  @Autowired
+  private CartItemRepository cartItemRepository;
+
+  @Transactional
+  public void removeItemFromCart(Long cartId, Long productId) {
+    cartItemRepository.deleteByCartItemIdCartIdAndCartItemIdProductId(cartId, productId);
+  }
+
   @Transactional(readOnly = true)
   public List<CartItemsDto> getCartDetailsByUserId(Long userId) {
     List<Tuple> cartItemsTuples = cartRepository.getCartItemsByUserId(userId);
 
     if (cartItemsTuples.isEmpty()) {
-        throw new NotFoundException();
+      throw new NotFoundException();
     }
 
     List<CartItemsDto> cartItems = cartItemsTuples.stream()
@@ -43,7 +52,7 @@ public class CartService {
             tuple.get(3, String.class), // descriptionProduct
             tuple.get(4, Integer.class), // quantity
             tuple.get(5, Float.class), // unitValue
-            tuple.get(6, Float.class)  // subtotal
+            tuple.get(6, Float.class) // subtotal
         ))
         .collect(Collectors.toList());
 
