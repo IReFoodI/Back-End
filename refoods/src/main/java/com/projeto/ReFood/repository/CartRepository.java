@@ -17,6 +17,7 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
         ci.cart_id AS cartId,
         ci.product_id AS productId,
         p.name_product AS productName,
+        p.description AS descriptionProduct,
         ci.quantity AS quantity,
         ci.subtotal AS subtotal,
         ci.unit_value AS unitValue

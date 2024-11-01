@@ -40,9 +40,10 @@ public class CartService {
             tuple.get(0, Long.class), // cartId
             tuple.get(1, Long.class), // productId
             tuple.get(2, String.class), // nameProduct
-            tuple.get(3, Integer.class), // quantity
-            tuple.get(4, Float.class), // unitValue
-            tuple.get(5, Float.class)  // subtotal
+            tuple.get(3, String.class), // descriptionProduct
+            tuple.get(4, Integer.class), // quantity
+            tuple.get(5, Float.class), // unitValue
+            tuple.get(6, Float.class)  // subtotal
         ))
         .collect(Collectors.toList());
 
