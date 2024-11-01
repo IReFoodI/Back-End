@@ -1,6 +1,5 @@
 package com.projeto.ReFood.controller;
 
-
 import com.projeto.ReFood.dto.ProductPartialUpdateDTO;
 import com.projeto.ReFood.service.ProductService;
 import jakarta.validation.Valid;
@@ -29,6 +28,11 @@ public class ProductController {
   @Autowired
   private ProductService productService;
 
+  @GetMapping("/{productId}/restaurant")
+  public String getRestaurantNameByProductId(@PathVariable Long productId) {
+    return productService.getRestaurantNameByProductId(productId);
+  }
+
   @GetMapping
   public ResponseEntity<List<ProductDTO>> listAllProducts() {
     List<ProductDTO> products = productService.getAllProducts();
@@ -53,20 +57,21 @@ public class ProductController {
   }
 
   @PostMapping
-  public ResponseEntity<ProductDTO> createProduct(@RequestHeader("Authorization") String token,@Valid @RequestBody ProductDTO productDTO) {
+  public ResponseEntity<ProductDTO> createProduct(@RequestHeader("Authorization") String token,
+      @Valid @RequestBody ProductDTO productDTO) {
 
     ProductDTO createdProduct = productService.createProduct(productDTO, token);
     URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-            .path("/{productId}")
-            .buildAndExpand(createdProduct.productId())
-            .toUri();
+        .path("/{productId}")
+        .buildAndExpand(createdProduct.productId())
+        .toUri();
     return ResponseEntity.created(location).body(createdProduct);
   }
 
   @PutMapping("/{productId}")
   public ResponseEntity<ProductDTO> updateProduct(
-          @PathVariable Long productId,
-          @Valid @RequestBody ProductDTO productDTO) {
+      @PathVariable Long productId,
+      @Valid @RequestBody ProductDTO productDTO) {
 
     ProductDTO updatedProduct = productService.updateProduct(productId, productDTO);
     return ResponseEntity.ok(updatedProduct);
@@ -74,13 +79,12 @@ public class ProductController {
 
   @PatchMapping("/{productId}")
   public ResponseEntity<ProductDTO> partialUpdateProduct(
-          @PathVariable Long productId,
-          @Valid @RequestBody ProductPartialUpdateDTO productPartialUpdateDTO) {
+      @PathVariable Long productId,
+      @Valid @RequestBody ProductPartialUpdateDTO productPartialUpdateDTO) {
 
     ProductDTO updatedProduct = productService.partialUpdateProduct(productId, productPartialUpdateDTO);
     return ResponseEntity.ok(updatedProduct);
   }
-
 
   @DeleteMapping("/{productId}")
   public ResponseEntity<Void> deleteProduct(@PathVariable Long productId) {
@@ -88,12 +92,12 @@ public class ProductController {
     return ResponseEntity.noContent().build();
   }
 
-
-
   @PostMapping("/upload")
   public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
     String originalFilename = file.getOriginalFilename();
-    String normalizedFilename = originalFilename.replaceAll(" ", "_").replaceAll("[^a-zA-Z0-9_.]", ""); // Remove caracteres especiais
+    String normalizedFilename = originalFilename.replaceAll(" ", "_").replaceAll("[^a-zA-Z0-9_.]", ""); // Remove
+                                                                                                        // caracteres
+                                                                                                        // especiais
 
     // Define o caminho para o diretório de uploads
     String uploadDirPath = "refoods/src/main/resources/static/images/";
@@ -125,12 +129,11 @@ public class ProductController {
     try {
       byte[] imageBytes = Files.readAllBytes(imageFile.toPath());
       return ResponseEntity.ok()
-              .contentType(MediaType.IMAGE_JPEG) // Altere para o tipo de imagem correto, se necessário
-              .body(imageBytes);
+          .contentType(MediaType.IMAGE_JPEG) // Altere para o tipo de imagem correto, se necessário
+          .body(imageBytes);
     } catch (IOException e) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-              .body(null); // Retorna 500 em caso de erro ao ler o arquivo
+          .body(null); // Retorna 500 em caso de erro ao ler o arquivo
     }
   }
-  }
-
+}

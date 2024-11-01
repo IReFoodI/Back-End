@@ -30,20 +30,23 @@ public class ProductService {
   @Autowired
   private JwtTokenProvider jwtTokenProvider;
 
-
+  @Transactional(readOnly = true)
+  public String getRestaurantNameByProductId(Long productId) {
+    return productRepository.findRestaurantNameByProductId(productId);
+  }
 
   @Transactional(readOnly = true)
   public List<ProductDTO> getAllProducts() {
     return productRepository.findAll().stream()
-            .map(this::convertToDTO)
-            .collect(Collectors.toList());
+        .map(this::convertToDTO)
+        .collect(Collectors.toList());
   }
 
   @Transactional(readOnly = true)
   public ProductDTO getProductById(Long productId) {
     return productRepository.findById(productId)
-            .map(this::convertToDTO)
-            .orElseThrow(NotFoundException::new);
+        .map(this::convertToDTO)
+        .orElseThrow(NotFoundException::new);
   }
 
   @Transactional
@@ -51,30 +54,29 @@ public class ProductService {
 
     Long restaurantId = jwtTokenProvider.extractUserId(token);
     productDTO = new ProductDTO(
-            productDTO.productId(),
-            productDTO.nameProd(),
-            productDTO.descriptionProd(),
-            productDTO.urlImgProd(),
-            productDTO.originalPrice(),
-            productDTO.sellPrice(),
-            productDTO.expirationDate(),
-            productDTO.quantity(),
-            productDTO.categoryProduct(),
-            productDTO.additionDate(),
-            productDTO.active(),
-            restaurantId
-    );
+        productDTO.productId(),
+        productDTO.nameProd(),
+        productDTO.descriptionProd(),
+        productDTO.urlImgProd(),
+        productDTO.originalPrice(),
+        productDTO.sellPrice(),
+        productDTO.expirationDate(),
+        productDTO.quantity(),
+        productDTO.categoryProduct(),
+        productDTO.additionDate(),
+        productDTO.active(),
+        restaurantId);
 
     Product product = convertToEntity(productDTO);
-      utilityService.associateRestaurant(product::setRestaurant, productDTO.restaurantId());
-      product = productRepository.save(product);
-      return convertToDTO(product);
+    utilityService.associateRestaurant(product::setRestaurant, productDTO.restaurantId());
+    product = productRepository.save(product);
+    return convertToDTO(product);
   }
 
   @Transactional
   public ProductDTO updateProduct(Long productId, @Valid ProductDTO productDTO) {
     Product product = productRepository.findById(productId)
-            .orElseThrow(NotFoundException::new);
+        .orElseThrow(NotFoundException::new);
 
     // Update all fields with BeanUtils
     BeanUtils.copyProperties(productDTO, product, getNullPropertyNames(productDTO));
@@ -94,32 +96,31 @@ public class ProductService {
 
   private String[] getNullPropertyNames(ProductDTO productDTO) {
     return Arrays.stream(BeanUtils.getPropertyDescriptors(ProductDTO.class))
-            .map(pd -> pd.getName())
-            .filter(name -> {
-              try {
-                return BeanUtils.getPropertyDescriptor(ProductDTO.class, name)
-                        .getReadMethod().invoke(productDTO) == null;
-              } catch (Exception e) {
-                return false;
-              }
-            }).toArray(String[]::new);
+        .map(pd -> pd.getName())
+        .filter(name -> {
+          try {
+            return BeanUtils.getPropertyDescriptor(ProductDTO.class, name)
+                .getReadMethod().invoke(productDTO) == null;
+          } catch (Exception e) {
+            return false;
+          }
+        }).toArray(String[]::new);
   }
 
   private ProductDTO convertToDTO(Product product) {
     return new ProductDTO(
-            product.getProductId(),
-            product.getNameProduct(),
-            product.getDescriptionProduct(),
-            product.getUrlImgProduct(),
-            product.getOriginalPrice(),
-            product.getSellPrice(),
-            product.getExpirationDate(),
-            product.getQuantity(),
-            product.getCategoryProduct(),
-            product.getAdditionDate(),
-            product.isActive(),
-            product.getRestaurant().getRestaurantId()
-    );
+        product.getProductId(),
+        product.getNameProduct(),
+        product.getDescriptionProduct(),
+        product.getUrlImgProduct(),
+        product.getOriginalPrice(),
+        product.getSellPrice(),
+        product.getExpirationDate(),
+        product.getQuantity(),
+        product.getCategoryProduct(),
+        product.getAdditionDate(),
+        product.isActive(),
+        product.getRestaurant().getRestaurantId());
   }
 
   private Product convertToEntity(ProductDTO productDTO) {
@@ -142,7 +143,7 @@ public class ProductService {
   @Transactional
   public ProductDTO partialUpdateProduct(Long productId, @Valid ProductPartialUpdateDTO productPartialUpdateDTO) {
     Product product = productRepository.findById(productId)
-            .orElseThrow(NotFoundException::new);
+        .orElseThrow(NotFoundException::new);
 
     if (productPartialUpdateDTO.nameProd() != null) {
       product.setNameProduct(productPartialUpdateDTO.nameProd());
@@ -176,13 +177,12 @@ public class ProductService {
     return convertToDTO(product);
   }
 
-
   @Transactional(readOnly = true)
   public List<ProductDTO> getProductsByRestaurantId(String token) {
     Long restaurantId = jwtTokenProvider.extractUserId(token);
     return productRepository.findByRestaurant_RestaurantId(restaurantId).stream()
-            .map(this::convertToDTO)
-            .collect(Collectors.toList());
+        .map(this::convertToDTO)
+        .collect(Collectors.toList());
   }
 
 }
