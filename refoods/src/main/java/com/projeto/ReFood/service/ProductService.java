@@ -1,6 +1,12 @@
 package com.projeto.ReFood.service;
 
+import com.projeto.ReFood.dto.ProductDTO;
 import com.projeto.ReFood.dto.ProductPartialUpdateDTO;
+import com.projeto.ReFood.dto.ProductRestaurantDTO;
+import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
+import com.projeto.ReFood.model.EnumProductCategory;
+import com.projeto.ReFood.model.EnumRestaurantCategory;
+import com.projeto.ReFood.model.Product;
 import com.projeto.ReFood.repository.ProductRepository;
 import com.projeto.ReFood.security.JwtTokenProvider;
 import jakarta.validation.Valid;
@@ -9,9 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import com.projeto.ReFood.dto.ProductDTO;
-import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
-import com.projeto.ReFood.model.Product;
 
 import java.util.Arrays;
 import java.util.List;
@@ -47,11 +50,24 @@ public class ProductService {
   }
 
   @Transactional(readOnly = true)
-  public List<ProductDTO> getFilteredProducts(String product) {
-    return productRepository.searchProductByFilter(product)
-        .stream()
-        .map(this::convertToDTO)
-        .collect(Collectors.toList());
+  public List<ProductRestaurantDTO> getFilteredProducts(String product, String types,String categories, String price) {
+
+    Float convertedPrice=null;
+    if(price != null && !price.isEmpty()){
+      convertedPrice= Float.parseFloat(price);
+    }
+    List<EnumRestaurantCategory> typeList = (types != null && !types.isEmpty()) ?
+        Arrays.stream(types.split(" "))
+            .map(EnumRestaurantCategory::valueOf)
+            .collect(Collectors.toList()) : null;
+
+    List<EnumProductCategory> categoryList = (categories != null && !categories.isEmpty()) ?
+        Arrays.stream(categories.split(" "))
+            .map(EnumProductCategory::valueOf)
+            .collect(Collectors.toList()) : null;
+
+    return productRepository.findProductsByFilters(product,typeList,categoryList,convertedPrice);
+
   }
 
   @Transactional
