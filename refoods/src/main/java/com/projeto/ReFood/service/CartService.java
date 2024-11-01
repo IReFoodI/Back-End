@@ -4,6 +4,8 @@ import com.projeto.ReFood.dto.CartDTO;
 import com.projeto.ReFood.dto.CartItemsDto;
 import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
 import com.projeto.ReFood.model.Cart;
+import com.projeto.ReFood.model.CartItem;
+import com.projeto.ReFood.model.CartItemPK;
 import com.projeto.ReFood.repository.CartItemRepository;
 import com.projeto.ReFood.repository.CartRepository;
 
@@ -33,7 +35,24 @@ public class CartService {
 
   @Transactional
   public void removeItemFromCart(Long cartId, Long productId) {
-    cartItemRepository.deleteByCartItemIdCartIdAndCartItemIdProductId(cartId, productId);
+    CartItemPK cartItemPK = new CartItemPK(cartId, productId);
+    CartItem cartItem = cartItemRepository.findById(cartItemPK)
+        .orElseThrow(() -> new NotFoundException());
+
+    if (cartItem.getQuantity() > 1) {
+      cartItem.setQuantity(cartItem.getQuantity() - 1);
+      cartItem.setSubtotal(cartItem.getQuantity() * cartItem.getUnitValue());
+      cartItemRepository.save(cartItem);
+    } else {
+      cartItemRepository.deleteById(cartItemPK);
+    }
+
+    Cart cart = cartItem.getCart();
+    float newTotalValue = (float) cart.getCartItems().stream()
+        .mapToDouble(CartItem::getSubtotal)
+        .sum();
+    cart.setTotalValue(newTotalValue);
+    cartRepository.save(cart);
   }
 
   @Transactional(readOnly = true)
