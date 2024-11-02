@@ -25,6 +25,15 @@ public class AddressController {
   @Autowired
   private AddressService addressService;
 
+  @GetMapping("/restaurant/{restaurantId}")
+  public ResponseEntity<List<AddressDTO>> getAddressesByRestaurantId(@PathVariable Long restaurantId) {
+      List<AddressDTO> addresses = addressService.getAddressesByRestaurantId(restaurantId);
+      if (addresses.isEmpty()) {
+          return ResponseEntity.noContent().build();
+      }
+      return ResponseEntity.ok(addresses);
+  }
+
   @Operation(
     summary = "Lista todos os endereços", 
     description = "Retorna uma lista de todos os endereços disponíveis no sistema.", 
