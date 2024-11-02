@@ -25,7 +25,7 @@ VALUES
     ('USER', '11045321', 'Apto 202', 'Centro', FALSE, '45', 'SP', 'Av Pedro Pessoa', 'Santos', 'Trabalho', NULL, 1),
     ('USER', '11045456', 'Apto 103', 'Jardins', TRUE, '56', 'SP', 'Rua Pinheiros', 'Sao Vicente', 'Casa', NULL, 2),
     ('USER', '11045654', 'Apto 203', 'Jardins', FALSE, '03', 'SP', 'Rua Boeto', 'Sao Vicente', 'Casa da Mamae', NULL, 2),
-    ('RESTAURANT', '11045898', 'Apto 202', 'Centro', TRUE, '371', 'SP', 'Av Siqueira Monteiro', 'Santos', 'Filial Santos', 1, NULL);
+    ('RESTAURANT', '11060470', 'Rua Gastronômica', 'Gonzaga', TRUE, '55', 'SP', 'Rua Tolentino Filgueiras', 'Santos', 'Filial Santos', 1, NULL);
 
 -- -- Inserindo dados na tabela tb_cards
 INSERT INTO tb_cards (cpf, cvv, number, validity, holder_name, user_id) VALUES 
@@ -82,11 +82,9 @@ VALUES
 -- -- Inserindo dados na tabela tb_cart
 INSERT INTO tb_cart (total_value, user_id)
 VALUES
-    (0.0, 1),
-    (0.0, 2),
     (120.0, 1),
-    (75.0, 2),
-    (0.0, 1);
+    (75.0, 2);
+
 
 -- -- Inserindo dados na tabela tb_cart_items
 INSERT INTO tb_cart_items (cart_id, product_id, quantity, unit_value, subtotal)
@@ -95,13 +93,13 @@ VALUES
     (1, 2, 1, 30.0, 30.0),
     (2, 1, 1, 20.0, 20.0),
     (2, 2, 2, 30.0, 60.0),
-    (3, 1, 1, 20.0, 20.0),
-    (3, 3, 3, 5.0, 15.0),
-    (3, 5, 2, 4.0, 8.0),
-    (4, 4, 1, 8.0, 8.0),
-    (4, 2, 2, 1.5, 3.0),
-    (5, 6, 4, 6.0, 24.0),
-    (5, 9, 3, 3.5, 10.5);
+    (1, 4, 1, 20.0, 20.0),
+    (1, 3, 3, 5.0, 15.0),
+    (2, 5, 2, 4.0, 8.0),
+    (2, 4, 1, 8.0, 8.0),
+    (1, 5, 2, 1.5, 3.0),
+    (1, 6, 4, 6.0, 24.0),
+    (1, 9, 3, 3.5, 10.5);
 
 -- -- Inserindo dados na tabela tb_orders
 INSERT INTO tb_orders (order_date, order_status, total_value, address_id, restaurant_id, user_id)

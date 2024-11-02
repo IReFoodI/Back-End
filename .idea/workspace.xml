@@ -5,24 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="792016bb-253f-48c4-b9e3-6e6697933102" name="Changes" comment="refactor:update product repository query">
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/dto/ProductPartialUpdateDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/refoods/src/main/resources/data copy.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/refoods/src/main/resources/dataTest.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/ReFoodsApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/ReFoodsApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/dto/CartItemsDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/dto/CartTotalSumDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/dto/RestaurantInfoDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/controller/AddressController.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/controller/AddressController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/controller/CartController.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/controller/CartController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/controller/ProductController.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/controller/ProductController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/dto/CartDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/dto/CartDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/dto/ProductDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/dto/ProductDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/model/Card.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/model/Card.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/model/Cart.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/model/Cart.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/model/EnumCartStatus.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/model/EnumRestaurantCategory.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/model/EnumRestaurantCategory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/model/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/model/Product.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/model/EnumOrderStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/model/EnumOrderStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/model/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/model/Order.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/model/Transaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/model/Transaction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/repository/CartItemRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/repository/CartItemRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/repository/CartRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/repository/CartRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/repository/ProductRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/repository/ProductRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/security/JwtTokenProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/security/JwtTokenProvider.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/service/AddressService.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/service/AddressService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/service/CartService.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/service/CartService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/service/ProductService.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/service/ProductService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/refoods/src/main/resources/application-test.properties" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/resources/application-test.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/service/TransactionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/service/TransactionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/service/UtilityService.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/service/UtilityService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/refoods/src/main/resources/data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/resources/data.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -68,22 +70,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Application.ReFoodsApplication.executor": "Run",
-    "Maven.ReFoods.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "Merging feat/search-filter",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/felip/OneDrive/Documentos/Analise de sistemas/Analise de sistemas2/Analise de sistemas/+praTi/ReFood/Back-End/refoods/src/main/resources/static/images",
-    "project.structure.last.edited": "Artifacts",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "MavenSettings"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Application.ReFoodsApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.ReFoods.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Merging feat/search-filter&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/felip/OneDrive/Documentos/Analise de sistemas/Analise de sistemas2/Analise de sistemas/+praTi/ReFood/Back-End/refoods/src/main/resources/static/images&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;MavenSettings&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\felip\OneDrive\Documentos\Analise de sistemas\Analise de sistemas2\Analise de sistemas\+praTi\ReFood\Back-End\refoods\src\main\resources\static\images" />

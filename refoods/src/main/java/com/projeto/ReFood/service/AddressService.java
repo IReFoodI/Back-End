@@ -35,6 +35,14 @@ public class AddressService {
   private final JwtTokenProvider jwtTokenProvider;
 
   @Transactional(readOnly = true)
+  public List<AddressDTO> getAddressesByRestaurantId(Long restaurantId) {
+      List<Address> addresses = addressRepository.findAddressesByRestaurantId(restaurantId);
+      return addresses.stream()
+              .map(this::convertToDTO)
+              .collect(Collectors.toList());
+  }
+
+  @Transactional(readOnly = true)
   public List<AddressDTO> getAllAddresses() {
     return addressRepository
         .findAll()
