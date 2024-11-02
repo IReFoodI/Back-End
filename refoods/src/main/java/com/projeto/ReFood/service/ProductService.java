@@ -1,6 +1,7 @@
 package com.projeto.ReFood.service;
 
 import com.projeto.ReFood.dto.ProductPartialUpdateDTO;
+import com.projeto.ReFood.dto.RestaurantInfoDTO;
 import com.projeto.ReFood.repository.ProductRepository;
 import com.projeto.ReFood.security.JwtTokenProvider;
 import jakarta.validation.Valid;
@@ -29,6 +30,11 @@ public class ProductService {
 
   @Autowired
   private JwtTokenProvider jwtTokenProvider;
+
+  @Transactional(readOnly = true)
+  public RestaurantInfoDTO getRestaurantInfoByProductId(Long productId) {
+    return productRepository.findRestaurantInfoByProductId(productId);
+  }
 
   @Transactional(readOnly = true)
   public String getRestaurantNameByProductId(Long productId) {

@@ -1,6 +1,7 @@
 package com.projeto.ReFood.controller;
 
 import com.projeto.ReFood.dto.ProductPartialUpdateDTO;
+import com.projeto.ReFood.dto.RestaurantInfoDTO;
 import com.projeto.ReFood.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,15 @@ public class ProductController {
 
   @Autowired
   private ProductService productService;
+
+  @GetMapping("/{productId}/restaurant-info")
+  public ResponseEntity<RestaurantInfoDTO> getRestaurantInfoByProductId(@PathVariable Long productId) {
+    RestaurantInfoDTO restaurantInfo = productService.getRestaurantInfoByProductId(productId);
+    if (restaurantInfo == null) {
+      return ResponseEntity.notFound().build();
+    }
+    return ResponseEntity.ok(restaurantInfo);
+  }
 
   @GetMapping("/{productId}/restaurant")
   public String getRestaurantNameByProductId(@PathVariable Long productId) {
