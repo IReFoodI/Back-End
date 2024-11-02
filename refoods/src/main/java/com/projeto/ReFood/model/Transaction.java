@@ -32,9 +32,9 @@ public class Transaction {
   @Column(nullable = false)
   private EnumTransactionStatus transactionStatus;
 
-  @ManyToOne(optional = false)
-    @JoinColumn(name = "card_id", nullable = false, foreignKey = @ForeignKey(name = "FK_TB_TRANSACTIONS_CARD_ID", foreignKeyDefinition = "FOREIGN KEY (card_id) REFERENCES tb_cards(card_id) ON DELETE CASCADE"))
-    private Card card;
+  @NotNull(message = "O ID do cartão é obrigatório.")
+  @Column(name = "card_id", nullable = false)
+  private Long cardId;
 
   @OneToOne(cascade = CascadeType.ALL, optional = false)
   @JoinColumn(name = "order_id", nullable = false)
