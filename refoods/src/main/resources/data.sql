@@ -15,7 +15,15 @@ INSERT INTO tb_restaurants (
     (4.5, 'PADARIA', '42342342300195', NOW(), 'bakeryshop@email.com', 'Bakery Shop', NOW(), 
     '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', 1327, 1328, '1308006666',
     'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/banner12.jpg?alt=media&token=e4dd1628-a01d-4e81-8d91-09cb2886217a', 
-    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/logo12.png?alt=media&token=bacd3db9-56d8-46ca-8af1-1e6292854bf6');
+    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/logo12.png?alt=media&token=bacd3db9-56d8-46ca-8af1-1e6292854bf6'),
+       (4.2, 'RESTAURANTE', '32142342300195', NOW(), 'Bomsabor@email.com', 'Bom Sabor', NOW(),
+    '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', 1327, 1328, '1308006776',
+    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/banner12.jpg?alt=media&token=e4dd1628-a01d-4e81-8d91-09cb2886217a',
+    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/logo12.png?alt=media&token=bacd3db9-56d8-46ca-8af1-1e6292854bf6'),
+    (4.0, 'SUPERMERCADO', '32142342300000', NOW(), 'bh@email.com', 'BH', NOW(),
+        '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', 1327, 1328, '1309006776',
+        'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/banner12.jpg?alt=media&token=e4dd1628-a01d-4e81-8d91-09cb2886217a',
+        'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/logo12.png?alt=media&token=bacd3db9-56d8-46ca-8af1-1e6292854bf6');
 
 
 -- -- Inserindo dados na tabela tb_addresses
@@ -77,7 +85,103 @@ VALUES
     3.5, '2024-11-17', 90, 1),
     (TRUE, NOW(), 'Quiche de queijo com espinafre', 12.9, 'Quiche de Queijo e Espinafre', 'SALGADO', 
     'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
-    15.0, '2024-11-17', 40, 1);
+    15.0, '2024-11-17', 40, 1),
+    --
+       (TRUE, NOW(), 'Pão de queijo mineiro, ideal para o café da manhã', 5.0, 'Pão de Queijo', 'SALGADO',
+        'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
+        6.0, '2024-11-17', 30, 1),
+
+        (TRUE, NOW(), 'Bolo de fubá com um toque de erva-doce', 12.0, 'Bolo de Fubá', 'DOCE',
+        'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
+        15.0, '2024-11-18', 20, 2),
+
+        (TRUE, NOW(), 'Salgado de presunto e queijo com massa crocante', 7.0, 'Enrolado de Presunto e Queijo', 'SALGADO',
+        'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
+        8.0, '2024-11-19', 50, 3),
+
+        (TRUE, NOW(), 'Biscoito caseiro de polvilho crocante', 4.0, 'Biscoito de Polvilho', 'MISTO',
+        'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
+        5.0, '2024-11-20', 40, 1),
+
+        (TRUE, NOW(), 'Bolo de chocolate com recheio cremoso', 18.0, 'Bolo de Chocolate', 'DOCE',
+        'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
+        22.0, '2024-11-21', 15, 2),
+
+        (TRUE, NOW(), 'Sanduíche natural de frango com alface e tomate', 9.0, 'Sanduíche Natural', 'SALGADO',
+        'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
+        10.0, '2024-11-22', 35, 3),
+
+        (TRUE, NOW(), 'Torta de morango com chantilly, perfeita para sobremesa', 20.0, 'Torta de Morango', 'DOCE',
+        'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
+        25.0, '2024-11-30', 25, 1),
+
+        (TRUE, NOW(), 'Empada de frango com tempero especial', 6.5, 'Empada de Frango', 'SALGADO',
+        'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
+        7.5, '2024-11-28', 45, 2),
+
+        (TRUE, NOW(), 'Salgadinho de batata recheado com queijo', 5.0, 'Coxinha de Batata com Queijo', 'SALGADO',
+        'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
+        6.0, '2024-11-27', 50, 3),
+
+        (TRUE, NOW(), 'Pão francês fresquinho, ideal para o café da manhã', 0.5, 'Pão Francês', 'SALGADO',
+            'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
+            0.8, '2024-11-23', 100, 1),
+
+            (TRUE, NOW(), 'Bolo de laranja com pedaços da fruta, ótimo para o lanche', 10.0, 'Bolo de Laranja', 'DOCE',
+            'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
+            12.0, '2024-11-25', 20, 2),
+
+            (TRUE, NOW(), 'Coxinha de frango crocante e saborosa', 5.0, 'Coxinha de Frango', 'SALGADO',
+            'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
+            6.0, '2024-11-26', 40, 3),
+
+            (TRUE, NOW(), 'Torta salgada de legumes com queijo', 8.0, 'Torta de Legumes', 'MISTO',
+            'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
+            10.0, '2024-11-27', 15, 1),
+
+            (TRUE, NOW(), 'Queijo minas frescal, ideal para acompanhar pães', 20.0, 'Queijo Minas', 'MISTO',
+            'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
+            25.0, '2024-11-28', 10, 2),
+
+            (TRUE, NOW(), 'Biscoito amanteigado caseiro', 3.5, 'Biscoito Amanteigado', 'DOCE',
+            'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
+            4.5, '2024-11-29', 50, 3),
+
+            (TRUE, NOW(), 'Sanduíche de atum com salada', 12.0, 'Sanduíche de Atum', 'SALGADO',
+            'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
+            13.0, '2024-11-30', 30, 1),
+
+            (TRUE, NOW(), 'Bolo de milho cremoso, feito com milho fresco', 8.0, 'Bolo de Milho', 'DOCE',
+            'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
+            9.0, '2024-12-01', 25, 2),
+
+            (TRUE, NOW(), 'Empadão de palmito com azeitonas', 15.0, 'Empadão de Palmito', 'MISTO',
+            'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
+            18.0, '2024-12-02', 12, 3),
+
+            (TRUE, NOW(), 'Pastel de carne crocante e recheado', 4.5, 'Pastel de Carne', 'SALGADO',
+            'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
+            5.5, '2024-12-03', 45, 1),
+
+            (TRUE, NOW(), 'Bolo de coco gelado, ideal para sobremesa', 12.0, 'Bolo de Coco Gelado', 'DOCE',
+            'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
+            14.0, '2024-12-04', 20, 2),
+
+            (TRUE, NOW(), 'Croissant de presunto e queijo', 7.0, 'Croissant de Presunto e Queijo', 'SALGADO',
+            'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
+            8.5, '2024-12-05', 35, 3),
+
+            (TRUE, NOW(), 'Torrada com manteiga e alho', 2.0, 'Torrada com Manteiga e Alho', 'MISTO',
+            'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
+            3.0, '2024-12-06', 60, 1),
+
+            (TRUE, NOW(), 'Torta de frango com requeijão', 16.0, 'Torta de Frango', 'MISTO',
+            'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
+            18.0, '2024-12-07', 10, 2),
+
+            (TRUE, NOW(), 'Cupcake de chocolate com cobertura de morango', 6.5, 'Cupcake de Chocolate', 'DOCE',
+            'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
+            7.5, '2024-12-08', 40, 3);
 
 -- -- Inserindo dados na tabela tb_cart
 INSERT INTO tb_cart (total_value, user_id)
