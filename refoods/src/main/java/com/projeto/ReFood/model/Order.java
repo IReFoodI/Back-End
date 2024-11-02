@@ -32,6 +32,7 @@ public class Order {
   private Date orderDate;
 
   @NotNull(message = "O status do pedido não pode ser nulo.")
+  @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   private EnumOrderStatus orderStatus;
 
