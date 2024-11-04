@@ -11,3 +11,19 @@ public enum EnumOrderStatus {
   RECUSADO,
   REEMBOLSADO
 }
+
+
+// package com.projeto.ReFood.model;
+
+// public enum EnumOrderStatus {
+//   AGUARDANDO_APROVACAO,
+//   APROVADO,
+//   EMPRODUCAO,
+//   AGUARDANDO_RETIRADA,
+//   ENTREGUE,
+//   CONCLUIDO,
+//   CANCELADO,
+//   RECUSADO,
+//   REEMBOLSADO
+// }
+

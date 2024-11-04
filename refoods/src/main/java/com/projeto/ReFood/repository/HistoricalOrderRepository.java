@@ -1,7 +1,6 @@
 package com.projeto.ReFood.repository;
 
 import com.projeto.ReFood.model.HistoricalOrder;
-import com.projeto.ReFood.model.Restaurant;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
