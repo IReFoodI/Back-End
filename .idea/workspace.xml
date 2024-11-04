@@ -6,11 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="792016bb-253f-48c4-b9e3-6e6697933102" name="Changes" comment="Inserido o token nas solicitações de get e post dos horários.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/refoods/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/ReFoodsApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/ReFoodsApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/controller/RestaurantController.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/controller/RestaurantController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/dto/RestaurantHoursDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/dto/RestaurantHoursDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/service/RestaurantService.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/service/RestaurantService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/refoods/src/main/resources/restaurantData.sql" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/resources/restaurantData.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
