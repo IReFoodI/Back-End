@@ -1,10 +1,8 @@
 package com.projeto.ReFood.controller;
 
-import com.projeto.ReFood.dto.RestaurantHoursDTO;
+import com.projeto.ReFood.dto.*;
 import com.projeto.ReFood.model.EnumDayOfWeek;
 import com.projeto.ReFood.service.RestaurantHoursService;
-import com.projeto.ReFood.dto.RestaurantDTO;
-import com.projeto.ReFood.dto.RestaurantUpdateDTO;
 import com.projeto.ReFood.service.RestaurantService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -44,6 +42,13 @@ public class RestaurantController {
         return ResponseEntity.ok(restaurant);
     }
 
+    @Operation(summary = "Busca o email do restaurante por ID", description = "Retorna o email de um restaurante com base no token de autorização fornecido.")
+    @GetMapping("/email")
+    public ResponseEntity<String> getRestaurantEmailById(@RequestHeader("Authorization") String token) {
+        String restaurantEmail = restaurantService.getRestaurantEmailById(token);
+        return ResponseEntity.ok(restaurantEmail);
+    }
+
     @PostMapping
     public ResponseEntity<RestaurantDTO> createRestaurant(@Valid @RequestBody RestaurantDTO restaurantDTO) {
         RestaurantDTO createdRestaurant = restaurantService.createRestaurant(restaurantDTO);
@@ -59,6 +64,20 @@ public class RestaurantController {
                                                                 @Valid @RequestBody RestaurantUpdateDTO restaurantUpdateDTO) {
         RestaurantUpdateDTO updatedRestaurant = restaurantService.updateRestaurant(token, restaurantUpdateDTO);
         return ResponseEntity.ok(updatedRestaurant);
+    }
+
+    @PutMapping("/email")
+    public ResponseEntity<String> updateRestaurantEmail(@RequestHeader("Authorization") String token,
+                                                                     @Valid @RequestBody RestaurantUpdateEmailDTO restaurantUpdateEmailDTO) {
+        String updatedRestaurantEmail = restaurantService.updateRestaurantEmail(token, restaurantUpdateEmailDTO);
+        return ResponseEntity.ok(updatedRestaurantEmail);
+    }
+
+    @PutMapping("/password")
+    public ResponseEntity<Void> updateRestaurantPassword(@RequestHeader("Authorization") String token,
+                                                           @Valid @RequestBody RestaurantUpdatePasswordDTO restaurantUpdatePasswordDTO) {
+         restaurantService.updateRestaurantPassword(token, restaurantUpdatePasswordDTO);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{restaurantId}")
