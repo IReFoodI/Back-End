@@ -1,6 +1,8 @@
 package com.projeto.ReFood.controller;
 
+import com.projeto.ReFood.dto.ProductDTO;
 import com.projeto.ReFood.dto.ProductPartialUpdateDTO;
+import com.projeto.ReFood.dto.ProductRestaurantDTO;
 import com.projeto.ReFood.dto.RestaurantInfoDTO;
 import com.projeto.ReFood.service.ProductService;
 import jakarta.validation.Valid;
@@ -11,16 +13,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import com.projeto.ReFood.dto.ProductDTO;
-
-import java.net.URI;
-import java.util.List;
 
 import java.io.File;
+import java.net.URI;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/product")
@@ -64,6 +64,11 @@ public class ProductController {
   public ResponseEntity<ProductDTO> getProductById(@PathVariable Long productId) {
     ProductDTO productDTO = productService.getProductById(productId);
     return ResponseEntity.ok(productDTO);
+  }
+  @GetMapping("/search")
+  public ResponseEntity<List<ProductRestaurantDTO>> getProductById(@RequestParam(required = false)  String produto, @RequestParam(required = false) String tipo, @RequestParam(required = false) String categoria, @RequestParam(required = false)  String preco) {
+    List<ProductRestaurantDTO> productRestaurantDTO = productService.getFilteredProducts(produto,tipo,categoria,preco);
+    return ResponseEntity.ok(productRestaurantDTO);
   }
 
   @PostMapping
