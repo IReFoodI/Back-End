@@ -40,6 +40,14 @@ public class HistoricalOrderService {
         .orElseThrow(() -> new NotFoundException());
   }
 
+  @Transactional(readOnly = true)
+  public List<HistoricalOrderDTO> getAllHistoricalOrdersByRestaurantId(Long restaurantId) {
+    return historicalOrderRepository.findAllByRestaurantId(restaurantId)
+            .stream()
+            .map(this::convertToDTO)
+            .collect(Collectors.toList());
+  }
+
   @Transactional
   public HistoricalOrderDTO createHistoricalOrder(@Valid HistoricalOrderDTO historicalOrderDTO) {
     HistoricalOrder historicalOrder = convertToEntity(historicalOrderDTO);

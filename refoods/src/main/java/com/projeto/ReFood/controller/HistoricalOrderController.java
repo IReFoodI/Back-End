@@ -32,6 +32,11 @@ public class HistoricalOrderController {
     HistoricalOrderDTO historicalOrderDTO = historicalOrderService.getHistoricalOrderById(historyId);
     return ResponseEntity.ok(historicalOrderDTO);
   }
+  @GetMapping("/restaurant/{restaurantId}")
+  public ResponseEntity<List<HistoricalOrderDTO>> listALLHistoricalOrdersByRestaurantId(@PathVariable("restaurantId") Long restaurantId) {
+    List<HistoricalOrderDTO> historicalOrders = historicalOrderService.getAllHistoricalOrdersByRestaurantId(restaurantId);
+    return ResponseEntity.ok(historicalOrders);
+  }
 
   @PostMapping
   public ResponseEntity<HistoricalOrderDTO> createHistoricalOrder(
