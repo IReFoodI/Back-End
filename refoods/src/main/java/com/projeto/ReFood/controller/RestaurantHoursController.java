@@ -3,7 +3,6 @@ package com.projeto.ReFood.controller;
 import java.net.URI;
 import java.util.List;
 
-
 import com.projeto.ReFood.model.EnumDayOfWeek;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,16 +28,22 @@ public class RestaurantHoursController {
   }
 
   @GetMapping("/{hoursId}")
-  public ResponseEntity<RestaurantHoursDTO> getHoursById(@PathVariable Long hoursId)  {
-      RestaurantHoursDTO hoursDTO = restaurantHoursService.getHoursById(hoursId);
-      return ResponseEntity.ok(hoursDTO);
+  public ResponseEntity<RestaurantHoursDTO> getHoursById(@PathVariable Long hoursId) {
+    RestaurantHoursDTO hoursDTO = restaurantHoursService.getHoursById(hoursId);
+    return ResponseEntity.ok(hoursDTO);
   }
 
   @GetMapping("/today")
   public ResponseEntity<List<RestaurantHoursDTO>> getTodayHours() {
-      EnumDayOfWeek today = EnumDayOfWeek.valueOf(java.time.LocalDate.now().getDayOfWeek().name());
-      List<RestaurantHoursDTO> hours = restaurantHoursService.getHoursByDay(today);
-      return ResponseEntity.ok(hours);
+    EnumDayOfWeek today = EnumDayOfWeek.valueOf(java.time.LocalDate.now().getDayOfWeek().name());
+    List<RestaurantHoursDTO> hours = restaurantHoursService.getHoursByDay(today);
+    return ResponseEntity.ok(hours);
+  }
+
+  @GetMapping("/restaurant-id/{restaurantId}")
+  public ResponseEntity<List<RestaurantHoursDTO>> getRestaurantHours(@PathVariable Long restaurantId) {
+    List<RestaurantHoursDTO> hours = restaurantHoursService.getHoursByRestaurantId(restaurantId);
+    return ResponseEntity.ok(hours);
   }
 
   @GetMapping("/restaurant")
@@ -48,7 +53,8 @@ public class RestaurantHoursController {
   }
 
   @PostMapping
-  public ResponseEntity<RestaurantHoursDTO> createHours(@RequestHeader("Authorization") String token, @Valid @RequestBody RestaurantHoursDTO hoursDTO) {
+  public ResponseEntity<RestaurantHoursDTO> createHours(@RequestHeader("Authorization") String token,
+      @Valid @RequestBody RestaurantHoursDTO hoursDTO) {
     RestaurantHoursDTO createdHours = restaurantHoursService.createHours(hoursDTO, token);
     URI location = ServletUriComponentsBuilder.fromCurrentRequest()
         .path("/{hoursId}")

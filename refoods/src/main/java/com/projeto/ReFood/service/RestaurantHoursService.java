@@ -30,7 +30,6 @@ public class RestaurantHoursService {
   @Autowired
   private JwtTokenProvider jwtTokenProvider;
 
-
   @Transactional(readOnly = true)
   public List<RestaurantHoursDTO> getAllHours() {
     return restaurantHoursRepository.findAll()
@@ -89,30 +88,37 @@ public class RestaurantHoursService {
         hours.getRestaurant().getRestaurantId());
   }
 
-    private RestaurantHours convertToEntity(RestaurantHoursDTO hoursDTO) {
-        RestaurantHours hours = new RestaurantHours();
-        hours.setId(hoursDTO.id());
-        hours.setDayOfWeek(hoursDTO.dayOfWeek());
-        hours.setOpeningTime(hoursDTO.openingTime());
-        hours.setClosingTime(hoursDTO.closingTime());
-        hours.setId(hoursDTO.restaurantId());
+  private RestaurantHours convertToEntity(RestaurantHoursDTO hoursDTO) {
+    RestaurantHours hours = new RestaurantHours();
+    hours.setId(hoursDTO.id());
+    hours.setDayOfWeek(hoursDTO.dayOfWeek());
+    hours.setOpeningTime(hoursDTO.openingTime());
+    hours.setClosingTime(hoursDTO.closingTime());
+    hours.setId(hoursDTO.restaurantId());
 
-        return hours;
-    }
+    return hours;
+  }
 
-    @Transactional
-    public List<RestaurantHoursDTO> getHoursByDay(EnumDayOfWeek day) {
-                return restaurantHoursRepository.findByDayOfWeek(day).stream()
-                .map(this::convertToDTO)
-                .toList();
-    }
+  @Transactional
+  public List<RestaurantHoursDTO> getHoursByDay(EnumDayOfWeek day) {
+    return restaurantHoursRepository.findByDayOfWeek(day).stream()
+        .map(this::convertToDTO)
+        .toList();
+  }
+
+  @Transactional(readOnly = true)
+  public List<RestaurantHoursDTO> getHoursByRestaurantId(Long restaurantId) {
+    return restaurantHoursRepository.findByRestaurantId(restaurantId).stream()
+        .map(this::convertToDTO)
+        .toList();
+  }
 
   @Transactional(readOnly = true)
   public List<RestaurantHoursDTO> getHoursByRestaurant(String token) {
     Long restaurantId = jwtTokenProvider.extractUserId(token);
     return restaurantHoursRepository.findByRestaurantId(restaurantId).stream()
-            .map(this::convertToDTO)
-            .toList();
+        .map(this::convertToDTO)
+        .toList();
   }
 
 }
