@@ -16,6 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.Arrays;
 import java.util.List;
@@ -58,26 +61,29 @@ public class ProductService {
         .orElseThrow(NotFoundException::new);
   }
 
-  @Transactional(readOnly = true)
-  public List<ProductRestaurantDTO> getFilteredProducts(String product, String types,String categories, String price) {
 
-    Float convertedPrice=null;
-    if(price != null && !price.isEmpty()){
-      convertedPrice= Float.parseFloat(price);
-    }
-    List<EnumRestaurantCategory> typeList = (types != null && !types.isEmpty()) ?
-        Arrays.stream(types.split(" "))
-            .map(EnumRestaurantCategory::valueOf)
-            .collect(Collectors.toList()) : null;
+@Transactional(readOnly = true)
+public Page<ProductRestaurantDTO> getFilteredProducts(String product, String types, String categories, String price, Integer currentPage) {
+  Integer pageSize = 20; // Número de registros por página
+  Pageable pageable = PageRequest.of(currentPage, pageSize); // Cria o objeto Pageable
 
-    List<EnumProductCategory> categoryList = (categories != null && !categories.isEmpty()) ?
-        Arrays.stream(categories.split(" "))
-            .map(EnumProductCategory::valueOf)
-            .collect(Collectors.toList()) : null;
-
-    return productRepository.findProductsByFilters(product,typeList,categoryList,convertedPrice);
-
+  Float convertedPrice = null;
+  if (price != null && !price.isEmpty()) {
+    convertedPrice = Float.parseFloat(price);
   }
+
+  List<EnumRestaurantCategory> typeList = (types != null && !types.isEmpty()) ?
+      Arrays.stream(types.split(" "))
+          .map(EnumRestaurantCategory::valueOf)
+          .collect(Collectors.toList()) : null;
+
+  List<EnumProductCategory> categoryList = (categories != null && !categories.isEmpty()) ?
+      Arrays.stream(categories.split(" "))
+          .map(EnumProductCategory::valueOf)
+          .collect(Collectors.toList()) : null;
+
+  return productRepository.findProductsByFilters(product, typeList, categoryList, convertedPrice, pageable);
+}
 
   @Transactional
   public ProductDTO createProduct(@Valid ProductDTO productDTO, String token) {

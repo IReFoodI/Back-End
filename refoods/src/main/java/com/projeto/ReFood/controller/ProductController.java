@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.data.domain.Page;
 
 import java.io.File;
 import java.net.URI;
@@ -65,15 +66,22 @@ public class ProductController {
     ProductDTO productDTO = productService.getProductById(productId);
     return ResponseEntity.ok(productDTO);
   }
+
   @GetMapping("/search")
-  public ResponseEntity<List<ProductRestaurantDTO>> getProductById(@RequestParam(required = false)  String produto, @RequestParam(required = false) String tipo, @RequestParam(required = false) String categoria, @RequestParam(required = false)  String preco) {
-    List<ProductRestaurantDTO> productRestaurantDTO = productService.getFilteredProducts(produto,tipo,categoria,preco);
+  public ResponseEntity<Page<ProductRestaurantDTO>> getProductById(@RequestParam(required = false) String produto, @RequestParam(required = false) String tipo, @RequestParam(required = false) String categoria, @RequestParam(required = false) String preco, @RequestParam(required = false) String currentpage) {
+    Integer integerCurrentPage;
+    if (currentpage == null) {
+      integerCurrentPage = 0;
+    } else {
+      integerCurrentPage = Integer.parseInt(currentpage);
+    }
+    Page<ProductRestaurantDTO> productRestaurantDTO = productService.getFilteredProducts(produto, tipo, categoria, preco, integerCurrentPage);
     return ResponseEntity.ok(productRestaurantDTO);
   }
 
   @PostMapping
   public ResponseEntity<ProductDTO> createProduct(@RequestHeader("Authorization") String token,
-      @Valid @RequestBody ProductDTO productDTO) {
+                                                  @Valid @RequestBody ProductDTO productDTO) {
 
     ProductDTO createdProduct = productService.createProduct(productDTO, token);
     URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -111,8 +119,8 @@ public class ProductController {
   public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
     String originalFilename = file.getOriginalFilename();
     String normalizedFilename = originalFilename.replaceAll(" ", "_").replaceAll("[^a-zA-Z0-9_.]", ""); // Remove
-                                                                                                        // caracteres
-                                                                                                        // especiais
+    // caracteres
+    // especiais
 
     // Define o caminho para o diretório de uploads
     String uploadDirPath = "refoods/src/main/resources/static/images/";

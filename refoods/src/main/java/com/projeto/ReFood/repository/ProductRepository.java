@@ -1,10 +1,12 @@
 package com.projeto.ReFood.repository;
 
 import com.projeto.ReFood.dto.ProductRestaurantDTO;
+import com.projeto.ReFood.dto.RestaurantInfoDTO;
 import com.projeto.ReFood.model.EnumProductCategory;
 import com.projeto.ReFood.model.EnumRestaurantCategory;
-import com.projeto.ReFood.dto.RestaurantInfoDTO;
 import com.projeto.ReFood.model.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,12 +15,10 @@ import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
+  List<Product> findByRestaurant_RestaurantId(Long restaurantId);
 
-    List<Product> findByRestaurant_RestaurantId(Long restaurantId);
-
-    @Query("SELECT r.fantasy FROM Product p JOIN p.restaurant r WHERE p.productId = :productId")
-    String findRestaurantNameByProductId(Long productId);
-
+  @Query("SELECT r.fantasy FROM Product p JOIN p.restaurant r WHERE p.productId = :productId")
+  String findRestaurantNameByProductId(Long productId);
 
   @Query("SELECT new com.projeto.ReFood.dto.ProductRestaurantDTO(p, r.fantasy, r.category) " +
       "FROM Product p " +
@@ -33,14 +33,11 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
       "AND (:preco IS NULL OR p.sellPrice <= :preco) " +
       "AND (p.quantity>0) " +
       "ORDER BY p.nameProduct ASC")
-  List<ProductRestaurantDTO> findProductsByFilters(@Param("produto") String produto,
+  Page<ProductRestaurantDTO> findProductsByFilters(@Param("produto") String produto,
                                                    @Param("tipos") List<EnumRestaurantCategory> tipos,
                                                    @Param("categorias") List<EnumProductCategory> categorias,
-                                                   @Param("preco") Float preco);
-
-
-
-
+                                                   @Param("preco") Float preco,
+                                                   Pageable pageable);
 
   @Query("""
           SELECT new com.projeto.ReFood.dto.RestaurantInfoDTO(
