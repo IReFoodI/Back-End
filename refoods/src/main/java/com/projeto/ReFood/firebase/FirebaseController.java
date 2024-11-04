@@ -47,4 +47,18 @@ public class FirebaseController {
     }
   }
 
+  @DeleteMapping("/image/{imageName}")
+  public ResponseEntity<Void> deleteImage(@PathVariable String imageName) {
+    boolean deleted = firebaseService.deleteImage(imageName);
+    if (deleted) {
+      return ResponseEntity.noContent().build(); // 204 No Content
+    }
+    return ResponseEntity.notFound().build(); // 404 Not Found
+  }
+
+  @DeleteMapping("/test")
+  public ResponseEntity<String> testDelete() {
+    return ResponseEntity.ok("DELETE method is supported");
+  }
+
 }
