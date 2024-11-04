@@ -7,14 +7,7 @@ import java.util.List;
 import com.projeto.ReFood.model.EnumDayOfWeek;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.projeto.ReFood.dto.RestaurantHoursDTO;
@@ -48,15 +41,15 @@ public class RestaurantHoursController {
       return ResponseEntity.ok(hours);
   }
 
-  @GetMapping("/restaurant/{restaurantId}")
-  public ResponseEntity<List<RestaurantHoursDTO>> getRestaurantHours(@PathVariable Long restaurantId) {
-    List<RestaurantHoursDTO> hours = restaurantHoursService.getHoursByRestaurant(restaurantId);
+  @GetMapping("/restaurant")
+  public ResponseEntity<List<RestaurantHoursDTO>> getRestaurantHours(@RequestHeader("Authorization") String token) {
+    List<RestaurantHoursDTO> hours = restaurantHoursService.getHoursByRestaurant(token);
     return ResponseEntity.ok(hours);
   }
 
   @PostMapping
-  public ResponseEntity<RestaurantHoursDTO> createHours(@Valid @RequestBody RestaurantHoursDTO hoursDTO) {
-    RestaurantHoursDTO createdHours = restaurantHoursService.createHours(hoursDTO);
+  public ResponseEntity<RestaurantHoursDTO> createHours(@RequestHeader("Authorization") String token, @Valid @RequestBody RestaurantHoursDTO hoursDTO) {
+    RestaurantHoursDTO createdHours = restaurantHoursService.createHours(hoursDTO, token);
     URI location = ServletUriComponentsBuilder.fromCurrentRequest()
         .path("/{hoursId}")
         .buildAndExpand(createdHours.id())
