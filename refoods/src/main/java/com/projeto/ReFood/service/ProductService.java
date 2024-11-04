@@ -61,26 +61,7 @@ public class ProductService {
         .orElseThrow(NotFoundException::new);
   }
 
-//  @Transactional(readOnly = true)
-//  public List<ProductRestaurantDTO> getFilteredProducts(String product, String types,String categories, String price,String currentPage) {
-//    Integer integerCurrentPage=Integer.getInteger(currentPage);
-//    Float convertedPrice=null;
-//    if(price != null && !price.isEmpty()){
-//      convertedPrice= Float.parseFloat(price);
-//    }
-//    List<EnumRestaurantCategory> typeList = (types != null && !types.isEmpty()) ?
-//        Arrays.stream(types.split(" "))
-//            .map(EnumRestaurantCategory::valueOf)
-//            .collect(Collectors.toList()) : null;
-//
-//    List<EnumProductCategory> categoryList = (categories != null && !categories.isEmpty()) ?
-//        Arrays.stream(categories.split(" "))
-//            .map(EnumProductCategory::valueOf)
-//            .collect(Collectors.toList()) : null;
-//
-//    return productRepository.findProductsByFilters(product,typeList,categoryList,convertedPrice,integerCurrentPage);
-//
-//  }
+
 @Transactional(readOnly = true)
 public Page<ProductRestaurantDTO> getFilteredProducts(String product, String types, String categories, String price, Integer currentPage) {
   Integer pageSize = 20; // Número de registros por página
