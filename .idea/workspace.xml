@@ -4,11 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="792016bb-253f-48c4-b9e3-6e6697933102" name="Changes" comment="">
+    <list default="true" id="792016bb-253f-48c4-b9e3-6e6697933102" name="Changes" comment="Inserido o token nas solicitações de get e post dos horários.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/controller/RestaurantHoursController.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/controller/RestaurantHoursController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/refoods/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/ReFoodsApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/ReFoodsApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/controller/RestaurantController.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/controller/RestaurantController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/dto/RestaurantHoursDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/dto/RestaurantHoursDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/service/RestaurantHoursService.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/service/RestaurantHoursService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/service/RestaurantService.java" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/java/com/projeto/ReFood/service/RestaurantService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/refoods/src/main/resources/restaurantData.sql" beforeDir="false" afterPath="$PROJECT_DIR$/refoods/src/main/resources/restaurantData.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -118,7 +121,15 @@
       <option name="project" value="LOCAL" />
       <updated>1729515569676</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Inserido o token nas solicitações de get e post dos horários.">
+      <option name="closed" value="true" />
+      <created>1730675400245</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1730675400245</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -147,7 +158,8 @@
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Inseridas imagens e ajuste no enum de dias." />
-    <option name="LAST_COMMIT_MESSAGE" value="Inseridas imagens e ajuste no enum de dias." />
+    <MESSAGE value="Inserido o token nas solicitações de get e post dos horários." />
+    <option name="LAST_COMMIT_MESSAGE" value="Inserido o token nas solicitações de get e post dos horários." />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>
