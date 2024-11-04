@@ -4,6 +4,7 @@ import com.projeto.ReFood.model.EnumDayOfWeek;
 
 import jakarta.validation.constraints.NotNull;
 
+
 public record RestaurantHoursDTO(
     Long id,
 

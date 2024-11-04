@@ -11,6 +11,8 @@ import com.projeto.ReFood.repository.RestaurantRepository;
 import com.projeto.ReFood.security.JwtTokenProvider;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +40,13 @@ RestaurantService {
         .stream()
         .map(this::convertToDTO)
         .collect(Collectors.toList());
+  }
+
+  @Transactional(readOnly = true)
+  public Page<RestaurantDTO> getRestaurants(Pageable pageable) {
+    return restaurantRepository
+            .findAll(pageable)
+            .map(this::convertToDTO);
   }
 
   @Transactional(readOnly = true)

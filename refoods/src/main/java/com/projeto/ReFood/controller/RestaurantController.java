@@ -9,16 +9,20 @@ import com.projeto.ReFood.service.RestaurantService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -28,14 +32,28 @@ public class RestaurantController {
     @Autowired
     private RestaurantService restaurantService;
 
+    @Autowired
+    private PagedResourcesAssembler<RestaurantDTO> pagedResourcesAssembler;
+
   @Autowired
   private RestaurantHoursService restaurantHoursService;
 
-    @GetMapping("/restaurants")
+    @GetMapping("/allRestaurants")
     public ResponseEntity<List<RestaurantDTO>> getAllRestaurants() {
         List<RestaurantDTO> restaurants = restaurantService.getAllRestaurants();
         return ResponseEntity.ok(restaurants);
     }
+
+    @GetMapping("/restaurants")
+    public ResponseEntity<PagedModel<EntityModel<RestaurantDTO>>> getRestaurants(
+            @PageableDefault(size = 15) Pageable pageable) {
+
+        Page<RestaurantDTO> restaurantPage = restaurantService.getRestaurants(pageable);
+        PagedModel<EntityModel<RestaurantDTO>> pagedModel = pagedResourcesAssembler.toModel(restaurantPage);
+
+        return ResponseEntity.ok(pagedModel);
+    }
+
 
     @Operation(summary = "Busca restaurante por ID", description = "Retorna os detalhes de um restaurante com base no token de autorização fornecido.")
     @GetMapping
@@ -67,26 +85,46 @@ public class RestaurantController {
         return ResponseEntity.noContent().build();
     }
 
-  @GetMapping("/today")
-  public ResponseEntity<List<Map<String, Object>>> getTodayHours() {
-    List<RestaurantDTO> restaurants = restaurantService.getAllRestaurants();
-    EnumDayOfWeek today = EnumDayOfWeek.valueOf(LocalDate.now().getDayOfWeek().name());
-    List<RestaurantHoursDTO> hours = restaurantHoursService.getHoursByDay(today);
-    List<Map<String, Object>> mergedData = new ArrayList<>();
-    for (RestaurantDTO restaurant : restaurants) {
-      Map<String, Object> restaurantData = new HashMap<>();
-      restaurantData.put("restaurant", restaurant);
 
-      // Filtrar os horários correspondentes ao restaurante
-      List<RestaurantHoursDTO> hoursForRestaurant = hours.stream()
-              .filter(hour -> hour.restaurantId().equals(restaurant.restaurantId()))
-              .collect(Collectors.toList());
+    @GetMapping("/today")
+    public ResponseEntity<PagedModel<EntityModel<Map<String, Object>>>> getTodayHours(
+            @PageableDefault(size = 15) Pageable pageable,
+            PagedResourcesAssembler<Map<String, Object>> pagedResourcesAssembler) {
 
-      restaurantData.put("hours", hoursForRestaurant);
+        // Obtém todos os restaurantes e horários de hoje
+        List<RestaurantDTO> allRestaurants = restaurantService.getAllRestaurants();
+        EnumDayOfWeek today = EnumDayOfWeek.valueOf(LocalDate.now().getDayOfWeek().name());
+        List<RestaurantHoursDTO> hours = restaurantHoursService.getHoursByDay(today);
 
-      mergedData.add(restaurantData);
+        // Filtra e mapeia apenas os restaurantes com horários disponíveis hoje
+        List<Map<String, Object>> mergedData = allRestaurants.stream()
+                .map(restaurant -> {
+                    Map<String, Object> restaurantData = new HashMap<>();
+                    restaurantData.put("restaurant", restaurant);
+
+                    // Filtra os horários correspondentes ao restaurante atual
+                    List<RestaurantHoursDTO> hoursForRestaurant = hours.stream()
+                            .filter(hour -> hour.restaurantId().equals(restaurant.restaurantId()))
+                            .collect(Collectors.toList());
+
+                    if (!hoursForRestaurant.isEmpty()) {
+                        restaurantData.put("hours", hoursForRestaurant);
+                        return restaurantData;
+                    }
+                    return null;
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+
+        // Converte para uma página paginada
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), mergedData.size());
+        List<Map<String, Object>> paginatedData = mergedData.subList(start, end);
+        Page<Map<String, Object>> page = new PageImpl<>(paginatedData, pageable, mergedData.size());
+
+        // Retorna como PagedModel
+        PagedModel<EntityModel<Map<String, Object>>> pagedModel = pagedResourcesAssembler.toModel(page);
+        return ResponseEntity.ok(pagedModel);
     }
-
-    return ResponseEntity.ok(mergedData);
-  }
 }
+
