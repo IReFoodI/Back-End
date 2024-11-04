@@ -46,7 +46,7 @@ public class TransactionService {
     @Transactional
     public TransactionDTO createTransaction(@Valid TransactionDTO transactionDTO) {
         Transaction transaction = convertToEntity(transactionDTO);
-        utilityService.associateCard(transaction::setCard, transactionDTO.cardId());
+        transaction.setCardId(transactionDTO.cardId());
         utilityService.associateOrder(transaction::setAssociatedOrder, transactionDTO.orderId());
         
         transaction = transactionRepository.save(transaction);
@@ -61,7 +61,7 @@ public class TransactionService {
         transaction.setTransactionDate(transactionDTO.transactionDate());
         transaction.setTransactionValue(transactionDTO.transactionValue());
         transaction.setTransactionStatus(EnumTransactionStatus.valueOf(transactionDTO.transactionStatus()));
-        utilityService.associateCard(transaction::setCard, transactionDTO.cardId());
+        transaction.setCardId(transactionDTO.cardId());
         utilityService.associateOrder(transaction::setAssociatedOrder, transactionDTO.orderId());
 
         transaction = transactionRepository.save(transaction);
@@ -82,7 +82,7 @@ public class TransactionService {
             transaction.getTransactionDate(),
             transaction.getTransactionValue(),
             transaction.getTransactionStatus().name(),
-            transaction.getCard().getCardId(), 
+            transaction.getCardId(),
             transaction.getAssociatedOrder().getOrderId() 
         );
     }

@@ -18,10 +18,10 @@ public record ProductDTO(
     String urlImgProd,
 
     @NotNull(message = "O valor do produto não pode ser nulo.")
-    float valueProd,
+    float originalPrice,
 
-    @NotNull(message = "O desconto deve ser um valor válido.")
-    int discount,
+    @NotNull(message = "O valor de venda não pode ser nulo.")
+    float sellPrice,
 
     @NotNull(message = "A data de expiração não pode ser nula.")
     Date expirationDate,

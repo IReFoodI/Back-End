@@ -6,8 +6,6 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
-import java.util.Set;
-
 @Entity
 @Data
 @Table(name = "tb_cards")
@@ -45,8 +43,5 @@ public class Card {
   @ManyToOne
   @JoinColumn(name = "user_id")
   private User user;
-
-  @OneToMany(mappedBy = "card")
-  private Set<Transaction> cardTransactions;
 
 }

@@ -3,18 +3,10 @@ package com.projeto.ReFood.controller;
 import java.net.URI;
 import java.util.List;
 
-
 import com.projeto.ReFood.model.EnumDayOfWeek;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.projeto.ReFood.dto.RestaurantHoursDTO;
@@ -36,27 +28,34 @@ public class RestaurantHoursController {
   }
 
   @GetMapping("/{hoursId}")
-  public ResponseEntity<RestaurantHoursDTO> getHoursById(@PathVariable Long hoursId)  {
-      RestaurantHoursDTO hoursDTO = restaurantHoursService.getHoursById(hoursId);
-      return ResponseEntity.ok(hoursDTO);
+  public ResponseEntity<RestaurantHoursDTO> getHoursById(@PathVariable Long hoursId) {
+    RestaurantHoursDTO hoursDTO = restaurantHoursService.getHoursById(hoursId);
+    return ResponseEntity.ok(hoursDTO);
   }
 
   @GetMapping("/today")
   public ResponseEntity<List<RestaurantHoursDTO>> getTodayHours() {
-      EnumDayOfWeek today = EnumDayOfWeek.valueOf(java.time.LocalDate.now().getDayOfWeek().name());
-      List<RestaurantHoursDTO> hours = restaurantHoursService.getHoursByDay(today);
-      return ResponseEntity.ok(hours);
+    EnumDayOfWeek today = EnumDayOfWeek.valueOf(java.time.LocalDate.now().getDayOfWeek().name());
+    List<RestaurantHoursDTO> hours = restaurantHoursService.getHoursByDay(today);
+    return ResponseEntity.ok(hours);
   }
 
-  @GetMapping("/restaurant/{restaurantId}")
+  @GetMapping("/restaurant-id/{restaurantId}")
   public ResponseEntity<List<RestaurantHoursDTO>> getRestaurantHours(@PathVariable Long restaurantId) {
-    List<RestaurantHoursDTO> hours = restaurantHoursService.getHoursByRestaurant(restaurantId);
+    List<RestaurantHoursDTO> hours = restaurantHoursService.getHoursByRestaurantId(restaurantId);
+    return ResponseEntity.ok(hours);
+  }
+
+  @GetMapping("/restaurant")
+  public ResponseEntity<List<RestaurantHoursDTO>> getRestaurantHours(@RequestHeader("Authorization") String token) {
+    List<RestaurantHoursDTO> hours = restaurantHoursService.getHoursByRestaurant(token);
     return ResponseEntity.ok(hours);
   }
 
   @PostMapping
-  public ResponseEntity<RestaurantHoursDTO> createHours(@Valid @RequestBody RestaurantHoursDTO hoursDTO) {
-    RestaurantHoursDTO createdHours = restaurantHoursService.createHours(hoursDTO);
+  public ResponseEntity<RestaurantHoursDTO> createHours(@RequestHeader("Authorization") String token,
+      @Valid @RequestBody RestaurantHoursDTO hoursDTO) {
+    RestaurantHoursDTO createdHours = restaurantHoursService.createHours(hoursDTO, token);
     URI location = ServletUriComponentsBuilder.fromCurrentRequest()
         .path("/{hoursId}")
         .buildAndExpand(createdHours.id())

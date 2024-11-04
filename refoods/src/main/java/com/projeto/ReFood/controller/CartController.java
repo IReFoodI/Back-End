@@ -1,6 +1,7 @@
 package com.projeto.ReFood.controller;
 
 import com.projeto.ReFood.dto.CartDTO;
+import com.projeto.ReFood.dto.CartItemsDto;
 import com.projeto.ReFood.service.CartService;
 
 import jakarta.validation.Valid;
@@ -19,6 +20,24 @@ public class CartController {
 
   @Autowired
   private CartService cartService;
+
+  @DeleteMapping("/cart/item")
+  public ResponseEntity<String> removeItemFromCart(@RequestParam Long cartId, @RequestParam Long productId) {
+    cartService.removeItemFromCart(cartId, productId);
+    return ResponseEntity.noContent().build();
+  }
+
+  @GetMapping("/user/{userId}")
+  public ResponseEntity<List<CartItemsDto>> getCartDetailsByUserId(@PathVariable Long userId) {
+    List<CartItemsDto> cartDetails = cartService.getCartDetailsByUserId(userId);
+    return ResponseEntity.ok(cartDetails);
+  }
+
+  @DeleteMapping("/{cartId}/clear")
+  public ResponseEntity<Void> clearCart(@PathVariable Long cartId) {
+    cartService.clearCart(cartId);
+    return ResponseEntity.noContent().build();
+  }
 
   @GetMapping
   public ResponseEntity<List<CartDTO>> listAllCarts() {

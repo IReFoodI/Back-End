@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,9 +40,7 @@ public class UserService {
 
   @Transactional(readOnly = true)
   public UserDTO getUserById(Long userId) {
-    System.out.println(userId);
-    Optional<User> response = userRepository.findById(userId);
-    System.out.println(response);
+    // Optional<User> response = userRepository.findById(userId);
     UserDTO dto = userRepository.findById(userId)
         .map(this::convertToDTO)
         .orElseThrow(() -> new NotFoundException());
