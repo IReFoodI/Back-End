@@ -1,7 +1,5 @@
 package com.projeto.ReFood.service;
 
-import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.function.Consumer;
 
 import com.projeto.ReFood.dto.AddressDTO;
@@ -17,7 +15,6 @@ import com.projeto.ReFood.repository.CartRepository;
 import com.projeto.ReFood.repository.OrderRepository;
 import com.projeto.ReFood.repository.ProductRepository;
 import com.projeto.ReFood.repository.RestaurantRepository;
-import com.projeto.ReFood.repository.TransactionRepository;
 import com.projeto.ReFood.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -28,7 +25,6 @@ public class UtilityService {
 
   private final UserRepository userRepository;
   private final RestaurantRepository restaurantRepository;
-  private final TransactionRepository transactionRepository;
   private final OrderRepository orderRepository;
   private final AddressRepository addressRepository;
   private final CardRepository cardRepository;
@@ -53,16 +49,6 @@ public class UtilityService {
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new NotFoundException());
         restaurantSetter.accept(restaurant);
-    }
-
-    public void associateTransactions(Card card, Set<Long> transactionIds) {
-        if (transactionIds != null && !transactionIds.isEmpty()) {
-            Set<Transaction> transactions = transactionIds.stream()
-                    .map(transactionId -> transactionRepository.findById(transactionId)
-                            .orElseThrow(() -> new NotFoundException()))
-                    .collect(Collectors.toSet());
-            card.setCardTransactions(transactions);
-        }
     }
 
     public void associateOrder(HistoricalOrder historicalOrder, Long orderId) {
