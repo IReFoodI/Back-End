@@ -45,12 +45,26 @@ public class RestaurantController {
     }
 
     @GetMapping("/restaurants")
-    public ResponseEntity<PagedModel<EntityModel<RestaurantDTO>>> getRestaurants(
-            @PageableDefault(size = 15) Pageable pageable) {
+    public ResponseEntity<PagedModel<EntityModel<Map<String, Object>>>>getRestaurants(
+            @PageableDefault(size = 15) Pageable pageable,
+            PagedResourcesAssembler<Map<String, Object>> pagedResourcesAssembler) {
 
-        Page<RestaurantDTO> restaurantPage = restaurantService.getRestaurants(pageable);
-        PagedModel<EntityModel<RestaurantDTO>> pagedModel = pagedResourcesAssembler.toModel(restaurantPage);
+        List<RestaurantDTO> allRestaurants = restaurantService.getAllRestaurants();
+        List<Map<String, Object>> mergedData = allRestaurants.stream()
+                .map(restaurant -> {
+                    Map<String, Object> restaurantData = new HashMap<>();
+                    restaurantData.put("restaurant", restaurant);
+                    return restaurantData;
+                })
+                .collect(Collectors.toList());
 
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), mergedData.size());
+        List<Map<String, Object>> paginatedData = mergedData.subList(start, end);
+        Page<Map<String, Object>> page = new PageImpl<>(paginatedData, pageable, mergedData.size());
+
+        // Retorna como PagedModel
+        PagedModel<EntityModel<Map<String, Object>>> pagedModel = pagedResourcesAssembler.toModel(page);
         return ResponseEntity.ok(pagedModel);
     }
 
