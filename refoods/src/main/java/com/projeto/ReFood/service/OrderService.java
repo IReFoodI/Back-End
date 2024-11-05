@@ -1,5 +1,6 @@
 package com.projeto.ReFood.service;
 
+import com.projeto.ReFood.model.EnumDeliveryType;
 import com.projeto.ReFood.repository.OrderRepository;
 
 import jakarta.validation.Valid;
@@ -81,6 +82,7 @@ public class OrderService {
         order.getOrderId(),
         order.getOrderDate(),
         order.getOrderStatus(),
+        order.getDeliveryType(),
         order.getTotalValue(),
         order.getUser().getUserId(),
         order.getRestaurant().getRestaurantId(),
@@ -92,6 +94,7 @@ public class OrderService {
     order.setOrderId(orderDTO.orderId());
     order.setOrderDate(orderDTO.orderDate());
     order.setOrderStatus(orderDTO.orderStatus());
+    order.setDeliveryType(orderDTO.deliveryType());
     order.setTotalValue(orderDTO.totalValue());
     utilityService.associateUser(order::setUser, orderDTO.userId());
     utilityService.associateRestaurant(order::setRestaurant, orderDTO.restaurantId());

@@ -1,10 +1,13 @@
 package com.projeto.ReFood.dto;
 
+import com.projeto.ReFood.model.EnumDeliveryType;
 import com.projeto.ReFood.model.EnumOrderStatus;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Positive;
+import lombok.Builder;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.util.Date;
 
@@ -17,6 +20,8 @@ public record OrderDTO(
 
     @NotNull(message = "O status do pedido não pode ser nulo.")
     EnumOrderStatus orderStatus,
+
+    EnumDeliveryType deliveryType,
 
     @NotNull(message = "O valor total não pode ser nulo.")
     @Positive(message = "O valor total deve ser positivo.")
@@ -33,4 +38,8 @@ public record OrderDTO(
     @NotNull(message = "O ID do endereço não pode ser nulo.")
     @Positive(message = "O ID do endereço deve ser positivo.")
     Long addressId
-) {}
+) {
+    public OrderDTO{
+        deliveryType = EnumDeliveryType.RETIRADA;
+    }
+}

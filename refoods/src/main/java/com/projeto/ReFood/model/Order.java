@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.util.Date;
 import java.util.Set;
@@ -35,6 +37,11 @@ public class Order {
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   private EnumOrderStatus orderStatus;
+
+  @NotNull(message = "O tipo de entrega não pode estar nulo.")
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false, columnDefinition = "enum('RETIRADA', 'ENTREGA') default 'RETIRADA'")
+  private EnumDeliveryType deliveryType;
 
   @NotNull(message = "O valor total não pode ser nulo.")
   @Positive(message = "O valor total deve ser positivo.")
