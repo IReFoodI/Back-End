@@ -63,7 +63,6 @@ public class RestaurantController {
         List<Map<String, Object>> paginatedData = mergedData.subList(start, end);
         Page<Map<String, Object>> page = new PageImpl<>(paginatedData, pageable, mergedData.size());
 
-        // Retorna como PagedModel
         PagedModel<EntityModel<Map<String, Object>>> pagedModel = pagedResourcesAssembler.toModel(page);
         return ResponseEntity.ok(pagedModel);
     }
