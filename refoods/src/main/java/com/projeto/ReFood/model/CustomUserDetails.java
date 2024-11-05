@@ -66,5 +66,10 @@ public class CustomUserDetails implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public String setEmail(String email){
+        this.email=email;
+        return this.email;
+    }
 }
 

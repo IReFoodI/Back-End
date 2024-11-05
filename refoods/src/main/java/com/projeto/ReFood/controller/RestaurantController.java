@@ -85,9 +85,9 @@ public class RestaurantController {
     }
 
     @PutMapping("/email")
-    public ResponseEntity<String> updateRestaurantEmail(@RequestHeader("Authorization") String token,
+    public ResponseEntity<RestaurantUpdateEmailResponse> updateRestaurantEmail(@RequestHeader("Authorization") String token,
                                                                      @Valid @RequestBody RestaurantUpdateEmailDTO restaurantUpdateEmailDTO) {
-        String updatedRestaurantEmail = restaurantService.updateRestaurantEmail(token, restaurantUpdateEmailDTO);
+      RestaurantUpdateEmailResponse updatedRestaurantEmail = restaurantService.updateRestaurantEmail(token, restaurantUpdateEmailDTO);
         return ResponseEntity.ok(updatedRestaurantEmail);
     }
 

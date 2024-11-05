@@ -1,12 +1,11 @@
 package com.projeto.ReFood.service;
 
-import com.projeto.ReFood.dto.RestaurantDTO;
-import com.projeto.ReFood.dto.RestaurantUpdateDTO;
-import com.projeto.ReFood.dto.RestaurantUpdateEmailDTO;
-import com.projeto.ReFood.dto.RestaurantUpdatePasswordDTO;
+import com.projeto.ReFood.dto.*;
+import com.projeto.ReFood.exception.BadRequestException;
 import com.projeto.ReFood.exception.GlobalExceptionHandler.CnpjAlreadyExistsException;
 import com.projeto.ReFood.exception.GlobalExceptionHandler.EmailAlreadyExistsException;
 import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
+import com.projeto.ReFood.model.CustomUserDetails;
 import com.projeto.ReFood.model.EnumRestaurantCategory;
 import com.projeto.ReFood.model.Restaurant;
 import com.projeto.ReFood.repository.RestaurantRepository;
@@ -35,6 +34,8 @@ RestaurantService {
   private final UtilityService utilityService;
   private final PasswordEncoder passwordEncoder;
   private final JwtTokenProvider jwtTokenProvider;
+  private final CustomUserDetailsService userDetailsService;
+
 
   @Transactional(readOnly = true)
   public List<RestaurantDTO> getAllRestaurants() {
@@ -131,20 +132,30 @@ public RestaurantDTO createRestaurant(@Valid RestaurantDTO restaurantDTO) {
   }
 
   @Transactional
-  public String updateRestaurantEmail(String token, @Valid RestaurantUpdateEmailDTO restaurantUpdateEmailDTO) {
+  public RestaurantUpdateEmailResponse updateRestaurantEmail(String token, @Valid RestaurantUpdateEmailDTO restaurantUpdateEmailDTO) {
     Long userId = jwtTokenProvider.extractUserId(token);
     Restaurant restaurant = restaurantRepository.findById(userId)
         .orElseThrow(() -> new NotFoundException());
 
+
     Optional<Restaurant> restaurantEmail=restaurantRepository.findByEmail(restaurantUpdateEmailDTO.email());
 
-    if(restaurantEmail!=null){
+    if(restaurantEmail.isPresent()){
       throw new EmailAlreadyExistsException();
     }
 
+    CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(restaurantUpdateEmailDTO.oldEmail());
+    userDetails.setEmail(restaurantUpdateEmailDTO.email());
+    String role = userDetails.getAuthorities().stream().findFirst().get().getAuthority();
+    if (!role.equals("ROLE_RESTAURANT")) {
+      throw new BadRequestException("Essa conta não é de restaurante");
+    }
+
+    String jwt = jwtTokenProvider.generateToken(userDetails, userId);
+
     restaurant.setEmail(restaurantUpdateEmailDTO.email());
     Restaurant updatedRestaurant = restaurantRepository.save(restaurant);
-    return updatedRestaurant.getEmail();
+    return new RestaurantUpdateEmailResponse(jwt,updatedRestaurant.getEmail());
   }
 
   @Transactional
