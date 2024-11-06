@@ -27,136 +27,132 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/restaurant")
 public class RestaurantController {
 
-    @Autowired
-    private RestaurantService restaurantService;
-
-    @Autowired
-    private PagedResourcesAssembler<RestaurantDTO> pagedResourcesAssembler;
+  @Autowired
+  private RestaurantService restaurantService;
 
   @Autowired
   private RestaurantHoursService restaurantHoursService;
 
-    @GetMapping("/allRestaurants")
-    public ResponseEntity<List<RestaurantDTO>> getAllRestaurants() {
-        List<RestaurantDTO> restaurants = restaurantService.getAllRestaurants();
-        return ResponseEntity.ok(restaurants);
-    }
+  @GetMapping("/allRestaurants")
+  public ResponseEntity<List<RestaurantDTO>> getAllRestaurants() {
+    List<RestaurantDTO> restaurants = restaurantService.getAllRestaurants();
+    return ResponseEntity.ok(restaurants);
+  }
 
-    @GetMapping("/restaurants")
-    public ResponseEntity<PagedModel<EntityModel<Map<String, Object>>>>getRestaurants(
-            @PageableDefault(size = 15) Pageable pageable,
-            PagedResourcesAssembler<Map<String, Object>> pagedResourcesAssembler) {
+  @GetMapping("/restaurants")
+  public ResponseEntity<PagedModel<EntityModel<Map<String, Object>>>> getRestaurants(
+      @PageableDefault(size = 15) Pageable pageable,
+      PagedResourcesAssembler<Map<String, Object>> pagedResourcesAssembler) {
 
-        List<RestaurantDTO> allRestaurants = restaurantService.getAllRestaurants();
-        List<Map<String, Object>> mergedData = allRestaurants.stream()
-                .map(restaurant -> {
-                    Map<String, Object> restaurantData = new HashMap<>();
-                    restaurantData.put("restaurant", restaurant);
-                    return restaurantData;
-                })
-                .collect(Collectors.toList());
+    List<RestaurantDTO> allRestaurants = restaurantService.getAllRestaurants();
+    List<Map<String, Object>> mergedData = allRestaurants.stream()
+        .map(restaurant -> {
+          Map<String, Object> restaurantData = new HashMap<>();
+          restaurantData.put("restaurant", restaurant);
+          return restaurantData;
+        })
+        .collect(Collectors.toList());
 
-        int start = (int) pageable.getOffset();
-        int end = Math.min((start + pageable.getPageSize()), mergedData.size());
-        List<Map<String, Object>> paginatedData = mergedData.subList(start, end);
-        Page<Map<String, Object>> page = new PageImpl<>(paginatedData, pageable, mergedData.size());
+    int start = (int) pageable.getOffset();
+    int end = Math.min((start + pageable.getPageSize()), mergedData.size());
+    List<Map<String, Object>> paginatedData = mergedData.subList(start, end);
+    Page<Map<String, Object>> page = new PageImpl<>(paginatedData, pageable, mergedData.size());
 
-        PagedModel<EntityModel<Map<String, Object>>> pagedModel = pagedResourcesAssembler.toModel(page);
-        return ResponseEntity.ok(pagedModel);
-    }
+    PagedModel<EntityModel<Map<String, Object>>> pagedModel = pagedResourcesAssembler.toModel(page);
+    return ResponseEntity.ok(pagedModel);
+  }
 
+  @Operation(summary = "Busca restaurante por ID", description = "Retorna os detalhes de um restaurante com base no token de autorização fornecido.")
+  @GetMapping
+  public ResponseEntity<RestaurantDTO> getRestaurantById(@RequestHeader("Authorization") String token) {
+    RestaurantDTO restaurant = restaurantService.getRestaurantById(token);
+    return ResponseEntity.ok(restaurant);
+  }
 
-    @Operation(summary = "Busca restaurante por ID", description = "Retorna os detalhes de um restaurante com base no token de autorização fornecido.")
-    @GetMapping
-    public ResponseEntity<RestaurantDTO> getRestaurantById(@RequestHeader("Authorization") String token) {
-        RestaurantDTO restaurant = restaurantService.getRestaurantById(token);
-        return ResponseEntity.ok(restaurant);
-    }
+  @Operation(summary = "Busca o email do restaurante por ID", description = "Retorna o email de um restaurante com base no token de autorização fornecido.")
+  @GetMapping("/email")
+  public ResponseEntity<String> getRestaurantEmailById(@RequestHeader("Authorization") String token) {
+    String restaurantEmail = restaurantService.getRestaurantEmailById(token);
+    return ResponseEntity.ok(restaurantEmail);
+  }
 
-    @Operation(summary = "Busca o email do restaurante por ID", description = "Retorna o email de um restaurante com base no token de autorização fornecido.")
-    @GetMapping("/email")
-    public ResponseEntity<String> getRestaurantEmailById(@RequestHeader("Authorization") String token) {
-        String restaurantEmail = restaurantService.getRestaurantEmailById(token);
-        return ResponseEntity.ok(restaurantEmail);
-    }
+  @PostMapping
+  public ResponseEntity<RestaurantDTO> createRestaurant(@Valid @RequestBody RestaurantDTO restaurantDTO) {
+    RestaurantDTO createdRestaurant = restaurantService.createRestaurant(restaurantDTO);
+    URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+        .path("/{restaurantId}")
+        .buildAndExpand(createdRestaurant.restaurantId())
+        .toUri();
+    return ResponseEntity.created(location).body(createdRestaurant);
+  }
 
-    @PostMapping
-    public ResponseEntity<RestaurantDTO> createRestaurant(@Valid @RequestBody RestaurantDTO restaurantDTO) {
-        RestaurantDTO createdRestaurant = restaurantService.createRestaurant(restaurantDTO);
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{restaurantId}")
-                .buildAndExpand(createdRestaurant.restaurantId())
-                .toUri();
-        return ResponseEntity.created(location).body(createdRestaurant);
-    }
+  @PutMapping
+  public ResponseEntity<RestaurantUpdateDTO> updateRestaurant(@RequestHeader("Authorization") String token,
+      @Valid @RequestBody RestaurantUpdateDTO restaurantUpdateDTO) {
+    RestaurantUpdateDTO updatedRestaurant = restaurantService.updateRestaurant(token, restaurantUpdateDTO);
+    return ResponseEntity.ok(updatedRestaurant);
+  }
 
-    @PutMapping
-    public ResponseEntity<RestaurantUpdateDTO> updateRestaurant(@RequestHeader("Authorization") String token,
-                                                                @Valid @RequestBody RestaurantUpdateDTO restaurantUpdateDTO) {
-        RestaurantUpdateDTO updatedRestaurant = restaurantService.updateRestaurant(token, restaurantUpdateDTO);
-        return ResponseEntity.ok(updatedRestaurant);
-    }
+  @PutMapping("/email")
+  public ResponseEntity<RestaurantUpdateEmailResponse> updateRestaurantEmail(
+      @RequestHeader("Authorization") String token,
+      @Valid @RequestBody RestaurantUpdateEmailDTO restaurantUpdateEmailDTO) {
+    RestaurantUpdateEmailResponse updatedRestaurantEmail = restaurantService.updateRestaurantEmail(token,
+        restaurantUpdateEmailDTO);
+    return ResponseEntity.ok(updatedRestaurantEmail);
+  }
 
-    @PutMapping("/email")
-    public ResponseEntity<RestaurantUpdateEmailResponse> updateRestaurantEmail(@RequestHeader("Authorization") String token,
-                                                                     @Valid @RequestBody RestaurantUpdateEmailDTO restaurantUpdateEmailDTO) {
-      RestaurantUpdateEmailResponse updatedRestaurantEmail = restaurantService.updateRestaurantEmail(token, restaurantUpdateEmailDTO);
-        return ResponseEntity.ok(updatedRestaurantEmail);
-    }
+  @PutMapping("/password")
+  public ResponseEntity<Void> updateRestaurantPassword(@RequestHeader("Authorization") String token,
+      @Valid @RequestBody RestaurantUpdatePasswordDTO restaurantUpdatePasswordDTO) {
+    restaurantService.updateRestaurantPassword(token, restaurantUpdatePasswordDTO);
+    return ResponseEntity.noContent().build();
+  }
 
-    @PutMapping("/password")
-    public ResponseEntity<Void> updateRestaurantPassword(@RequestHeader("Authorization") String token,
-                                                           @Valid @RequestBody RestaurantUpdatePasswordDTO restaurantUpdatePasswordDTO) {
-         restaurantService.updateRestaurantPassword(token, restaurantUpdatePasswordDTO);
-        return ResponseEntity.noContent().build();
-    }
+  @DeleteMapping("/{restaurantId}")
+  public ResponseEntity<Void> deleteRestaurant(@PathVariable Long restaurantId) {
+    restaurantService.deleteRestaurant(restaurantId);
+    return ResponseEntity.noContent().build();
+  }
 
-    @DeleteMapping("/{restaurantId}")
-    public ResponseEntity<Void> deleteRestaurant(@PathVariable Long restaurantId) {
-        restaurantService.deleteRestaurant(restaurantId);
-        return ResponseEntity.noContent().build();
-    }
+  @GetMapping("/today")
+  public ResponseEntity<PagedModel<EntityModel<Map<String, Object>>>> getTodayHours(
+      @PageableDefault(size = 15) Pageable pageable,
+      PagedResourcesAssembler<Map<String, Object>> pagedResourcesAssembler) {
 
+    // Obtém todos os restaurantes e horários de hoje
+    List<RestaurantDTO> allRestaurants = restaurantService.getAllRestaurants();
+    EnumDayOfWeek today = EnumDayOfWeek.valueOf(LocalDate.now().getDayOfWeek().name());
+    List<RestaurantHoursDTO> hours = restaurantHoursService.getHoursByDay(today);
 
-    @GetMapping("/today")
-    public ResponseEntity<PagedModel<EntityModel<Map<String, Object>>>> getTodayHours(
-            @PageableDefault(size = 15) Pageable pageable,
-            PagedResourcesAssembler<Map<String, Object>> pagedResourcesAssembler) {
+    // Filtra e mapeia apenas os restaurantes com horários disponíveis hoje
+    List<Map<String, Object>> mergedData = allRestaurants.stream()
+        .map(restaurant -> {
+          Map<String, Object> restaurantData = new HashMap<>();
+          restaurantData.put("restaurant", restaurant);
 
-        // Obtém todos os restaurantes e horários de hoje
-        List<RestaurantDTO> allRestaurants = restaurantService.getAllRestaurants();
-        EnumDayOfWeek today = EnumDayOfWeek.valueOf(LocalDate.now().getDayOfWeek().name());
-        List<RestaurantHoursDTO> hours = restaurantHoursService.getHoursByDay(today);
+          // Filtra os horários correspondentes ao restaurante atual
+          List<RestaurantHoursDTO> hoursForRestaurant = hours.stream()
+              .filter(hour -> hour.restaurantId().equals(restaurant.restaurantId()))
+              .collect(Collectors.toList());
 
-        // Filtra e mapeia apenas os restaurantes com horários disponíveis hoje
-        List<Map<String, Object>> mergedData = allRestaurants.stream()
-                .map(restaurant -> {
-                    Map<String, Object> restaurantData = new HashMap<>();
-                    restaurantData.put("restaurant", restaurant);
+          if (!hoursForRestaurant.isEmpty()) {
+            restaurantData.put("hours", hoursForRestaurant);
+            return restaurantData;
+          }
+          return null;
+        })
+        .filter(Objects::nonNull)
+        .collect(Collectors.toList());
 
-                    // Filtra os horários correspondentes ao restaurante atual
-                    List<RestaurantHoursDTO> hoursForRestaurant = hours.stream()
-                            .filter(hour -> hour.restaurantId().equals(restaurant.restaurantId()))
-                            .collect(Collectors.toList());
+    // Converte para uma página paginada
+    int start = (int) pageable.getOffset();
+    int end = Math.min((start + pageable.getPageSize()), mergedData.size());
+    List<Map<String, Object>> paginatedData = mergedData.subList(start, end);
+    Page<Map<String, Object>> page = new PageImpl<>(paginatedData, pageable, mergedData.size());
 
-                    if (!hoursForRestaurant.isEmpty()) {
-                        restaurantData.put("hours", hoursForRestaurant);
-                        return restaurantData;
-                    }
-                    return null;
-                })
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
-
-        // Converte para uma página paginada
-        int start = (int) pageable.getOffset();
-        int end = Math.min((start + pageable.getPageSize()), mergedData.size());
-        List<Map<String, Object>> paginatedData = mergedData.subList(start, end);
-        Page<Map<String, Object>> page = new PageImpl<>(paginatedData, pageable, mergedData.size());
-
-        // Retorna como PagedModel
-        PagedModel<EntityModel<Map<String, Object>>> pagedModel = pagedResourcesAssembler.toModel(page);
-        return ResponseEntity.ok(pagedModel);
-    }
+    // Retorna como PagedModel
+    PagedModel<EntityModel<Map<String, Object>>> pagedModel = pagedResourcesAssembler.toModel(page);
+    return ResponseEntity.ok(pagedModel);
+  }
 }
-
