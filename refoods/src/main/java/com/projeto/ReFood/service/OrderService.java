@@ -87,7 +87,6 @@ public class OrderService {
 
   @Transactional
   public OrderResponseDTO createOrder(OrderRequestDTO orderRequestDTO) {
-
     Order order = new Order();
     order.setOrderDate(orderRequestDTO.getOrderDate());
     order.setOrderStatus(orderRequestDTO.getOrderStatus());
@@ -123,11 +122,17 @@ public class OrderService {
       orderItem.setOrderItemId(orderItemPK);
 
       orderItem.setProduct(product);
-
       orderItems.add(orderItem);
     }
 
     orderItemRepository.saveAll(orderItems);
+
+    List<OrderItemDTO> orderItemDTOs = new ArrayList<>();
+    for (OrderItem orderItem : orderItems) {
+      orderItemDTOs.add(new OrderItemDTO(orderItem.getOrderItemId(), orderItem.getQuantity(),
+          orderItem.getUnitValue(), orderItem.getSubtotal(),
+          orderItem.getOrder().getOrderId(), orderItem.getProduct().getProductId()));
+    }
 
     return new OrderResponseDTO(
         order.getOrderId(),
@@ -138,7 +143,7 @@ public class OrderService {
         order.getUser().getUserId(),
         order.getRestaurant().getRestaurantId(),
         order.getAssociatedAddress().getAddressId(),
-        orderRequestDTO.getOrderItems());
+        orderItemDTOs);
   }
 
   private OrderDTO convertToDTO(Order order) {
