@@ -44,17 +44,14 @@ public class Order {
   @JoinColumn(name = "restaurant_id", nullable = false)
   private Restaurant restaurant;
 
-  @OneToOne(cascade = CascadeType.ALL)
+  @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "address_id", nullable = false)
   private Address associatedAddress;
 
-  @OneToOne(mappedBy = "associatedHistoricalOrder")
-  private HistoricalOrder associatedHistoricalOrder;
-
-  @OneToOne(mappedBy = "associatedOrder")
-  private Transaction associatedTransaction;
-
   @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
   private Set<OrderItem> orderItems;
+
+  @OneToOne(mappedBy = "associatedHistoricalOrder", cascade = CascadeType.ALL)
+  private HistoricalOrder associatedHistoricalOrder;
 
 }

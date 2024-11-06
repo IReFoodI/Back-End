@@ -1,6 +1,9 @@
 package com.projeto.ReFood.service;
 
+import com.projeto.ReFood.repository.AddressRepository;
+import com.projeto.ReFood.repository.OrderItemRepository;
 import com.projeto.ReFood.repository.OrderRepository;
+import com.projeto.ReFood.repository.ProductRepository;
 
 import jakarta.validation.Valid;
 
@@ -10,9 +13,19 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import com.projeto.ReFood.dto.OrderDTO;
+import com.projeto.ReFood.dto.OrderItemDTO;
+import com.projeto.ReFood.dto.OrderRequestDTO;
+import com.projeto.ReFood.dto.OrderResponseDTO;
 import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
+import com.projeto.ReFood.model.Address;
 import com.projeto.ReFood.model.Order;
+import com.projeto.ReFood.model.OrderItem;
+import com.projeto.ReFood.model.OrderItemPK;
+import com.projeto.ReFood.model.Product;
+import com.projeto.ReFood.model.Restaurant;
+import com.projeto.ReFood.model.User;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +37,12 @@ public class OrderService {
   private OrderRepository orderRepository;
   @Autowired
   private UtilityService utilityService;
+  @Autowired
+  private ProductRepository productRepository;
+  @Autowired
+  private OrderItemRepository orderItemRepository;
+  @Autowired
+  private AddressRepository addressRepository;
 
   @Transactional(readOnly = true)
   public List<OrderDTO> getAllOrders() {
@@ -39,16 +58,6 @@ public class OrderService {
     return orderRepository.findById(orderId)
         .map(this::convertToDTO)
         .orElseThrow(() -> new NotFoundException());
-  }
-
-  @Transactional
-  public OrderDTO createOrder(@Valid OrderDTO orderDTO) {
-    Order order = convertToEntity(orderDTO);
-    utilityService.associateUser(order::setUser, orderDTO.userId());
-    utilityService.associateRestaurant(order::setRestaurant, orderDTO.restaurantId());
-    utilityService.associateAddress(order::setAssociatedAddress, orderDTO.addressId());
-    order = orderRepository.save(order);
-    return convertToDTO(order);
   }
 
   @Transactional
@@ -74,6 +83,62 @@ public class OrderService {
       throw new NotFoundException();
     }
     orderRepository.deleteById(orderId);
+  }
+
+  @Transactional
+  public OrderResponseDTO createOrder(OrderRequestDTO orderRequestDTO) {
+
+    Order order = new Order();
+    order.setOrderDate(orderRequestDTO.getOrderDate());
+    order.setOrderStatus(orderRequestDTO.getOrderStatus());
+    order.setDeliveryType(orderRequestDTO.getDeliveryType());
+    order.setTotalValue(orderRequestDTO.getTotalValue());
+
+    User user = new User();
+    user.setUserId(orderRequestDTO.getUserId());
+    order.setUser(user);
+
+    Restaurant restaurant = new Restaurant();
+    restaurant.setRestaurantId(orderRequestDTO.getRestaurantId());
+    order.setRestaurant(restaurant);
+
+    Address address = addressRepository.findById(orderRequestDTO.getAddressId())
+        .orElseThrow(() -> new RuntimeException("Address not found"));
+    order.setAssociatedAddress(address);
+
+    orderRepository.save(order);
+
+    List<OrderItem> orderItems = new ArrayList<>();
+    for (OrderItemDTO itemDTO : orderRequestDTO.getOrderItems()) {
+      Product product = productRepository.findById(itemDTO.productId())
+          .orElseThrow(() -> new RuntimeException("Product not found"));
+
+      OrderItem orderItem = new OrderItem();
+      orderItem.setQuantity(itemDTO.quantity());
+      orderItem.setUnitValue(product.getSellPrice());
+      orderItem.setSubtotal(itemDTO.unitValue() * itemDTO.quantity());
+      orderItem.setOrder(order);
+
+      OrderItemPK orderItemPK = new OrderItemPK(order.getOrderId(), product.getProductId());
+      orderItem.setOrderItemId(orderItemPK);
+
+      orderItem.setProduct(product);
+
+      orderItems.add(orderItem);
+    }
+
+    orderItemRepository.saveAll(orderItems);
+
+    return new OrderResponseDTO(
+        order.getOrderId(),
+        order.getOrderDate(),
+        order.getOrderStatus(),
+        order.getDeliveryType(),
+        order.getTotalValue(),
+        order.getUser().getUserId(),
+        order.getRestaurant().getRestaurantId(),
+        order.getAssociatedAddress().getAddressId(),
+        orderRequestDTO.getOrderItems());
   }
 
   private OrderDTO convertToDTO(Order order) {

@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.projeto.ReFood.dto.OrderDTO;
+import com.projeto.ReFood.dto.OrderRequestDTO;
+import com.projeto.ReFood.dto.OrderResponseDTO;
 
 import java.net.URI;
 import java.util.List;
@@ -34,11 +36,11 @@ public class OrderController {
   }
 
   @PostMapping
-  public ResponseEntity<OrderDTO> createOrder(@Valid @RequestBody OrderDTO orderDTO) {
-    OrderDTO createdOrder = orderService.createOrder(orderDTO);
+  public ResponseEntity<OrderResponseDTO> createOrder(@RequestBody OrderRequestDTO orderRequestDTO) {
+    OrderResponseDTO createdOrder = orderService.createOrder(orderRequestDTO);
     URI location = ServletUriComponentsBuilder.fromCurrentRequest()
         .path("/{orderId}")
-        .buildAndExpand(createdOrder.orderId())
+        .buildAndExpand(createdOrder.getOrderId())
         .toUri();
     return ResponseEntity.created(location).body(createdOrder);
   }
