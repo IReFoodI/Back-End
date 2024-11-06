@@ -3,7 +3,7 @@
 -- Inserindo dados na tabela tb_users
 INSERT INTO tb_users (date_creation, email, last_login, name, password, phone)
 VALUES -- -- as senhas são 123456Bb*
-    (NOW(), 'user1@example.com', NOW(), 'User One', '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', '1112223333' ),
+    (NOW(), 'user1@example.com', NOW(), 'User One', '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', '91912345678' ),
     (NOW(), 'user2@example.com', NOW(), 'User Two', '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', '4445556666' );
 
 -- Inserindo dados na tabela tb_restaurants
