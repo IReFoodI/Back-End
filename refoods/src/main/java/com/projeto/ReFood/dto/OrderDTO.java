@@ -8,6 +8,7 @@ import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Positive;
 
 import java.util.Date;
+import java.util.Set;
 
 public record OrderDTO(
     Long orderId,
@@ -35,7 +36,7 @@ public record OrderDTO(
 
     @NotNull(message = "O ID do endereço não pode ser nulo.")
     @Positive(message = "O ID do endereço deve ser positivo.")
-    Long addressId
+    Set<Long> addressId
 ) {
     public OrderDTO{
         deliveryType = EnumDeliveryType.RETIRADA;
