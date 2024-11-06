@@ -199,8 +199,8 @@ public class AddressService {
       address.setRestaurant(restaurant);
     }
     if (order != null) {
-      address.getOrders().add(order);
-  }
+      address.setAssociatedOrder(order);
+    }
     addressRepository.save(address);
     return convertToDTO(address);
   }
@@ -294,7 +294,7 @@ public class AddressService {
         address.isStandard(),
         address.getUser() != null ? address.getUser().getUserId() : null,
         address.getRestaurant() != null ? address.getRestaurant().getRestaurantId() : null,
-        address.getOrders() != null && !address.getOrders().isEmpty() ? address.getOrders().iterator().next().getOrderId() : null);
+        address.getAssociatedOrder() != null ? address.getAssociatedOrder().getOrderId() : null);
   }
 
   public Address convertToEntity(AddressDTO addressDTO, User user, Restaurant restaurant, Order order) {
@@ -318,8 +318,8 @@ public class AddressService {
       address.setRestaurant(restaurant);
     }
     if (order != null) {
-      address.getOrders().add(order);
-  }
+      address.setAssociatedOrder(order);
+    }
     return address;
   }
 }

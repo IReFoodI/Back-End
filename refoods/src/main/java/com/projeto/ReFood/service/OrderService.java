@@ -11,12 +11,9 @@ import org.springframework.validation.annotation.Validated;
 
 import com.projeto.ReFood.dto.OrderDTO;
 import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
-import com.projeto.ReFood.model.Address;
 import com.projeto.ReFood.model.Order;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,13 +46,7 @@ public class OrderService {
     Order order = convertToEntity(orderDTO);
     utilityService.associateUser(order::setUser, orderDTO.userId());
     utilityService.associateRestaurant(order::setRestaurant, orderDTO.restaurantId());
-
-    Set<Address> addresses = new HashSet<>();
-    for (Long addressId : orderDTO.addressId()) {
-      utilityService.associateAddress(address -> addresses.add(address), addressId);
-    }
-    order.setAddresses(addresses);
-
+    utilityService.associateAddress(order::setAssociatedAddress, orderDTO.addressId());
     order = orderRepository.save(order);
     return convertToDTO(order);
   }
@@ -71,12 +62,7 @@ public class OrderService {
 
     utilityService.associateUser(order::setUser, orderDTO.userId());
     utilityService.associateRestaurant(order::setRestaurant, orderDTO.restaurantId());
-
-    Set<Address> addresses = new HashSet<>();
-    for (Long addressId : orderDTO.addressId()) {
-      utilityService.associateAddress(address -> addresses.add(address), addressId);
-    }
-    order.setAddresses(addresses);
+    utilityService.associateAddress(order::setAssociatedAddress, orderDTO.addressId());
 
     order = orderRepository.save(order);
     return convertToDTO(order);
@@ -91,11 +77,6 @@ public class OrderService {
   }
 
   private OrderDTO convertToDTO(Order order) {
-    Set<Long> addressIds = order.getAddresses().isEmpty()
-        ? null
-        : order.getAddresses().stream()
-            .map(Address::getAddressId)
-            .collect(Collectors.toSet());
     return new OrderDTO(
         order.getOrderId(),
         order.getOrderDate(),
@@ -104,7 +85,7 @@ public class OrderService {
         order.getTotalValue(),
         order.getUser().getUserId(),
         order.getRestaurant().getRestaurantId(),
-        addressIds);
+        order.getAssociatedAddress().getAddressId());
   }
 
   private Order convertToEntity(OrderDTO orderDTO) {
@@ -116,14 +97,7 @@ public class OrderService {
     order.setTotalValue(orderDTO.totalValue());
     utilityService.associateUser(order::setUser, orderDTO.userId());
     utilityService.associateRestaurant(order::setRestaurant, orderDTO.restaurantId());
-
-    Set<Address> addresses = new HashSet<>();
-    for (Long addressId : orderDTO.addressId()) {
-      utilityService.associateAddress(address -> addresses.add(address), addressId);
-    }
-    order.setAddresses(addresses);
-
+    utilityService.associateAddress(order::setAssociatedAddress, orderDTO.addressId());
     return order;
   }
-
 }

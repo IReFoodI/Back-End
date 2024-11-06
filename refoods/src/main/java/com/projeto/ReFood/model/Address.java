@@ -1,7 +1,5 @@
 package com.projeto.ReFood.model;
 
-import java.util.Set;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -74,6 +72,6 @@ public class Address {
   @JoinColumn(name = "restaurant_id")
   private Restaurant restaurant;
 
-  @ManyToMany(mappedBy = "addresses")
-  private Set<Order> orders;
+  @OneToOne(mappedBy = "associatedAddress")
+  private Order associatedOrder;
 }

@@ -44,9 +44,9 @@ public class Order {
   @JoinColumn(name = "restaurant_id", nullable = false)
   private Restaurant restaurant;
 
-  @ManyToMany
-  @JoinTable(name = "order_address", joinColumns = @JoinColumn(name = "order_id"), inverseJoinColumns = @JoinColumn(name = "address_id"))
-  private Set<Address> addresses;
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "address_id", nullable = false)
+  private Address associatedAddress;
 
   @OneToOne(mappedBy = "associatedHistoricalOrder")
   private HistoricalOrder associatedHistoricalOrder;
