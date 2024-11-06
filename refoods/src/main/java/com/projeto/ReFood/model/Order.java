@@ -48,7 +48,7 @@ public class Order {
   @JoinColumn(name = "address_id", nullable = false)
   private Address associatedAddress;
 
-  @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<OrderItem> orderItems;
 
   @OneToOne(mappedBy = "associatedHistoricalOrder", cascade = CascadeType.ALL)

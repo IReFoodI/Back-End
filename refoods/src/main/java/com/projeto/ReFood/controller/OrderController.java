@@ -32,27 +32,14 @@ public class OrderController {
 
   @GetMapping
   public ResponseEntity<List<OrderResponseDTO>> listAllOrders() {
-      List<OrderResponseDTO> orders = orderService.getAllOrders();
-      return ResponseEntity.ok(orders);
+    List<OrderResponseDTO> orders = orderService.getAllOrders();
+    return ResponseEntity.ok(orders);
   }
 
   @GetMapping("/{orderId}")
   public ResponseEntity<OrderResponseDTO> getOrderById(@PathVariable Long orderId) {
-      OrderResponseDTO orderResponse = orderService.getOrderById(orderId);
-      return ResponseEntity.ok(orderResponse);
+    OrderResponseDTO orderResponse = orderService.getOrderById(orderId);
+    return ResponseEntity.ok(orderResponse);
   }
 
-  // @PutMapping("/{orderId}")
-  // public ResponseEntity<OrderResponseDTO> updateOrder(
-  //         @PathVariable Long orderId,
-  //         @Valid @RequestBody OrderRequestDTO orderRequestDTO) {
-  //     OrderResponseDTO updatedOrder = orderService.updateOrder(orderId, orderRequestDTO);
-  //     return ResponseEntity.ok(updatedOrder);
-  // }
-
-  // @DeleteMapping("/{orderId}")
-  // public ResponseEntity<Void> deleteOrder(@PathVariable Long orderId) {
-  //     orderService.deleteOrder(orderId);
-  //     return ResponseEntity.noContent().build();
-  // }
 }

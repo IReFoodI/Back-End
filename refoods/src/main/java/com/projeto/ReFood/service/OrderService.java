@@ -30,15 +30,6 @@ public class OrderService {
   private final UtilityService utilityService;
   private final OrderItemRepository orderItemRepository;
 
-  // @Transactional
-  // public void deleteOrder(Long orderId) {
-
-  //   Order order = orderRepository.findById(orderId)
-  //       .orElseThrow(() -> new NotFoundException());
-
-  //   orderItemRepository.deleteAllByOrder(order);
-  //   orderRepository.delete(order);
-  // }
 
   @Transactional(readOnly = true)
   public List<OrderResponseDTO> getAllOrders() {
