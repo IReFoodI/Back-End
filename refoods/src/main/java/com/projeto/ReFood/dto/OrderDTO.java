@@ -6,8 +6,6 @@ import com.projeto.ReFood.model.EnumOrderStatus;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Positive;
-import lombok.Builder;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.util.Date;
 

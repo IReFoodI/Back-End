@@ -1,6 +1,5 @@
 package com.projeto.ReFood.service;
 
-import com.projeto.ReFood.model.EnumDeliveryType;
 import com.projeto.ReFood.repository.OrderRepository;
 
 import jakarta.validation.Valid;

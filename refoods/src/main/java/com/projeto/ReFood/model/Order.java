@@ -9,8 +9,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.util.Date;
 import java.util.Set;
