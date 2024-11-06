@@ -9,7 +9,7 @@ public enum EnumRestaurantCategory {
   SUSHI_BAR,
   FAST_FOOD,
   LANCHONETE,
-  AÇOUGUE,
+  ACOUGUE,
   EMPORIO,
   PEIXARIA,
   CHURRASCARIA,
