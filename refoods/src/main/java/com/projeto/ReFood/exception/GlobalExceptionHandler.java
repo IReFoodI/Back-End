@@ -112,6 +112,11 @@ public class GlobalExceptionHandler {
     return createErrorResponse(HttpStatus.BAD_REQUEST, "Erro no banco de dados", request);
   }
 
+  @ExceptionHandler(IllegalArgumentException.class)
+  public ResponseEntity<CustomError> handleIllegalArgumentException(IllegalArgumentException ex, HttpServletRequest request) {
+    return createErrorResponse(HttpStatus.BAD_REQUEST,ex.getMessage(),request);
+  }
+
   // Handler para erros de validação
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<ValidationError> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
