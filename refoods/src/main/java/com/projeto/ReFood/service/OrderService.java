@@ -6,8 +6,8 @@ import com.projeto.ReFood.repository.OrderRepository;
 import com.projeto.ReFood.repository.ProductRepository;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -31,18 +31,14 @@ import java.util.stream.Collectors;
 
 @Service
 @Validated
+@RequiredArgsConstructor
 public class OrderService {
 
-  @Autowired
-  private OrderRepository orderRepository;
-  @Autowired
-  private UtilityService utilityService;
-  @Autowired
-  private ProductRepository productRepository;
-  @Autowired
-  private OrderItemRepository orderItemRepository;
-  @Autowired
-  private AddressRepository addressRepository;
+  private final OrderRepository orderRepository;
+  private final UtilityService utilityService;
+  private final ProductRepository productRepository;
+  private final OrderItemRepository orderItemRepository;
+  private final AddressRepository addressRepository;
 
   @Transactional(readOnly = true)
   public List<OrderDTO> getAllOrders() {
@@ -86,53 +82,48 @@ public class OrderService {
   }
 
   @Transactional
-  public OrderResponseDTO createOrder(OrderRequestDTO orderRequestDTO) {
+public OrderResponseDTO createOrder(OrderRequestDTO orderRequestDTO) {
     Order order = new Order();
     order.setOrderDate(orderRequestDTO.getOrderDate());
     order.setOrderStatus(orderRequestDTO.getOrderStatus());
     order.setDeliveryType(orderRequestDTO.getDeliveryType());
     order.setTotalValue(orderRequestDTO.getTotalValue());
 
-    User user = new User();
-    user.setUserId(orderRequestDTO.getUserId());
-    order.setUser(user);
-
-    Restaurant restaurant = new Restaurant();
-    restaurant.setRestaurantId(orderRequestDTO.getRestaurantId());
-    order.setRestaurant(restaurant);
-
-    Address address = addressRepository.findById(orderRequestDTO.getAddressId())
-        .orElseThrow(() -> new RuntimeException("Address not found"));
-    order.setAssociatedAddress(address);
+    // Associação de entidades usando UtilityService
+    utilityService.associateUser(order::setUser, orderRequestDTO.getUserId());
+    utilityService.associateRestaurant(order::setRestaurant, orderRequestDTO.getRestaurantId());
+    utilityService.associateAddress(order::setAssociatedAddress, orderRequestDTO.getAddressId());
 
     orderRepository.save(order);
 
     List<OrderItem> orderItems = new ArrayList<>();
     for (OrderItemDTO itemDTO : orderRequestDTO.getOrderItems()) {
-      Product product = productRepository.findById(itemDTO.productId())
-          .orElseThrow(() -> new RuntimeException("Product not found"));
+        OrderItem orderItem = new OrderItem();
+        orderItem.setQuantity(itemDTO.quantity());
+        orderItem.setUnitValue(itemDTO.unitValue());
+        orderItem.setSubtotal(itemDTO.unitValue() * itemDTO.quantity());
+        orderItem.setOrder(order);
 
-      OrderItem orderItem = new OrderItem();
-      orderItem.setQuantity(itemDTO.quantity());
-      orderItem.setUnitValue(product.getSellPrice());
-      orderItem.setSubtotal(itemDTO.unitValue() * itemDTO.quantity());
-      orderItem.setOrder(order);
+        // Associação de Product usando UtilityService
+        utilityService.associateProduct(orderItem::setProduct, itemDTO.productId());
 
-      OrderItemPK orderItemPK = new OrderItemPK(order.getOrderId(), product.getProductId());
-      orderItem.setOrderItemId(orderItemPK);
+        OrderItemPK orderItemPK = new OrderItemPK(order.getOrderId(), itemDTO.productId());
+        orderItem.setOrderItemId(orderItemPK);
 
-      orderItem.setProduct(product);
-      orderItems.add(orderItem);
+        orderItems.add(orderItem);
     }
 
     orderItemRepository.saveAll(orderItems);
 
-    List<OrderItemDTO> orderItemDTOs = new ArrayList<>();
-    for (OrderItem orderItem : orderItems) {
-      orderItemDTOs.add(new OrderItemDTO(orderItem.getOrderItemId(), orderItem.getQuantity(),
-          orderItem.getUnitValue(), orderItem.getSubtotal(),
-          orderItem.getOrder().getOrderId(), orderItem.getProduct().getProductId()));
-    }
+    List<OrderItemDTO> orderItemDTOs = orderItems.stream()
+        .map(item -> new OrderItemDTO(
+            item.getOrderItemId(),
+            item.getQuantity(),
+            item.getUnitValue(),
+            item.getSubtotal(),
+            item.getOrder().getOrderId(),
+            item.getProduct().getProductId()))
+        .collect(Collectors.toList());
 
     return new OrderResponseDTO(
         order.getOrderId(),
@@ -143,8 +134,10 @@ public class OrderService {
         order.getUser().getUserId(),
         order.getRestaurant().getRestaurantId(),
         order.getAssociatedAddress().getAddressId(),
-        orderItemDTOs);
-  }
+        orderItemDTOs
+    );
+}
+
 
   private OrderDTO convertToDTO(Order order) {
     return new OrderDTO(
