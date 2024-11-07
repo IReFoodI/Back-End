@@ -52,6 +52,7 @@ public class OrderService {
   public OrderResponseDTO createOrder(OrderRequestDTO orderRequestDTO) {
     Order order = new Order();
     order.setOrderDate(orderRequestDTO.getOrderDate());
+    order.setDeliveryDate(orderRequestDTO.getDeliveryDate());
     order.setOrderStatus(orderRequestDTO.getOrderStatus());
     order.setDeliveryType(orderRequestDTO.getDeliveryType());
     order.setTotalValue(orderRequestDTO.getTotalValue());
@@ -93,6 +94,7 @@ public class OrderService {
     return new OrderResponseDTO(
         order.getOrderId(),
         order.getOrderDate(),
+        order.getDeliveryDate(),
         order.getOrderStatus(),
         order.getDeliveryType(),
         order.getTotalValue(),
@@ -116,6 +118,7 @@ public class OrderService {
     return new OrderResponseDTO(
         order.getOrderId(),
         order.getOrderDate(),
+        order.getDeliveryDate(),
         order.getOrderStatus(),
         order.getDeliveryType(),
         order.getTotalValue(),

@@ -9,6 +9,7 @@ import com.projeto.ReFood.model.EnumOrderStatus;
 public class OrderResponseDTO {
   private Long orderId;
   private Date orderDate;
+  private Date deliveryDate;
   private EnumOrderStatus orderStatus;
   private EnumDeliveryType deliveryType;
   private float totalValue;
@@ -20,18 +21,22 @@ public class OrderResponseDTO {
   public OrderResponseDTO() {
   }
 
-  public OrderResponseDTO(Long orderId, Date orderDate, EnumOrderStatus orderStatus, EnumDeliveryType deliveryType, float totalValue,
-                          Long userId, Long restaurantId, Long addressId, List<OrderItemDTO> orderItems) {
-      this.orderId = orderId;
-      this.orderDate = orderDate;
-      this.orderStatus = orderStatus;
-      this.deliveryType = deliveryType;
-      this.totalValue = totalValue;
-      this.userId = userId;
-      this.restaurantId = restaurantId;
-      this.addressId = addressId;
-      this.orderItems = orderItems;
+
+  public OrderResponseDTO(Long orderId, Date orderDate, Date deliveryDate, EnumOrderStatus orderStatus,
+      EnumDeliveryType deliveryType, float totalValue, Long userId, Long restaurantId, Long addressId,
+      List<OrderItemDTO> orderItems) {
+    this.orderId = orderId;
+    this.orderDate = orderDate;
+    this.deliveryDate = deliveryDate;
+    this.orderStatus = orderStatus;
+    this.deliveryType = deliveryType;
+    this.totalValue = totalValue;
+    this.userId = userId;
+    this.restaurantId = restaurantId;
+    this.addressId = addressId;
+    this.orderItems = orderItems;
   }
+
 
   public Long getOrderId() {
       return orderId;
@@ -103,5 +108,13 @@ public class OrderResponseDTO {
 
   public void setOrderItems(List<OrderItemDTO> orderItems) {
       this.orderItems = orderItems;
+  }
+
+  public Date getDeliveryDate() {
+    return deliveryDate;
+  }
+
+  public void setDeliveryDate(Date deliveryDate) {
+    this.deliveryDate = deliveryDate;
   }
 }

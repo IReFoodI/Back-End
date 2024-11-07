@@ -8,6 +8,7 @@ import com.projeto.ReFood.model.EnumOrderStatus;
 
 public class OrderRequestDTO {
   private Date orderDate;
+  private Date deliveryDate;
   private EnumOrderStatus orderStatus;
   private EnumDeliveryType deliveryType;
   private float totalValue;
@@ -18,9 +19,11 @@ public class OrderRequestDTO {
   
   public OrderRequestDTO() {
   }
-  public OrderRequestDTO(Date orderDate, EnumOrderStatus orderStatus, EnumDeliveryType deliveryType, float totalValue, Long userId,
-      Long restaurantId, Long addressId, List<OrderItemDTO> orderItems) {
+
+  public OrderRequestDTO(Date orderDate, Date deliveryDate, EnumOrderStatus orderStatus, EnumDeliveryType deliveryType,
+      float totalValue, Long userId, Long restaurantId, Long addressId, List<OrderItemDTO> orderItems) {
     this.orderDate = orderDate;
+    this.deliveryDate = deliveryDate;
     this.orderStatus = orderStatus;
     this.deliveryType = deliveryType;
     this.totalValue = totalValue;
@@ -29,6 +32,7 @@ public class OrderRequestDTO {
     this.addressId = addressId;
     this.orderItems = orderItems;
   }
+
   public Date getOrderDate() {
     return orderDate;
   }
@@ -40,6 +44,12 @@ public class OrderRequestDTO {
   }
   public void setOrderStatus(EnumOrderStatus orderStatus) {
     this.orderStatus = orderStatus;
+  }
+  public Date getDeliveryDate() {
+    return deliveryDate;
+  }
+  public void setDeliveryDate(Date deliveryDate) {
+    this.deliveryDate = deliveryDate;
   }
   public EnumDeliveryType getDeliveryType() {
     return deliveryType;

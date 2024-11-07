@@ -25,6 +25,9 @@ public class Order {
   @Column(nullable = false)
   private Date orderDate;
 
+  @Column
+  private Date deliveryDate; 
+
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   private EnumOrderStatus orderStatus;
