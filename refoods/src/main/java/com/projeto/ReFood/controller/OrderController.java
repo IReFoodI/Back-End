@@ -42,4 +42,10 @@ public class OrderController {
     return ResponseEntity.ok(orderResponse);
   }
 
+  @GetMapping("/restaurant/{restaurantId}")
+  public ResponseEntity<List<OrderResponseDTO>> getOrdersByRestaurantId(@PathVariable Long restaurantId) {
+    List<OrderResponseDTO> orders = orderService.getOrdersByRestaurantId(restaurantId);
+    return ResponseEntity.ok(orders);
+  }
+
 }

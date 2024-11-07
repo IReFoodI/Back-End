@@ -47,6 +47,19 @@ public class OrderService {
     return convertToDTO(order);
   }
 
+  @Transactional(readOnly = true)
+  public List<OrderResponseDTO> getOrdersByRestaurantId(Long restaurantId) {
+    List<Order> orders = orderRepository.findByRestaurant_RestaurantId(restaurantId);
+
+    if (orders.isEmpty()) {
+      throw new NotFoundException();
+    }
+
+    return orders.stream()
+        .map(this::convertToDTO)
+        .collect(Collectors.toList());
+  }
+
   @Transactional
   public OrderResponseDTO createOrder(OrderRequestDTO orderRequestDTO) {
     Order order = new Order();
