@@ -26,7 +26,7 @@ public class Order {
   private Date orderDate;
 
   @Column
-  private Date deliveryDate; 
+  private Date deliveryDate;
 
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
@@ -54,7 +54,12 @@ public class Order {
   @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<OrderItem> orderItems;
 
-  @OneToOne(mappedBy = "associatedHistoricalOrder", cascade = CascadeType.ALL)
-  private HistoricalOrder associatedHistoricalOrder;
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "review_id", referencedColumnName = "review_id", nullable = true)
+  private Review review;
+
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "transaction_id", referencedColumnName = "transaction_id", nullable = true)
+  private Transaction transaction;
 
 }

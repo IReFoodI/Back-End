@@ -30,7 +30,6 @@ public class OrderService {
   private final UtilityService utilityService;
   private final OrderItemRepository orderItemRepository;
 
-
   @Transactional(readOnly = true)
   public List<OrderResponseDTO> getAllOrders() {
 
@@ -60,6 +59,12 @@ public class OrderService {
     utilityService.associateUser(order::setUser, orderRequestDTO.getUserId());
     utilityService.associateRestaurant(order::setRestaurant, orderRequestDTO.getRestaurantId());
     utilityService.associateAddress(order::setAssociatedAddress, orderRequestDTO.getAddressId());
+    if (orderRequestDTO.getReviewId() != null) {
+      utilityService.associateReview(order::setReview, orderRequestDTO.getReviewId());
+    }
+    if (orderRequestDTO.getTransactionId() != null) {
+      utilityService.associateTransaction(order::setTransaction, orderRequestDTO.getTransactionId());
+    }
 
     orderRepository.save(order);
 
@@ -101,6 +106,8 @@ public class OrderService {
         order.getUser().getUserId(),
         order.getRestaurant().getRestaurantId(),
         order.getAssociatedAddress().getAddressId(),
+        order.getReview() != null ? order.getReview().getReviewId() : null,
+        order.getTransaction() != null ? order.getTransaction().getTransactionId() : null,
         orderItemDTOs);
   }
 
@@ -125,6 +132,8 @@ public class OrderService {
         order.getUser().getUserId(),
         order.getRestaurant().getRestaurantId(),
         order.getAssociatedAddress().getAddressId(),
+        order.getReview() != null ? order.getReview().getReviewId() : null,
+        order.getTransaction() != null ? order.getTransaction().getTransactionId() : null,
         orderItemDTOs);
   }
 

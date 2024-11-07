@@ -16,15 +16,16 @@ public class OrderResponseDTO {
   private Long userId;
   private Long restaurantId;
   private Long addressId;
+  private Long reviewId;
+  private Long transactionId;
   private List<OrderItemDTO> orderItems;
 
   public OrderResponseDTO() {
   }
 
-
   public OrderResponseDTO(Long orderId, Date orderDate, Date deliveryDate, EnumOrderStatus orderStatus,
-      EnumDeliveryType deliveryType, float totalValue, Long userId, Long restaurantId, Long addressId,
-      List<OrderItemDTO> orderItems) {
+      EnumDeliveryType deliveryType, float totalValue, Long userId, Long restaurantId, Long addressId, Long reviewId,
+      Long transactionId, List<OrderItemDTO> orderItems) {
     this.orderId = orderId;
     this.orderDate = orderDate;
     this.deliveryDate = deliveryDate;
@@ -34,9 +35,27 @@ public class OrderResponseDTO {
     this.userId = userId;
     this.restaurantId = restaurantId;
     this.addressId = addressId;
+    this.reviewId = reviewId;
+    this.transactionId = transactionId;
     this.orderItems = orderItems;
   }
 
+
+  public Long getReviewId() {
+    return reviewId;
+  }
+
+  public void setReviewId(Long reviewId) {
+    this.reviewId = reviewId;
+  }
+
+  public Long getTransactionId() {
+    return transactionId;
+  }
+
+  public void setTransactionId(Long transactionId) {
+    this.transactionId = transactionId;
+  }
 
   public Long getOrderId() {
       return orderId;
