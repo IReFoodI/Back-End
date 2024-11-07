@@ -60,6 +60,41 @@ public class OrderService {
         .collect(Collectors.toList());
   }
 
+  @Transactional(readOnly = true)
+  public List<OrderResponseDTO> getOrdersByUserId(Long userId) {
+    List<Order> orders = orderRepository.findByUser_UserId(userId);
+
+    if (orders.isEmpty()) {
+      throw new NotFoundException();
+    }
+
+    return orders.stream()
+        .map(this::convertToDTO)
+        .collect(Collectors.toList());
+  }
+
+  @Transactional
+  public List<OrderResponseDTO> getOrdersByUserIdAndStatus(Long userId, String orderStatus) {
+    List<Order> orders = orderRepository.findByUserIdAndOrderStatus(userId, orderStatus);
+    if (orders.isEmpty()) {
+      throw new NotFoundException();
+    }
+    return orders.stream()
+        .map(this::convertToDTO)
+        .collect(Collectors.toList());
+  }
+
+  @Transactional
+  public List<OrderResponseDTO> getOrdersByRestaurantIdAndStatus(Long restaurantId, String orderStatus) {
+    List<Order> orders = orderRepository.findByRestaurantIdAndOrderStatus(restaurantId, orderStatus);
+    if (orders.isEmpty()) {
+      throw new NotFoundException();
+    }
+    return orders.stream()
+        .map(this::convertToDTO)
+        .collect(Collectors.toList());
+  }
+
   @Transactional
   public OrderResponseDTO createOrder(OrderRequestDTO orderRequestDTO) {
     Order order = new Order();
