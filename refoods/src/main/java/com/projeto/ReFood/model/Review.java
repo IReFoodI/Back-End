@@ -43,4 +43,8 @@ public class Review {
   @JoinColumn(name = "restaurant_id", nullable = false)
   private Restaurant restaurant;
 
+  @OneToOne
+  @JoinColumn(name = "order_id", nullable = true)
+  private Order order;
+
 }

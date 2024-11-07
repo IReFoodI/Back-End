@@ -204,61 +204,62 @@ VALUES
     (1, 5, 2, 1.5, 3.0),
     (1, 6, 4, 6.0, 24.0),
     (1, 9, 3, 3.5, 10.5);
+    
 
--- -- Inserindo dados na tabela tb_orders
-INSERT INTO tb_orders (order_date, order_status, total_value, address_id, restaurant_id, user_id)
-VALUES 
-    (NOW(), 1, 100.0, 1, 1, 1),
-    (NOW(), 2, 50.0, 2, 1, 2),
-    (NOW(), 1, 45.0, 3, 1, 1),
-    (NOW(), 2, 75.0, 4, 1, 2),
-    (NOW(), 1, 30.0, 5, 1, 1);
+-- -- -- Inserindo dados na tabela tb_orders
+-- INSERT INTO tb_orders (order_date, order_status, total_value, address_id, restaurant_id, user_id)
+-- VALUES 
+--     (NOW(), 1, 100.0, 1, 1, 1),
+--     (NOW(), 2, 50.0, 2, 1, 2),
+--     (NOW(), 1, 45.0, 3, 1, 1),
+--     (NOW(), 2, 75.0, 4, 1, 2),
+--     (NOW(), 1, 30.0, 5, 1, 1);
 
--- -- Inserindo dados na tabela tb_order_items
-INSERT INTO tb_order_items (order_id, product_id, quantity, unit_value, subtotal)
-VALUES 
-    (1, 1, 2, 20.0, 40.0), -- 2 unidades do Product One no pedido 1
-    (1, 2, 1, 30.0, 30.0), -- 1 unidade do Product Two no pedido 1
-    (2, 1, 1, 20.0, 20.0), -- 1 unidade do Product One no pedido 2
-    (2, 2, 2, 30.0, 60.0), -- 2 unidades do Product Two no pedido 2
-    (3, 3, 2, 5.0, 10.0),  -- 2 unidades do Product Three no pedido 3
-    (3, 5, 1, 4.0, 4.0),   -- 1 unidade do Product Five no pedido 3
-    (4, 1, 1, 20.0, 20.0),  -- 1 unidade do Product One no pedido 4
-    (4, 4, 2, 8.0, 16.0),   -- 2 unidades do Product Four no pedido 4
-    (5, 6, 3, 6.0, 18.0),   -- 3 unidades do Product Six no pedido 5
-    (5, 9, 1, 3.5, 3.5);     -- 1 unidade do Product Nine no pedido 5
-
-
--- -- Inserindo dados na tabela tb_reviews
-INSERT INTO tb_reviews (rating_comment, rating_date, rating_note, restaurant_id, user_id)
-VALUES 
-    ('Comida maravilhosa!', NOW(), 5, 1, 1),
-    ('Ótimo serviço.', NOW(), 4, 1, 2);
-
--- -- Inserindo dados na tabela tb_favorites
-INSERT INTO tb_favorites (restaurant_id, user_id)
-VALUES 
-    (1, 1),
-    (1, 2);
-
--- -- Inserindo dados na tabela tb_historical_orders
-INSERT INTO tb_historical_orders (date_mod, order_status, order_id, restaurant_id, user_id) 
-VALUES 
-(NOW(), 'EMPRODUCAO', 1, 1, 1), 
-(NOW(), 'ENVIADO', 2, 1, 2); 
+-- -- -- Inserindo dados na tabela tb_order_items
+-- INSERT INTO tb_order_items (order_id, product_id, quantity, unit_value, subtotal)
+-- VALUES 
+--     (1, 1, 2, 20.0, 40.0), -- 2 unidades do Product One no pedido 1
+--     (1, 2, 1, 30.0, 30.0), -- 1 unidade do Product Two no pedido 1
+--     (2, 1, 1, 20.0, 20.0), -- 1 unidade do Product One no pedido 2
+--     (2, 2, 2, 30.0, 60.0), -- 2 unidades do Product Two no pedido 2
+--     (3, 3, 2, 5.0, 10.0),  -- 2 unidades do Product Three no pedido 3
+--     (3, 5, 1, 4.0, 4.0),   -- 1 unidade do Product Five no pedido 3
+--     (4, 1, 1, 20.0, 20.0),  -- 1 unidade do Product One no pedido 4
+--     (4, 4, 2, 8.0, 16.0),   -- 2 unidades do Product Four no pedido 4
+--     (5, 6, 3, 6.0, 18.0),   -- 3 unidades do Product Six no pedido 5
+--     (5, 9, 1, 3.5, 3.5);     -- 1 unidade do Product Nine no pedido 5
 
 
--- -- Inserindo dados na tabela tb_notifications
-INSERT INTO tb_notifications (msg_notification, msg_read, send_date, restaurant_id, user_id)
-VALUES 
-    ('Seu pedido foi entregue.', FALSE, NOW(), 1, 1),
-    ('novos produtos disponíveis!', TRUE, NOW(), 1, 2);
+-- -- -- Inserindo dados na tabela tb_reviews
+-- INSERT INTO tb_reviews (rating_comment, rating_date, rating_note, restaurant_id, user_id)
+-- VALUES 
+--     ('Comida maravilhosa!', NOW(), 5, 1, 1),
+--     ('Ótimo serviço.', NOW(), 4, 1, 2);
 
--- -- Inserindo dados na tabela tb_transactions
-INSERT INTO tb_transactions (transaction_date, transaction_status, transaction_value, order_id, card_id) 
-VALUES 
-(NOW(), 'PENDENTE', 100.0, 1, 1), 
-(NOW(), 'APROVADA', 50.0, 2, 2); 
+-- -- -- Inserindo dados na tabela tb_favorites
+-- INSERT INTO tb_favorites (restaurant_id, user_id)
+-- VALUES 
+--     (1, 1),
+--     (1, 2);
+
+-- -- -- Inserindo dados na tabela tb_historical_orders
+-- INSERT INTO tb_historical_orders (date_mod, order_status, order_id, restaurant_id, user_id) 
+-- VALUES 
+-- (NOW(), 'EMPRODUCAO', 1, 1, 1), 
+-- (NOW(), 'ENVIADO', 2, 1, 2); 
+
+
+-- -- -- Inserindo dados na tabela tb_notifications
+-- INSERT INTO tb_notifications (msg_notification, msg_read, send_date, restaurant_id, user_id)
+-- VALUES 
+--     ('Seu pedido foi entregue.', FALSE, NOW(), 1, 1),
+--     ('novos produtos disponíveis!', TRUE, NOW(), 1, 2);
+
+-- -- -- Inserindo dados na tabela tb_transactions
+-- INSERT INTO tb_transactions (transaction_date, transaction_status, transaction_value, order_id, card_id) 
+-- VALUES 
+-- (NOW(), 'PENDENTE', 100.0, 1, 1), 
+-- (NOW(), 'APROVADA', 50.0, 2, 2); 
 
 
 

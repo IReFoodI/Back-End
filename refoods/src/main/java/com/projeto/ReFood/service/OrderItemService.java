@@ -83,7 +83,7 @@ public class OrderItemService {
 
   public OrderItem convertToEntity(OrderItemDTO orderItemDTO) {
     OrderItem orderItem = new OrderItem();
-    OrderItemPK orderItemPK = new OrderItemPK(orderItemDTO.orderId(), orderItemDTO.productId());
+    OrderItemPK orderItemPK = new OrderItemPK();
     orderItem.setOrderItemId(orderItemPK);
     orderItem.setQuantity(orderItemDTO.quantity());
     orderItem.setUnitValue(orderItemDTO.unitValue());
