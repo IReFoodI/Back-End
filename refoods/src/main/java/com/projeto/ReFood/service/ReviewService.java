@@ -19,79 +19,85 @@ import java.util.stream.Collectors;
 @Validated
 public class ReviewService {
 
-    @Autowired
-    private ReviewRepository reviewRepository;
-    
-    @Autowired
-    private UtilityService utilityService;
+  @Autowired
+  private ReviewRepository reviewRepository;
 
-    @Transactional(readOnly = true)
-    public List<ReviewDTO> getAllReviews() {
-        return reviewRepository.findAll()
-                .stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+  @Autowired
+  private UtilityService utilityService;
+
+  @Transactional(readOnly = true)
+  public List<ReviewDTO> getAllReviews() {
+    return reviewRepository.findAll()
+        .stream()
+        .map(this::convertToDTO)
+        .collect(Collectors.toList());
+  }
+
+  @Transactional(readOnly = true)
+  public ReviewDTO getReviewById(Long reviewId) {
+    return reviewRepository.findById(reviewId)
+        .map(this::convertToDTO)
+        .orElseThrow(() -> new NotFoundException());
+  }
+
+  @Transactional
+  public ReviewDTO createReview(@Valid ReviewDTO reviewDTO) {
+    Review review = convertToEntity(reviewDTO);
+    utilityService.associateUser(review::setUser, reviewDTO.userId());
+    utilityService.associateRestaurant(review::setRestaurant, reviewDTO.restaurantId());
+    review = reviewRepository.save(review);
+    return convertToDTO(review);
+  }
+
+  @Transactional
+  public ReviewDTO updateReview(Long reviewId, @Valid ReviewDTO reviewDTO) {
+    Review review = reviewRepository.findById(reviewId)
+        .orElseThrow(() -> new NotFoundException());
+
+    review.setRatingNote(reviewDTO.ratingNote());
+    review.setRatingDate(reviewDTO.ratingDate());
+    review.setRatingComment(reviewDTO.ratingComment());
+
+    utilityService.associateUser(review::setUser, reviewDTO.userId());
+    utilityService.associateRestaurant(review::setRestaurant, reviewDTO.restaurantId());
+
+    review = reviewRepository.save(review);
+    return convertToDTO(review);
+  }
+
+  @Transactional
+  public void deleteReview(Long reviewId) {
+    if (!reviewRepository.existsById(reviewId)) {
+      throw new NotFoundException();
     }
+    reviewRepository.deleteById(reviewId);
+  }
 
-    @Transactional(readOnly = true)
-    public ReviewDTO getReviewById(Long reviewId) {
-        return reviewRepository.findById(reviewId)
-                .map(this::convertToDTO)
-                .orElseThrow(() -> new NotFoundException());
-    }
+  @Transactional(readOnly = true)
+  public ReviewDTO getReviewByOrderId(Long orderId) {
+    return reviewRepository.findByOrder_OrderId(orderId)
+        .map(this::convertToDTO)
+        .orElseThrow(() -> new NotFoundException());
+  }
 
-    @Transactional
-    public ReviewDTO createReview(@Valid ReviewDTO reviewDTO) {
-        Review review = convertToEntity(reviewDTO);
-        utilityService.associateUser(review::setUser, reviewDTO.userId());
-        utilityService.associateRestaurant(review::setRestaurant, reviewDTO.restaurantId());
-        review = reviewRepository.save(review);
-        return convertToDTO(review);
-    }
+  private ReviewDTO convertToDTO(Review review) {
+    return new ReviewDTO(
+        review.getReviewId(),
+        review.getRatingNote(),
+        review.getRatingDate(),
+        review.getRatingComment(),
+        review.getUser().getUserId(),
+        review.getRestaurant().getRestaurantId());
+  }
 
-    @Transactional
-    public ReviewDTO updateReview(Long reviewId, @Valid ReviewDTO reviewDTO) {
-        Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new NotFoundException());
-
-        review.setRatingNote(reviewDTO.ratingNote());
-        review.setRatingDate(reviewDTO.ratingDate());
-        review.setRatingComment(reviewDTO.ratingComment());
-
-        utilityService.associateUser(review::setUser, reviewDTO.userId());
-        utilityService.associateRestaurant(review::setRestaurant, reviewDTO.restaurantId());
-
-        review = reviewRepository.save(review);
-        return convertToDTO(review);
-    }
-
-    @Transactional
-    public void deleteReview(Long reviewId) {
-        if (!reviewRepository.existsById(reviewId)) {
-            throw new NotFoundException();
-        }
-        reviewRepository.deleteById(reviewId);
-    }
-
-    private ReviewDTO convertToDTO(Review review) {
-        return new ReviewDTO(
-                review.getReviewId(),
-                review.getRatingNote(),
-                review.getRatingDate(),
-                review.getRatingComment(),
-                review.getUser().getUserId(),
-                review.getRestaurant().getRestaurantId()
-        );
-    }
-
-    private Review convertToEntity(ReviewDTO reviewDTO) {
-        Review review = new Review();
-        review.setReviewId(reviewDTO.reviewId());
-        review.setRatingNote(reviewDTO.ratingNote());
-        review.setRatingDate(reviewDTO.ratingDate());
-        review.setRatingComment(reviewDTO.ratingComment());
-        utilityService.associateUser(review::setUser, reviewDTO.userId());
-        utilityService.associateRestaurant(review::setRestaurant, reviewDTO.restaurantId());
-        return review;
-    }
+  private Review convertToEntity(ReviewDTO reviewDTO) {
+    Review review = new Review();
+    review.setReviewId(reviewDTO.reviewId());
+    review.setRatingNote(reviewDTO.ratingNote());
+    review.setRatingDate(reviewDTO.ratingDate());
+    review.setRatingComment(reviewDTO.ratingComment());
+    utilityService.associateUser(review::setUser, reviewDTO.userId());
+    utilityService.associateRestaurant(review::setRestaurant, reviewDTO.restaurantId());
+    return review;
+  }
 }

@@ -276,9 +276,9 @@ VALUES
 
 
 -- -- Inserindo dados na tabela tb_reviews
-INSERT INTO tb_reviews (rating_comment, rating_date, rating_note, restaurant_id, user_id)
+INSERT INTO tb_reviews (rating_comment, rating_date, rating_note, order_id, restaurant_id, user_id)
 VALUES 
-    ('Ótimo serviço.', NOW(), 4, 1, 1);
+    ('Ótimo serviço.', NOW(), 4, 1, 1, 1);
 
 -- -- -- Inserindo dados na tabela tb_favorites
 -- INSERT INTO tb_favorites (restaurant_id, user_id)
