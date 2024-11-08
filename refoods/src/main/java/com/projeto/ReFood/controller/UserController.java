@@ -1,6 +1,7 @@
 package com.projeto.ReFood.controller;
 
 import com.projeto.ReFood.dto.UserDTO;
+import com.projeto.ReFood.dto.UserUpdateResponse;
 import com.projeto.ReFood.service.UserService;
 
 import jakarta.validation.Valid;
@@ -20,15 +21,15 @@ public class UserController {
   @Autowired
   private UserService userService;
 
-  @GetMapping
+  @GetMapping("/users")
   public ResponseEntity<List<UserDTO>> listAllUsers() {
     List<UserDTO> users = userService.getAllUsers();
     return ResponseEntity.ok(users);
   }
 
-  @GetMapping("/{userId}")
-  public ResponseEntity<UserDTO> getUserById(@PathVariable Long userId) {
-    UserDTO userDTO = userService.getUserById(userId);
+  @GetMapping
+  public ResponseEntity<UserDTO> getUserById(@RequestHeader("Authorization") String token) {
+    UserDTO userDTO = userService.getUserById(token);
     return ResponseEntity.ok(userDTO);
   }
 
@@ -42,15 +43,15 @@ public class UserController {
     return ResponseEntity.created(location).body(createdUser);
   }
 
-  @PutMapping("/{userId}")
-  public ResponseEntity<UserDTO> updateUser(@PathVariable Long userId, @Valid @RequestBody UserDTO userDTO) {
-    UserDTO updatedUser = userService.updateUser(userId, userDTO);
+  @PutMapping
+  public ResponseEntity<UserUpdateResponse> updateUser(@RequestHeader("Authorization") String token, @Valid @RequestBody UserDTO userDTO) {
+    UserUpdateResponse updatedUser = userService.updateUser(token, userDTO);
     return ResponseEntity.ok(updatedUser);
   }
 
-  @DeleteMapping("/{userId}")
-  public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
-    userService.deleteUser(userId);
+  @DeleteMapping
+  public ResponseEntity<Void> deleteUser(@RequestHeader("Authorization") String token) {
+    userService.deleteUser(token);
     return ResponseEntity.noContent().build();
   }
 }
