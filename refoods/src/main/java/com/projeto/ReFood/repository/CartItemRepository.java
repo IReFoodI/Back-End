@@ -6,4 +6,5 @@ import com.projeto.ReFood.model.CartItemPK;
 
 public interface CartItemRepository extends JpaRepository<CartItem, CartItemPK> {
   void deleteByCartItemIdCartIdAndCartItemIdProductId(Long cartId, Long productId);
+  void deleteByCart_CartId(Long cartId);
 }
