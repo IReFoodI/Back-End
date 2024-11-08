@@ -206,28 +206,59 @@ VALUES
     (1, 9, 3, 3.5, 10.5);
     
 
--- -- -- Inserindo dados na tabela tb_orders
--- INSERT INTO tb_orders (order_date, order_status, total_value, address_id, restaurant_id, user_id)
--- VALUES 
---     (NOW(), 1, 100.0, 1, 1, 1),
---     (NOW(), 2, 50.0, 2, 1, 2),
---     (NOW(), 1, 45.0, 3, 1, 1),
---     (NOW(), 2, 75.0, 4, 1, 2),
---     (NOW(), 1, 30.0, 5, 1, 1);
+-- -- Seeds para a tabela tb_orders
+-- INSERT INTO tb_orders (order_date, order_status, delivery_date, delivery_type, total_value, user_id, restaurant_id, address_id, review_id, transaction_id)
+-- VALUES
+--     (NOW(), 'PENDENTE', NULL, 'RETIRADA', 250.50, 1, 1, 1, NULL, NULL), 
+--     (NOW(), 'PREPARANDO', NULL, 'RETIRADA', 120.00, 1, 2, 1, NULL, NULL),
+--     (NOW(), 'AGUARDANDO_RETIRADA', NULL, 'RETIRADA', 75.00, 1, 3, 1, NULL, NULL),
+--     (NOW(), 'CONCLUIDO', NULL, 'RETIRADA', 200.00, 1, 1, 1, NULL, NULL),
+--     (NOW(), 'CANCELADO', NULL, 'RETIRADA', 50.00, 1, 2, 1, NULL, NULL),
+--     (NOW(), 'CONCLUIDO', NULL, 'RETIRADA', 180.00, 1, 1, 1, NULL, NULL),
+--     (NOW(), 'CONCLUIDO', NULL, 'RETIRADA', 120.00, 1, 1, 2, NULL, NULL),
+--     (NOW(), 'CONCLUIDO', NULL, 'RETIRADA', 200.00, 1, 2, 3, NULL, NULL),
+--     (NOW(), 'CONCLUIDO', NULL, 'RETIRADA', 160.00, 1, 3, 4, NULL, NULL);
 
--- -- -- Inserindo dados na tabela tb_order_items
--- INSERT INTO tb_order_items (order_id, product_id, quantity, unit_value, subtotal)
--- VALUES 
---     (1, 1, 2, 20.0, 40.0), -- 2 unidades do Product One no pedido 1
---     (1, 2, 1, 30.0, 30.0), -- 1 unidade do Product Two no pedido 1
---     (2, 1, 1, 20.0, 20.0), -- 1 unidade do Product One no pedido 2
---     (2, 2, 2, 30.0, 60.0), -- 2 unidades do Product Two no pedido 2
---     (3, 3, 2, 5.0, 10.0),  -- 2 unidades do Product Three no pedido 3
---     (3, 5, 1, 4.0, 4.0),   -- 1 unidade do Product Five no pedido 3
---     (4, 1, 1, 20.0, 20.0),  -- 1 unidade do Product One no pedido 4
---     (4, 4, 2, 8.0, 16.0),   -- 2 unidades do Product Four no pedido 4
---     (5, 6, 3, 6.0, 18.0),   -- 3 unidades do Product Six no pedido 5
---     (5, 9, 1, 3.5, 3.5);     -- 1 unidade do Product Nine no pedido 5
+-- -- Seeds para a tabela tb_order_items para os pedidos criados
+-- INSERT INTO tb_order_items (quantity, unit_value, subtotal, product_id, order_id)
+-- VALUES
+--     -- Itens do pedido 1 (PENDENTE) 
+--     (2, 50.00, 100.00, 2, 1),
+--     (1, 50.50, 50.50, 9, 1),
+--     (3, 25.00, 75.00, 3, 1),
+--     (1, 25.00, 25.00, 5, 1), 
+--     (2, 30.00, 60.00, 6, 1), 
+--     (1, 40.00, 40.00, 7, 1), 
+
+--     -- Itens do pedido 2 (PREPARANDO)
+--     (1, 40.00, 40.00, 3, 2),
+--     (2, 40.00, 80.00, 6, 2),
+
+--     -- Itens do pedido 3 (PENDENTE)
+--     (1, 75.00, 75.00, 8, 3),
+
+--     -- Itens do pedido 4 (CONCLUIDO)
+--     (3, 50.00, 150.00, 5, 4),
+--     (1, 50.00, 50.00, 4, 4),
+
+--     -- Itens do pedido 5 (CANCELADO)
+--     (1, 50.00, 50.00, 7, 5),
+
+--     -- Itens do pedido 6 (CONCLUIDO)
+--     (2, 60.00, 120.00, 3, 6),
+--     (1, 60.00, 60.00, 5, 6),
+
+--     -- Itens do pedido 7 (CONCLUIDO)
+--     (1, 40.00, 40.00, 6, 7),
+--     (2, 40.00, 80.00, 9, 7),
+
+--     -- Itens do pedido 8 (CONCLUIDO)
+--     (2, 70.00, 140.00, 4, 8),
+--     (1, 60.00, 60.00, 3, 8),
+
+--     -- Itens do pedido 9 (CONCLUIDO)
+--     (3, 50.00, 150.00, 2, 9),
+--     (1, 10.00, 10.00, 8, 9);
 
 
 -- -- -- Inserindo dados na tabela tb_reviews
@@ -242,24 +273,10 @@ VALUES
 --     (1, 1),
 --     (1, 2);
 
--- -- -- Inserindo dados na tabela tb_historical_orders
--- INSERT INTO tb_historical_orders (date_mod, order_status, order_id, restaurant_id, user_id) 
--- VALUES 
--- (NOW(), 'EMPRODUCAO', 1, 1, 1), 
--- (NOW(), 'ENVIADO', 2, 1, 2); 
 
 
--- -- -- Inserindo dados na tabela tb_notifications
--- INSERT INTO tb_notifications (msg_notification, msg_read, send_date, restaurant_id, user_id)
--- VALUES 
---     ('Seu pedido foi entregue.', FALSE, NOW(), 1, 1),
---     ('novos produtos disponíveis!', TRUE, NOW(), 1, 2);
 
--- -- -- Inserindo dados na tabela tb_transactions
--- INSERT INTO tb_transactions (transaction_date, transaction_status, transaction_value, order_id, card_id) 
--- VALUES 
--- (NOW(), 'PENDENTE', 100.0, 1, 1), 
--- (NOW(), 'APROVADA', 50.0, 2, 2); 
+
 
 
 
