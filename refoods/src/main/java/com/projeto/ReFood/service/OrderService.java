@@ -141,7 +141,8 @@ public class OrderService {
             item.getUnitValue(),
             item.getSubtotal(),
             item.getOrder().getOrderId(),
-            item.getProduct().getProductId()))
+            item.getProduct().getProductId(),
+            item.getProduct().getNameProduct()))
         .collect(Collectors.toList());
 
     return new OrderResponseDTO(
@@ -167,7 +168,8 @@ public class OrderService {
             item.getUnitValue(),
             item.getSubtotal(),
             item.getOrder().getOrderId(),
-            item.getProduct().getProductId()))
+            item.getProduct().getProductId(),
+            item.getProduct().getNameProduct()))
         .collect(Collectors.toList());
 
     return new OrderResponseDTO(

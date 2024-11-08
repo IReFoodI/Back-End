@@ -78,7 +78,8 @@ public class OrderItemService {
         orderItem.getUnitValue(),
         orderItem.getSubtotal(),
         orderItem.getOrder().getOrderId(),
-        orderItem.getProduct().getProductId());
+        orderItem.getProduct().getProductId(),
+        orderItem.getProduct().getNameProduct());
   }
 
   public OrderItem convertToEntity(OrderItemDTO orderItemDTO) {

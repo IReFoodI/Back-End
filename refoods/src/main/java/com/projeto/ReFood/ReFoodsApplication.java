@@ -8,8 +8,7 @@ import org.springframework.data.web.config.EnableSpringDataWebSupport;
 
 @EnableSpringDataWebSupport //Para fazer o carregamento de páginas infinitas
 @SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
-public class
-ReFoodsApplication {
+public class ReFoodsApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ReFoodsApplication.class, args);
 	}
