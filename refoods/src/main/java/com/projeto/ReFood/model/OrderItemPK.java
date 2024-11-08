@@ -1,19 +1,53 @@
 package com.projeto.ReFood.model;
 
 import jakarta.persistence.Embeddable;
+
 import java.io.Serializable;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-
 @Embeddable
-@NoArgsConstructor // Gera um construtor sem argumentos
-@AllArgsConstructor // Gera um construtor com argumentos para todos os campos
-@EqualsAndHashCode // Gera os métodos equals e hashCode baseados nos campos da classe
 public class OrderItemPK implements Serializable {
 
-  private Long orderId;
-  private Long productId;
+  private Long orderId; // ID do pedido
+  private Long productId; // ID do produto
 
+  // Construtores
+  public OrderItemPK() {
+  }
+
+  public OrderItemPK(Long orderId, Long productId) {
+    this.orderId = orderId;
+    this.productId = productId;
+  }
+
+  // Getters e Setters
+  public Long getOrderId() {
+    return orderId;
+  }
+
+  public void setOrderId(Long orderId) {
+    this.orderId = orderId;
+  }
+
+  public Long getProductId() {
+    return productId;
+  }
+
+  public void setProductId(Long productId) {
+    this.productId = productId;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (o == null || getClass() != o.getClass())
+      return false;
+    OrderItemPK that = (OrderItemPK) o;
+    return orderId.equals(that.orderId) && productId.equals(that.productId);
+  }
+
+  @Override
+  public int hashCode() {
+    return 31 * orderId.hashCode() + productId.hashCode();
+  }
 }

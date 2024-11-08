@@ -1,5 +1,6 @@
 package com.projeto.ReFood.repository;
 
+import com.projeto.ReFood.model.Order;
 import com.projeto.ReFood.model.OrderItem;
 import com.projeto.ReFood.model.OrderItemPK;
 
@@ -8,4 +9,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface OrderItemRepository extends JpaRepository<OrderItem, OrderItemPK> {
+  void deleteAllByOrder(Order order);
 }

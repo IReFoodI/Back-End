@@ -1,101 +1,190 @@
 package com.projeto.ReFood.service;
 
+import com.projeto.ReFood.repository.OrderItemRepository;
 import com.projeto.ReFood.repository.OrderRepository;
 
-import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
-import com.projeto.ReFood.dto.OrderDTO;
+import com.projeto.ReFood.dto.OrderItemDTO;
+import com.projeto.ReFood.dto.OrderRequestDTO;
+import com.projeto.ReFood.dto.OrderResponseDTO;
 import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
 import com.projeto.ReFood.model.Order;
+import com.projeto.ReFood.model.OrderItem;
+import com.projeto.ReFood.model.OrderItemPK;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @Validated
+@RequiredArgsConstructor
 public class OrderService {
 
-  @Autowired
-  private OrderRepository orderRepository;
-  @Autowired
-  private UtilityService utilityService;
+  private final OrderRepository orderRepository;
+  private final UtilityService utilityService;
+  private final OrderItemRepository orderItemRepository;
 
   @Transactional(readOnly = true)
-  public List<OrderDTO> getAllOrders() {
-    return orderRepository
-        .findAll()
-        .stream()
+  public List<OrderResponseDTO> getAllOrders() {
+
+    return orderRepository.findAll().stream()
         .map(this::convertToDTO)
         .collect(Collectors.toList());
   }
 
   @Transactional(readOnly = true)
-  public OrderDTO getOrderById(Long orderId) {
-    return orderRepository.findById(orderId)
-        .map(this::convertToDTO)
-        .orElseThrow(() -> new NotFoundException());
-  }
+  public OrderResponseDTO getOrderById(Long orderId) {
 
-  @Transactional
-  public OrderDTO createOrder(@Valid OrderDTO orderDTO) {
-    Order order = convertToEntity(orderDTO);
-    utilityService.associateUser(order::setUser, orderDTO.userId());
-    utilityService.associateRestaurant(order::setRestaurant, orderDTO.restaurantId());
-    utilityService.associateAddress(order::setAssociatedAddress, orderDTO.addressId());
-    order = orderRepository.save(order);
-    return convertToDTO(order);
-  }
-
-  @Transactional
-  public OrderDTO updateOrder(Long orderId, @Valid OrderDTO orderDTO) {
     Order order = orderRepository.findById(orderId)
         .orElseThrow(() -> new NotFoundException());
 
-    order.setOrderDate(orderDTO.orderDate());
-    order.setOrderStatus(orderDTO.orderStatus());
-    order.setTotalValue(orderDTO.totalValue());
-
-    utilityService.associateUser(order::setUser, orderDTO.userId());
-    utilityService.associateRestaurant(order::setRestaurant, orderDTO.restaurantId());
-    utilityService.associateAddress(order::setAssociatedAddress, orderDTO.addressId());
-
-    order = orderRepository.save(order);
     return convertToDTO(order);
   }
 
-  @Transactional
-  public void deleteOrder(Long orderId) {
-    if (!orderRepository.existsById(orderId)) {
+  @Transactional(readOnly = true)
+  public List<OrderResponseDTO> getOrdersByRestaurantId(Long restaurantId) {
+    List<Order> orders = orderRepository.findByRestaurant_RestaurantId(restaurantId);
+
+    if (orders.isEmpty()) {
       throw new NotFoundException();
     }
-    orderRepository.deleteById(orderId);
+
+    return orders.stream()
+        .map(this::convertToDTO)
+        .collect(Collectors.toList());
   }
 
-  private OrderDTO convertToDTO(Order order) {
-    return new OrderDTO(
+  @Transactional(readOnly = true)
+  public List<OrderResponseDTO> getOrdersByUserId(Long userId) {
+    List<Order> orders = orderRepository.findByUser_UserId(userId);
+
+    if (orders.isEmpty()) {
+      throw new NotFoundException();
+    }
+
+    return orders.stream()
+        .map(this::convertToDTO)
+        .collect(Collectors.toList());
+  }
+
+  @Transactional
+  public List<OrderResponseDTO> getOrdersByUserIdAndStatus(Long userId, String orderStatus) {
+    List<Order> orders = orderRepository.findByUserIdAndOrderStatus(userId, orderStatus);
+    if (orders.isEmpty()) {
+      throw new NotFoundException();
+    }
+    return orders.stream()
+        .map(this::convertToDTO)
+        .collect(Collectors.toList());
+  }
+
+  @Transactional
+  public List<OrderResponseDTO> getOrdersByRestaurantIdAndStatus(Long restaurantId, String orderStatus) {
+    List<Order> orders = orderRepository.findByRestaurantIdAndOrderStatus(restaurantId, orderStatus);
+    if (orders.isEmpty()) {
+      throw new NotFoundException();
+    }
+    return orders.stream()
+        .map(this::convertToDTO)
+        .collect(Collectors.toList());
+  }
+
+  @Transactional
+  public OrderResponseDTO createOrder(OrderRequestDTO orderRequestDTO) {
+    Order order = new Order();
+    order.setOrderDate(orderRequestDTO.getOrderDate());
+    order.setDeliveryDate(orderRequestDTO.getDeliveryDate());
+    order.setOrderStatus(orderRequestDTO.getOrderStatus());
+    order.setDeliveryType(orderRequestDTO.getDeliveryType());
+    order.setTotalValue(orderRequestDTO.getTotalValue());
+
+    utilityService.associateUser(order::setUser, orderRequestDTO.getUserId());
+    utilityService.associateRestaurant(order::setRestaurant, orderRequestDTO.getRestaurantId());
+    utilityService.associateAddress(order::setAssociatedAddress, orderRequestDTO.getAddressId());
+    if (orderRequestDTO.getReviewId() != null) {
+      utilityService.associateReview(order::setReview, orderRequestDTO.getReviewId());
+    }
+    if (orderRequestDTO.getTransactionId() != null) {
+      utilityService.associateTransaction(order::setTransaction, orderRequestDTO.getTransactionId());
+    }
+
+    orderRepository.save(order);
+
+    List<OrderItem> orderItems = new ArrayList<>();
+    for (OrderItemDTO itemDTO : orderRequestDTO.getOrderItems()) {
+      OrderItem orderItem = new OrderItem();
+      orderItem.setQuantity(itemDTO.quantity());
+      orderItem.setUnitValue(itemDTO.unitValue());
+      orderItem.setSubtotal(itemDTO.unitValue() * itemDTO.quantity());
+      orderItem.setOrder(order);
+
+      utilityService.associateProduct(orderItem::setProduct, itemDTO.productId());
+
+      OrderItemPK orderItemPK = new OrderItemPK(order.getOrderId(), itemDTO.productId());
+      orderItem.setOrderItemId(orderItemPK);
+
+      orderItems.add(orderItem);
+    }
+
+    orderItemRepository.saveAll(orderItems);
+
+    List<OrderItemDTO> orderItemDTOs = orderItems.stream()
+        .map(item -> new OrderItemDTO(
+            item.getOrderItemId(),
+            item.getQuantity(),
+            item.getUnitValue(),
+            item.getSubtotal(),
+            item.getOrder().getOrderId(),
+            item.getProduct().getProductId(),
+            item.getProduct().getNameProduct()))
+        .collect(Collectors.toList());
+
+    return new OrderResponseDTO(
         order.getOrderId(),
         order.getOrderDate(),
+        order.getDeliveryDate(),
         order.getOrderStatus(),
+        order.getDeliveryType(),
         order.getTotalValue(),
         order.getUser().getUserId(),
         order.getRestaurant().getRestaurantId(),
-        order.getAssociatedAddress().getAddressId());
+        order.getAssociatedAddress().getAddressId(),
+        order.getReview() != null ? order.getReview().getReviewId() : null,
+        order.getTransaction() != null ? order.getTransaction().getTransactionId() : null,
+        orderItemDTOs);
   }
 
-  private Order convertToEntity(OrderDTO orderDTO) {
-    Order order = new Order();
-    order.setOrderId(orderDTO.orderId());
-    order.setOrderDate(orderDTO.orderDate());
-    order.setOrderStatus(orderDTO.orderStatus());
-    order.setTotalValue(orderDTO.totalValue());
-    utilityService.associateUser(order::setUser, orderDTO.userId());
-    utilityService.associateRestaurant(order::setRestaurant, orderDTO.restaurantId());
-    utilityService.associateAddress(order::setAssociatedAddress, orderDTO.addressId());
-    return order;
+  private OrderResponseDTO convertToDTO(Order order) {
+    List<OrderItemDTO> orderItemDTOs = order.getOrderItems().stream()
+        .map(item -> new OrderItemDTO(
+            item.getOrderItemId(),
+            item.getQuantity(),
+            item.getUnitValue(),
+            item.getSubtotal(),
+            item.getOrder().getOrderId(),
+            item.getProduct().getProductId(),
+            item.getProduct().getNameProduct()))
+        .collect(Collectors.toList());
+
+    return new OrderResponseDTO(
+        order.getOrderId(),
+        order.getOrderDate(),
+        order.getDeliveryDate(),
+        order.getOrderStatus(),
+        order.getDeliveryType(),
+        order.getTotalValue(),
+        order.getUser().getUserId(),
+        order.getRestaurant().getRestaurantId(),
+        order.getAssociatedAddress().getAddressId(),
+        order.getReview() != null ? order.getReview().getReviewId() : null,
+        order.getTransaction() != null ? order.getTransaction().getTransactionId() : null,
+        orderItemDTOs);
   }
+
 }

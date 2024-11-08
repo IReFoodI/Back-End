@@ -15,5 +15,7 @@ public record OrderItemDTO(
 
     @NotNull(message = "O ID do pedido não pode ser nulo.") Long orderId,
 
-    @NotNull(message = "O ID do produto não pode ser nulo.") Long productId) {
+    @NotNull(message = "O ID do produto não pode ser nulo.") Long productId,
+    
+    String productName) {
 }

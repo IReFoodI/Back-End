@@ -27,15 +27,13 @@ import java.util.stream.Collectors;
 @Service
 @Validated
 @RequiredArgsConstructor
-public class
-RestaurantService {
+public class RestaurantService {
 
   private final RestaurantRepository restaurantRepository;
   private final UtilityService utilityService;
   private final PasswordEncoder passwordEncoder;
   private final JwtTokenProvider jwtTokenProvider;
   private final CustomUserDetailsService userDetailsService;
-
 
   @Transactional(readOnly = true)
   public List<RestaurantDTO> getAllRestaurants() {
@@ -49,8 +47,8 @@ RestaurantService {
   @Transactional(readOnly = true)
   public Page<RestaurantDTO> getRestaurants(Pageable pageable) {
     return restaurantRepository
-            .findAll(pageable)
-            .map(this::convertToDTO);
+        .findAll(pageable)
+        .map(this::convertToDTO);
   }
 
   @Transactional(readOnly = true)
@@ -80,21 +78,23 @@ RestaurantService {
   }
 
   @Transactional
-public RestaurantDTO createRestaurant(@Valid RestaurantDTO restaurantDTO) {
+  public RestaurantDTO createRestaurant(@Valid RestaurantDTO restaurantDTO) {
 
     if (!utilityService.isEmailUnique(restaurantDTO.email())) {
-        throw new EmailAlreadyExistsException();
+      throw new EmailAlreadyExistsException();
     }
 
     if (restaurantRepository.existsByCnpj(restaurantDTO.cnpj())) {
-        throw new CnpjAlreadyExistsException();
+      throw new CnpjAlreadyExistsException();
     }
 
     Restaurant restaurant = convertToEntity(restaurantDTO);
     restaurant.setPassword(passwordEncoder.encode(restaurant.getPassword()));
     restaurant.setDateCreation(LocalDateTime.now());
-    restaurant.setUrlBanner("https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/644020ab-f6c8-4871-be38-f1e70ccbabd4_banner.png?alt=media");
-    restaurant.setUrlLogo("https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/2234dc33-7c9f-42c5-a1e4-57e9f96ebb3e_perfil.png?alt=media");
+    restaurant.setUrlBanner(
+        "https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/644020ab-f6c8-4871-be38-f1e70ccbabd4_banner.png?alt=media");
+    restaurant.setUrlLogo(
+        "https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/2234dc33-7c9f-42c5-a1e4-57e9f96ebb3e_perfil.png?alt=media");
     restaurant.setLastLogin(null);
 
     restaurant = restaurantRepository.save(restaurant);
@@ -102,8 +102,7 @@ public RestaurantDTO createRestaurant(@Valid RestaurantDTO restaurantDTO) {
     utilityService.addAddressToRestaurant(restaurant, restaurantDTO.address());
 
     return convertToDTO(restaurant);
-}
-
+  }
 
   @Transactional
   public RestaurantUpdateDTO updateRestaurant(String token, @Valid RestaurantUpdateDTO restaurantDTO) {
@@ -111,13 +110,13 @@ public RestaurantDTO createRestaurant(@Valid RestaurantDTO restaurantDTO) {
     Restaurant restaurant = restaurantRepository.findById(userId)
         .orElseThrow(() -> new NotFoundException());
 
-//        if (!utilityService.isEmailUnique(restaurantDTO.email())) {
-//            throw new EmailAlreadyExistsException();
-//        }
+    // if (!utilityService.isEmailUnique(restaurantDTO.email())) {
+    // throw new EmailAlreadyExistsException();
+    // }
 
-//        if (restaurantRepository.existsByCnpj(restaurantDTO.cnpj())) {
-//            throw new CnpjAlreadyExistsException();
-//        }
+    // if (restaurantRepository.existsByCnpj(restaurantDTO.cnpj())) {
+    // throw new CnpjAlreadyExistsException();
+    // }
 
     restaurant.setCnpj(restaurantDTO.cnpj());
     restaurant.setCategory(EnumRestaurantCategory.valueOf(restaurantDTO.category()));
@@ -132,19 +131,20 @@ public RestaurantDTO createRestaurant(@Valid RestaurantDTO restaurantDTO) {
   }
 
   @Transactional
-  public RestaurantUpdateEmailResponse updateRestaurantEmail(String token, @Valid RestaurantUpdateEmailDTO restaurantUpdateEmailDTO) {
+  public RestaurantUpdateEmailResponse updateRestaurantEmail(String token,
+      @Valid RestaurantUpdateEmailDTO restaurantUpdateEmailDTO) {
     Long userId = jwtTokenProvider.extractUserId(token);
     Restaurant restaurant = restaurantRepository.findById(userId)
         .orElseThrow(() -> new NotFoundException());
 
+    Optional<Restaurant> restaurantEmail = restaurantRepository.findByEmail(restaurantUpdateEmailDTO.email());
 
-    Optional<Restaurant> restaurantEmail=restaurantRepository.findByEmail(restaurantUpdateEmailDTO.email());
-
-    if(restaurantEmail.isPresent()){
+    if (restaurantEmail.isPresent()) {
       throw new EmailAlreadyExistsException();
     }
 
-    CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(restaurantUpdateEmailDTO.oldEmail());
+    CustomUserDetails userDetails = (CustomUserDetails) userDetailsService
+        .loadUserByUsername(restaurantUpdateEmailDTO.oldEmail());
     userDetails.setEmail(restaurantUpdateEmailDTO.email());
     String role = userDetails.getAuthorities().stream().findFirst().get().getAuthority();
     if (!role.equals("ROLE_RESTAURANT")) {
@@ -155,7 +155,7 @@ public RestaurantDTO createRestaurant(@Valid RestaurantDTO restaurantDTO) {
 
     restaurant.setEmail(restaurantUpdateEmailDTO.email());
     Restaurant updatedRestaurant = restaurantRepository.save(restaurant);
-    return new RestaurantUpdateEmailResponse(jwt,updatedRestaurant.getEmail());
+    return new RestaurantUpdateEmailResponse(jwt, updatedRestaurant.getEmail());
   }
 
   @Transactional
@@ -170,7 +170,7 @@ public RestaurantDTO createRestaurant(@Valid RestaurantDTO restaurantDTO) {
     String encryptedPassword = passwordEncoder.encode(restaurantUpdatePasswordDTO.password());
     restaurant.setPassword(encryptedPassword);
     restaurantRepository.save(restaurant);
-    return ;
+    return;
   }
 
   @Transactional
@@ -179,6 +179,13 @@ public RestaurantDTO createRestaurant(@Valid RestaurantDTO restaurantDTO) {
       throw new NotFoundException();
     }
     restaurantRepository.deleteById(restaurantId);
+  }
+
+  @Transactional(readOnly = true)
+  public RestaurantDTO getRestaurantById(Long restaurantId) {
+    return restaurantRepository.findById(restaurantId)
+        .map(this::convertToDTO)
+        .orElseThrow(() -> new NotFoundException());
   }
 
   public RestaurantDTO convertToDTO(Restaurant restaurant) {
@@ -198,8 +205,7 @@ public RestaurantDTO createRestaurant(@Valid RestaurantDTO restaurantDTO) {
         restaurant.getDescription(),
         null,
         restaurant.getDateCreation(),
-        restaurant.getLastLogin()
-    );
+        restaurant.getLastLogin());
   }
 
   public RestaurantUpdateDTO convertToDTOUpdate(Restaurant restaurant) {
@@ -211,8 +217,7 @@ public RestaurantDTO createRestaurant(@Valid RestaurantDTO restaurantDTO) {
         restaurant.getPhone(),
         restaurant.getUrlBanner(),
         restaurant.getUrlLogo(),
-        restaurant.getDescription()
-    );
+        restaurant.getDescription());
   }
 
   public Restaurant convertToEntity(RestaurantDTO restaurantDTO) {

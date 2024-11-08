@@ -53,7 +53,7 @@ VALUES
     (TRUE, NOW(), 'Bolo de cenoura com cobertura de chocolate, delicioso e fresquinho', 15, 'Bolo de Cenoura com Chocolate', 'DOCE', 
     'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
     18.0, '2024-11-17', 50, 1),
-    (TRUE, NOW(), 'Pão francês crocante por fora e macio por dentro', 1, 'Pão Francês', 'SALGADO', 
+    (TRUE, NOW(), 'Pao Frances crocante por fora e macio por dentro', 1, 'Pao Frances', 'SALGADO', 
     'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
     1.5, '2024-11-17', 300, 1),
     (TRUE, NOW(), 'Pastel assado de frango com catupiry', 6, 'Pastel de Frango com Catupiry', 'SALGADO', 
@@ -62,36 +62,36 @@ VALUES
     (TRUE, NOW(), 'Biscoito caseiro amanteigado, derrete na boca', 7, 'Biscoito Amanteigado', 'DOCE', 
     'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
     8.0, '2024-11-17', 80, 1),
-    (TRUE, NOW(), 'Pão doce recheado com creme de baunilha', 3.5, 'Pão Doce com Creme', 'DOCE', 
+    (TRUE, NOW(), 'Pao doce recheado com creme de baunilha', 3.5, 'Pao Doce com Creme', 'DOCE', 
     'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
     4.0, '2024-11-17', 100, 1),
-    (TRUE, NOW(), 'Croissant folhado e amanteigado, perfeito para o café da manhã', 6.0, 'Croissant', 'SALGADO', 
+    (TRUE, NOW(), 'Croissant folhado e amanteigado, perfeito para o cafe da manha', 6.0, 'Croissant', 'SALGADO', 
     'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
     6.0, '2024-11-17', 70, 1),
     (TRUE, NOW(), 'Sonho com recheio de doce de leite', 4.2, 'Sonho de Doce de Leite', 'DOCE', 
     'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
     4.5, '2024-11-17', 60, 1),
-    (TRUE, NOW(), 'Torta de maçã com massa crocante e recheio cremoso', 12, 'Torta de Maçã', 'DOCE', 
+    (TRUE, NOW(), 'Torta de Maca com massa crocante e recheio cremoso', 12, 'Torta de Maca', 'DOCE', 
     'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
     12.0, '2024-11-17', 30, 1),
-    (TRUE, NOW(), 'Empadão de palmito, delicioso e bem temperado', 20, 'Empadão de Palmito', 'SALGADO', 
+    (TRUE, NOW(), 'Empadao de palmito, delicioso e bem temperado', 20, 'Empadao de Palmito', 'SALGADO', 
     'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
     20.0, '2024-11-17', 20, 1),
-    (TRUE, NOW(), 'Enroladinho de salsicha, ideal para lanches rápidos', 3, 'Enroladinho de Salsicha', 'SALGADO', 
+    (TRUE, NOW(), 'Enroladinho de salsicha, ideal para lanches rapidos', 3, 'Enroladinho de Salsicha', 'SALGADO', 
     'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
     3.0, '2024-11-17', 200, 1),
-    (TRUE, NOW(), 'Rosquinha de coco com açúcar por cima', 3, 'Rosquinha de Coco', 'DOCE', 
+    (TRUE, NOW(), 'Rosquinha de coco com acucar por cima', 3, 'Rosquinha de Coco', 'DOCE', 
     'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
     3.5, '2024-11-17', 90, 1),
     (TRUE, NOW(), 'Quiche de queijo com espinafre', 12.9, 'Quiche de Queijo e Espinafre', 'SALGADO', 
     'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
     15.0, '2024-11-17', 40, 1),
     --
-       (TRUE, NOW(), 'Pão de queijo mineiro, ideal para o café da manhã', 5.0, 'Pão de Queijo', 'SALGADO',
+       (TRUE, NOW(), 'Pao de queijo mineiro, ideal para o cafe da manha', 5.0, 'Pao de Queijo', 'SALGADO',
         'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
         6.0, '2024-11-17', 30, 1),
 
-        (TRUE, NOW(), 'Bolo de fubá com um toque de erva-doce', 12.0, 'Bolo de Fubá', 'DOCE',
+        (TRUE, NOW(), 'Bolo de Fuba com um toque de erva-doce', 12.0, 'Bolo de Fuba', 'DOCE',
         'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
         15.0, '2024-11-18', 20, 2),
 
@@ -107,7 +107,7 @@ VALUES
         'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
         22.0, '2024-11-21', 15, 2),
 
-        (TRUE, NOW(), 'Sanduíche natural de frango com alface e tomate', 9.0, 'Sanduíche Natural', 'SALGADO',
+        (TRUE, NOW(), 'Sanduiche natural de frango com alface e tomate', 9.0, 'Sanduiche Natural', 'SALGADO',
         'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
         10.0, '2024-11-22', 35, 3),
 
@@ -123,7 +123,7 @@ VALUES
         'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
         6.0, '2024-11-27', 50, 3),
 
-        (TRUE, NOW(), 'Pão francês fresquinho, ideal para o café da manhã', 0.5, 'Pão Francês', 'SALGADO',
+        (TRUE, NOW(), 'Pao Frances fresquinho, ideal para o cafe da manha', 0.5, 'Pao Frances', 'SALGADO',
             'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
             0.8, '2024-11-23', 100, 1),
 
@@ -139,7 +139,7 @@ VALUES
             'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
             10.0, '2024-11-27', 15, 1),
 
-            (TRUE, NOW(), 'Queijo minas frescal, ideal para acompanhar pães', 20.0, 'Queijo Minas', 'MISTO',
+            (TRUE, NOW(), 'Queijo minas frescal, ideal para acompanhar paes', 20.0, 'Queijo Minas', 'MISTO',
             'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
             25.0, '2024-11-28', 10, 2),
 
@@ -147,7 +147,7 @@ VALUES
             'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
             4.5, '2024-11-29', 50, 3),
 
-            (TRUE, NOW(), 'Sanduíche de atum com salada', 12.0, 'Sanduíche de Atum', 'SALGADO',
+            (TRUE, NOW(), 'Sanduiche de atum com salada', 12.0, 'Sanduiche de Atum', 'SALGADO',
             'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
             13.0, '2024-11-30', 30, 1),
 
@@ -155,7 +155,7 @@ VALUES
             'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
             9.0, '2024-12-01', 25, 2),
 
-            (TRUE, NOW(), 'Empadão de palmito com azeitonas', 15.0, 'Empadão de Palmito', 'MISTO',
+            (TRUE, NOW(), 'Empadao de palmito com azeitonas', 15.0, 'Empadao de Palmito', 'MISTO',
             'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
             18.0, '2024-12-02', 12, 3),
 
@@ -175,7 +175,7 @@ VALUES
             'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
             3.0, '2024-12-06', 60, 1),
 
-            (TRUE, NOW(), 'Torta de frango com requeijão', 16.0, 'Torta de Frango', 'MISTO',
+            (TRUE, NOW(), 'Torta de frango com requeijao', 16.0, 'Torta de Frango', 'MISTO',
             'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14',
             18.0, '2024-12-07', 10, 2),
 
@@ -205,60 +205,83 @@ VALUES
     (1, 6, 4, 6.0, 24.0),
     (1, 9, 3, 3.5, 10.5);
 
--- -- Inserindo dados na tabela tb_orders
-INSERT INTO tb_orders (order_date, order_status, total_value, address_id, restaurant_id, user_id)
-VALUES 
-    (NOW(), 1, 100.0, 1, 1, 1),
-    (NOW(), 2, 50.0, 2, 1, 2),
-    (NOW(), 1, 45.0, 3, 1, 1),
-    (NOW(), 2, 75.0, 4, 1, 2),
-    (NOW(), 1, 30.0, 5, 1, 1);
 
--- -- Inserindo dados na tabela tb_order_items
-INSERT INTO tb_order_items (order_id, product_id, quantity, unit_value, subtotal)
-VALUES 
-    (1, 1, 2, 20.0, 40.0), -- 2 unidades do Product One no pedido 1
-    (1, 2, 1, 30.0, 30.0), -- 1 unidade do Product Two no pedido 1
-    (2, 1, 1, 20.0, 20.0), -- 1 unidade do Product One no pedido 2
-    (2, 2, 2, 30.0, 60.0), -- 2 unidades do Product Two no pedido 2
-    (3, 3, 2, 5.0, 10.0),  -- 2 unidades do Product Three no pedido 3
-    (3, 5, 1, 4.0, 4.0),   -- 1 unidade do Product Five no pedido 3
-    (4, 1, 1, 20.0, 20.0),  -- 1 unidade do Product One no pedido 4
-    (4, 4, 2, 8.0, 16.0),   -- 2 unidades do Product Four no pedido 4
-    (5, 6, 3, 6.0, 18.0),   -- 3 unidades do Product Six no pedido 5
-    (5, 9, 1, 3.5, 3.5);     -- 1 unidade do Product Nine no pedido 5
+-- Inserindo dados na tabela tb_orders
+INSERT INTO tb_orders (order_date, order_status, delivery_date, delivery_type, total_value, user_id, restaurant_id, address_id, review_id, transaction_id)
+VALUES
+    (NOW(), 'CONCLUIDO', NULL, 'RETIRADA', 200.00, 1, 1, 1, NULL, NULL);
+
+-- Inserindo dados na tabela tb_order_items
+INSERT INTO tb_order_items (quantity, unit_value, subtotal, product_id, order_id)
+VALUES
+    (3, 50.00, 150.00, 2, 1),  
+    (2, 25.00, 50.00, 5, 1),
+    (1, 40.00, 40.00, 1, 1),
+    (2, 30.00, 60.00, 3, 1),
+    (3, 25.00, 75.00, 4, 1);
+
+-- -- Seeds para a tabela tb_orders
+-- INSERT INTO tb_orders (order_date, order_status, delivery_date, delivery_type, total_value, user_id, restaurant_id, address_id, review_id, transaction_id)
+-- VALUES
+--     (NOW(), 'PENDENTE', NULL, 'RETIRADA', 250.50, 1, 1, 1, NULL, NULL), 
+--     (NOW(), 'PREPARANDO', NULL, 'RETIRADA', 120.00, 1, 2, 1, NULL, NULL),
+--     (NOW(), 'AGUARDANDO_RETIRADA', NULL, 'RETIRADA', 75.00, 1, 3, 1, NULL, NULL),
+--     (NOW(), 'CONCLUIDO', NULL, 'RETIRADA', 200.00, 1, 1, 1, NULL, NULL),
+--     (NOW(), 'CANCELADO', NULL, 'RETIRADA', 50.00, 1, 2, 1, NULL, NULL),
+--     (NOW(), 'CONCLUIDO', NULL, 'RETIRADA', 180.00, 1, 1, 1, NULL, NULL),
+--     (NOW(), 'CONCLUIDO', NULL, 'RETIRADA', 120.00, 1, 1, 2, NULL, NULL),
+--     (NOW(), 'CONCLUIDO', NULL, 'RETIRADA', 200.00, 1, 2, 3, NULL, NULL),
+--     (NOW(), 'CONCLUIDO', NULL, 'RETIRADA', 160.00, 1, 3, 4, NULL, NULL);
+
+-- -- Seeds para a tabela tb_order_items para os pedidos criados
+-- INSERT INTO tb_order_items (quantity, unit_value, subtotal, product_id, order_id)
+-- VALUES
+--     -- Itens do pedido 1 (PENDENTE) 
+--     (2, 50.00, 100.00, 2, 1),
+--     (1, 50.50, 50.50, 9, 1),
+--     (3, 25.00, 75.00, 3, 1),
+--     (1, 25.00, 25.00, 5, 1), 
+--     (2, 30.00, 60.00, 6, 1), 
+--     (1, 40.00, 40.00, 7, 1), 
+
+--     -- Itens do pedido 2 (PREPARANDO)
+--     (1, 40.00, 40.00, 3, 2),
+--     (2, 40.00, 80.00, 6, 2),
+
+--     -- Itens do pedido 3 (PENDENTE)
+--     (1, 75.00, 75.00, 8, 3),
+
+--     -- Itens do pedido 4 (CONCLUIDO)
+--     (3, 50.00, 150.00, 5, 4),
+--     (1, 50.00, 50.00, 4, 4),
+
+--     -- Itens do pedido 5 (CANCELADO)
+--     (1, 50.00, 50.00, 7, 5),
+
+--     -- Itens do pedido 6 (CONCLUIDO)
+--     (2, 60.00, 120.00, 3, 6),
+--     (1, 60.00, 60.00, 5, 6),
+
+--     -- Itens do pedido 7 (CONCLUIDO)
+--     (1, 40.00, 40.00, 6, 7),
+--     (2, 40.00, 80.00, 9, 7),
+
+--     -- Itens do pedido 8 (CONCLUIDO)
+--     (2, 70.00, 140.00, 4, 8),
+--     (1, 60.00, 60.00, 3, 8),
+
+--     -- Itens do pedido 9 (CONCLUIDO)
+--     (3, 50.00, 150.00, 2, 9),
+--     (1, 10.00, 10.00, 8, 9);
 
 
 -- -- Inserindo dados na tabela tb_reviews
 INSERT INTO tb_reviews (rating_comment, rating_date, rating_note, restaurant_id, user_id)
 VALUES 
-    ('Comida maravilhosa!', NOW(), 5, 1, 1),
-    ('Ótimo serviço.', NOW(), 4, 1, 2);
+    ('Ótimo serviço.', NOW(), 4, 1, 1);
 
--- -- Inserindo dados na tabela tb_favorites
-INSERT INTO tb_favorites (restaurant_id, user_id)
-VALUES 
-    (1, 1),
-    (1, 2);
-
--- -- Inserindo dados na tabela tb_historical_orders
-INSERT INTO tb_historical_orders (date_mod, order_status, order_id, restaurant_id, user_id) 
-VALUES 
-(NOW(), 'EMPRODUCAO', 1, 1, 1), 
-(NOW(), 'ENVIADO', 2, 1, 2); 
-
-
--- -- Inserindo dados na tabela tb_notifications
-INSERT INTO tb_notifications (msg_notification, msg_read, send_date, restaurant_id, user_id)
-VALUES 
-    ('Seu pedido foi entregue.', FALSE, NOW(), 1, 1),
-    ('novos produtos disponíveis!', TRUE, NOW(), 1, 2);
-
--- -- Inserindo dados na tabela tb_transactions
-INSERT INTO tb_transactions (transaction_date, transaction_status, transaction_value, order_id, card_id) 
-VALUES 
-(NOW(), 'PENDENTE', 100.0, 1, 1), 
-(NOW(), 'APROVADA', 50.0, 2, 2); 
-
-
-
+-- -- -- Inserindo dados na tabela tb_favorites
+-- INSERT INTO tb_favorites (restaurant_id, user_id)
+-- VALUES 
+--     (1, 1),
+--     (1, 2);

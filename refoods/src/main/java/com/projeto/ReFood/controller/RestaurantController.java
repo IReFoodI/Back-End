@@ -155,4 +155,12 @@ public class RestaurantController {
     PagedModel<EntityModel<Map<String, Object>>> pagedModel = pagedResourcesAssembler.toModel(page);
     return ResponseEntity.ok(pagedModel);
   }
+
+  @Operation(summary = "Busca informações do restaurante por ID", description = "Retorna os detalhes de um restaurante com base no ID fornecido.")
+  @GetMapping("/{restaurantId}")
+  public ResponseEntity<RestaurantDTO> getRestaurantById(@PathVariable Long restaurantId) {
+    RestaurantDTO restaurant = restaurantService.getRestaurantById(restaurantId);
+    return ResponseEntity.ok(restaurant);
+  }
+
 }

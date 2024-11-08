@@ -36,8 +36,8 @@ public class HistoricalOrder {
   @JoinColumn(name = "restaurant_id", nullable = false)
   private Restaurant restaurant;
 
-  @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "order_id", nullable = false)
+  @OneToOne
+  @JoinColumn(name = "order_id", nullable = false, unique = true)
   private Order associatedHistoricalOrder;
 
 }
