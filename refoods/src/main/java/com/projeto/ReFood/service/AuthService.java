@@ -99,7 +99,7 @@ public class AuthService {
     String jwt = jwtTokenProvider.generateToken(userDetails, userDetails.getId());
 
     return ResponseEntity.ok(new LoginResponse(jwt, userDetails.getId(),
-        userDetails.getNome(), email));
+        userDetails.getName(), email));
   }
 
   public ResponseEntity<LoginResponse> authenticateRestaurant(String email, String password) {
@@ -127,7 +127,7 @@ public class AuthService {
     String jwt = jwtTokenProvider.generateToken(userDetails, userDetails.getId());
 
     return ResponseEntity.ok(new LoginResponse(jwt, userDetails.getId(),
-        userDetails.getNome(), email));
+        userDetails.getName(), email));
   }
 
   public UserInfo getCurrentUserInfo() {
@@ -173,6 +173,6 @@ public class AuthService {
     String jwt = jwtTokenProvider.generateToken(userDetails, userResult.getUserId());
 
     return ResponseEntity
-        .ok(new LoginResponse(jwt, userDetails.getId(), userDetails.getNome(), userDetails.getEmail()));
+        .ok(new LoginResponse(jwt, userDetails.getId(), userDetails.getName(), userDetails.getEmail()));
   }
 }
