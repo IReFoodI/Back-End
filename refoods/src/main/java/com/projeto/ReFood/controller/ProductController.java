@@ -4,13 +4,16 @@ import com.projeto.ReFood.dto.ProductDTO;
 import com.projeto.ReFood.dto.ProductPartialUpdateDTO;
 import com.projeto.ReFood.dto.ProductRestaurantDTO;
 import com.projeto.ReFood.dto.RestaurantInfoDTO;
+import com.projeto.ReFood.exception.GlobalExceptionHandler;
 import com.projeto.ReFood.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
@@ -67,15 +70,28 @@ public class ProductController {
     @GetMapping("/products")
     public ResponseEntity<PagedModel<EntityModel<ProductDTO>>> listProductsByRestaurantId(
             @RequestHeader("Authorization") String token,
-            Pageable pageable) {
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size) {
 
+        if (page < 0) {
+            throw new GlobalExceptionHandler.BadRequestException("Número da página não pode ser menor que 0");
+        }
+//       Caso queira do mais recente para o mais antigo, mas percebi q se tiver vários criados ao mesmo tempo, ele fica estranho
+//        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "additionDate"));
+//        Page<ProductDTO> productsPage = productService.getProductsByRestaurantId(token, pageable);
+        Pageable pageable = PageRequest.of(page, size);
         Page<ProductDTO> productsPage = productService.getProductsByRestaurantId(token, pageable);
+
+        if (page >= productsPage.getTotalPages() && productsPage.getTotalPages() > 0) {
+            throw new GlobalExceptionHandler.BadRequestException("Número da página excede o total de páginas disponíveis.");
+        }
 
         PagedModel<EntityModel<ProductDTO>> pagedModel = pagedResourcesAssembler.toModel(productsPage);
 
         if (productsPage.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
+
         return ResponseEntity.ok(pagedModel);
     }
 
