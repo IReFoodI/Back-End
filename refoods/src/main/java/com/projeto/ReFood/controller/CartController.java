@@ -2,6 +2,7 @@ package com.projeto.ReFood.controller;
 
 import com.projeto.ReFood.dto.CartDTO;
 import com.projeto.ReFood.dto.CartItemsDto;
+import com.projeto.ReFood.model.CartItem;
 import com.projeto.ReFood.service.CartService;
 
 import jakarta.validation.Valid;
@@ -20,6 +21,19 @@ public class CartController {
 
   @Autowired
   private CartService cartService;
+
+  @PostMapping("/user/{userId}/add-item")
+  public ResponseEntity<CartItem> addItemToCart(
+      @PathVariable Long userId,
+      @RequestParam Long productId,
+      @RequestParam int quantity) {
+    try {
+      CartItem cartItem = cartService.addItemToUserCart(userId, productId, quantity);
+      return ResponseEntity.ok(cartItem);
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(null);
+    }
+  }
 
   @DeleteMapping("/cart/item")
   public ResponseEntity<String> removeItemFromCart(@RequestParam Long cartId, @RequestParam Long productId) {

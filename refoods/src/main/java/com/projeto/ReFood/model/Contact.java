@@ -15,7 +15,7 @@ public class Contact {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "contact_id")
   private Long contactId;
-  
+
   @NotBlank(message = "A descrição do contato é obrigatória.")
   @Size(max = 255, message = "A descrição não pode ter mais de 255 caracteres.")
   @Column(nullable = false)
@@ -29,5 +29,14 @@ public class Contact {
   @ManyToOne
   @JoinColumn(name = "restaurant_id", nullable = false)
   private Restaurant restaurant;
+
+  @Override
+  public String toString() {
+    return "Contact{" +
+        "contactId=" + contactId +
+        ", description='" + description + '\'' +
+        ", phone='" + phone + '\'' +
+        '}';
+  }
 
 }

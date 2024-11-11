@@ -55,7 +55,7 @@ VALUES
     18.0, '2024-11-17', 50, 1),
     (TRUE, NOW(), 'Pao Frances crocante por fora e macio por dentro', 1, 'Pao Frances', 'SALGADO', 
     'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
-    1.5, '2024-11-17', 300, 1),
+    1.5, '2024-11-17', 800, 1),
     (TRUE, NOW(), 'Pastel assado de frango com catupiry', 6, 'Pastel de Frango com Catupiry', 'SALGADO', 
     'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
     5.0, '2024-11-17', 150, 1),
@@ -193,14 +193,14 @@ VALUES
 -- -- Inserindo dados na tabela tb_cart_items
 INSERT INTO tb_cart_items (cart_id, product_id, quantity, unit_value, subtotal)
 VALUES 
-    (1, 1, 2, 20.0, 40.0),
-    (1, 2, 1, 30.0, 30.0),
     (2, 1, 1, 20.0, 20.0),
     (2, 2, 2, 30.0, 60.0),
-    (1, 4, 1, 20.0, 20.0),
-    (1, 3, 3, 5.0, 15.0),
     (2, 5, 2, 4.0, 8.0),
     (2, 4, 1, 8.0, 8.0),
+    (1, 2, 1, 30.0, 30.0),
+    (1, 1, 2, 20.0, 40.0),
+    (1, 3, 3, 5.0, 15.0),
+    (1, 4, 1, 20.0, 20.0),
     (1, 5, 2, 1.5, 3.0),
     (1, 6, 4, 6.0, 24.0),
     (1, 9, 3, 3.5, 10.5);

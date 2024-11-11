@@ -15,6 +15,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
+import lombok.ToString;
 
 @Entity
 @Data
@@ -37,6 +38,7 @@ public class Cart {
   private User user;
 
   @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
-  private Set<CartItem> CartItems;
+  @ToString.Exclude
+  private Set<CartItem> cartItems;
 
 }

@@ -10,6 +10,8 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Entity
 @Data
@@ -36,6 +38,8 @@ public class CartItem {
   @ManyToOne
   @MapsId("cartId")
   @JoinColumn(name = "cart_id", referencedColumnName = "cart_id",nullable = false)
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
   private Cart cart;
 
   @NotNull(message = "O produto não pode ser nulo.")
