@@ -15,7 +15,7 @@ import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-  List<Product> findByRestaurant_RestaurantId(Long restaurantId);
+  Page<Product> findByRestaurant_RestaurantId(Long restaurantId, Pageable pageable);
 
   @Query("SELECT r.fantasy FROM Product p JOIN p.restaurant r WHERE p.productId = :productId")
   String findRestaurantNameByProductId(Long productId);
