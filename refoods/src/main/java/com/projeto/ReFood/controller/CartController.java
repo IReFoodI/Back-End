@@ -33,7 +33,6 @@ public class CartController {
       @RequestParam int quantity) {
     try {
       boolean cartItemExists = cartRepository.existsByUserIdAndProductId(userId, productId);
-      System.out.println("Cart item exists: " + cartItemExists);
       CartItemDTO cartItemDTO = cartService.addItemToUserCart(userId, productId, quantity);
       if (cartItemExists) {
         // Item já existe e foi atualizado, retorna 200 OK

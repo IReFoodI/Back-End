@@ -39,102 +39,89 @@ public class CartService {
 
   @Transactional
   public CartItemDTO addItemToUserCart(Long userId, Long productId, int quantity) throws Exception {
-    // Verifica se a quantidade é válida
-    if (quantity <= 0) {
-      System.out.println("\n\n\nQuantidade inválida: " + quantity);
-      throw new IllegalArgumentException("A quantidade deve ser maior que zero.");
-    }
+    // Valida a quantidade do item
+    validateQuantity(quantity);
 
-    // Verifica se o usuário existe
-    User user = userRepository.findById(userId)
-        .orElseThrow(() -> new NotFoundException());
-    // System.out.println("\n\n\nUsuário encontrado: " + user);
-    System.out.println("\nUsuário encontrado ID: " + user.getUserId());
-
-    // Verifica se o produto existe
-    Product product = productRepository.findById(productId)
-        .orElseThrow(() -> new NotFoundException());
-    // System.out.println("\n\n\nProduto encontrado: " + product);
-    System.out.println("\nProduto encontrado ID: " + product.getProductId());
-    System.out.println("\nProduto encontrado SellPrice: " + product.getSellPrice());
+    // Recupera usuário e produto ou lança exceção
+    User user = findUserById(userId);
+    Product product = findProductById(productId);
 
     // Busca ou cria o carrinho do usuário
-    Cart cart = cartRepository.findByUser(user)
-        .orElseGet(() -> {
-          Cart newCart = new Cart();
-          newCart.setUser(user);
-          newCart.setTotalValue(0);
-          newCart.setCartItems(new HashSet<>());
-          return cartRepository.save(newCart);
-        });
-    System.out.println("\nCarrinho do usuário: " + cart.getUser().getUserId());
+    Cart cart = findOrCreateCart(user);
 
-    // // Busca ou cria um item no carrinho
+    // Busca ou cria um item no carrinho
+    CartItem cartItem = findOrCreateCartItem(cart, product, quantity);
+
+    // Atualiza o total do carrinho
+    updateCartTotal(cart);
+
+    // Cria e retorna o DTO do CartItem
+    return createCartItemDTO(cartItem);
+  }
+
+  private void validateQuantity(int quantity) {
+    if (quantity <= 0) {
+      throw new IllegalArgumentException("A quantidade deve ser maior que zero.");
+    }
+  }
+
+  private User findUserById(Long userId) throws NotFoundException {
+    return userRepository.findById(userId)
+        .orElseThrow(() -> new NotFoundException());
+  }
+
+  private Product findProductById(Long productId) throws NotFoundException {
+    return productRepository.findById(productId)
+        .orElseThrow(() -> new NotFoundException());
+  }
+
+  private Cart findOrCreateCart(User user) {
+    return cartRepository.findByUser(user)
+        .orElseGet(() -> createNewCart(user));
+  }
+
+  private Cart createNewCart(User user) {
+    Cart newCart = new Cart();
+    newCart.setUser(user);
+    newCart.setTotalValue(0);
+    newCart.setCartItems(new HashSet<>());
+    return cartRepository.save(newCart);
+  }
+
+  private CartItem findOrCreateCartItem(Cart cart, Product product, int quantity) {
     CartItem cartItem = cartItemRepository.findByCartAndProduct(cart, product)
         .orElse(new CartItem());
 
     // Atualiza os valores do item
-    int newQuantity = cartItem.getQuantity() + quantity;
-    cartItem.setQuantity(newQuantity);
-
-    float unitValue = product.getSellPrice();
-    cartItem.setUnitValue(unitValue);
-
-    float newSubtotal = unitValue * newQuantity;
-    cartItem.setSubtotal(newSubtotal);
-
+    cartItem.setQuantity(cartItem.getQuantity() + quantity);
+    cartItem.setUnitValue(product.getSellPrice());
+    cartItem.setSubtotal(cartItem.getUnitValue() * cartItem.getQuantity());
     cartItem.setProduct(product);
     cartItem.setCart(cart);
+    cartItem.setCartItemId(new CartItemPK(cart.getCartId(), product.getProductId()));
 
-    // Cria a chave composta (CartItemPK)
-    CartItemPK cartItemPK = new CartItemPK(cart.getCartId(),
-        product.getProductId());
-    cartItem.setCartItemId(cartItemPK);
+    return cartItemRepository.save(cartItem);
+  }
 
-    // Salva o item no repositório
-    CartItem savedCartItem = cartItemRepository.save(cartItem);
-    System.out.println("\n\n\nCartItem salvo no repositório.");
-    System.out.println(savedCartItem.getCartItemId());
-    System.out.println(savedCartItem.getCartItemId().getCartId());
-    System.out.println(savedCartItem.getCartItemId().getProductId());
-
-    // Atualiza o valor total do carrinho
-    cart.getCartItems().add(cartItem);
-
+  private void updateCartTotal(Cart cart) {
     float totalValue = cart.getCartItems().stream()
         .map(elem -> {
           Float subtotal = elem.getSubtotal();
-          System.out.println("\nITEM:");
-          System.out.println("ID: " + elem.getProduct().getProductId());
-          System.out.println("NAME: " + elem.getProduct().getNameProduct());
-          System.out.println("SUBTOTAL do item:");
-          System.out.println(elem.getSubtotal());
           return subtotal;
         })
         .reduce(0f, Float::sum);
-    System.out.println("\n\n\nValor total do carrinho calculado: " + totalValue);
-
     cart.setTotalValue(totalValue);
+    cartRepository.save(cart);
+  }
 
-    Cart cartSaved = cartRepository.save(cart);
-    System.out.println("\n\n\nCarrinho salvo no repositório:");
-    System.out.println(cartSaved);
-
-    CartItemDTO cartItemDTO = new CartItemDTO(
-        new CartItemPK(savedCartItem.getCartItemId().getCartId(), savedCartItem.getCartItemId().getProductId()),
-        savedCartItem.getQuantity(),
-        savedCartItem.getUnitValue(),
-        savedCartItem.getSubtotal(),
-        savedCartItem.getCartItemId().getCartId(),
-        savedCartItem.getCartItemId().getProductId());
-
-    System.out.println("\n\n\n///////////////////////////////");
-    System.out.println("///////////////////////////////\n");
-    // return cartSaved;
-    // return savedCartItem;
-    // return null;
-    return cartItemDTO;
-
+  private CartItemDTO createCartItemDTO(CartItem cartItem) {
+    return new CartItemDTO(
+        cartItem.getCartItemId(),
+        cartItem.getQuantity(),
+        cartItem.getUnitValue(),
+        cartItem.getSubtotal(),
+        cartItem.getCartItemId().getCartId(),
+        cartItem.getCartItemId().getProductId());
   }
 
   @Transactional
