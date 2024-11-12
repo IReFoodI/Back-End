@@ -44,4 +44,11 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
 
   Optional<Cart> findByUser(User user);
 
+  @Query(value = "SELECT COUNT(*) > 0 " +
+      "FROM tb_cart_items ci " +
+      "JOIN tb_cart c ON ci.cart_id = c.cart_id " +
+      "JOIN tb_users u ON c.user_id = u.user_id " +
+      "WHERE u.user_id = :userId AND ci.product_id = :productId", nativeQuery = true)
+  boolean existsByUserIdAndProductId(@Param("userId") Long userId, @Param("productId") Long productId);
+
 }

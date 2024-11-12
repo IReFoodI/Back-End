@@ -1,8 +1,10 @@
 package com.projeto.ReFood.controller;
 
 import com.projeto.ReFood.dto.CartDTO;
+import com.projeto.ReFood.dto.CartItemDTO;
 import com.projeto.ReFood.dto.CartItemsDto;
-import com.projeto.ReFood.model.CartItem;
+import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
+import com.projeto.ReFood.repository.CartRepository;
 import com.projeto.ReFood.service.CartService;
 
 import jakarta.validation.Valid;
@@ -21,18 +23,38 @@ public class CartController {
 
   @Autowired
   private CartService cartService;
+  @Autowired
+  private CartRepository cartRepository;
 
   @PostMapping("/user/{userId}/add-item")
-  public ResponseEntity<CartItem> addItemToCart(
+  public ResponseEntity<CartItemDTO> addItemToCart(
       @PathVariable Long userId,
       @RequestParam Long productId,
       @RequestParam int quantity) {
     try {
-      CartItem cartItem = cartService.addItemToUserCart(userId, productId, quantity);
-      return ResponseEntity.ok(cartItem);
+      boolean cartItemExists = cartRepository.existsByUserIdAndProductId(userId, productId);
+      System.out.println("Cart item exists: " + cartItemExists);
+      CartItemDTO cartItemDTO = cartService.addItemToUserCart(userId, productId, quantity);
+      if (cartItemExists) {
+        // Item já existe e foi atualizado, retorna 200 OK
+        return ResponseEntity.ok(cartItemDTO);
+      } else {
+        // Item foi criado, retorna 201 Created
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+            .path("/{cartItemId}")
+            .buildAndExpand(cartItemDTO.cartItemId())
+            .toUri();
+        return ResponseEntity.created(location).body(cartItemDTO);
+      }
+
+    } catch (NotFoundException e) {
+      return ResponseEntity.notFound().build();
+    } catch (IllegalArgumentException e) {
+      return ResponseEntity.badRequest().build();
     } catch (Exception e) {
-      return ResponseEntity.badRequest().body(null);
+      return ResponseEntity.internalServerError().build();
     }
+
   }
 
   @DeleteMapping("/cart/item")

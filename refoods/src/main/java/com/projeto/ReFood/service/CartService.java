@@ -1,6 +1,7 @@
 package com.projeto.ReFood.service;
 
 import com.projeto.ReFood.dto.CartDTO;
+import com.projeto.ReFood.dto.CartItemDTO;
 import com.projeto.ReFood.dto.CartItemsDto;
 import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
 import com.projeto.ReFood.model.Cart;
@@ -37,7 +38,7 @@ public class CartService {
   private final UserRepository userRepository;
 
   @Transactional
-  public CartItem addItemToUserCart(Long userId, Long productId, int quantity) throws Exception {
+  public CartItemDTO addItemToUserCart(Long userId, Long productId, int quantity) throws Exception {
     // Verifica se a quantidade é válida
     if (quantity <= 0) {
       System.out.println("\n\n\nQuantidade inválida: " + quantity);
@@ -64,9 +65,7 @@ public class CartService {
           newCart.setUser(user);
           newCart.setTotalValue(0);
           newCart.setCartItems(new HashSet<>());
-          Cart savedCart = cartRepository.save(newCart);
-          System.out.println("\n\n\nNovo carrinho criado ID: " + savedCart.getCartId());
-          return savedCart;
+          return cartRepository.save(newCart);
         });
     System.out.println("\nCarrinho do usuário: " + cart.getUser().getUserId());
 
@@ -92,71 +91,49 @@ public class CartService {
         product.getProductId());
     cartItem.setCartItemId(cartItemPK);
 
-    try {
+    // Salva o item no repositório
+    CartItem savedCartItem = cartItemRepository.save(cartItem);
+    System.out.println("\n\n\nCartItem salvo no repositório.");
+    System.out.println(savedCartItem.getCartItemId());
+    System.out.println(savedCartItem.getCartItemId().getCartId());
+    System.out.println(savedCartItem.getCartItemId().getProductId());
 
-      CartItem savedCartItem = cartItemRepository.save(cartItem);
-      System.out.println("\n\n\nCartItem salvo no repositório.");
-      System.out.println(savedCartItem.getCartItemId());
-      System.out.println(savedCartItem.getCartItemId().getCartId());
-      System.out.println(savedCartItem.getCartItemId().getProductId());
-    } catch (Exception e) {
-      System.err.println("Erro ao salvar o item: " + e.getMessage());
-      e.printStackTrace();
-      return null;
-    }
+    // Atualiza o valor total do carrinho
+    cart.getCartItems().add(cartItem);
 
-    // Verifica se o carrinho não é nulo
-    if (cart != null) {
-      System.out.println("\n\n\nCarrinho encontrado.");
-      try {
-        cart.getCartItems().add(cartItem);
-      } catch (Exception e) {
-        System.err.println("\n\n\nErro no ADD ITEM: " + e.getMessage());
-        e.printStackTrace();
-        return null;
-      }
-
-      // Verifica se a lista de itens do carrinho não é nula
-      if (cart.getCartItems() != null) {
-        System.out.println("\n\n\nItens do carrinho encontrados.");
-
-        // Exibe/Imprime os itens do carrinho para verificação
-        cart.getCartItems().forEach(elem -> {
+    float totalValue = cart.getCartItems().stream()
+        .map(elem -> {
+          Float subtotal = elem.getSubtotal();
           System.out.println("\nITEM:");
           System.out.println("ID: " + elem.getProduct().getProductId());
           System.out.println("NAME: " + elem.getProduct().getNameProduct());
           System.out.println("SUBTOTAL do item:");
           System.out.println(elem.getSubtotal());
-        });
+          return subtotal;
+        })
+        .reduce(0f, Float::sum);
+    System.out.println("\n\n\nValor total do carrinho calculado: " + totalValue);
 
-        // Atualiza o valor total do carrinho
-        float totalValue = cart.getCartItems().stream()
-            .map(elem -> {
-              Float subtotal = elem.getSubtotal();
-              return subtotal;
-            })
-            .reduce(0f, Float::sum);
-        System.out.println("\n\n\nValor total do carrinho calculado: " + totalValue);
+    cart.setTotalValue(totalValue);
 
-        cart.setTotalValue(totalValue);
+    Cart cartSaved = cartRepository.save(cart);
+    System.out.println("\n\n\nCarrinho salvo no repositório:");
+    System.out.println(cartSaved);
 
-        try {
-          Cart cartSaved = cartRepository.save(cart);
-          System.out.println("\n\n\nCarrinho salvo no repositório:");
-          System.out.println(cartSaved);
-        } catch (Exception e) {
-          e.printStackTrace();
-          System.err.println("Erro ao salvar o carrinho: " + e.getMessage());
-        }
-
-      }
-    }
+    CartItemDTO cartItemDTO = new CartItemDTO(
+        new CartItemPK(savedCartItem.getCartItemId().getCartId(), savedCartItem.getCartItemId().getProductId()),
+        savedCartItem.getQuantity(),
+        savedCartItem.getUnitValue(),
+        savedCartItem.getSubtotal(),
+        savedCartItem.getCartItemId().getCartId(),
+        savedCartItem.getCartItemId().getProductId());
 
     System.out.println("\n\n\n///////////////////////////////");
-    System.out.println("///////////////////////////////");
     System.out.println("///////////////////////////////\n");
-    // return cartItem;
-    return null;
+    // return cartSaved;
+    // return savedCartItem;
+    // return null;
+    return cartItemDTO;
 
   }
 
