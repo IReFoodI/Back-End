@@ -51,8 +51,8 @@ public class ProductController {
     }
 
     @GetMapping("/restaurant/{restaurantId}")
-    public ResponseEntity<List<ProductDTO>> listAllRestaurantProducts(@PathVariable Long restaurantId) {
-        List<ProductDTO> products = productService.getProductsByRestaurantId(restaurantId);
+    public ResponseEntity<List<ProductRestaurantDTO>> listAllRestaurantProducts(@PathVariable Long restaurantId) {
+        List<ProductRestaurantDTO> products = productService.getProductsByRestaurantId(restaurantId);
         return ResponseEntity.ok(products);
     }
 

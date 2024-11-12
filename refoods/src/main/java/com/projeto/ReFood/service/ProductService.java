@@ -222,10 +222,8 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public List<ProductDTO> getProductsByRestaurantId(Long id) {
-        return productRepository.findByRestaurant_RestaurantId(id).stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+    public List<ProductRestaurantDTO> getProductsByRestaurantId(Long id) {
+        return productRepository.findByRestaurant_RestaurantIdWithFilters(id);
     }
 
 }
