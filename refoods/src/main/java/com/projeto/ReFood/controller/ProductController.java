@@ -4,9 +4,18 @@ import com.projeto.ReFood.dto.ProductDTO;
 import com.projeto.ReFood.dto.ProductPartialUpdateDTO;
 import com.projeto.ReFood.dto.ProductRestaurantDTO;
 import com.projeto.ReFood.dto.RestaurantInfoDTO;
+import com.projeto.ReFood.exception.GlobalExceptionHandler;
 import com.projeto.ReFood.service.ProductService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +38,8 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+    @Autowired
+    private PagedResourcesAssembler<ProductDTO> pagedResourcesAssembler;
 
     @GetMapping("/{productId}/restaurant-info")
     public ResponseEntity<RestaurantInfoDTO> getRestaurantInfoByProductId(@PathVariable Long productId) {
@@ -50,21 +61,43 @@ public class ProductController {
         return ResponseEntity.ok(products);
     }
 
-    @GetMapping("/restaurant/{restaurantId}")
-    public ResponseEntity<List<ProductRestaurantDTO>> listAllRestaurantProducts(@PathVariable Long restaurantId) {
-        List<ProductRestaurantDTO> products = productService.getProductsByRestaurantId(restaurantId);
-        return ResponseEntity.ok(products);
-    }
+    // @GetMapping("/restaurant/{restaurantId}")
+    // public ResponseEntity<List<ProductRestaurantDTO>> listAllRestaurantProducts(@PathVariable Long restaurantId) {
+    //     List<ProductRestaurantDTO> products = productService.getProductsByRestaurantId(restaurantId);
+    //     return ResponseEntity.ok(products);
+    // }
 
-    @GetMapping("/restaurant")
-    public ResponseEntity<List<ProductDTO>> listProductsByRestaurantId(@RequestHeader("Authorization") String token) {
-        List<ProductDTO> products = productService.getProductsByRestaurantByToken(token);
+    @Operation(summary = "Lista produtos por ID do restaurante", description = "Retorna uma lista paginada de produtos associados ao restaurante com base no token de autorização e parâmetros de paginação.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Produtos encontrados e listados com sucesso."),
+            @ApiResponse(responseCode = "204", description = "Nenhum produto encontrado."),
+    })
+    @GetMapping("/products")
+    public ResponseEntity<PagedModel<EntityModel<ProductDTO>>> listProductsByRestaurantId(
+            @RequestHeader("Authorization") String token,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size) {
 
-        if (products.isEmpty()) {
+        if (page < 0) {
+            throw new GlobalExceptionHandler.BadRequestException("Número da página não pode ser menor que 0");
+        }
+//       Caso queira do mais recente para o mais antigo, mas percebi q se tiver vários criados ao mesmo tempo, ele fica estranho
+//        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "additionDate"));
+//        Page<ProductDTO> productsPage = productService.getProductsByRestaurantId(token, pageable);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ProductDTO> productsPage = productService.getProductsByRestaurantId(token, pageable);
+
+        if (page >= productsPage.getTotalPages() && productsPage.getTotalPages() > 0) {
+            throw new GlobalExceptionHandler.BadRequestException("Número da página excede o total de páginas disponíveis.");
+        }
+
+        PagedModel<EntityModel<ProductDTO>> pagedModel = pagedResourcesAssembler.toModel(productsPage);
+
+        if (productsPage.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
 
-        return ResponseEntity.ok(products);
+        return ResponseEntity.ok(pagedModel);
     }
 
     @GetMapping("/{productId}")
