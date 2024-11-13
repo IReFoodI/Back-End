@@ -241,7 +241,7 @@ public class ProductService {
 
   @Transactional
   public List<ProductRestaurantDTO> getProductsSortedByRestaurantId(Long restaurantId, String sort, int page) {
-    Pageable pageable = PageRequest.of(page, 5, getSortByOption(sort));
+    Pageable pageable = PageRequest.of(page, 6, getSortByOption(sort));
     Page<Product> products = productRepository.findByRestaurantId(restaurantId, pageable);
 
     return products.stream()

@@ -70,7 +70,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
       """)
   List<ProductRestaurantDTO> findByRestaurant_RestaurantIdWithFilters(Long restaurantId);
 
-  @Query("SELECT p FROM Product p WHERE p.restaurant.restaurantId = :restaurantId")
+  @Query("SELECT p FROM Product p WHERE p.restaurant.restaurantId = :restaurantId AND p.active = true AND p.expirationDate > CURRENT_DATE AND p.quantity > 0")
   Page<Product> findByRestaurantId(Long restaurantId, Pageable pageable);
 
 }

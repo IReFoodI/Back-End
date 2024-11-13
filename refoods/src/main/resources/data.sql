@@ -50,7 +50,7 @@ VALUES
 -- -- Inserindo dados na tabela tb_products
 INSERT INTO tb_products (active, addition_date, description_product, sell_price, name_product, category, url_img_product, original_price, expiration_date, quantity, restaurant_id)
 VALUES 
-    (TRUE, NOW(), 'Bolo de cenoura com cobertura de chocolate, delicioso e fresquinho', 15, 'Bolo de Cenoura com Chocolate', 'DOCE', 
+    (FALSE, NOW(), '!Bolo de cenoura com cobertura de chocolate, delicioso e fresquinho', 15, 'Bolo de Cenoura com Chocolate', 'DOCE',
     'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
     18.0, '2024-11-17', 50, 1),
     (TRUE, NOW(), 'Pao Frances crocante por fora e macio por dentro', 1, 'Pao Frances', 'SALGADO', 
