@@ -124,28 +124,6 @@ public class CartService {
         cartItem.getCartItemId().getProductId());
   }
 
-  // @Transactional
-  // public void removeItemFromCart(Long cartId, Long productId) {
-  // CartItemPK cartItemPK = new CartItemPK(cartId, productId);
-  // CartItem cartItem = cartItemRepository.findById(cartItemPK)
-  // .orElseThrow(() -> new NotFoundException());
-
-  // if (cartItem.getQuantity() > 1) {
-  // cartItem.setQuantity(cartItem.getQuantity() - 1);
-  // cartItem.setSubtotal(cartItem.getQuantity() * cartItem.getUnitValue());
-  // cartItemRepository.save(cartItem);
-  // } else {
-  // cartItemRepository.deleteById(cartItemPK);
-  // }
-
-  // Cart cart = cartItem.getCart();
-  // float newTotalValue = (float) cart.getCartItems().stream()
-  // .mapToDouble(CartItem::getSubtotal)
-  // .sum();
-  // cart.setTotalValue(newTotalValue);
-  // cartRepository.save(cart);
-  // }
-
   @Transactional
   public void removeItemFromCart(Long cartId, Long productId) {
     CartItemPK cartItemPK = new CartItemPK(cartId, productId);
@@ -171,6 +149,23 @@ public class CartService {
       cartRepository.save(cart);
       cartItemRepository.deleteById(cartItemPK);
     }
+  }
+
+  @Transactional
+  public void removeAllQuantityFromCartItem(Long cartId, Long productId) {
+    CartItemPK cartItemPK = new CartItemPK(cartId, productId);
+    CartItem cartItem = cartItemRepository.findById(cartItemPK)
+        .orElseThrow(() -> new NotFoundException());
+
+    Cart cart = cartItem.getCart();
+
+    // busca o valor do item para subtrair do total do carrinho antes do delete, pq
+    // se fizer depois da bug
+    float newTotalValue = cart.getTotalValue() - cartItem.getSubtotal();
+    cart.setTotalValue(newTotalValue);
+    cartRepository.save(cart);
+
+    cartItemRepository.deleteById(cartItemPK);
   }
 
   @Transactional(readOnly = true)
