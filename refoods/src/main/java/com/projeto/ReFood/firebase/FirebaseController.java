@@ -36,7 +36,7 @@ public class FirebaseController {
 
     @DeleteMapping("/image/{imageName}")
     public ResponseEntity<Void> deleteImage(@PathVariable String imageName) {
-        boolean deleted = firebaseService.deleteImage(imageName);
+        firebaseService.deleteImage(imageName);
         return ResponseEntity.noContent().build(); // 204 No Content em todos os casos
     }
 

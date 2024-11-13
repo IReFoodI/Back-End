@@ -119,18 +119,13 @@ public class ProductService {
         // Update all fields with BeanUtils
         BeanUtils.copyProperties(productDTO, product, getNullPropertyNames(productDTO));
         utilityService.associateRestaurant(product::setRestaurant, productDTO.restaurantId());
+        // Update all fields with BeanUtils
+        BeanUtils.copyProperties(productDTO, product, getNullPropertyNames(productDTO));
+        utilityService.associateRestaurant(product::setRestaurant, productDTO.restaurantId());
 
         product = productRepository.save(product);
         return convertToDTO(product);
     }
-
-//  @Transactional
-//  public void deleteProduct(Long productId) {
-//    if (!productRepository.existsById(productId)) {
-//      throw new NotFoundException();
-//    }
-//    productRepository.deleteById(productId);
-//  }
 
     @Transactional
     public void deleteProduct(Long productId) {
@@ -224,9 +219,18 @@ public class ProductService {
             product.setActive(productPartialUpdateDTO.active());
         }
 
-        product = productRepository.save(product);
-        return convertToDTO(product);
-    }
+    product = productRepository.save(product);
+    return convertToDTO(product);
+  }
+
+  // @Transactional(readOnly = true)
+  //   public List<ProductDTO> getProductsByRestaurantByToken(String token) {
+  //       Long restaurantId = jwtTokenProvider.extractUserId(token);
+  //       return productRepository.findByRestaurant_RestaurantId(restaurantId).stream()
+  //               .map(this::convertToDTO)
+  //               .collect(Collectors.toList());
+  //   }
+
     @Transactional(readOnly = true)
     public Page<ProductDTO> getProductsByRestaurantId(String token, Pageable pageable) {
         Long restaurantId = jwtTokenProvider.extractUserId(token);

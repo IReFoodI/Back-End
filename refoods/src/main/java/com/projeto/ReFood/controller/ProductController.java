@@ -13,7 +13,6 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
@@ -61,6 +60,12 @@ public class ProductController {
         List<ProductDTO> products = productService.getAllProducts();
         return ResponseEntity.ok(products);
     }
+
+    // @GetMapping("/restaurant/{restaurantId}")
+    // public ResponseEntity<List<ProductRestaurantDTO>> listAllRestaurantProducts(@PathVariable Long restaurantId) {
+    //     List<ProductRestaurantDTO> products = productService.getProductsByRestaurantId(restaurantId);
+    //     return ResponseEntity.ok(products);
+    // }
 
     @Operation(summary = "Lista produtos por ID do restaurante", description = "Retorna uma lista paginada de produtos associados ao restaurante com base no token de autorização e parâmetros de paginação.")
     @ApiResponses(value = {
