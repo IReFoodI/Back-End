@@ -124,25 +124,53 @@ public class CartService {
         cartItem.getCartItemId().getProductId());
   }
 
+  // @Transactional
+  // public void removeItemFromCart(Long cartId, Long productId) {
+  // CartItemPK cartItemPK = new CartItemPK(cartId, productId);
+  // CartItem cartItem = cartItemRepository.findById(cartItemPK)
+  // .orElseThrow(() -> new NotFoundException());
+
+  // if (cartItem.getQuantity() > 1) {
+  // cartItem.setQuantity(cartItem.getQuantity() - 1);
+  // cartItem.setSubtotal(cartItem.getQuantity() * cartItem.getUnitValue());
+  // cartItemRepository.save(cartItem);
+  // } else {
+  // cartItemRepository.deleteById(cartItemPK);
+  // }
+
+  // Cart cart = cartItem.getCart();
+  // float newTotalValue = (float) cart.getCartItems().stream()
+  // .mapToDouble(CartItem::getSubtotal)
+  // .sum();
+  // cart.setTotalValue(newTotalValue);
+  // cartRepository.save(cart);
+  // }
+
   @Transactional
   public void removeItemFromCart(Long cartId, Long productId) {
     CartItemPK cartItemPK = new CartItemPK(cartId, productId);
     CartItem cartItem = cartItemRepository.findById(cartItemPK)
         .orElseThrow(() -> new NotFoundException());
 
+    Cart cart = cartItem.getCart();
+
     if (cartItem.getQuantity() > 1) {
       cartItem.setQuantity(cartItem.getQuantity() - 1);
       cartItem.setSubtotal(cartItem.getQuantity() * cartItem.getUnitValue());
       cartItemRepository.save(cartItem);
-    } else {
-      cartItemRepository.deleteById(cartItemPK);
-    }
 
-    Cart cart = cartItem.getCart();
-    float newTotalValue = (float) cart.getCartItems().stream()
-        .mapToDouble(CartItem::getSubtotal)
-        .sum();
-    cart.setTotalValue(newTotalValue);
+      float currentTotalValue = (float) cart.getCartItems().stream()
+          .filter(item -> !(item.getCartItemId().equals(cartItemPK) && cartItem.getQuantity() == 1))
+          .mapToDouble(CartItem::getSubtotal)
+          .sum();
+
+      currentTotalValue += cartItem.getSubtotal();
+      cart.setTotalValue(currentTotalValue);
+
+    } else {
+      cartItemRepository.delete(cartItem);
+      cart.setTotalValue(0);
+    }
     cartRepository.save(cart);
   }
 
