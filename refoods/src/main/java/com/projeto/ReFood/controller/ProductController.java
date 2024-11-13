@@ -1,5 +1,6 @@
 package com.projeto.ReFood.controller;
 
+import com.projeto.ReFood.dto.PagedProductResponseDTO;
 import com.projeto.ReFood.dto.ProductDTO;
 import com.projeto.ReFood.dto.ProductPartialUpdateDTO;
 import com.projeto.ReFood.dto.ProductRestaurantDTO;
@@ -7,7 +8,6 @@ import com.projeto.ReFood.dto.RestaurantInfoDTO;
 import com.projeto.ReFood.exception.GlobalExceptionHandler;
 import com.projeto.ReFood.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -211,33 +211,40 @@ public class ProductController {
   }
 
   /**
-   * Retorna uma lista de produtos filtrada pelo ID do restaurante e ordenada de acordo com os parâmetros fornecidos.
+   * Retorna uma lista paginada de produtos filtrada pelo ID do restaurante e
+   * ordenada de
+   * acordo com os parâmetros fornecidos, junto com as informações de paginação.
    *
    * @param restaurantId ID do restaurante pelo qual os produtos serão filtrados.
-   * @param page Número da página para a paginação dos resultados, com valor padrão 0.
-   * @param sort Critério de ordenação para os produtos. Valores possíveis:
-   *             "name_asc" (ordem alfabética ascendente), "name_desc" (ordem alfabética descendente),
-   *             "price_asc" (preço crescente), "price_desc" (preço decrescente),
-   *             "expiry_asc" (data de validade ascendente), "expiry_desc" (data de validade descendente).
-   *             Valor padrão: "name_asc".
-   * @return Uma lista de produtos ordenada e paginada de acordo com os parâmetros fornecidos.
+   * @param page         Número da página para a paginação dos resultados, com
+   *                     valor padrão 0.
+   * @param sort         Critério de ordenação para os produtos. Valores
+   *                     possíveis:
+   *                     "name_asc" (ordem alfabética ascendente), "name_desc"
+   *                     (ordem alfabética descendente),
+   *                     "price_asc" (preço crescente), "price_desc" (preço
+   *                     decrescente),
+   *                     "expiry_asc" (data de validade ascendente), "expiry_desc"
+   *                     (data de validade descendente).
+   *                     Valor padrão: "name_asc".
+   * @return Um objeto `PagedProductResponseDTO` contendo a lista de produtos
+   *         ordenada e paginada, bem como informações de paginação.
    */
-  @Operation(summary = "Obtém produtos ordenados por ID do restaurante",
-             description = "Retorna uma lista de produtos filtrados por ID do restaurante e ordenados conforme o critério especificado.")
+  @Operation(summary = "Obtém produtos ordenados por ID do restaurante", description = "Retorna uma lista paginada de produtos filtrados por ID do restaurante e ordenados conforme o critério especificado. Inclui informações de paginação, como página atual, total de páginas, total de itens e itens por página.")
   @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Lista de produtos recuperada com sucesso",
-                   content = @Content(array = @ArraySchema(schema = @Schema(implementation = ProductRestaurantDTO.class)))),
+      @ApiResponse(responseCode = "200", description = "Lista de produtos recuperada com sucesso", content = {
+          @Content(mediaType = "application/json", schema = @Schema(implementation = PagedProductResponseDTO.class))
+      }),
       @ApiResponse(responseCode = "400", description = "Parâmetros inválidos fornecidos"),
       @ApiResponse(responseCode = "404", description = "Restaurante não encontrado")
   })
   @GetMapping("/sorted")
-  public ResponseEntity<List<ProductRestaurantDTO>> getProductsSortedByRestaurantId(
+  public ResponseEntity<PagedProductResponseDTO> getProductsSortedByRestaurantId(
       @RequestParam Long restaurantId,
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "name_asc") String sort) {
 
-    List<ProductRestaurantDTO> products = productService.getProductsSortedByRestaurantId(restaurantId, sort,
-        page);
-    return ResponseEntity.ok(products);
+    PagedProductResponseDTO response = productService.getProductsSortedByRestaurantId(restaurantId, sort, page);
+    return ResponseEntity.ok(response);
   }
 }

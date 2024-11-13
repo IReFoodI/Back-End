@@ -1,5 +1,6 @@
 package com.projeto.ReFood.service;
 
+import com.projeto.ReFood.dto.PagedProductResponseDTO;
 import com.projeto.ReFood.dto.ProductDTO;
 import com.projeto.ReFood.dto.ProductPartialUpdateDTO;
 import com.projeto.ReFood.dto.ProductRestaurantDTO;
@@ -240,15 +241,23 @@ public class ProductService {
   }
 
   @Transactional
-  public List<ProductRestaurantDTO> getProductsSortedByRestaurantId(Long restaurantId, String sort, int page) {
-    Pageable pageable = PageRequest.of(page, 6, getSortByOption(sort));
-    Page<Product> products = productRepository.findByRestaurantId(restaurantId, pageable);
+public PagedProductResponseDTO getProductsSortedByRestaurantId(Long restaurantId, String sort, int page) {
+  Pageable pageable = PageRequest.of(page, 6, getSortByOption(sort));
+  Page<Product> productsPage = productRepository.findByRestaurantId(restaurantId, pageable);
 
-    return products.stream()
-        .map(product -> new ProductRestaurantDTO(product, product.getRestaurant().getFantasy(),
-            product.getRestaurant().getCategory()))
-        .collect(Collectors.toList());
-  }
+  List<ProductRestaurantDTO> products = productsPage.stream()
+      .map(product -> new ProductRestaurantDTO(product, product.getRestaurant().getFantasy(),
+          product.getRestaurant().getCategory()))
+      .collect(Collectors.toList());
+
+  return new PagedProductResponseDTO(
+      products,
+      productsPage.getNumber(),
+      productsPage.getTotalPages(),
+      productsPage.getTotalElements(),
+      productsPage.getSize()
+  );
+}
 
   private Sort getSortByOption(String sort) {
     switch (sort.toLowerCase()) {
