@@ -1,37 +1,128 @@
 package com.projeto.ReFood.service;
 
 import com.projeto.ReFood.dto.CartDTO;
+import com.projeto.ReFood.dto.CartItemDTO;
 import com.projeto.ReFood.dto.CartItemsDto;
 import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
 import com.projeto.ReFood.model.Cart;
 import com.projeto.ReFood.model.CartItem;
 import com.projeto.ReFood.model.CartItemPK;
+import com.projeto.ReFood.model.Product;
+import com.projeto.ReFood.model.User;
 import com.projeto.ReFood.repository.CartItemRepository;
 import com.projeto.ReFood.repository.CartRepository;
+import com.projeto.ReFood.repository.ProductRepository;
+import com.projeto.ReFood.repository.UserRepository;
 
 import jakarta.persistence.Tuple;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @Validated
+@RequiredArgsConstructor
 public class CartService {
 
-  @Autowired
-  private CartRepository cartRepository;
+  private final CartRepository cartRepository;
+  private final UtilityService utilityService;
+  private final CartItemRepository cartItemRepository;
+  private final ProductRepository productRepository;
+  private final UserRepository userRepository;
 
-  @Autowired
-  private UtilityService utilityService;
+  @Transactional
+  public CartItemDTO addItemToUserCart(Long userId, Long productId, int quantity) throws Exception {
+    // Valida a quantidade do item
+    validateQuantity(quantity);
 
-  @Autowired
-  private CartItemRepository cartItemRepository;
+    // Recupera usuário e produto ou lança exceção
+    User user = findUserById(userId);
+    Product product = findProductById(productId);
+
+    // Busca ou cria o carrinho do usuário
+    Cart cart = findOrCreateCart(user);
+
+    // Busca ou cria um item no carrinho
+    CartItem cartItem = findOrCreateCartItem(cart, product, quantity);
+
+    // Atualiza o total do carrinho
+    updateCartTotal(cart);
+
+    // Cria e retorna o DTO do CartItem
+    return createCartItemDTO(cartItem);
+  }
+
+  private void validateQuantity(int quantity) {
+    if (quantity <= 0) {
+      throw new IllegalArgumentException("A quantidade deve ser maior que zero.");
+    }
+  }
+
+  private User findUserById(Long userId) throws NotFoundException {
+    return userRepository.findById(userId)
+        .orElseThrow(() -> new NotFoundException());
+  }
+
+  private Product findProductById(Long productId) throws NotFoundException {
+    return productRepository.findById(productId)
+        .orElseThrow(() -> new NotFoundException());
+  }
+
+  private Cart findOrCreateCart(User user) {
+    return cartRepository.findByUser(user)
+        .orElseGet(() -> createNewCart(user));
+  }
+
+  private Cart createNewCart(User user) {
+    Cart newCart = new Cart();
+    newCart.setUser(user);
+    newCart.setTotalValue(0);
+    newCart.setCartItems(new HashSet<>());
+    return cartRepository.save(newCart);
+  }
+
+  private CartItem findOrCreateCartItem(Cart cart, Product product, int quantity) {
+    CartItem cartItem = cartItemRepository.findByCartAndProduct(cart, product)
+        .orElse(new CartItem());
+
+    // Atualiza os valores do item
+    cartItem.setQuantity(cartItem.getQuantity() + quantity);
+    cartItem.setUnitValue(product.getSellPrice());
+    cartItem.setSubtotal(cartItem.getUnitValue() * cartItem.getQuantity());
+    cartItem.setProduct(product);
+    cartItem.setCart(cart);
+    cartItem.setCartItemId(new CartItemPK(cart.getCartId(), product.getProductId()));
+
+    return cartItemRepository.save(cartItem);
+  }
+
+  private void updateCartTotal(Cart cart) {
+    float totalValue = cart.getCartItems().stream()
+        .map(elem -> {
+          Float subtotal = elem.getSubtotal();
+          return subtotal;
+        })
+        .reduce(0f, Float::sum);
+    cart.setTotalValue(totalValue);
+    cartRepository.save(cart);
+  }
+
+  private CartItemDTO createCartItemDTO(CartItem cartItem) {
+    return new CartItemDTO(
+        cartItem.getCartItemId(),
+        cartItem.getQuantity(),
+        cartItem.getUnitValue(),
+        cartItem.getSubtotal(),
+        cartItem.getCartItemId().getCartId(),
+        cartItem.getCartItemId().getProductId());
+  }
 
   @Transactional
   public void removeItemFromCart(Long cartId, Long productId) {
@@ -39,20 +130,42 @@ public class CartService {
     CartItem cartItem = cartItemRepository.findById(cartItemPK)
         .orElseThrow(() -> new NotFoundException());
 
+    Cart cart = cartItem.getCart();
+
     if (cartItem.getQuantity() > 1) {
       cartItem.setQuantity(cartItem.getQuantity() - 1);
       cartItem.setSubtotal(cartItem.getQuantity() * cartItem.getUnitValue());
       cartItemRepository.save(cartItem);
+
+      float newTotalValue = (float) cart.getCartItems().stream()
+          .mapToDouble(CartItem::getSubtotal)
+          .sum();
+      cart.setTotalValue(newTotalValue);
+      cartRepository.save(cart);
     } else {
+      // busca o valor do item para subtrair do total do carrinho antes do delete
+      float newTotalValue = cart.getTotalValue() - cartItem.getSubtotal();
+      cart.setTotalValue(newTotalValue);
+      cartRepository.save(cart);
       cartItemRepository.deleteById(cartItemPK);
     }
+  }
+
+  @Transactional
+  public void removeAllQuantityFromCartItem(Long cartId, Long productId) {
+    CartItemPK cartItemPK = new CartItemPK(cartId, productId);
+    CartItem cartItem = cartItemRepository.findById(cartItemPK)
+        .orElseThrow(() -> new NotFoundException());
 
     Cart cart = cartItem.getCart();
-    float newTotalValue = (float) cart.getCartItems().stream()
-        .mapToDouble(CartItem::getSubtotal)
-        .sum();
+
+    // busca o valor do item para subtrair do total do carrinho antes do delete, pq
+    // se fizer depois da bug
+    float newTotalValue = cart.getTotalValue() - cartItem.getSubtotal();
     cart.setTotalValue(newTotalValue);
     cartRepository.save(cart);
+
+    cartItemRepository.deleteById(cartItemPK);
   }
 
   @Transactional(readOnly = true)
@@ -77,16 +190,6 @@ public class CartService {
 
     return cartItems;
   }
-
-  // @Transactional
-  // public void clearCart(Long cartId) {
-  // Cart cart = cartRepository.findById(cartId)
-  // .orElseThrow(() -> new NotFoundException());
-
-  // cart.getCartItems().clear();
-  // cart.setTotalValue(0);
-  // cartRepository.save(cart);
-  // }
 
   @Transactional
   public void clearCart(Long cartId) {

@@ -50,17 +50,18 @@ VALUES
 -- -- Inserindo dados na tabela tb_products
 INSERT INTO tb_products (active, addition_date, description_product, sell_price, name_product, category, url_img_product, original_price, expiration_date, quantity, restaurant_id)
 VALUES 
-    (FALSE, NOW(), '!Bolo de cenoura com cobertura de chocolate, delicioso e fresquinho', 15, 'Bolo de Cenoura com Chocolate', 'DOCE',
-    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
-    18.0, '2024-11-17', 50, 1),
-    (TRUE, NOW(), 'Pao Frances crocante por fora e macio por dentro', 1, 'Pao Frances', 'SALGADO', 
-    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
-    1.5, '2024-11-17', 300, 1),
-    (TRUE, NOW(), 'Pastel assado de frango com catupiry', 6, 'Pastel de Frango com Catupiry', 'SALGADO', 
-    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
-    5.0, '2024-11-17', 150, 1),
-    (TRUE, NOW(), 'Biscoito caseiro amanteigado, derrete na boca', 7, 'Biscoito Amanteigado', 'DOCE', 
-    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
+    (TRUE, NOW(), 'Bolo de cenoura com cobertura de chocolate, delicioso e fresquinho', 18.0, 'Bolo de Cenoura com Chocolate', 'DOCE', 
+    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
+    20.0, '2024-11-17', 50, 1),
+    (TRUE, NOW(), 'Pao Frances crocante por fora e macio por dentro', 0.8, 'Pao Frances', 'SALGADO', 
+    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
+    1.0, '2024-11-17', 800, 1),
+    (TRUE, NOW(), 'Pastel assado de frango com catupiry', 5.5, 'Pastel de Frango com Catupiry', 'SALGADO', 
+    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
+    6.0, '2024-11-17', 150, 1),
+    (TRUE, NOW(), 'Biscoito caseiro amanteigado, derrete na boca', 7.5, 'Biscoito Amanteigado', 'DOCE', 
+    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
+
     8.0, '2024-11-17', 80, 1),
     (TRUE, NOW(), 'Pao doce recheado com creme de baunilha', 3.5, 'Pao Doce com Creme', 'DOCE', 
     'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
@@ -186,24 +187,24 @@ VALUES
 -- -- Inserindo dados na tabela tb_cart
 INSERT INTO tb_cart (total_value, user_id)
 VALUES
-    (120.0, 1),
-    (75.0, 2);
+    (100.8, 1),
+    (34.1, 2);
 
 
 -- -- Inserindo dados na tabela tb_cart_items
 INSERT INTO tb_cart_items (cart_id, product_id, quantity, unit_value, subtotal)
 VALUES 
-    (1, 1, 2, 20.0, 40.0),
-    (1, 2, 1, 30.0, 30.0),
-    (2, 1, 1, 20.0, 20.0),
-    (2, 2, 2, 30.0, 60.0),
-    (1, 4, 1, 20.0, 20.0),
-    (1, 3, 3, 5.0, 15.0),
-    (2, 5, 2, 4.0, 8.0),
-    (2, 4, 1, 8.0, 8.0),
-    (1, 5, 2, 1.5, 3.0),
-    (1, 6, 4, 6.0, 24.0),
-    (1, 9, 3, 3.5, 10.5);
+    (2, 1, 1, 18.0, 18.0),  -- Bolo de Cenoura com Chocolate
+    (2, 2, 2, 0.8, 1.6),    -- Pao Frances
+    (2, 5, 2, 3.5, 7.0),    -- Pao Doce com Creme
+    (2, 4, 1, 7.5, 7.5),    -- Biscoito Amanteigado
+    (1, 2, 1, 0.8, 0.8),    -- Pao Frances
+    (1, 1, 2, 18.0, 36.0),  -- Bolo de Cenoura com Chocolate
+    (1, 3, 3, 5.5, 16.5),   -- Pastel de Frango com Catupiry
+    (1, 4, 1, 7.5, 7.5),    -- Biscoito Amanteigado
+    (1, 5, 2, 3.5, 7.0),    -- Pao Doce com Creme
+    (1, 6, 4, 6.0, 24.0),   -- Croissant
+    (1, 9, 3, 3.0, 9.0);    -- Enroladinho de Salsicha
 
 
 -- Inserindo dados na tabela tb_orders

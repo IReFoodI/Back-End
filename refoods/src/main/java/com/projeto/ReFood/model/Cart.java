@@ -2,6 +2,8 @@ package com.projeto.ReFood.model;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,6 +17,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
+import lombok.ToString;
 
 @Entity
 @Data
@@ -34,9 +37,12 @@ public class Cart {
   @NotNull(message = "O usuário associado não pode ser nulo.")
   @ManyToOne
   @JoinColumn(name = "user_id", nullable = false)
+  @JsonIgnore
   private User user;
 
   @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
-  private Set<CartItem> CartItems;
+  @ToString.Exclude
+  @JsonIgnore
+  private Set<CartItem> cartItems;
 
 }
