@@ -159,19 +159,18 @@ public class CartService {
       cartItem.setSubtotal(cartItem.getQuantity() * cartItem.getUnitValue());
       cartItemRepository.save(cartItem);
 
-      float currentTotalValue = (float) cart.getCartItems().stream()
-          .filter(item -> !(item.getCartItemId().equals(cartItemPK) && cartItem.getQuantity() == 1))
+      float newTotalValue = (float) cart.getCartItems().stream()
           .mapToDouble(CartItem::getSubtotal)
           .sum();
-
-      currentTotalValue += cartItem.getSubtotal();
-      cart.setTotalValue(currentTotalValue);
-
+      cart.setTotalValue(newTotalValue);
+      cartRepository.save(cart);
     } else {
-      cartItemRepository.delete(cartItem);
-      cart.setTotalValue(0);
+      // busca o valor do item para subtrair do total do carrinho antes do delete
+      float newTotalValue = cart.getTotalValue() - cartItem.getSubtotal();
+      cart.setTotalValue(newTotalValue);
+      cartRepository.save(cart);
+      cartItemRepository.deleteById(cartItemPK);
     }
-    cartRepository.save(cart);
   }
 
   @Transactional(readOnly = true)
