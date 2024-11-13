@@ -21,6 +21,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,212 +31,242 @@ import java.util.stream.Collectors;
 @Validated
 public class ProductService {
 
-    @Autowired
-    private ProductRepository productRepository;
+  @Autowired
+  private ProductRepository productRepository;
 
-    @Autowired
-    private UtilityService utilityService;
+  @Autowired
+  private UtilityService utilityService;
 
-    @Autowired
-    private JwtTokenProvider jwtTokenProvider;
+  @Autowired
+  private JwtTokenProvider jwtTokenProvider;
 
-    @Transactional(readOnly = true)
-    public RestaurantInfoDTO getRestaurantInfoByProductId(Long productId) {
-        return productRepository.findRestaurantInfoByProductId(productId);
+  @Transactional(readOnly = true)
+  public RestaurantInfoDTO getRestaurantInfoByProductId(Long productId) {
+    return productRepository.findRestaurantInfoByProductId(productId);
+  }
+
+  @Transactional(readOnly = true)
+  public String getRestaurantNameByProductId(Long productId) {
+    return productRepository.findRestaurantNameByProductId(productId);
+  }
+
+  @Transactional(readOnly = true)
+  public List<ProductDTO> getAllProducts() {
+    return productRepository.findAll().stream()
+        .map(this::convertToDTO)
+        .collect(Collectors.toList());
+  }
+
+  @Transactional(readOnly = true)
+  public ProductDTO getProductById(Long productId) {
+    return productRepository.findById(productId)
+        .map(this::convertToDTO)
+        .orElseThrow(NotFoundException::new);
+  }
+
+  @Transactional(readOnly = true)
+  public Page<ProductRestaurantDTO> getFilteredProducts(String product, String types, String categories, String price,
+      Integer currentPage) {
+    Integer pageSize = 20; // Número de registros por página
+    Pageable pageable = PageRequest.of(currentPage, pageSize); // Cria o objeto Pageable
+
+    Float convertedPrice = null;
+    if (price != null && !price.isEmpty()) {
+      convertedPrice = Float.parseFloat(price);
     }
 
-    @Transactional(readOnly = true)
-    public String getRestaurantNameByProductId(Long productId) {
-        return productRepository.findRestaurantNameByProductId(productId);
+    List<EnumRestaurantCategory> typeList = (types != null && !types.isEmpty()) ? Arrays.stream(types.split(" "))
+        .map(EnumRestaurantCategory::valueOf)
+        .collect(Collectors.toList()) : null;
+
+    List<EnumProductCategory> categoryList = (categories != null && !categories.isEmpty())
+        ? Arrays.stream(categories.split(" "))
+            .map(EnumProductCategory::valueOf)
+            .collect(Collectors.toList())
+        : null;
+
+    return productRepository.findProductsByFilters(product, typeList, categoryList, convertedPrice, pageable);
+  }
+
+  @Transactional
+  public ProductDTO createProduct(@Valid ProductDTO productDTO, String token) {
+
+    Long restaurantId = jwtTokenProvider.extractUserId(token);
+    productDTO = new ProductDTO(
+        productDTO.productId(),
+        productDTO.nameProd(),
+        productDTO.descriptionProd(),
+        productDTO.urlImgProd(),
+        productDTO.originalPrice(),
+        productDTO.sellPrice(),
+        productDTO.expirationDate(),
+        productDTO.quantity(),
+        productDTO.categoryProduct(),
+        productDTO.additionDate(),
+        productDTO.active(),
+        restaurantId);
+
+    Product product = convertToEntity(productDTO);
+    utilityService.associateRestaurant(product::setRestaurant, productDTO.restaurantId());
+    product = productRepository.save(product);
+    return convertToDTO(product);
+  }
+
+  @Transactional
+  public ProductDTO updateProduct(Long productId, @Valid ProductDTO productDTO) {
+    Product product = productRepository.findById(productId)
+        .orElseThrow(NotFoundException::new);
+
+    // Update all fields with BeanUtils
+    BeanUtils.copyProperties(productDTO, product, getNullPropertyNames(productDTO));
+    utilityService.associateRestaurant(product::setRestaurant, productDTO.restaurantId());
+    // Update all fields with BeanUtils
+    BeanUtils.copyProperties(productDTO, product, getNullPropertyNames(productDTO));
+    utilityService.associateRestaurant(product::setRestaurant, productDTO.restaurantId());
+
+    product = productRepository.save(product);
+    return convertToDTO(product);
+  }
+
+  @Transactional
+  public void deleteProduct(Long productId) {
+    try {
+      if (!productRepository.existsById(productId)) {
+        throw new GlobalExceptionHandler.NotFoundException(); // lança exceção personalizada se o produto não existir
+      }
+      productRepository.deleteById(productId);
+    } catch (DataIntegrityViolationException ex) {
+      throw new DataIntegrityViolationException(
+          "Não é possível excluir o produto, pois ele está vinculado a outra tabela.");
     }
+  }
 
-    @Transactional(readOnly = true)
-    public List<ProductDTO> getAllProducts() {
-        return productRepository.findAll().stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+  private String[] getNullPropertyNames(ProductDTO productDTO) {
+    return Arrays.stream(BeanUtils.getPropertyDescriptors(ProductDTO.class))
+        .map(pd -> pd.getName())
+        .filter(name -> {
+          try {
+            return BeanUtils.getPropertyDescriptor(ProductDTO.class, name)
+                .getReadMethod().invoke(productDTO) == null;
+          } catch (Exception e) {
+            return false;
+          }
+        }).toArray(String[]::new);
+  }
+
+  private ProductDTO convertToDTO(Product product) {
+    return new ProductDTO(
+        product.getProductId(),
+        product.getNameProduct(),
+        product.getDescriptionProduct(),
+        product.getUrlImgProduct(),
+        product.getOriginalPrice(),
+        product.getSellPrice(),
+        product.getExpirationDate(),
+        product.getQuantity(),
+        product.getCategoryProduct(),
+        product.getAdditionDate(),
+        product.isActive(),
+        product.getRestaurant().getRestaurantId());
+  }
+
+  private Product convertToEntity(ProductDTO productDTO) {
+    Product product = new Product();
+    product.setProductId(productDTO.productId());
+    product.setNameProduct(productDTO.nameProd());
+    product.setDescriptionProduct(productDTO.descriptionProd());
+    product.setUrlImgProduct(productDTO.urlImgProd());
+    product.setOriginalPrice(productDTO.originalPrice());
+    product.setSellPrice(productDTO.sellPrice());
+    product.setQuantity(productDTO.quantity());
+    product.setExpirationDate(productDTO.expirationDate());
+    product.setCategoryProduct(productDTO.categoryProduct());
+    product.setAdditionDate(productDTO.additionDate());
+    product.setActive(productDTO.active());
+    utilityService.associateRestaurant(product::setRestaurant, productDTO.restaurantId());
+    return product;
+  }
+
+  @Transactional
+  public ProductDTO partialUpdateProduct(Long productId, @Valid ProductPartialUpdateDTO productPartialUpdateDTO) {
+    Product product = productRepository.findById(productId)
+        .orElseThrow(NotFoundException::new);
+
+    if (productPartialUpdateDTO.nameProd() != null) {
+      product.setNameProduct(productPartialUpdateDTO.nameProd());
     }
-
-    @Transactional(readOnly = true)
-    public ProductDTO getProductById(Long productId) {
-        return productRepository.findById(productId)
-                .map(this::convertToDTO)
-                .orElseThrow(NotFoundException::new);
+    if (productPartialUpdateDTO.descriptionProd() != null) {
+      product.setDescriptionProduct(productPartialUpdateDTO.descriptionProd());
     }
-
-
-    @Transactional(readOnly = true)
-    public Page<ProductRestaurantDTO> getFilteredProducts(String product, String types, String categories, String price, Integer currentPage) {
-        Integer pageSize = 20; // Número de registros por página
-        Pageable pageable = PageRequest.of(currentPage, pageSize); // Cria o objeto Pageable
-
-        Float convertedPrice = null;
-        if (price != null && !price.isEmpty()) {
-            convertedPrice = Float.parseFloat(price);
-        }
-
-        List<EnumRestaurantCategory> typeList = (types != null && !types.isEmpty()) ?
-                Arrays.stream(types.split(" "))
-                        .map(EnumRestaurantCategory::valueOf)
-                        .collect(Collectors.toList()) : null;
-
-        List<EnumProductCategory> categoryList = (categories != null && !categories.isEmpty()) ?
-                Arrays.stream(categories.split(" "))
-                        .map(EnumProductCategory::valueOf)
-                        .collect(Collectors.toList()) : null;
-
-        return productRepository.findProductsByFilters(product, typeList, categoryList, convertedPrice, pageable);
+    if (productPartialUpdateDTO.urlImgProd() != null) {
+      product.setUrlImgProduct(productPartialUpdateDTO.urlImgProd());
     }
-
-    @Transactional
-    public ProductDTO createProduct(@Valid ProductDTO productDTO, String token) {
-
-        Long restaurantId = jwtTokenProvider.extractUserId(token);
-        productDTO = new ProductDTO(
-                productDTO.productId(),
-                productDTO.nameProd(),
-                productDTO.descriptionProd(),
-                productDTO.urlImgProd(),
-                productDTO.originalPrice(),
-                productDTO.sellPrice(),
-                productDTO.expirationDate(),
-                productDTO.quantity(),
-                productDTO.categoryProduct(),
-                productDTO.additionDate(),
-                productDTO.active(),
-                restaurantId);
-
-        Product product = convertToEntity(productDTO);
-        utilityService.associateRestaurant(product::setRestaurant, productDTO.restaurantId());
-        product = productRepository.save(product);
-        return convertToDTO(product);
+    if (productPartialUpdateDTO.originalPrice() != null) {
+      product.setOriginalPrice(productPartialUpdateDTO.originalPrice());
     }
-
-    @Transactional
-    public ProductDTO updateProduct(Long productId, @Valid ProductDTO productDTO) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(NotFoundException::new);
-
-        // Update all fields with BeanUtils
-        BeanUtils.copyProperties(productDTO, product, getNullPropertyNames(productDTO));
-        utilityService.associateRestaurant(product::setRestaurant, productDTO.restaurantId());
-        // Update all fields with BeanUtils
-        BeanUtils.copyProperties(productDTO, product, getNullPropertyNames(productDTO));
-        utilityService.associateRestaurant(product::setRestaurant, productDTO.restaurantId());
-
-        product = productRepository.save(product);
-        return convertToDTO(product);
+    if (productPartialUpdateDTO.sellPrice() != null) {
+      product.setSellPrice(productPartialUpdateDTO.sellPrice());
     }
-
-    @Transactional
-    public void deleteProduct(Long productId) {
-        try {
-            if (!productRepository.existsById(productId)) {
-                throw new GlobalExceptionHandler.NotFoundException(); // lança exceção personalizada se o produto não existir
-            }
-            productRepository.deleteById(productId);
-        } catch (DataIntegrityViolationException ex) {
-            throw new DataIntegrityViolationException("Não é possível excluir o produto, pois ele está vinculado a outra tabela.");
-        }
+    if (productPartialUpdateDTO.expirationDate() != null) {
+      product.setExpirationDate(productPartialUpdateDTO.expirationDate());
     }
-
-
-    private String[] getNullPropertyNames(ProductDTO productDTO) {
-        return Arrays.stream(BeanUtils.getPropertyDescriptors(ProductDTO.class))
-                .map(pd -> pd.getName())
-                .filter(name -> {
-                    try {
-                        return BeanUtils.getPropertyDescriptor(ProductDTO.class, name)
-                                .getReadMethod().invoke(productDTO) == null;
-                    } catch (Exception e) {
-                        return false;
-                    }
-                }).toArray(String[]::new);
+    if (productPartialUpdateDTO.quantity() != null) {
+      product.setQuantity(productPartialUpdateDTO.quantity());
     }
-
-    private ProductDTO convertToDTO(Product product) {
-        return new ProductDTO(
-                product.getProductId(),
-                product.getNameProduct(),
-                product.getDescriptionProduct(),
-                product.getUrlImgProduct(),
-                product.getOriginalPrice(),
-                product.getSellPrice(),
-                product.getExpirationDate(),
-                product.getQuantity(),
-                product.getCategoryProduct(),
-                product.getAdditionDate(),
-                product.isActive(),
-                product.getRestaurant().getRestaurantId());
+    if (productPartialUpdateDTO.categoryProduct() != null) {
+      product.setCategoryProduct(productPartialUpdateDTO.categoryProduct());
     }
-
-    private Product convertToEntity(ProductDTO productDTO) {
-        Product product = new Product();
-        product.setProductId(productDTO.productId());
-        product.setNameProduct(productDTO.nameProd());
-        product.setDescriptionProduct(productDTO.descriptionProd());
-        product.setUrlImgProduct(productDTO.urlImgProd());
-        product.setOriginalPrice(productDTO.originalPrice());
-        product.setSellPrice(productDTO.sellPrice());
-        product.setQuantity(productDTO.quantity());
-        product.setExpirationDate(productDTO.expirationDate());
-        product.setCategoryProduct(productDTO.categoryProduct());
-        product.setAdditionDate(productDTO.additionDate());
-        product.setActive(productDTO.active());
-        utilityService.associateRestaurant(product::setRestaurant, productDTO.restaurantId());
-        return product;
+    if (productPartialUpdateDTO.active() != null) {
+      product.setActive(productPartialUpdateDTO.active());
     }
-
-    @Transactional
-    public ProductDTO partialUpdateProduct(Long productId, @Valid ProductPartialUpdateDTO productPartialUpdateDTO) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(NotFoundException::new);
-
-        if (productPartialUpdateDTO.nameProd() != null) {
-            product.setNameProduct(productPartialUpdateDTO.nameProd());
-        }
-        if (productPartialUpdateDTO.descriptionProd() != null) {
-            product.setDescriptionProduct(productPartialUpdateDTO.descriptionProd());
-        }
-        if (productPartialUpdateDTO.urlImgProd() != null) {
-            product.setUrlImgProduct(productPartialUpdateDTO.urlImgProd());
-        }
-        if (productPartialUpdateDTO.originalPrice() != null) {
-            product.setOriginalPrice(productPartialUpdateDTO.originalPrice());
-        }
-        if (productPartialUpdateDTO.sellPrice() != null) {
-            product.setSellPrice(productPartialUpdateDTO.sellPrice());
-        }
-        if (productPartialUpdateDTO.expirationDate() != null) {
-            product.setExpirationDate(productPartialUpdateDTO.expirationDate());
-        }
-        if (productPartialUpdateDTO.quantity() != null) {
-            product.setQuantity(productPartialUpdateDTO.quantity());
-        }
-        if (productPartialUpdateDTO.categoryProduct() != null) {
-            product.setCategoryProduct(productPartialUpdateDTO.categoryProduct());
-        }
-        if (productPartialUpdateDTO.active() != null) {
-            product.setActive(productPartialUpdateDTO.active());
-        }
 
     product = productRepository.save(product);
     return convertToDTO(product);
   }
 
   // @Transactional(readOnly = true)
-  //   public List<ProductDTO> getProductsByRestaurantByToken(String token) {
-  //       Long restaurantId = jwtTokenProvider.extractUserId(token);
-  //       return productRepository.findByRestaurant_RestaurantId(restaurantId).stream()
-  //               .map(this::convertToDTO)
-  //               .collect(Collectors.toList());
-  //   }
+  // public List<ProductDTO> getProductsByRestaurantByToken(String token) {
+  // Long restaurantId = jwtTokenProvider.extractUserId(token);
+  // return productRepository.findByRestaurant_RestaurantId(restaurantId).stream()
+  // .map(this::convertToDTO)
+  // .collect(Collectors.toList());
+  // }
 
-    @Transactional(readOnly = true)
-    public Page<ProductDTO> getProductsByRestaurantId(String token, Pageable pageable) {
-        Long restaurantId = jwtTokenProvider.extractUserId(token);
-        return productRepository.findByRestaurant_RestaurantId(restaurantId, pageable)
-                .map(this::convertToDTO);
+  @Transactional(readOnly = true)
+  public Page<ProductDTO> getProductsByRestaurantId(String token, Pageable pageable) {
+    Long restaurantId = jwtTokenProvider.extractUserId(token);
+    return productRepository.findByRestaurant_RestaurantId(restaurantId, pageable)
+        .map(this::convertToDTO);
+  }
+
+  @Transactional
+  public List<ProductRestaurantDTO> getProductsSortedByRestaurantId(Long restaurantId, String sort, int page) {
+    Pageable pageable = PageRequest.of(page, 5, getSortByOption(sort));
+    Page<Product> products = productRepository.findByRestaurantId(restaurantId, pageable);
+
+    return products.stream()
+        .map(product -> new ProductRestaurantDTO(product, product.getRestaurant().getFantasy(),
+            product.getRestaurant().getCategory()))
+        .collect(Collectors.toList());
+  }
+
+  private Sort getSortByOption(String sort) {
+    switch (sort.toLowerCase()) {
+      case "name_asc":
+        return Sort.by(Sort.Direction.ASC, "nameProduct");
+      case "name_desc":
+        return Sort.by(Sort.Direction.DESC, "nameProduct");
+      case "price_asc":
+        return Sort.by(Sort.Direction.ASC, "sellPrice");
+      case "price_desc":
+        return Sort.by(Sort.Direction.DESC, "sellPrice");
+      case "expiry_asc":
+        return Sort.by(Sort.Direction.ASC, "expirationDate");
+      case "expiry_desc":
+        return Sort.by(Sort.Direction.DESC, "expirationDate");
+      default:
+        return Sort.unsorted();
     }
+  }
 
 }
