@@ -15,19 +15,6 @@ public class FirebaseController {
   @Autowired
   private FirebaseService firebaseService;
 
-  // @PostMapping("/upload")
-  // public ResponseEntity<String> uploadImage(@RequestParam("imageFile")
-  // MultipartFile imageFile,
-  // @RequestParam("imageName") String imageName) {
-  // try {
-  // firebaseService.upload(imageFile, imageName);
-  // return ResponseEntity.ok("Upload successful!");
-  // } catch (IOException e) {
-  // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-  // .body("Failed to upload image: " + e.getMessage());
-  // }
-  // }
-
   @GetMapping("/image/{imageName}")
   public ResponseEntity<String> getImageUrl(@PathVariable String imageName) {
     String imageUrl = firebaseService.getImageUrl(imageName);
@@ -47,18 +34,10 @@ public class FirebaseController {
     }
   }
 
-  @DeleteMapping("/image/{imageName}")
-  public ResponseEntity<Void> deleteImage(@PathVariable String imageName) {
-    boolean deleted = firebaseService.deleteImage(imageName);
-    if (deleted) {
-      return ResponseEntity.noContent().build(); // 204 No Content
+    @DeleteMapping("/image/{imageName}")
+    public ResponseEntity<Void> deleteImage(@PathVariable String imageName) {
+        firebaseService.deleteImage(imageName);
+        return ResponseEntity.noContent().build(); // 204 No Content em todos os casos
     }
-    return ResponseEntity.notFound().build(); // 404 Not Found
-  }
-
-  @DeleteMapping("/test")
-  public ResponseEntity<String> testDelete() {
-    return ResponseEntity.ok("DELETE method is supported");
-  }
 
 }

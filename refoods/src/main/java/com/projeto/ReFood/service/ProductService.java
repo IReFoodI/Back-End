@@ -3,6 +3,7 @@ package com.projeto.ReFood.service;
 import com.projeto.ReFood.dto.ProductDTO;
 import com.projeto.ReFood.dto.ProductPartialUpdateDTO;
 import com.projeto.ReFood.dto.ProductRestaurantDTO;
+import com.projeto.ReFood.exception.GlobalExceptionHandler;
 import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
 import com.projeto.ReFood.model.EnumProductCategory;
 import com.projeto.ReFood.model.EnumRestaurantCategory;
@@ -13,6 +14,7 @@ import com.projeto.ReFood.security.JwtTokenProvider;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -117,6 +119,9 @@ public class ProductService {
         // Update all fields with BeanUtils
         BeanUtils.copyProperties(productDTO, product, getNullPropertyNames(productDTO));
         utilityService.associateRestaurant(product::setRestaurant, productDTO.restaurantId());
+        // Update all fields with BeanUtils
+        BeanUtils.copyProperties(productDTO, product, getNullPropertyNames(productDTO));
+        utilityService.associateRestaurant(product::setRestaurant, productDTO.restaurantId());
 
         product = productRepository.save(product);
         return convertToDTO(product);
@@ -124,11 +129,16 @@ public class ProductService {
 
     @Transactional
     public void deleteProduct(Long productId) {
-        if (!productRepository.existsById(productId)) {
-            throw new NotFoundException();
+        try {
+            if (!productRepository.existsById(productId)) {
+                throw new GlobalExceptionHandler.NotFoundException(); // lança exceção personalizada se o produto não existir
+            }
+            productRepository.deleteById(productId);
+        } catch (DataIntegrityViolationException ex) {
+            throw new DataIntegrityViolationException("Não é possível excluir o produto, pois ele está vinculado a outra tabela.");
         }
-        productRepository.deleteById(productId);
     }
+
 
     private String[] getNullPropertyNames(ProductDTO productDTO) {
         return Arrays.stream(BeanUtils.getPropertyDescriptors(ProductDTO.class))
@@ -209,21 +219,23 @@ public class ProductService {
             product.setActive(productPartialUpdateDTO.active());
         }
 
-        product = productRepository.save(product);
-        return convertToDTO(product);
-    }
+    product = productRepository.save(product);
+    return convertToDTO(product);
+  }
+
+  // @Transactional(readOnly = true)
+  //   public List<ProductDTO> getProductsByRestaurantByToken(String token) {
+  //       Long restaurantId = jwtTokenProvider.extractUserId(token);
+  //       return productRepository.findByRestaurant_RestaurantId(restaurantId).stream()
+  //               .map(this::convertToDTO)
+  //               .collect(Collectors.toList());
+  //   }
 
     @Transactional(readOnly = true)
-    public List<ProductDTO> getProductsByRestaurantByToken(String token) {
+    public Page<ProductDTO> getProductsByRestaurantId(String token, Pageable pageable) {
         Long restaurantId = jwtTokenProvider.extractUserId(token);
-        return productRepository.findByRestaurant_RestaurantId(restaurantId).stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-    }
-
-    @Transactional(readOnly = true)
-    public List<ProductRestaurantDTO> getProductsByRestaurantId(Long id) {
-        return productRepository.findByRestaurant_RestaurantIdWithFilters(id);
+        return productRepository.findByRestaurant_RestaurantId(restaurantId, pageable)
+                .map(this::convertToDTO);
     }
 
 }

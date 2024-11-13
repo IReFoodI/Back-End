@@ -78,13 +78,27 @@ public class CartService {
     return cartItems;
   }
 
+  // @Transactional
+  // public void clearCart(Long cartId) {
+  // Cart cart = cartRepository.findById(cartId)
+  // .orElseThrow(() -> new NotFoundException());
+
+  // cart.getCartItems().clear();
+  // cart.setTotalValue(0);
+  // cartRepository.save(cart);
+  // }
+
   @Transactional
   public void clearCart(Long cartId) {
     Cart cart = cartRepository.findById(cartId)
         .orElseThrow(() -> new NotFoundException());
 
+    cartItemRepository.deleteByCart_CartId(cartId);
+
     cart.getCartItems().clear();
+
     cart.setTotalValue(0);
+
     cartRepository.save(cart);
   }
 
