@@ -4,9 +4,21 @@ import com.projeto.ReFood.dto.ProductDTO;
 import com.projeto.ReFood.dto.ProductPartialUpdateDTO;
 import com.projeto.ReFood.dto.ProductRestaurantDTO;
 import com.projeto.ReFood.dto.RestaurantInfoDTO;
+import com.projeto.ReFood.exception.GlobalExceptionHandler;
 import com.projeto.ReFood.service.ProductService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +41,8 @@ public class ProductController {
 
   @Autowired
   private ProductService productService;
+  @Autowired
+  private PagedResourcesAssembler<ProductDTO> pagedResourcesAssembler;
 
   @GetMapping("/{productId}/restaurant-info")
   public ResponseEntity<RestaurantInfoDTO> getRestaurantInfoByProductId(@PathVariable Long productId) {
@@ -50,15 +64,48 @@ public class ProductController {
     return ResponseEntity.ok(products);
   }
 
-  @GetMapping("/restaurant")
-  public ResponseEntity<List<ProductDTO>> listProductsByRestaurantId(@RequestHeader("Authorization") String token) {
-    List<ProductDTO> products = productService.getProductsByRestaurantId(token);
+  // @GetMapping("/restaurant/{restaurantId}")
+  // public ResponseEntity<List<ProductRestaurantDTO>>
+  // listAllRestaurantProducts(@PathVariable Long restaurantId) {
+  // List<ProductRestaurantDTO> products =
+  // productService.getProductsByRestaurantId(restaurantId);
+  // return ResponseEntity.ok(products);
+  // }
 
-    if (products.isEmpty()) {
+  @Operation(summary = "Lista produtos por ID do restaurante", description = "Retorna uma lista paginada de produtos associados ao restaurante com base no token de autorização e parâmetros de paginação.")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Produtos encontrados e listados com sucesso."),
+      @ApiResponse(responseCode = "204", description = "Nenhum produto encontrado."),
+  })
+  @GetMapping("/products")
+  public ResponseEntity<PagedModel<EntityModel<ProductDTO>>> listProductsByRestaurantId(
+      @RequestHeader("Authorization") String token,
+      @RequestParam(value = "page", defaultValue = "0") int page,
+      @RequestParam(value = "size", defaultValue = "10") int size) {
+
+    if (page < 0) {
+      throw new GlobalExceptionHandler.BadRequestException("Número da página não pode ser menor que 0");
+    }
+    // Caso queira do mais recente para o mais antigo, mas percebi q se tiver vários
+    // criados ao mesmo tempo, ele fica estranho
+    // Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC,
+    // "additionDate"));
+    // Page<ProductDTO> productsPage =
+    // productService.getProductsByRestaurantId(token, pageable);
+    Pageable pageable = PageRequest.of(page, size);
+    Page<ProductDTO> productsPage = productService.getProductsByRestaurantId(token, pageable);
+
+    if (page >= productsPage.getTotalPages() && productsPage.getTotalPages() > 0) {
+      throw new GlobalExceptionHandler.BadRequestException("Número da página excede o total de páginas disponíveis.");
+    }
+
+    PagedModel<EntityModel<ProductDTO>> pagedModel = pagedResourcesAssembler.toModel(productsPage);
+
+    if (productsPage.isEmpty()) {
       return ResponseEntity.noContent().build();
     }
 
-    return ResponseEntity.ok(products);
+    return ResponseEntity.ok(pagedModel);
   }
 
   @GetMapping("/{productId}")
@@ -68,20 +115,23 @@ public class ProductController {
   }
 
   @GetMapping("/search")
-  public ResponseEntity<Page<ProductRestaurantDTO>> getProductById(@RequestParam(required = false) String produto, @RequestParam(required = false) String tipo, @RequestParam(required = false) String categoria, @RequestParam(required = false) String preco, @RequestParam(required = false) String currentpage) {
+  public ResponseEntity<Page<ProductRestaurantDTO>> getProductById(@RequestParam(required = false) String produto,
+      @RequestParam(required = false) String tipo, @RequestParam(required = false) String categoria,
+      @RequestParam(required = false) String preco, @RequestParam(required = false) String currentpage) {
     Integer integerCurrentPage;
     if (currentpage == null) {
       integerCurrentPage = 0;
     } else {
       integerCurrentPage = Integer.parseInt(currentpage);
     }
-    Page<ProductRestaurantDTO> productRestaurantDTO = productService.getFilteredProducts(produto, tipo, categoria, preco, integerCurrentPage);
+    Page<ProductRestaurantDTO> productRestaurantDTO = productService.getFilteredProducts(produto, tipo, categoria,
+        preco, integerCurrentPage);
     return ResponseEntity.ok(productRestaurantDTO);
   }
 
   @PostMapping
   public ResponseEntity<ProductDTO> createProduct(@RequestHeader("Authorization") String token,
-                                                  @Valid @RequestBody ProductDTO productDTO) {
+      @Valid @RequestBody ProductDTO productDTO) {
 
     ProductDTO createdProduct = productService.createProduct(productDTO, token);
     URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -158,5 +208,36 @@ public class ProductController {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
           .body(null); // Retorna 500 em caso de erro ao ler o arquivo
     }
+  }
+
+  /**
+   * Retorna uma lista de produtos filtrada pelo ID do restaurante e ordenada de acordo com os parâmetros fornecidos.
+   *
+   * @param restaurantId ID do restaurante pelo qual os produtos serão filtrados.
+   * @param page Número da página para a paginação dos resultados, com valor padrão 0.
+   * @param sort Critério de ordenação para os produtos. Valores possíveis:
+   *             "name_asc" (ordem alfabética ascendente), "name_desc" (ordem alfabética descendente),
+   *             "price_asc" (preço crescente), "price_desc" (preço decrescente),
+   *             "expiry_asc" (data de validade ascendente), "expiry_desc" (data de validade descendente).
+   *             Valor padrão: "name_asc".
+   * @return Uma lista de produtos ordenada e paginada de acordo com os parâmetros fornecidos.
+   */
+  @Operation(summary = "Obtém produtos ordenados por ID do restaurante",
+             description = "Retorna uma lista de produtos filtrados por ID do restaurante e ordenados conforme o critério especificado.")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Lista de produtos recuperada com sucesso",
+                   content = @Content(array = @ArraySchema(schema = @Schema(implementation = ProductRestaurantDTO.class)))),
+      @ApiResponse(responseCode = "400", description = "Parâmetros inválidos fornecidos"),
+      @ApiResponse(responseCode = "404", description = "Restaurante não encontrado")
+  })
+  @GetMapping("/sorted")
+  public ResponseEntity<List<ProductRestaurantDTO>> getProductsSortedByRestaurantId(
+      @RequestParam Long restaurantId,
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "name_asc") String sort) {
+
+    List<ProductRestaurantDTO> products = productService.getProductsSortedByRestaurantId(restaurantId, sort,
+        page);
+    return ResponseEntity.ok(products);
   }
 }

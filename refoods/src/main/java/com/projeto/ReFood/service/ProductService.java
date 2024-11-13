@@ -3,6 +3,7 @@ package com.projeto.ReFood.service;
 import com.projeto.ReFood.dto.ProductDTO;
 import com.projeto.ReFood.dto.ProductPartialUpdateDTO;
 import com.projeto.ReFood.dto.ProductRestaurantDTO;
+import com.projeto.ReFood.exception.GlobalExceptionHandler;
 import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
 import com.projeto.ReFood.model.EnumProductCategory;
 import com.projeto.ReFood.model.EnumRestaurantCategory;
@@ -13,12 +14,14 @@ import com.projeto.ReFood.security.JwtTokenProvider;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.util.Arrays;
 import java.util.List;
@@ -61,29 +64,29 @@ public class ProductService {
         .orElseThrow(NotFoundException::new);
   }
 
+  @Transactional(readOnly = true)
+  public Page<ProductRestaurantDTO> getFilteredProducts(String product, String types, String categories, String price,
+      Integer currentPage) {
+    Integer pageSize = 20; // Número de registros por página
+    Pageable pageable = PageRequest.of(currentPage, pageSize); // Cria o objeto Pageable
 
-@Transactional(readOnly = true)
-public Page<ProductRestaurantDTO> getFilteredProducts(String product, String types, String categories, String price, Integer currentPage) {
-  Integer pageSize = 20; // Número de registros por página
-  Pageable pageable = PageRequest.of(currentPage, pageSize); // Cria o objeto Pageable
+    Float convertedPrice = null;
+    if (price != null && !price.isEmpty()) {
+      convertedPrice = Float.parseFloat(price);
+    }
 
-  Float convertedPrice = null;
-  if (price != null && !price.isEmpty()) {
-    convertedPrice = Float.parseFloat(price);
+    List<EnumRestaurantCategory> typeList = (types != null && !types.isEmpty()) ? Arrays.stream(types.split(" "))
+        .map(EnumRestaurantCategory::valueOf)
+        .collect(Collectors.toList()) : null;
+
+    List<EnumProductCategory> categoryList = (categories != null && !categories.isEmpty())
+        ? Arrays.stream(categories.split(" "))
+            .map(EnumProductCategory::valueOf)
+            .collect(Collectors.toList())
+        : null;
+
+    return productRepository.findProductsByFilters(product, typeList, categoryList, convertedPrice, pageable);
   }
-
-  List<EnumRestaurantCategory> typeList = (types != null && !types.isEmpty()) ?
-      Arrays.stream(types.split(" "))
-          .map(EnumRestaurantCategory::valueOf)
-          .collect(Collectors.toList()) : null;
-
-  List<EnumProductCategory> categoryList = (categories != null && !categories.isEmpty()) ?
-      Arrays.stream(categories.split(" "))
-          .map(EnumProductCategory::valueOf)
-          .collect(Collectors.toList()) : null;
-
-  return productRepository.findProductsByFilters(product, typeList, categoryList, convertedPrice, pageable);
-}
 
   @Transactional
   public ProductDTO createProduct(@Valid ProductDTO productDTO, String token) {
@@ -117,6 +120,9 @@ public Page<ProductRestaurantDTO> getFilteredProducts(String product, String typ
     // Update all fields with BeanUtils
     BeanUtils.copyProperties(productDTO, product, getNullPropertyNames(productDTO));
     utilityService.associateRestaurant(product::setRestaurant, productDTO.restaurantId());
+    // Update all fields with BeanUtils
+    BeanUtils.copyProperties(productDTO, product, getNullPropertyNames(productDTO));
+    utilityService.associateRestaurant(product::setRestaurant, productDTO.restaurantId());
 
     product = productRepository.save(product);
     return convertToDTO(product);
@@ -124,10 +130,15 @@ public Page<ProductRestaurantDTO> getFilteredProducts(String product, String typ
 
   @Transactional
   public void deleteProduct(Long productId) {
-    if (!productRepository.existsById(productId)) {
-      throw new NotFoundException();
+    try {
+      if (!productRepository.existsById(productId)) {
+        throw new GlobalExceptionHandler.NotFoundException(); // lança exceção personalizada se o produto não existir
+      }
+      productRepository.deleteById(productId);
+    } catch (DataIntegrityViolationException ex) {
+      throw new DataIntegrityViolationException(
+          "Não é possível excluir o produto, pois ele está vinculado a outra tabela.");
     }
-    productRepository.deleteById(productId);
   }
 
   private String[] getNullPropertyNames(ProductDTO productDTO) {
@@ -213,12 +224,49 @@ public Page<ProductRestaurantDTO> getFilteredProducts(String product, String typ
     return convertToDTO(product);
   }
 
+  // @Transactional(readOnly = true)
+  // public List<ProductDTO> getProductsByRestaurantByToken(String token) {
+  // Long restaurantId = jwtTokenProvider.extractUserId(token);
+  // return productRepository.findByRestaurant_RestaurantId(restaurantId).stream()
+  // .map(this::convertToDTO)
+  // .collect(Collectors.toList());
+  // }
+
   @Transactional(readOnly = true)
-  public List<ProductDTO> getProductsByRestaurantId(String token) {
+  public Page<ProductDTO> getProductsByRestaurantId(String token, Pageable pageable) {
     Long restaurantId = jwtTokenProvider.extractUserId(token);
-    return productRepository.findByRestaurant_RestaurantId(restaurantId).stream()
-        .map(this::convertToDTO)
+    return productRepository.findByRestaurant_RestaurantId(restaurantId, pageable)
+        .map(this::convertToDTO);
+  }
+
+  @Transactional
+  public List<ProductRestaurantDTO> getProductsSortedByRestaurantId(Long restaurantId, String sort, int page) {
+    Pageable pageable = PageRequest.of(page, 6, getSortByOption(sort));
+    Page<Product> products = productRepository.findByRestaurantId(restaurantId, pageable);
+
+    return products.stream()
+        .map(product -> new ProductRestaurantDTO(product, product.getRestaurant().getFantasy(),
+            product.getRestaurant().getCategory()))
         .collect(Collectors.toList());
+  }
+
+  private Sort getSortByOption(String sort) {
+    switch (sort.toLowerCase()) {
+      case "name_asc":
+        return Sort.by(Sort.Direction.ASC, "nameProduct");
+      case "name_desc":
+        return Sort.by(Sort.Direction.DESC, "nameProduct");
+      case "price_asc":
+        return Sort.by(Sort.Direction.ASC, "sellPrice");
+      case "price_desc":
+        return Sort.by(Sort.Direction.DESC, "sellPrice");
+      case "expiry_asc":
+        return Sort.by(Sort.Direction.ASC, "expirationDate");
+      case "expiry_desc":
+        return Sort.by(Sort.Direction.DESC, "expirationDate");
+      default:
+        return Sort.unsorted();
+    }
   }
 
 }

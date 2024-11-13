@@ -15,7 +15,7 @@ import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-  List<Product> findByRestaurant_RestaurantId(Long restaurantId);
+  Page<Product> findByRestaurant_RestaurantId(Long restaurantId, Pageable pageable);
 
   @Query("SELECT r.fantasy FROM Product p JOIN p.restaurant r WHERE p.productId = :productId")
   String findRestaurantNameByProductId(Long productId);
@@ -34,10 +34,10 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
       "AND (p.quantity>0) " +
       "ORDER BY p.nameProduct ASC")
   Page<ProductRestaurantDTO> findProductsByFilters(@Param("produto") String produto,
-                                                   @Param("tipos") List<EnumRestaurantCategory> tipos,
-                                                   @Param("categorias") List<EnumProductCategory> categorias,
-                                                   @Param("preco") Float preco,
-                                                   Pageable pageable);
+      @Param("tipos") List<EnumRestaurantCategory> tipos,
+      @Param("categorias") List<EnumProductCategory> categorias,
+      @Param("preco") Float preco,
+      Pageable pageable);
 
   @Query("""
           SELECT new com.projeto.ReFood.dto.RestaurantInfoDTO(
@@ -59,5 +59,18 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
           WHERE p.productId = :productId
       """)
   RestaurantInfoDTO findRestaurantInfoByProductId(Long productId);
+
+  @Query("""
+          SELECT new com.projeto.ReFood.dto.ProductRestaurantDTO(p, r.fantasy, r.category)
+          FROM Product p
+          JOIN p.restaurant r
+          WHERE r.id = :restaurantId
+          AND p.quantity > 0
+          AND p.expirationDate > CURRENT_DATE
+      """)
+  List<ProductRestaurantDTO> findByRestaurant_RestaurantIdWithFilters(Long restaurantId);
+
+  @Query("SELECT p FROM Product p WHERE p.restaurant.restaurantId = :restaurantId AND p.active = true AND p.expirationDate > CURRENT_DATE AND p.quantity > 0")
+  Page<Product> findByRestaurantId(Long restaurantId, Pageable pageable);
 
 }
