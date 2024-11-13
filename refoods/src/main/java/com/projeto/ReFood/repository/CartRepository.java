@@ -21,8 +21,8 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
         p.name_product AS productName,
         p.description_product AS descriptionProduct,
         ci.quantity AS quantity,
-        ci.subtotal AS subtotal,
-        ci.unit_value AS unitValue
+        ci.unit_value AS unitValue,
+        ci.subtotal AS subtotal
       FROM
         tb_cart_items ci
       JOIN
