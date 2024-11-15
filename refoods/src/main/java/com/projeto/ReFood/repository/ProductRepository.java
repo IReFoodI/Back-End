@@ -2,6 +2,7 @@ package com.projeto.ReFood.repository;
 
 import com.projeto.ReFood.dto.ProductRestaurantDTO;
 import com.projeto.ReFood.dto.RestaurantInfoDTO;
+import com.projeto.ReFood.dto.RestaurantNameIdDTO;
 import com.projeto.ReFood.model.EnumProductCategory;
 import com.projeto.ReFood.model.EnumRestaurantCategory;
 import com.projeto.ReFood.model.Product;
@@ -19,6 +20,10 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
   @Query("SELECT r.fantasy FROM Product p JOIN p.restaurant r WHERE p.productId = :productId")
   String findRestaurantNameByProductId(Long productId);
+
+  @Query("SELECT new com.projeto.ReFood.dto.RestaurantNameIdDTO(r.restaurantId, r.fantasy) " +
+      "FROM Product p JOIN p.restaurant r WHERE p.productId = :productId")
+  RestaurantNameIdDTO findRestaurantIdAndNameByProductId(Long productId);
 
   @Query("SELECT new com.projeto.ReFood.dto.ProductRestaurantDTO(p, r.fantasy, r.category) " +
       "FROM Product p " +

@@ -10,6 +10,7 @@ import com.projeto.ReFood.model.EnumProductCategory;
 import com.projeto.ReFood.model.EnumRestaurantCategory;
 import com.projeto.ReFood.model.Product;
 import com.projeto.ReFood.dto.RestaurantInfoDTO;
+import com.projeto.ReFood.dto.RestaurantNameIdDTO;
 import com.projeto.ReFood.repository.ProductRepository;
 import com.projeto.ReFood.security.JwtTokenProvider;
 import jakarta.validation.Valid;
@@ -49,6 +50,11 @@ public class ProductService {
   @Transactional(readOnly = true)
   public String getRestaurantNameByProductId(Long productId) {
     return productRepository.findRestaurantNameByProductId(productId);
+  }
+
+  @Transactional(readOnly = true)
+  public RestaurantNameIdDTO getRestaurantIdAndNameByProductId(Long productId) {
+    return productRepository.findRestaurantIdAndNameByProductId(productId);
   }
 
   @Transactional(readOnly = true)
@@ -241,23 +247,22 @@ public class ProductService {
   }
 
   @Transactional
-public PagedProductResponseDTO getProductsSortedByRestaurantId(Long restaurantId, String sort, int page) {
-  Pageable pageable = PageRequest.of(page, 6, getSortByOption(sort));
-  Page<Product> productsPage = productRepository.findByRestaurantId(restaurantId, pageable);
+  public PagedProductResponseDTO getProductsSortedByRestaurantId(Long restaurantId, String sort, int page) {
+    Pageable pageable = PageRequest.of(page, 6, getSortByOption(sort));
+    Page<Product> productsPage = productRepository.findByRestaurantId(restaurantId, pageable);
 
-  List<ProductRestaurantDTO> products = productsPage.stream()
-      .map(product -> new ProductRestaurantDTO(product, product.getRestaurant().getFantasy(),
-          product.getRestaurant().getCategory()))
-      .collect(Collectors.toList());
+    List<ProductRestaurantDTO> products = productsPage.stream()
+        .map(product -> new ProductRestaurantDTO(product, product.getRestaurant().getFantasy(),
+            product.getRestaurant().getCategory()))
+        .collect(Collectors.toList());
 
-  return new PagedProductResponseDTO(
-      products,
-      productsPage.getNumber(),
-      productsPage.getTotalPages(),
-      productsPage.getTotalElements(),
-      productsPage.getSize()
-  );
-}
+    return new PagedProductResponseDTO(
+        products,
+        productsPage.getNumber(),
+        productsPage.getTotalPages(),
+        productsPage.getTotalElements(),
+        productsPage.getSize());
+  }
 
   private Sort getSortByOption(String sort) {
     switch (sort.toLowerCase()) {
