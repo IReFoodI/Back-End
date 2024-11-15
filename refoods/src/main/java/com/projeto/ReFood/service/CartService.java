@@ -39,8 +39,10 @@ public class CartService {
 
   @Transactional
   public CartItemDTO addItemToUserCart(Long userId, Long productId, int quantity) throws Exception {
-    // Valida a quantidade do item
-    validateQuantity(quantity);
+    // Valida a quantidade fornecida na requisição
+    if (quantity <= 0) {
+      throw new IllegalArgumentException("A quantidade deve ser maior que zero.");
+    }
 
     // Recupera usuário e produto ou lança exceção
     User user = findUserById(userId);
@@ -49,20 +51,28 @@ public class CartService {
     // Busca ou cria o carrinho do usuário
     Cart cart = findOrCreateCart(user);
 
-    // Busca ou cria um item no carrinho
-    CartItem cartItem = findOrCreateCartItem(cart, product, quantity);
+    // Verifica se o produto já existe no carrinho e calcula a quantidade total
+    CartItem existingCartItem = cart.getCartItems().stream()
+        .filter(item -> item.getProduct().getProductId().equals(productId))
+        .findFirst()
+        .orElse(null);
+
+    int totalQuantityInCart = existingCartItem != null ? existingCartItem.getQuantity() : 0;
+    int totalQuantityRequested = totalQuantityInCart + quantity;
+
+    // Valida a quantidade total (já no carrinho + nova quantidade)
+    if (product.getQuantity() < totalQuantityRequested) {
+      throw new IllegalArgumentException("Quantidade solicitada maior que a quantidade disponível.");
+    }
+
+    // Cria ou atualiza o CartItem
+    CartItem cartItem = findOrCreateCartItem(cart, product, quantity, totalQuantityRequested);
 
     // Atualiza o total do carrinho
     updateCartTotal(cart);
 
     // Cria e retorna o DTO do CartItem
     return createCartItemDTO(cartItem);
-  }
-
-  private void validateQuantity(int quantity) {
-    if (quantity <= 0) {
-      throw new IllegalArgumentException("A quantidade deve ser maior que zero.");
-    }
   }
 
   private User findUserById(Long userId) throws NotFoundException {
@@ -88,12 +98,13 @@ public class CartService {
     return cartRepository.save(newCart);
   }
 
-  private CartItem findOrCreateCartItem(Cart cart, Product product, int quantity) {
+  private CartItem findOrCreateCartItem(Cart cart, Product product, int quantity, int totalQuantityRequested) {
+    // Busca o item do carrinho
     CartItem cartItem = cartItemRepository.findByCartAndProduct(cart, product)
         .orElse(new CartItem());
 
     // Atualiza os valores do item
-    cartItem.setQuantity(cartItem.getQuantity() + quantity);
+    cartItem.setQuantity(totalQuantityRequested);
     cartItem.setUnitValue(product.getSellPrice());
     cartItem.setSubtotal(cartItem.getUnitValue() * cartItem.getQuantity());
     cartItem.setProduct(product);
@@ -101,7 +112,7 @@ public class CartService {
     cartItem.setCartItemId(new CartItemPK(cart.getCartId(), product.getProductId()));
 
     return cartItemRepository.save(cartItem);
-  }
+}
 
   private void updateCartTotal(Cart cart) {
     float totalValue = cart.getCartItems().stream()
