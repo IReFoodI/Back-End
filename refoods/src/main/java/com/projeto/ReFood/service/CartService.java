@@ -166,13 +166,12 @@ public class CartService {
   public void removeAllQuantityFromCartItem(Long cartId, Long productId) {
     CartItemPK cartItemPK = new CartItemPK(cartId, productId);
     CartItem cartItem = cartItemRepository.findById(cartItemPK)
-        .orElseThrow(() -> new NotFoundException());
+            .orElseThrow(() -> new NotFoundException());
 
     Cart cart = cartItem.getCart();
 
-    // busca o valor do item para subtrair do total do carrinho antes do delete, pq
-    // se fizer depois da bug
-    float newTotalValue = cart.getTotalValue() - cartItem.getSubtotal();
+    // Subtrair o subtotal do item, garantindo que o total seja no mínimo zero
+    float newTotalValue = Math.max(cart.getTotalValue() - cartItem.getSubtotal(), 0);
     cart.setTotalValue(newTotalValue);
     cartRepository.save(cart);
 
