@@ -16,6 +16,7 @@ import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
 import com.projeto.ReFood.model.Order;
 import com.projeto.ReFood.model.OrderItem;
 import com.projeto.ReFood.model.OrderItemPK;
+import com.projeto.ReFood.model.EnumOrderStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -186,5 +187,13 @@ public class OrderService {
         order.getTransaction() != null ? order.getTransaction().getTransactionId() : null,
         orderItemDTOs);
   }
-
+  
+  @Transactional
+  public OrderResponseDTO updateOrderStatus(Long orderId, EnumOrderStatus newStatus) {
+    Order order = orderRepository.findById(orderId)
+            .orElseThrow(() -> new NotFoundException());
+    order.setOrderStatus(newStatus);
+    order = orderRepository.save(order);
+    return convertToDTO(order);
+  }
 }
