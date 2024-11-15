@@ -56,13 +56,13 @@ public class CartController {
 
   }
 
-  @DeleteMapping("/cart/item")
+  @DeleteMapping("/del/item")
   public ResponseEntity<String> removeItemFromCart(@RequestParam Long cartId, @RequestParam Long productId) {
     cartService.removeItemFromCart(cartId, productId);
     return ResponseEntity.noContent().build();
   }
 
-  @DeleteMapping("/cart/item/all")
+  @DeleteMapping("/del/item/all")
   public ResponseEntity<String> removeAllQuantityFromCartItem(@RequestParam Long cartId, @RequestParam Long productId) {
     cartService.removeAllQuantityFromCartItem(cartId, productId);
     return ResponseEntity.noContent().build();

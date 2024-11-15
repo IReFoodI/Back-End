@@ -14,8 +14,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 import lombok.ToString;
 
@@ -30,7 +30,7 @@ public class Cart {
   private Long cartId;
 
   @NotNull(message = "O valor total não pode ser nulo.")
-  @PositiveOrZero(message = "O valor total não pode ser negativo.")
+  @Min(value = 0, message = "O valor total deve ser maior ou igual a zero.")
   @Column(nullable = false)
   private float totalValue;
 

@@ -5,6 +5,7 @@ import com.projeto.ReFood.dto.ProductDTO;
 import com.projeto.ReFood.dto.ProductPartialUpdateDTO;
 import com.projeto.ReFood.dto.ProductRestaurantDTO;
 import com.projeto.ReFood.dto.RestaurantInfoDTO;
+import com.projeto.ReFood.dto.RestaurantNameIdDTO;
 import com.projeto.ReFood.exception.GlobalExceptionHandler;
 import com.projeto.ReFood.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -50,12 +51,19 @@ public class ProductController {
     if (restaurantInfo == null) {
       return ResponseEntity.notFound().build();
     }
+    System.out.println("restaurantInfo: ");
+    System.out.println(restaurantInfo);
     return ResponseEntity.ok(restaurantInfo);
   }
 
-  @GetMapping("/{productId}/restaurant")
+  @GetMapping("/{productId}/restaurant-name")
   public String getRestaurantNameByProductId(@PathVariable Long productId) {
     return productService.getRestaurantNameByProductId(productId);
+  }
+
+  @GetMapping("/{productId}/restaurant")
+  public RestaurantNameIdDTO getRestaurantIdAndNameByProductId(@PathVariable Long productId) {
+    return productService.getRestaurantIdAndNameByProductId(productId);
   }
 
   @GetMapping

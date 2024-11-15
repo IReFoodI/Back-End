@@ -2,6 +2,7 @@ package com.projeto.ReFood.service;
 
 import com.projeto.ReFood.repository.OrderItemRepository;
 import com.projeto.ReFood.repository.OrderRepository;
+import com.projeto.ReFood.repository.ProductRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -12,10 +13,12 @@ import org.springframework.validation.annotation.Validated;
 import com.projeto.ReFood.dto.OrderItemDTO;
 import com.projeto.ReFood.dto.OrderRequestDTO;
 import com.projeto.ReFood.dto.OrderResponseDTO;
+import com.projeto.ReFood.exception.BadRequestException;
 import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
 import com.projeto.ReFood.model.Order;
 import com.projeto.ReFood.model.OrderItem;
 import com.projeto.ReFood.model.OrderItemPK;
+import com.projeto.ReFood.model.Product;
 import com.projeto.ReFood.model.EnumOrderStatus;
 
 import java.util.ArrayList;
@@ -30,6 +33,7 @@ public class OrderService {
   private final OrderRepository orderRepository;
   private final UtilityService utilityService;
   private final OrderItemRepository orderItemRepository;
+  private final ProductRepository productRepository;
 
   @Transactional(readOnly = true)
   public List<OrderResponseDTO> getAllOrders() {
@@ -115,6 +119,17 @@ public class OrderService {
       utilityService.associateTransaction(order::setTransaction, orderRequestDTO.getTransactionId());
     }
 
+    // Verifica a quantidade disponível em estoque para cada item do pedido
+    for (OrderItemDTO itemDTO : orderRequestDTO.getOrderItems()) {
+      Product product = productRepository.findById(itemDTO.productId())
+          .orElseThrow(() -> new NotFoundException());
+
+      if (product.getQuantity() < itemDTO.quantity()) {
+        throw new BadRequestException(
+            "Quantidade de produto insuficiente em estoque para o produto: " + product.getNameProduct());
+      }
+    }
+
     orderRepository.save(order);
 
     List<OrderItem> orderItems = new ArrayList<>();
@@ -129,6 +144,11 @@ public class OrderService {
 
       OrderItemPK orderItemPK = new OrderItemPK(order.getOrderId(), itemDTO.productId());
       orderItem.setOrderItemId(orderItemPK);
+
+      // Subtrai a quantidade do produto do estoque
+      Product product = orderItem.getProduct();
+      product.setQuantity(product.getQuantity() - itemDTO.quantity());
+      productRepository.save(product);
 
       orderItems.add(orderItem);
     }
