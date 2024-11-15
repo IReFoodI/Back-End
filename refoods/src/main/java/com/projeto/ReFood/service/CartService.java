@@ -8,6 +8,7 @@ import com.projeto.ReFood.model.Cart;
 import com.projeto.ReFood.model.CartItem;
 import com.projeto.ReFood.model.CartItemPK;
 import com.projeto.ReFood.model.Product;
+import com.projeto.ReFood.model.Restaurant;
 import com.projeto.ReFood.model.User;
 import com.projeto.ReFood.repository.CartItemRepository;
 import com.projeto.ReFood.repository.CartRepository;
@@ -51,6 +52,21 @@ public class CartService {
     // Busca ou cria o carrinho do usuário
     Cart cart = findOrCreateCart(user);
 
+    // Obtém o restaurante do produto
+    Restaurant productRestaurant = product.getRestaurant();
+
+    // Verifica se o carrinho já possui itens
+    if (!cart.getCartItems().isEmpty()) {
+      // Obtém o restaurante associado aos itens do carrinho
+      Restaurant existingRestaurant = cart.getCartItems().iterator().next().getProduct().getRestaurant();
+
+      // Valida se o restaurante do produto é o mesmo do carrinho
+      if (!existingRestaurant.getRestaurantId().equals(productRestaurant.getRestaurantId())) {
+        System.out.println("O carrinho só pode conter produtos de um único restaurante.");
+        throw new IllegalArgumentException("O carrinho só pode conter produtos de um único restaurante.");
+      }
+    }
+
     // Verifica se o produto já existe no carrinho e calcula a quantidade total
     CartItem existingCartItem = cart.getCartItems().stream()
         .filter(item -> item.getProduct().getProductId().equals(productId))
@@ -61,7 +77,7 @@ public class CartService {
     int totalQuantityRequested = totalQuantityInCart + quantity;
 
     // Valida a quantidade total (já no carrinho + nova quantidade)
-    if (product.getQuantity() < totalQuantityRequested) {
+    if (product.getQuantity() < totalQuantityRequested) {      
       throw new IllegalArgumentException("Quantidade solicitada maior que a quantidade disponível.");
     }
 
@@ -112,7 +128,7 @@ public class CartService {
     cartItem.setCartItemId(new CartItemPK(cart.getCartId(), product.getProductId()));
 
     return cartItemRepository.save(cartItem);
-}
+  }
 
   private void updateCartTotal(Cart cart) {
     float totalValue = cart.getCartItems().stream()
