@@ -132,7 +132,8 @@ public class CartService {
         cartItem.getUnitValue(),
         cartItem.getSubtotal(),
         cartItem.getCartItemId().getCartId(),
-        cartItem.getCartItemId().getProductId());
+        cartItem.getCartItemId().getProductId(),
+        cartItem.getRestaurant() != null ? cartItem.getRestaurant().getRestaurantId() : null);
   }
 
   @Transactional
