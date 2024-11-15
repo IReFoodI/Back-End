@@ -185,4 +185,14 @@ public class GlobalExceptionHandler {
         return createErrorResponse(HttpStatus.CONFLICT, message, request);
     }
 
+    public static class DifferentStoreItemException extends RuntimeException {
+        public DifferentStoreItemException(String message) {
+            super(message);
+        }
+    }
+
+    @ExceptionHandler(DifferentStoreItemException.class)
+    public ResponseEntity<CustomError> handleDifferentStoreItem(DifferentStoreItemException ex, HttpServletRequest request) {
+        return createErrorResponse(HttpStatus.CONFLICT, ex.getMessage(), request);
+    }
 }
