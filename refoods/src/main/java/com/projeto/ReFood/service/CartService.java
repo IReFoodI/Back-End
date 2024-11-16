@@ -18,10 +18,12 @@ import jakarta.persistence.Tuple;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,6 +38,26 @@ public class CartService {
   private final CartItemRepository cartItemRepository;
   private final ProductRepository productRepository;
   private final UserRepository userRepository;
+
+  private static final int EXPIRATION_TIME_IN_SECONDS = 600; // tempo de expiração em segundos
+  @Scheduled(fixedRate = 60_000) // Executa a cada ??_000 segundos
+  public void checkCartExpirations() {
+    LocalDateTime expirationThreshold = LocalDateTime.now().minusSeconds(EXPIRATION_TIME_IN_SECONDS);
+
+    // Busca itens expirados
+    List<CartItem> expiredItems = cartItemRepository.findExpiredItems(expirationThreshold);
+
+    for (CartItem item : expiredItems) {
+      // Restaura o estoque do produto
+      Product product = item.getProduct();
+      product.setQuantity(product.getQuantity() + item.getQuantity());
+      productRepository.save(product);
+
+      // remove o item
+      cartItemRepository.delete(item);
+    }
+    System.out.println("CART ITEMS EXPIRED: " + expiredItems.size());
+  }
 
   @Transactional
   public CartItemDTO addItemToUserCart(Long userId, Long productId, int quantity) throws Exception {
@@ -67,6 +89,10 @@ public class CartService {
 
     // Cria ou atualiza o CartItem
     CartItem cartItem = findOrCreateCartItem(cart, product, quantity, totalQuantityRequested);
+
+    // atualiza estoque (quantity) de Product
+    product.setQuantity(product.getQuantity() - quantity);
+    productRepository.save(product);
 
     // Atualiza o total do carrinho
     updateCartTotal(cart);
@@ -110,9 +136,10 @@ public class CartService {
     cartItem.setProduct(product);
     cartItem.setCart(cart);
     cartItem.setCartItemId(new CartItemPK(cart.getCartId(), product.getProductId()));
+    cartItem.setAddedAt(LocalDateTime.now());
 
     return cartItemRepository.save(cartItem);
-}
+  }
 
   private void updateCartTotal(Cart cart) {
     float totalValue = cart.getCartItems().stream()

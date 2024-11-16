@@ -1,5 +1,7 @@
 package com.projeto.ReFood.model;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -37,7 +39,7 @@ public class CartItem {
   @NotNull(message = "O carrinho não pode ser nulo.")
   @ManyToOne
   @MapsId("cartId")
-  @JoinColumn(name = "cart_id", referencedColumnName = "cart_id",nullable = false)
+  @JoinColumn(name = "cart_id", referencedColumnName = "cart_id", nullable = false)
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
   private Cart cart;
@@ -47,5 +49,10 @@ public class CartItem {
   @MapsId("productId")
   @JoinColumn(name = "product_id", referencedColumnName = "product_id", nullable = false)
   private Product product;
+
+  @Column(name = "addedAt", nullable = false)
+  private LocalDateTime addedAt = LocalDateTime.now();
+
+
 
 }
