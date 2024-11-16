@@ -79,7 +79,8 @@ public class CartItemService {
         cartItem.getUnitValue(),
         cartItem.getSubtotal(),
         cartItem.getCart().getCartId(),
-        cartItem.getProduct().getProductId());
+        cartItem.getProduct().getProductId(),
+        cartItem.getRestaurant() != null ? cartItem.getRestaurant().getRestaurantId() : null);
   }
 
   public CartItem convertToEntity(CartItemDTO cartItemDTO) {

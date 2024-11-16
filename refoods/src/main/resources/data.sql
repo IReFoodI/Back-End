@@ -192,20 +192,19 @@ VALUES
 
 
 -- -- Inserindo dados na tabela tb_cart_items
-INSERT INTO tb_cart_items (cart_id, product_id, quantity, unit_value, subtotal, added_at)
+INSERT INTO tb_cart_items (cart_id, product_id, quantity, unit_value, subtotal, added_at, restaurant_id)
 VALUES 
-    (2, 1, 1, 18.0, 18.0, NOW()),  -- Bolo de Cenoura com Chocolate
-    (2, 2, 2, 0.8, 1.6, NOW()),    -- Pao Frances
-    (2, 5, 2, 3.5, 7.0, NOW()),    -- Pao Doce com Creme
-    (2, 4, 1, 7.5, 7.5, NOW()),    -- Biscoito Amanteigado
-    (1, 2, 1, 0.8, 0.8, NOW()),    -- Pao Frances
-    (1, 1, 2, 18.0, 36.0, NOW()),  -- Bolo de Cenoura com Chocolate
-    (1, 3, 3, 5.5, 16.5, NOW()),   -- Pastel de Frango com Catupiry
-    (1, 4, 1, 7.5, 7.5, NOW()),    -- Biscoito Amanteigado
-    (1, 5, 2, 3.5, 7.0, NOW()),    -- Pao Doce com Creme
-    (1, 6, 4, 6.0, 24.0, NOW()),   -- Croissant
-    (1, 9, 3, 3.0, 9.0, NOW());    -- Enroladinho de Salsicha
-
+    (2, 1, 1, 18.0, 18.0, NOW(), 1),  -- Bolo de Cenoura com Chocolate
+    (2, 2, 2, 0.8, 1.6, NOW(), 1),    -- Pao Frances
+    (2, 5, 2, 3.5, 7.0, NOW(), 1),    -- Pao Doce com Creme
+    (2, 4, 1, 7.5, 7.5, NOW(), 1),    -- Biscoito Amanteigado
+    (1, 2, 1, 0.8, 0.8, NOW(), 1),    -- Pao Frances
+    (1, 1, 2, 18.0, 36.0, NOW(), 1),  -- Bolo de Cenoura com Chocolate
+    (1, 3, 3, 5.5, 16.5, NOW(), 1),   -- Pastel de Frango com Catupiry
+    (1, 4, 1, 7.5, 7.5, NOW(), 1),    -- Biscoito Amanteigado
+    (1, 5, 2, 3.5, 7.0, NOW(), 1),    -- Pao Doce com Creme
+    (1, 6, 4, 6.0, 24.0, NOW(), 1),   -- Croissant
+    (1, 9, 3, 3.0, 9.0, NOW(), 1);    -- Enroladinho de Salsicha
 
 -- Inserindo dados na tabela tb_orders
 INSERT INTO tb_orders (order_date, order_status, delivery_date, delivery_type, total_value, user_id, restaurant_id, address_id, review_id, transaction_id)

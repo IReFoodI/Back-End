@@ -15,4 +15,6 @@ public record CartItemDTO(
 
     @NotNull(message = "O ID do pedido não pode ser nulo.") Long cartId,
 
-    @NotNull(message = "O ID do produto não pode ser nulo.") Long productId) {}
+    @NotNull(message = "O ID do produto não pode ser nulo.") Long productId,
+    
+    Long restaurantId) {}

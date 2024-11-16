@@ -50,9 +50,21 @@ public class CartItem {
   @JoinColumn(name = "product_id", referencedColumnName = "product_id", nullable = false)
   private Product product;
 
+  @ManyToOne
+  @JoinColumn(name = "restaurant_id", nullable = true)
+  private Restaurant restaurant;
+
   @Column(name = "addedAt", nullable = false)
   private LocalDateTime addedAt = LocalDateTime.now();
 
+  public CartItem() {
+  }
 
+  public CartItem(Cart cart, Product product, int quantity, Restaurant restaurant) {
+    this.cart = cart;
+    this.product = product;
+    this.quantity = quantity;
+    this.restaurant = restaurant;
+  }
 
 }

@@ -49,6 +49,4 @@ public class Product {
   @ManyToOne
   @JoinColumn(name = "restaurant_id", nullable = false)
   private Restaurant restaurant;
-
-
 }

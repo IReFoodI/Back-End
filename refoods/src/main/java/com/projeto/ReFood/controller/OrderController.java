@@ -2,6 +2,8 @@ package com.projeto.ReFood.controller;
 
 import com.projeto.ReFood.service.OrderService;
 
+import com.projeto.ReFood.model.EnumOrderStatus;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -92,5 +94,18 @@ public class OrderController {
       @Parameter(description = "Status do pedido") @PathVariable String orderStatus) {
     return orderService.getOrdersByRestaurantIdAndStatus(restaurantId, orderStatus);
   }
-
+  
+  @Operation(summary = "Atualiza o status de um pedido", description = "Atualiza o status do pedido com base no ID.")
+  @ApiResponses(value = {
+          @ApiResponse(responseCode = "200", description = "Status do pedido atualizado com sucesso"),
+          @ApiResponse(responseCode = "404", description = "Pedido não encontrado")
+  })
+  @PatchMapping("/{orderId}/status")
+  public ResponseEntity<OrderResponseDTO> updateOrderStatus(
+          @PathVariable Long orderId,
+          @RequestParam EnumOrderStatus newStatus) {
+    
+    OrderResponseDTO updatedOrder = orderService.updateOrderStatus(orderId, newStatus);
+    return ResponseEntity.ok(updatedOrder);
+  }
 }

@@ -8,6 +8,7 @@ import com.projeto.ReFood.model.Cart;
 import com.projeto.ReFood.model.CartItem;
 import com.projeto.ReFood.model.CartItemPK;
 import com.projeto.ReFood.model.Product;
+import com.projeto.ReFood.model.Restaurant;
 import com.projeto.ReFood.model.User;
 import com.projeto.ReFood.repository.CartItemRepository;
 import com.projeto.ReFood.repository.CartRepository;
@@ -73,6 +74,21 @@ public class CartService {
     // Busca ou cria o carrinho do usuário
     Cart cart = findOrCreateCart(user);
 
+    // Obtém o restaurante do produto
+    Restaurant productRestaurant = product.getRestaurant();
+
+    // Verifica se o carrinho já possui itens
+    if (!cart.getCartItems().isEmpty()) {
+      // Obtém o restaurante associado aos itens do carrinho
+      Restaurant existingRestaurant = cart.getCartItems().iterator().next().getProduct().getRestaurant();
+
+      // Valida se o restaurante do produto é o mesmo do carrinho
+      if (!existingRestaurant.getRestaurantId().equals(productRestaurant.getRestaurantId())) {
+        System.out.println("O carrinho só pode conter produtos de um único restaurante.");
+        throw new IllegalArgumentException("O carrinho só pode conter produtos de um único restaurante.");
+      }
+    }
+
     // Verifica se o produto já existe no carrinho e calcula a quantidade total
     CartItem existingCartItem = cart.getCartItems().stream()
         .filter(item -> item.getProduct().getProductId().equals(productId))
@@ -83,7 +99,7 @@ public class CartService {
     int totalQuantityRequested = totalQuantityInCart + quantity;
 
     // Valida a quantidade total (já no carrinho + nova quantidade)
-    if (product.getQuantity() < totalQuantityRequested) {
+    if (product.getQuantity() < totalQuantityRequested) {      
       throw new IllegalArgumentException("Quantidade solicitada maior que a quantidade disponível.");
     }
 
@@ -159,7 +175,8 @@ public class CartService {
         cartItem.getUnitValue(),
         cartItem.getSubtotal(),
         cartItem.getCartItemId().getCartId(),
-        cartItem.getCartItemId().getProductId());
+        cartItem.getCartItemId().getProductId(),
+        cartItem.getRestaurant() != null ? cartItem.getRestaurant().getRestaurantId() : null);
   }
 
   @Transactional
@@ -193,13 +210,12 @@ public class CartService {
   public void removeAllQuantityFromCartItem(Long cartId, Long productId) {
     CartItemPK cartItemPK = new CartItemPK(cartId, productId);
     CartItem cartItem = cartItemRepository.findById(cartItemPK)
-        .orElseThrow(() -> new NotFoundException());
+            .orElseThrow(() -> new NotFoundException());
 
     Cart cart = cartItem.getCart();
 
-    // busca o valor do item para subtrair do total do carrinho antes do delete, pq
-    // se fizer depois da bug
-    float newTotalValue = cart.getTotalValue() - cartItem.getSubtotal();
+    // Subtrair o subtotal do item, garantindo que o total seja no mínimo zero
+    float newTotalValue = Math.max(cart.getTotalValue() - cartItem.getSubtotal(), 0);
     cart.setTotalValue(newTotalValue);
     cartRepository.save(cart);
 
