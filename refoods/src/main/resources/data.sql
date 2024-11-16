@@ -206,19 +206,7 @@ VALUES
     (1, 6, 4, 6.0, 24.0, NOW(), 1),   -- Croissant
     (1, 9, 3, 3.0, 9.0, NOW(), 1);    -- Enroladinho de Salsicha
 
--- Inserindo dados na tabela tb_orders
-INSERT INTO tb_orders (order_date, order_status, delivery_date, delivery_type, total_value, user_id, restaurant_id, address_id, review_id, transaction_id)
-VALUES
-    (NOW(), 'CONCLUIDO', NULL, 'RETIRADA', 200.00, 1, 1, 1, NULL, NULL);
 
--- Inserindo dados na tabela tb_order_items
-INSERT INTO tb_order_items (quantity, unit_value, subtotal, product_id, order_id)
-VALUES
-    (3, 50.00, 150.00, 2, 1),  
-    (2, 25.00, 50.00, 5, 1),
-    (1, 40.00, 40.00, 1, 1),
-    (2, 30.00, 60.00, 3, 1),
-    (3, 25.00, 75.00, 4, 1);
 
 -- -- Seeds para a tabela tb_orders
 -- INSERT INTO tb_orders (order_date, order_status, delivery_date, delivery_type, total_value, user_id, restaurant_id, address_id, review_id, transaction_id)
@@ -273,12 +261,6 @@ VALUES
 --     -- Itens do pedido 9 (CONCLUIDO)
 --     (3, 50.00, 150.00, 2, 9),
 --     (1, 10.00, 10.00, 8, 9);
-
-
--- -- Inserindo dados na tabela tb_reviews
-INSERT INTO tb_reviews (rating_comment, rating_date, rating_note, order_id, restaurant_id, user_id)
-VALUES 
-    ('Ótimo serviço.', NOW(), 4, 1, 1, 1);
 
 -- -- -- Inserindo dados na tabela tb_favorites
 -- INSERT INTO tb_favorites (restaurant_id, user_id)
