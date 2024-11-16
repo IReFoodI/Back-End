@@ -41,6 +41,7 @@ public class CartService {
   private final UserRepository userRepository;
 
   private static final int EXPIRATION_TIME_IN_SECONDS = 600; // tempo de expiração em segundos
+
   @Scheduled(fixedRate = 60_000) // Executa a cada ??_000 segundos
   public void checkCartExpirations() {
     LocalDateTime expirationThreshold = LocalDateTime.now().minusSeconds(EXPIRATION_TIME_IN_SECONDS);
@@ -99,7 +100,7 @@ public class CartService {
     int totalQuantityRequested = totalQuantityInCart + quantity;
 
     // Valida a quantidade total (já no carrinho + nova quantidade)
-    if (product.getQuantity() < totalQuantityRequested) {      
+    if (product.getQuantity() < totalQuantityRequested) {
       throw new IllegalArgumentException("Quantidade solicitada maior que a quantidade disponível.");
     }
 
@@ -185,6 +186,8 @@ public class CartService {
     CartItem cartItem = cartItemRepository.findById(cartItemPK)
         .orElseThrow(() -> new NotFoundException());
 
+    Product product = cartItem.getProduct();
+
     Cart cart = cartItem.getCart();
 
     if (cartItem.getQuantity() > 1) {
@@ -197,11 +200,20 @@ public class CartService {
           .sum();
       cart.setTotalValue(newTotalValue);
       cartRepository.save(cart);
+
+      // att estoque
+      product.setQuantity(product.getQuantity() + 1);
+      productRepository.save(product);
     } else {
       // busca o valor do item para subtrair do total do carrinho antes do delete
       float newTotalValue = cart.getTotalValue() - cartItem.getSubtotal();
       cart.setTotalValue(newTotalValue);
       cartRepository.save(cart);
+
+      // att estoque
+      product.setQuantity(product.getQuantity() + cartItem.getQuantity());
+      productRepository.save(product);
+
       cartItemRepository.deleteById(cartItemPK);
     }
   }
@@ -210,7 +222,9 @@ public class CartService {
   public void removeAllQuantityFromCartItem(Long cartId, Long productId) {
     CartItemPK cartItemPK = new CartItemPK(cartId, productId);
     CartItem cartItem = cartItemRepository.findById(cartItemPK)
-            .orElseThrow(() -> new NotFoundException());
+        .orElseThrow(() -> new NotFoundException());
+
+    Product product = cartItem.getProduct();
 
     Cart cart = cartItem.getCart();
 
@@ -219,7 +233,33 @@ public class CartService {
     cart.setTotalValue(newTotalValue);
     cartRepository.save(cart);
 
+    // att o estoque
+    product.setQuantity(product.getQuantity() + cartItem.getQuantity());
+    productRepository.save(product);
+
     cartItemRepository.deleteById(cartItemPK);
+  }
+
+  @Transactional
+  public void clearCart(Long cartId) {
+    Cart cart = cartRepository.findById(cartId)
+        .orElseThrow(() -> new NotFoundException());
+
+    // att estoque
+    for (CartItem cartItem : cart.getCartItems()) {
+      Product product = cartItem.getProduct();
+      product.setQuantity(product.getQuantity() + cartItem.getQuantity());
+      productRepository.save(product);
+    }
+
+    // continua a limpeza
+    cartItemRepository.deleteByCart_CartId(cartId);
+
+    cart.getCartItems().clear();
+
+    cart.setTotalValue(0);
+
+    cartRepository.save(cart);
   }
 
   @Transactional(readOnly = true)
@@ -243,20 +283,6 @@ public class CartService {
         .collect(Collectors.toList());
 
     return cartItems;
-  }
-
-  @Transactional
-  public void clearCart(Long cartId) {
-    Cart cart = cartRepository.findById(cartId)
-        .orElseThrow(() -> new NotFoundException());
-
-    cartItemRepository.deleteByCart_CartId(cartId);
-
-    cart.getCartItems().clear();
-
-    cart.setTotalValue(0);
-
-    cartRepository.save(cart);
   }
 
   @Transactional(readOnly = true)
