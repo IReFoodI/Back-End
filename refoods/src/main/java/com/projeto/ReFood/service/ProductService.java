@@ -267,19 +267,19 @@ public class ProductService {
   private Sort getSortByOption(String sort) {
     switch (sort.toLowerCase()) {
       case "name_asc":
-        return Sort.by(Sort.Direction.ASC, "nameProduct");
+        return Sort.by(Sort.Order.asc("nameProduct"), Sort.Order.asc("id"));
       case "name_desc":
-        return Sort.by(Sort.Direction.DESC, "nameProduct");
+        return Sort.by(Sort.Order.desc("nameProduct"), Sort.Order.asc("id"));
       case "price_asc":
-        return Sort.by(Sort.Direction.ASC, "sellPrice");
+        return Sort.by(Sort.Order.asc("sellPrice"), Sort.Order.asc("id"));
       case "price_desc":
-        return Sort.by(Sort.Direction.DESC, "sellPrice");
+        return Sort.by(Sort.Order.desc("sellPrice"), Sort.Order.asc("id"));
       case "expiry_asc":
-        return Sort.by(Sort.Direction.ASC, "expirationDate");
+        return Sort.by(Sort.Order.asc("expirationDate"), Sort.Order.asc("id"));
       case "expiry_desc":
-        return Sort.by(Sort.Direction.DESC, "expirationDate");
+        return Sort.by(Sort.Order.desc("expirationDate"), Sort.Order.asc("id"));
       default:
-        return Sort.unsorted();
+        return Sort.by(Sort.Order.asc("id"));
     }
   }
 
