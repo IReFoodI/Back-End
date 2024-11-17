@@ -30,11 +30,11 @@ INSERT INTO tb_restaurants (
 -- -- Inserindo dados na tabela tb_addresses
 INSERT INTO tb_addresses (address_type, cep, complement, district, is_standard, number, state, street, city, type, restaurant_id, user_id)
 VALUES
+    ('RESTAURANT', '11060470', 'Rua Gastronômica', 'Gonzaga', TRUE, '55', 'SP', 'Rua Tolentino Filgueiras', 'Santos', 'Filial Santos', 1, NULL),
     ('USER', '11045123', 'Apto 101', 'Jardins', TRUE, '12', 'SP', 'Rua Dom', 'Santos', 'Casa', NULL, 1 ),
     ('USER', '11045321', 'Apto 202', 'Centro', FALSE, '45', 'SP', 'Av Pedro Pessoa', 'Santos', 'Trabalho', NULL, 1),
     ('USER', '11045456', 'Apto 103', 'Jardins', TRUE, '56', 'SP', 'Rua Pinheiros', 'Sao Vicente', 'Casa', NULL, 2),
-    ('USER', '11045654', 'Apto 203', 'Jardins', FALSE, '03', 'SP', 'Rua Boeto', 'Sao Vicente', 'Casa da Mamae', NULL, 2),
-    ('RESTAURANT', '11060470', 'Rua Gastronômica', 'Gonzaga', TRUE, '55', 'SP', 'Rua Tolentino Filgueiras', 'Santos', 'Filial Santos', 1, NULL);
+    ('USER', '11045654', 'Apto 203', 'Jardins', FALSE, '03', 'SP', 'Rua Boeto', 'Sao Vicente', 'Casa da Mamae', NULL, 2);
 
 -- -- Inserindo dados na tabela tb_cards
 INSERT INTO tb_cards (cpf, cvv, number, validity, holder_name, user_id) VALUES 
