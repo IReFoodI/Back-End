@@ -15,14 +15,6 @@ INSERT INTO tb_restaurants (
      NOW(), '$2y$10$p1IXPiQ29t1mUit/msZV3OY7Dpz2voS6pK4TBQzPEcVC6QbG6cWhe', 18, 85, '91993559449', 'teste aqui e 1',
      'banner5.jpg', 'logo5.jpg'),
 
-    (4.7, 'PADARIA', '15975328000111', NOW(), 'farmacia1@example.com', 'Padaria Vida',
-     NOW(), '$2y$10$p1IXPiQ29t1mUit/msZV3OY7Dpz2voS6pK4TBQzPEcVC6QbG6cWhe', 12, 60, '91993559449', 'teste aqui e 1',
-     'banner6.jpg', 'logo6.jpg'),
-
-    (4.2, 'PADARIA', '74196385000177', NOW(), 'sorveteria1@example.com', 'Sorveteria Tropical',
-     NOW(), '$2y$10$p1IXPiQ29t1mUit/msZV3OY7Dpz2voS6pK4TBQzPEcVC6QbG6cWhe', 8, 45, '91993559449', 'teste aqui e 1',
-     'banner7.jpg', 'logo7.jpg'),
-
      (4.8, 'RESTAURANTE', '12312312000100', NOW(), 'restaurante2@example.com', 'Sabor do Brasil', NOW(), '$2y$10$QWErtyUI1234567890/asdfg', 5, 30, '91993556677', 'Comida caseira e aconchegante', 'banner13.jpg', 'logo13.jpg'),
 
      (4.9, 'PADARIA', '45645678000111', NOW(), 'padaria25@example.com', 'Pao Quente', NOW(), '$2y$10$QWErtyUI1234567890/qwerty', 1, 10, '91993557788', 'Paes e bolos fresquinhos todos os dias', 'banner14.jpg', 'logo14.jpg'),
@@ -75,52 +67,7 @@ INSERT INTO tb_restaurants (
 
 (4.33, 'LANCHONETE', '88888888000177', NOW(), 'lanchonete3@example.com', 'Lanches Rapidos', NOW(), '$2y$10$abcdefgh1234567890/zxcvbn', 6, 25, '91993581122', 'Lanches prontos para viagem', 'banner38.jpg', 'logo38.jpg'),
 
-(4.34, 'ACOUGUE', '99999999000188', NOW(), 'acougue2@example.com', 'Acougue do Bairro', NOW(), '$2y$10$abcdefgh1234567890/qwerty', 9, 40, '91993582233', 'Carnes selecionadas e frescas', 'banner39.jpg', 'logo39.jpg'),
-
-(4.35, 'EMPORIO', '10101010100199', NOW(), 'emporio2@example.com', 'Emporio da Familia', NOW(), '$2y$10$abcdefgh1234567890/ytrewq', 10, 45, '91993583344', 'Produtos de qualidade para sua casa', 'banner40.jpg', 'logo40.jpg'),
-
-(4.36, 'PEIXARIA', '20202020200110', NOW(), 'peixaria2@example.com', 'Peixaria do Porto', NOW(), '$2y$10$abcdefgh1234567890/edcvfr', 8, 50, '91993584455', 'Peixes e mariscos frescos', 'banner41.jpg', 'logo41.jpg'),
-
-(4.37, 'CHURRASCARIA', '30303030300121', NOW(), 'churrascaria2@example.com', 'Churrascaria do Sul', NOW(), '$2y$10$abcdefgh1234567890/nhyujm', 7, 60, '91993585566', 'Churrasco com cortes nobres', 'banner42.jpg', 'logo42.jpg'),
-
-(4.38, 'CONFEITARIA', '40404040400132', NOW(), 'confeitaria2@example.com', 'Confeitaria da Lu', NOW(), '$2y$10$abcdefgh1234567890/123456', 6, 30, '91993586677', 'Doces e bolos para todas as ocasioes', 'banner43.jpg', 'logo43.jpg'),
-
-     (4.39, 'HORTIFRUTI', '50505050500143', NOW(), 'hortifruti2@example.com', 'Hortifruti da Terra', NOW(), '$2y$10$abcdefgh1234567890/qwerty', 5, 20, '91993587788', 'Frutas e verduras frescas do campo', 'banner44.jpg', 'logo44.jpg'),
-
-(4.40, 'OUTROS', '60606060600154', NOW(), 'outros2@example.com', 'Bistro Gourmet', NOW(), '$2y$10$abcdefgh1234567890/asdfgh', 4, 35, '91993588899', 'Experiencias gastronomicas unicas', 'banner45.jpg', 'logo45.jpg'),
-
-(4.41, 'RESTAURANTE', '70707070700165', NOW(), 'restaurante5@example.com', 'Restaurante Fusion', NOW(), '$2y$10$abcdefgh1234567890/qweqwe', 5, 30, '91993589900', 'Mistura de sabores de diferentes culturas', 'banner46.jpg', 'logo46.jpg'),
-
-(4.42, 'FAST_FOOD', '80808080800176', NOW(), 'fastfood4@example.com', 'Sanduiches Express', NOW(), '$2y$10$abcdefgh1234567890/rtyrty', 2, 10, '91993590011', 'Sanduiches feitos na hora', 'banner47.jpg', 'logo47.jpg'),
-
-(4.43, 'PADARIA', '90909090900187', NOW(), 'padaria4@example.com', 'Padaria do Dia', NOW(), '$2y$10$abcdefgh1234567890/nhyujm', 1, 12, '91993591122', 'Paes frescos e crocantes', 'banner48.jpg', 'logo48.jpg'),
-
-(4.44, 'SUPERMERCADO', '01010101000198', NOW(), 'supermercado3@example.com', 'Hipermercado Familia', NOW(), '$2y$10$abcdefgh1234567890/123456', 3, 20, '91993592233', 'Tudo para o seu dia a dia', 'banner49.jpg', 'logo49.jpg'),
-
-(4.45, 'CAFETERIA', '12121212100109', NOW(), 'cafeteria4@example.com', 'Cafe da Manha', NOW(), '$2y$10$abcdefgh1234567890/qwerty', 7, 15, '91993593344', 'Cafes e quitutes matinais', 'banner50.jpg', 'logo50.jpg'),
-
-(4.46, 'PASTELARIA', '23232323200110', NOW(), 'pastelaria3@example.com', 'Pasteis do Bairro', NOW(), '$2y$10$abcdefgh1234567890/asdfgh', 2, 25, '91993594455', 'Deliciosos pasteis de diversos sabores', 'banner51.jpg', 'logo51.jpg'),
-
-(4.47, 'SUSHI_BAR', '34343434300121', NOW(), 'sushi3@example.com', 'Sushi e Ceviche', NOW(), '$2y$10$abcdefgh1234567890/qwerty', 8, 30, '91993595566', 'Sushi e ceviche frescos', 'banner52.jpg', 'logo52.jpg'),
-
-(4.48, 'FAST_FOOD', '45454545400132', NOW(), 'fastfood5@example.com', 'Pizzaria do Rodizio', NOW(), '$2y$10$abcdefgh1234567890/zxcvbn', 4, 12, '91993596677', 'Rodizio de pizzas e lanches', 'banner53.jpg', 'logo53.jpg'),
-
-(4.49, 'LANCHONETE', '56565656500143', NOW(), 'lanchonete4@example.com', 'Lanchonete do Joao', NOW(), '$2y$10$abcdefgh1234567890/qazws', 6, 20, '91993597788', 'Lanches rapidos e saborosos', 'banner54.jpg', 'logo54.jpg'),
-
-(4.50, 'ACOUGUE', '67676767600154', NOW(), 'acougue3@example.com', 'Acougue do Chefe', NOW(), '$2y$10$abcdefgh1234567890/edcvfr', 9, 40, '91993598899', 'Carnes de alta qualidade', 'banner55.jpg', 'logo55.jpg'),
-
-(4.51, 'EMPORIO', '78787878700165', NOW(), 'emporio3@example.com', 'Emporio Natural', NOW(), '$2y$10$abcdefgh1234567890/qwerty', 10, 35, '91993599900', 'Produtos organicos e naturais', 'banner56.jpg', 'logo56.jpg'),
-
-(4.52, 'PEIXARIA', '89898989800176', NOW(), 'peixaria3@example.com', 'Peixes e Frutos do Mar', NOW(), '$2y$10$abcdefgh1234567890/tyuio', 8, 50, '91993600011', 'Frutos do mar frescos', 'banner57.jpg', 'logo57.jpg'),
-
-(4.53, 'CHURRASCARIA', '90909090900182', NOW(), 'churrascaria3@example.com', 'Churrasco do Pampa', NOW(), '$2y$10$abcdefgh1234567890/ujmnhy', 7, 60, '91993601122', 'Churrasco com cortes especiais', 'banner58.jpg', 'logo58.jpg'),
-
-(4.54, 'CONFEITARIA', '01010101000192', NOW(), 'confeitaria3@example.com', 'Confeitaria da Rainha', NOW(), '$2y$10$abcdefgh1234567890/rtyrty', 6, 30, '91993602233', 'Bolos e doces para festas', 'banner59.jpg', 'logo59.jpg'),
-
-(4.55, 'HORTIFRUTI', '12121212100102', NOW(), 'hortifruti3@example.com', 'Hortifruti Organico', NOW(), '$2y$10$abcdefgh1234567890/qwerty', 5, 20, '91993603344', 'Frutas e verduras frescas', 'banner60.jpg', 'logo60.jpg'),
-
-(4.56, 'OUTROS', '23232323200112', NOW(), 'outros3@example.com', 'Cozinha Internacional', NOW(), '$2y$10$abcdefgh1234567890/qazwsx', 4, 35, '91993604455', 'Pratos de diferentes paises', 'banner61.jpg', 'logo61.jpg');
-
+(4.34, 'ACOUGUE', '99999999000188', NOW(), 'acougue2@example.com', 'Acougue do Bairro', NOW(), '$2y$10$abcdefgh1234567890/qwerty', 9, 40, '91993582233', 'Carnes selecionadas e frescas', 'banner39.jpg', 'logo39.jpg');
 
 
 INSERT INTO tb_restaurant_hours (day_of_week, opening_time, closing_time, restaurant_id)
@@ -176,26 +123,7 @@ VALUES
 ('MONDAY', '08:00', '14:00', 24),
 ('MONDAY', '08:00', '14:00', 25),
 ('MONDAY', '08:00', '14:00', 26),
-('MONDAY', '08:00', '14:00', 27),
-('MONDAY', '08:00', '14:00', 28),
-('MONDAY', '08:00', '14:00', 29),
-('MONDAY', '08:00', '14:00', 31),
-('MONDAY', '08:00', '14:00', 32),
-('MONDAY', '08:00', '14:00', 33),
-('MONDAY', '08:00', '14:00', 34),
-('MONDAY', '08:00', '14:00', 35),
-('MONDAY', '08:00', '14:00', 36),
-('MONDAY', '08:00', '14:00', 37),
-('MONDAY', '08:00', '14:00', 38),
-('MONDAY', '08:00', '14:00', 39),
-('MONDAY', '08:00', '14:00', 40),
-('MONDAY', '08:00', '14:00', 41),
-('MONDAY', '08:00', '14:00', 42),
-('MONDAY', '08:00', '14:00', 43),
-('MONDAY', '08:00', '14:00', 44),
-('MONDAY', '08:00', '14:00', 45),
-('MONDAY', '08:00', '14:00', 46),
-('MONDAY', '08:00', '14:00', 47),
+
 ('TUESDAY', '08:00', '14:00', 4),
 ('TUESDAY', '08:00', '14:00', 5),
 ('TUESDAY', '08:00', '14:00', 6),
@@ -218,6 +146,7 @@ VALUES
 ('TUESDAY', '08:00', '14:00', 23),
 ('TUESDAY', '08:00', '14:00', 24),
 ('TUESDAY', '08:00', '14:00', 25),
+
 ('WEDNESDAY', '08:00', '14:00', 4),
 ('WEDNESDAY', '08:00', '14:00', 5),
 ('WEDNESDAY', '08:00', '14:00', 6),
@@ -240,6 +169,7 @@ VALUES
 ('WEDNESDAY', '08:00', '14:00', 23),
 ('WEDNESDAY', '08:00', '14:00', 24),
 ('WEDNESDAY', '08:00', '14:00', 25),
+
 ('THURSDAY', '08:00', '14:00', 4),
 ('THURSDAY', '08:00', '14:00', 5),
 ('THURSDAY', '08:00', '14:00', 6),
@@ -262,6 +192,7 @@ VALUES
 ('THURSDAY', '08:00', '14:00', 23),
 ('THURSDAY', '08:00', '14:00', 24),
 ('THURSDAY', '08:00', '14:00', 25),
+
 ('FRIDAY', '08:00', '14:00', 4),
 ('FRIDAY', '08:00', '14:00', 5),
 ('FRIDAY', '08:00', '14:00', 6),
@@ -284,6 +215,7 @@ VALUES
 ('FRIDAY', '08:00', '14:00', 23),
 ('FRIDAY', '08:00', '14:00', 24),
 ('FRIDAY', '08:00', '14:00', 25),
+
 ('SATURDAY', '08:00', '14:00', 4),
 ('SATURDAY', '08:00', '14:00', 5),
 ('SATURDAY', '08:00', '14:00', 6),
@@ -306,6 +238,7 @@ VALUES
 ('SATURDAY', '08:00', '14:00', 23),
 ('SATURDAY', '08:00', '14:00', 24),
 ('SATURDAY', '08:00', '14:00', 25),
+
 ('SUNDAY', '08:00', '14:00', 4),
 ('SUNDAY', '08:00', '14:00', 5),
 ('SUNDAY', '08:00', '14:00', 6),

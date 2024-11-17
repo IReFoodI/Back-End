@@ -4,7 +4,8 @@
 INSERT INTO tb_users (date_creation, email, last_login, name, password, phone)
 VALUES -- -- as senhas são 123456Bb*
     (NOW(), 'hortencia@email.com', NOW(), 'Hortencia Flores', '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', '1399998888' ),
-    (NOW(), 'isaaclovehortencia@email.com', NOW(), 'Isaac Bezerra', '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', '1399997777' );
+    (NOW(), 'isaaclovehortencia@email.com', NOW(), 'Isaac Bezerra', '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', '1399997777' ),
+    (NOW(), 'user1@example.com', NOW(), 'User One', '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', '91912345678' );
 
 -- Inserindo dados na tabela tb_restaurants
 INSERT INTO tb_restaurants (
@@ -39,13 +40,17 @@ VALUES
 INSERT INTO tb_cards (cpf, cvv, number, validity, holder_name, user_id) VALUES 
 ('42302050000', '123', '3333111122223333', '12/25', 'Hortencia Flores', 1), 
 ('42302050000', '244', '3000111122223000', '10/26', 'Hortencia Flores', 1), 
-('42402050110', '456', '5173000033335173', '01/26', 'Isaac Bezerra', 2);
+('42402050110', '456', '5173000033335173', '01/26', 'Isaac Bezerra', 2),
+('40002050000', '123', '4111111111111111', '12/25', 'hortencia', 1), 
+('11102050110', '456', '5500000000000004', '01/24', 'Isaac', 2);;
 
 -- -- Inserindo dados na tabela tb_contacts
 INSERT INTO tb_contacts (description, phone, restaurant_id)
 VALUES 
     ('Contato Principal', '1308006633', 1),
-    ('Contato Alternativo', '1308006645', 1);
+    ('Contato Alternativo', '1308006645', 1),
+    ('Contato Principal', '1112223333', 3),
+    ('Contato Alternativo', '4445556666', 3);
 
 -- -- Inserindo dados na tabela tb_products
 INSERT INTO tb_products (active, addition_date, description_product, sell_price, name_product, category, url_img_product, original_price, expiration_date, quantity, restaurant_id)
@@ -205,65 +210,3 @@ VALUES
     (1, 5, 2, 3.5, 7.0, NOW(), 1),    -- Pao Doce com Creme
     (1, 6, 4, 6.0, 24.0, NOW(), 1),   -- Croissant
     (1, 9, 3, 3.0, 9.0, NOW(), 1);    -- Enroladinho de Salsicha
-
-
-
--- -- Seeds para a tabela tb_orders
--- INSERT INTO tb_orders (order_date, order_status, delivery_date, delivery_type, total_value, user_id, restaurant_id, address_id, review_id, transaction_id)
--- VALUES
---     (NOW(), 'PENDENTE', NULL, 'RETIRADA', 250.50, 1, 1, 1, NULL, NULL), 
---     (NOW(), 'PREPARANDO', NULL, 'RETIRADA', 120.00, 1, 2, 1, NULL, NULL),
---     (NOW(), 'AGUARDANDO_RETIRADA', NULL, 'RETIRADA', 75.00, 1, 3, 1, NULL, NULL),
---     (NOW(), 'CONCLUIDO', NULL, 'RETIRADA', 200.00, 1, 1, 1, NULL, NULL),
---     (NOW(), 'CANCELADO', NULL, 'RETIRADA', 50.00, 1, 2, 1, NULL, NULL),
---     (NOW(), 'CONCLUIDO', NULL, 'RETIRADA', 180.00, 1, 1, 1, NULL, NULL),
---     (NOW(), 'CONCLUIDO', NULL, 'RETIRADA', 120.00, 1, 1, 2, NULL, NULL),
---     (NOW(), 'CONCLUIDO', NULL, 'RETIRADA', 200.00, 1, 2, 3, NULL, NULL),
---     (NOW(), 'CONCLUIDO', NULL, 'RETIRADA', 160.00, 1, 3, 4, NULL, NULL);
-
--- -- Seeds para a tabela tb_order_items para os pedidos criados
--- INSERT INTO tb_order_items (quantity, unit_value, subtotal, product_id, order_id)
--- VALUES
---     -- Itens do pedido 1 (PENDENTE) 
---     (2, 50.00, 100.00, 2, 1),
---     (1, 50.50, 50.50, 9, 1),
---     (3, 25.00, 75.00, 3, 1),
---     (1, 25.00, 25.00, 5, 1), 
---     (2, 30.00, 60.00, 6, 1), 
---     (1, 40.00, 40.00, 7, 1), 
-
---     -- Itens do pedido 2 (PREPARANDO)
---     (1, 40.00, 40.00, 3, 2),
---     (2, 40.00, 80.00, 6, 2),
-
---     -- Itens do pedido 3 (PENDENTE)
---     (1, 75.00, 75.00, 8, 3),
-
---     -- Itens do pedido 4 (CONCLUIDO)
---     (3, 50.00, 150.00, 5, 4),
---     (1, 50.00, 50.00, 4, 4),
-
---     -- Itens do pedido 5 (CANCELADO)
---     (1, 50.00, 50.00, 7, 5),
-
---     -- Itens do pedido 6 (CONCLUIDO)
---     (2, 60.00, 120.00, 3, 6),
---     (1, 60.00, 60.00, 5, 6),
-
---     -- Itens do pedido 7 (CONCLUIDO)
---     (1, 40.00, 40.00, 6, 7),
---     (2, 40.00, 80.00, 9, 7),
-
---     -- Itens do pedido 8 (CONCLUIDO)
---     (2, 70.00, 140.00, 4, 8),
---     (1, 60.00, 60.00, 3, 8),
-
---     -- Itens do pedido 9 (CONCLUIDO)
---     (3, 50.00, 150.00, 2, 9),
---     (1, 10.00, 10.00, 8, 9);
-
--- -- -- Inserindo dados na tabela tb_favorites
--- INSERT INTO tb_favorites (restaurant_id, user_id)
--- VALUES 
---     (1, 1),
---     (1, 2);
