@@ -16,6 +16,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.projeto.ReFood.dto.OrderRequestDTO;
 import com.projeto.ReFood.dto.OrderResponseDTO;
+import com.projeto.ReFood.dto.OrderWithAddress;
 
 import java.net.URI;
 import java.util.List;
@@ -72,8 +73,8 @@ public class OrderController {
   @Operation(summary = "Lista pedidos de um usuário", description = "Retorna uma lista de pedidos realizados por um usuário.")
   @ApiResponse(responseCode = "200", description = "Pedidos listados com sucesso")
   @GetMapping("/user/{userId}")
-  public ResponseEntity<List<OrderResponseDTO>> getOrdersByUserId(@PathVariable Long userId) {
-    List<OrderResponseDTO> orders = orderService.getOrdersByUserId(userId);
+  public ResponseEntity<List<OrderWithAddress>> getOrdersByUserId(@PathVariable Long userId) {
+    List<OrderWithAddress> orders = orderService.getOrdersByUserId(userId);
     return ResponseEntity.ok(orders);
   }
 

@@ -1,8 +1,10 @@
 package com.projeto.ReFood.service;
 
+import com.projeto.ReFood.dto.AddressDetailsDTO;
 import com.projeto.ReFood.dto.OrderItemDTO;
 import com.projeto.ReFood.dto.OrderRequestDTO;
 import com.projeto.ReFood.dto.OrderResponseDTO;
+import com.projeto.ReFood.dto.OrderWithAddress;
 import com.projeto.ReFood.exception.BadRequestException;
 import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
 import com.projeto.ReFood.model.*;
@@ -59,16 +61,50 @@ public class OrderService {
     }
     
     @Transactional(readOnly = true)
-    public List<OrderResponseDTO> getOrdersByUserId(Long userId) {
+    public List<OrderWithAddress> getOrdersByUserId(Long userId) {
         List<Order> orders = orderRepository.findByUser_UserId(userId);
         
         if (orders.isEmpty()) {
             throw new NotFoundException();
         }
-        
+
         return orders.stream()
-                .map(this::convertToDTO)
+                .map(this::convertOrderWithAddressToDTO)
                 .collect(Collectors.toList());
+        
+        // return orders.stream()
+        //         .map(this::convertToDTO)
+        //         .collect(Collectors.toList());
+    }
+
+    private OrderWithAddress convertOrderWithAddressToDTO(Order order) {
+        OrderWithAddress orderWithAddress = new OrderWithAddress();
+        orderWithAddress.setOrderId(order.getOrderId());
+        orderWithAddress.setOrderDate(order.getOrderDate());
+        orderWithAddress.setDeliveryDate(order.getDeliveryDate());
+        orderWithAddress.setOrderStatus(order.getOrderStatus());
+        orderWithAddress.setDeliveryType(order.getDeliveryType());
+        orderWithAddress.setTotalValue(order.getTotalValue());
+        orderWithAddress.setUserId(order.getUser().getUserId());
+        orderWithAddress.setRestaurantId(order.getRestaurant().getRestaurantId());
+        orderWithAddress.setReviewId(order.getReview() != null ? order.getReview().getReviewId() : null);
+        orderWithAddress.setTransactionId(order.getTransaction() != null ? order.getTransaction().getTransactionId() : null);
+        orderWithAddress.setAddressDetails(
+                new AddressDetailsDTO(
+                        order.getAssociatedAddress().getAddressId(),
+                        order.getAssociatedAddress().getStreet(),
+                        order.getAssociatedAddress().getNumber(),
+                        order.getAssociatedAddress().getComplement(),
+                        order.getAssociatedAddress().getCity(),
+                        order.getAssociatedAddress().getState(),
+                        order.getAssociatedAddress().getCity(),
+                        order.getAssociatedAddress().getCep(),
+                        order.getAssociatedAddress().getComplement(),
+                        order.getAssociatedAddress().getAddressType(),
+                        order.getAssociatedAddress().isStandard()
+                )
+        );
+        return orderWithAddress;
     }
     
     @Transactional
