@@ -51,4 +51,6 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
       "WHERE u.user_id = :userId AND ci.product_id = :productId", nativeQuery = true)
   boolean existsByUserIdAndProductId(@Param("userId") Long userId, @Param("productId") Long productId);
 
+  Optional<Cart> findByUser_UserId(Long userId);
+
 }

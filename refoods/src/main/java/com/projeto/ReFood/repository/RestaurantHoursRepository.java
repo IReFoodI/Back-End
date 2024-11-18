@@ -10,8 +10,14 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface RestaurantHoursRepository extends JpaRepository<RestaurantHours, Long> {
-    List<RestaurantHours> findByDayOfWeek(EnumDayOfWeek dayOfWeek);
+  List<RestaurantHours> findByDayOfWeek(EnumDayOfWeek dayOfWeek);
 
-    @Query("SELECT rh FROM RestaurantHours rh WHERE rh.restaurant.id = :restaurantId")
-    List<RestaurantHours> findByRestaurantId(@Param("restaurantId") Long restaurantId);
+  @Query("SELECT rh FROM RestaurantHours rh WHERE rh.restaurant.id = :restaurantId")
+  List<RestaurantHours> findByRestaurantId(@Param("restaurantId") Long restaurantId);
+
+  @Query("SELECT rh FROM RestaurantHours rh " +
+      "WHERE rh.restaurant.id = :restaurantId AND rh.dayOfWeek = :dayOfWeek")
+  RestaurantHours findTodayHoursByRestaurantId(
+      @Param("restaurantId") Long restaurantId,
+      @Param("dayOfWeek") EnumDayOfWeek dayOfWeek);
 }

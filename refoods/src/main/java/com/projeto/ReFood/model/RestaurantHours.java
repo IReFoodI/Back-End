@@ -40,4 +40,6 @@ public class RestaurantHours {
     @ManyToOne
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
+
+
 }

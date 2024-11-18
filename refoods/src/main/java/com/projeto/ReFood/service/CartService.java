@@ -1,18 +1,28 @@
 package com.projeto.ReFood.service;
 
+import com.projeto.ReFood.dto.AddressDetailsDTO;
 import com.projeto.ReFood.dto.CartDTO;
+import com.projeto.ReFood.dto.CartDetails;
+import com.projeto.ReFood.dto.CartDetails.CartDetailsDTO;
 import com.projeto.ReFood.dto.CartItemDTO;
 import com.projeto.ReFood.dto.CartItemsDto;
+import com.projeto.ReFood.dto.HourDTO;
+import com.projeto.ReFood.dto.RestaurantDetailsDTO;
+import com.projeto.ReFood.dto.RestaurantNameIdDTO;
 import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
 import com.projeto.ReFood.model.Cart;
 import com.projeto.ReFood.model.CartItem;
 import com.projeto.ReFood.model.CartItemPK;
+import com.projeto.ReFood.model.EnumDayOfWeek;
 import com.projeto.ReFood.model.Product;
 import com.projeto.ReFood.model.Restaurant;
+import com.projeto.ReFood.model.RestaurantHours;
 import com.projeto.ReFood.model.User;
 import com.projeto.ReFood.repository.CartItemRepository;
 import com.projeto.ReFood.repository.CartRepository;
 import com.projeto.ReFood.repository.ProductRepository;
+import com.projeto.ReFood.repository.RestaurantHoursRepository;
+import com.projeto.ReFood.repository.RestaurantRepository;
 import com.projeto.ReFood.repository.UserRepository;
 
 import jakarta.persistence.Tuple;
@@ -24,9 +34,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,13 +52,14 @@ public class CartService {
   private final CartItemRepository cartItemRepository;
   private final ProductRepository productRepository;
   private final UserRepository userRepository;
+  private final RestaurantRepository restaurantRepository;
+  private final RestaurantHoursRepository restaurantHoursRepository;
 
   private static final int EXPIRATION_TIME_IN_SECONDS = 600; // tempo de expiração em segundos
 
   @Scheduled(fixedRate = 60_000) // Executa a cada ??_000 segundos
   public void checkCartExpirations() {
     LocalDateTime expirationThreshold = LocalDateTime.now().minusSeconds(EXPIRATION_TIME_IN_SECONDS);
-
     // Busca itens expirados
     List<CartItem> expiredItems = cartItemRepository.findExpiredItems(expirationThreshold);
 
@@ -54,11 +68,97 @@ public class CartService {
       Product product = item.getProduct();
       product.setQuantity(product.getQuantity() + item.getQuantity());
       productRepository.save(product);
-
       // remove o item
       cartItemRepository.delete(item);
     }
     System.out.println("CART ITEMS EXPIRED: " + expiredItems.size());
+  }
+
+  @Transactional
+  public CartDetailsDTO getUserCartDetails(Long userId) {
+    try {
+      // CART ITEMS
+      List<Tuple> cartItemsTuples = cartRepository.getCartItemsByUserId(userId);
+
+      if (cartItemsTuples.isEmpty()) {
+        throw new NotFoundException();
+      }
+
+      List<CartItemsDto> cartItems = cartItemsTuples.stream()
+          .map(tuple -> {
+            try {
+              return new CartItemsDto(
+                  tuple.get(0, Long.class), // cartId
+                  tuple.get(1, Long.class), // productId
+                  tuple.get(2, String.class), // nameProduct
+                  tuple.get(3, String.class), // descriptionProduct
+                  tuple.get(4, Integer.class), // quantity
+                  tuple.get(5, Float.class), // unitValue
+                  tuple.get(6, Float.class) // subtotal
+              );
+            } catch (ClassCastException | NullPointerException e) {
+              throw new IllegalArgumentException("Erro ao processar os itens do carrinho. Verifique os dados.", e);
+            }
+          })
+          .collect(Collectors.toList());
+      // Buscando RESTAURANT INFO
+      Long productId = cartItems.get(0).getProductId();
+      Long restaurantId = Optional.ofNullable(productRepository.findRestaurantIdAndNameByProductId(productId))
+          .map(RestaurantNameIdDTO::restaurantId)
+          .orElseThrow(() -> new NotFoundException());
+      Restaurant restaurant = restaurantRepository.findById(restaurantId)
+          .orElseThrow(() -> new NotFoundException());
+
+      // Buscando horário do restaurante para o dia de hoje
+      DayOfWeek currentDay = LocalDate.now().getDayOfWeek();
+      EnumDayOfWeek dayEnum = EnumDayOfWeek.valueOf(currentDay.name());
+      RestaurantHours restaurantHour = Optional.ofNullable(
+          restaurantHoursRepository.findTodayHoursByRestaurantId(restaurantId, dayEnum))
+          .orElseThrow(() -> new NotFoundException());
+
+      HourDTO timesOfTheDay = new HourDTO(
+          restaurantHour.getId(),
+          restaurantHour.getDayOfWeek(),
+          restaurantHour.getOpeningTime(),
+          restaurantHour.getClosingTime());
+      // Convertendo Restaurant para RestaurantDetailsDTO
+      RestaurantDetailsDTO restaurantDTO = new RestaurantDetailsDTO(
+          restaurant.getRestaurantId(),
+          restaurant.getFantasy(),
+          restaurant.getCategory(),
+          restaurant.getUrlBanner(),
+          restaurant.getUrlLogo(),
+          restaurant.getQuantityEvaluations(),
+          restaurant.getTotalEvaluations(),
+          restaurant.getPhone(),
+          restaurant.getDescription(),
+          restaurant.getAverageRating(),
+          timesOfTheDay,
+          restaurant.getRestaurantAddresses().stream()
+              .findFirst()
+              .map(address -> new AddressDetailsDTO(
+                  address.getAddressId(),
+                  address.getCep(),
+                  address.getState(),
+                  address.getCity(),
+                  address.getType(),
+                  address.getDistrict(),
+                  address.getStreet(),
+                  address.getNumber(),
+                  address.getComplement(),
+                  address.getAddressType(),
+                  address.isStandard()))
+              .orElseThrow(() -> new NotFoundException()));
+      // Criando CartDetailsDTO
+      CartDetails cartDetails = new CartDetails();
+      return cartDetails.new CartDetailsDTO(restaurantDTO, cartItems);
+    } catch (NotFoundException e) {
+      throw e;
+    } catch (IllegalArgumentException e) {
+      throw e;
+    } catch (Exception e) {
+      throw new RuntimeException("Ocorreu um erro ao processar os detalhes do carrinho do usuário com ID " + userId, e);
+    }
   }
 
   @Transactional
