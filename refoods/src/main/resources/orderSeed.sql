@@ -3,12 +3,12 @@
     -- SEED para tabela tb_orders
 INSERT INTO tb_orders (order_date, delivery_date, order_status, delivery_type, total_value, user_id, restaurant_id, address_id, review_id, transaction_id)
 VALUES 
-('2024-10-31', '2024-11-01', 'CONCLUIDO', 'RETIRADA', 200.00, 1, 1, 5, NULL, NULL),
-('2024-11-01', '2024-11-03', 'PREPARANDO', 'RETIRADA', 0, 1, 1, 5, NULL, NULL),
-('2024-11-02', NULL, 'AGUARDANDO_RETIRADA', 'RETIRADA', 0, 1, 1, 5, NULL, NULL),
-('2024-11-03', '2024-11-04', 'CONCLUIDO', 'RETIRADA', 0, 1, 1, 5, NULL, NULL),
-('2024-11-04', NULL, 'PENDENTE', 'RETIRADA', 0, 2, 2, 5, NULL, NULL),
-('2024-11-05', '2024-11-07', 'CANCELADO', 'RETIRADA', 0, 2, 1, 5, NULL, NULL);
+('2024-10-31', '2024-11-01', 'CONCLUIDO', 'RETIRADA', 200.00, 1, 1, 1, NULL, NULL),
+('2024-11-01', '2024-11-03', 'PREPARANDO', 'RETIRADA', 0, 1, 1, 1, NULL, NULL),
+('2024-11-02', NULL, 'AGUARDANDO_RETIRADA', 'RETIRADA', 0, 1, 1, 1, NULL, NULL),
+('2024-11-03', '2024-11-04', 'CONCLUIDO', 'RETIRADA', 0, 1, 1, 1, NULL, NULL),
+('2024-11-04', NULL, 'PENDENTE', 'RETIRADA', 0, 2, 2, 1, NULL, NULL),
+('2024-11-05', '2024-11-07', 'CANCELADO', 'RETIRADA', 0, 2, 1, 1, NULL, NULL);
 
 
 -- SEED para tabela tb_order_items
