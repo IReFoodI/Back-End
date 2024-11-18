@@ -5,26 +5,181 @@ INSERT INTO tb_users (date_creation, email, last_login, name, password, phone)
 VALUES -- -- as senhas são 123456Bb*
     (NOW(), 'hortencia@email.com', NOW(), 'Hortencia Flores', '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', '1399998888' ),
     (NOW(), 'isaaclovehortencia@email.com', NOW(), 'Isaac Bezerra', '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', '1399997777' ),
-    (NOW(), 'user1@example.com', NOW(), 'User One', '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', '91912345678' );
+    (NOW(), 'user1@example.com', NOW(), 'Samilis Brito', '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', '91912345678' );
+
+
+
+
+-- -- Inserindo dados na tabela tb_cards
+INSERT INTO tb_cards (cpf, cvv, number, validity, holder_name, user_id) VALUES 
+('42302050000', '123', '3333111122223333', '12/25', 'Hortencia Flores', 1), 
+('42302050000', '244', '3000111122223000', '10/26', 'Hortencia Flores', 1), 
+('42402050110', '456', '5173000033335173', '01/26', 'Isaac Bezerra', 2),
+('40002050000', '123', '4111111111111111', '12/25', 'Hortencia F.', 1), 
+('11102050110', '456', '5500000000000004', '01/24', 'Isaac B.', 2);
+
+
+
 
 -- Inserindo dados na tabela tb_restaurants
-INSERT INTO tb_restaurants (
-    average_rating, category, cnpj, date_creation, email, fantasy, last_login,
-    password, quantity_evaluations, total_evaluations, phone,
-    url_banner, url_logo
-)VALUES -- -- as senhas são 123456Bb*
-    (4.5, 'PADARIA', '42342342300195', NOW(), 'bakeryshop@email.com', 'Bakery Shop', NOW(), 
-    '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', 1327, 1328, '13908006666',
-    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/banner12.jpg?alt=media&token=e4dd1628-a01d-4e81-8d91-09cb2886217a', 
-    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/logo12.png?alt=media&token=bacd3db9-56d8-46ca-8af1-1e6292854bf6'),
-       (4.2, 'RESTAURANTE', '32142342300195', NOW(), 'Bomsabor@email.com', 'Bom Sabor', NOW(),
-    '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', 1327, 1328, '13908006776',
-    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/banner12.jpg?alt=media&token=e4dd1628-a01d-4e81-8d91-09cb2886217a',
-    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/logo12.png?alt=media&token=bacd3db9-56d8-46ca-8af1-1e6292854bf6'),
-    (4.0, 'SUPERMERCADO', '32142342300000', NOW(), 'bh@email.com', 'BH', NOW(),
-        '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', 1327, 1328, '13909006776',
+INSERT INTO tb_restaurants 
+(
+  category, fantasy, email, cnpj, date_creation, last_login, average_rating,
+  quantity_evaluations, total_evaluations, phone, description,
+  password, url_banner, url_logo
+) 
+VALUES  
+      (
+        'PADARIA', 'Bakery Shop', 'bakeryshop@email.com', '42111342300195', 
+        NOW(), NOW(), 4.5, 727, 727, '13908006111', 
+        'Paes fresquinhos, doces artesanais e uma atmosfera acolhedora para começar o dia com o pe direito.',
+        -- senhas 123456Bb*
+        '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q',
         'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/banner12.jpg?alt=media&token=e4dd1628-a01d-4e81-8d91-09cb2886217a',
-        'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/logo12.png?alt=media&token=bacd3db9-56d8-46ca-8af1-1e6292854bf6');
+        'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/logo12.png?alt=media&token=bacd3db9-56d8-46ca-8af1-1e6292854bf6' 
+      ),
+      (
+        'RESTAURANTE', 'Sanderson Dinner', 'sanderson@email.com', '42222342300195', 
+        NOW(), NOW(), 4.5, 456, 456, '13908006222', 
+        'Sabores classicos com um toque contemporaneo, perfeitos para todas as ocasioes.',
+        -- senhas 123456Bb*
+        '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q',
+        'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/4e3e9fb9-d561-4659-aa98-b7dc2a6d999d_banner-sanderson.png?alt=media&token=066a1a85-011f-4ca4-bbee-a7c818b7fa9b',
+        'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/0f8b51df-f26b-4352-88a5-1cc7cd07ab77_logo-sanderson.png?alt=media&token=cc912599-91af-41a3-9da5-5e471325e6a9' 
+      ),
+      (
+        'RESTAURANTE', 'Preston Salad', 'preston@email.com', '42333342300195', 
+        NOW(), NOW(), 3.0, 327, 327, '13908006333', 
+        'Deliciosas saladas frescas, ingredientes selecionados e opções leves para uma refeicao saudavel.',
+        -- senhas 123456Bb*
+        '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q',
+        'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/81a927c4-67e7-4d96-a942-003bac94c609_banner-preston.png?alt=media&token=639f9704-13bd-42b8-b9e5-9eead6b41800',
+        'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/c83e1372-9e9b-457e-8ab2-9fd416947981_logo-preston.png?alt=media&token=9925df4e-c21e-47a3-8777-5a9213efff6b' 
+      ),
+      (
+        'RESTAURANTE', 'Nagoya', 'nagoya@email.com', '42444342300195', 
+        NOW(), NOW(), 5.0, 1327, 1327, '13908006444', 
+        'Autentica culinaria japonesa com sushis, sashimis e pratos quentes feitos na hora.',
+        -- senhas 123456Bb*
+        '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q',
+        'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/11f644fa-6a23-4ece-9b27-246aedec0ad1_banner-nagoya.jpg?alt=media&token=31a1ddf7-fa78-4add-a6a6-343db6708d26',
+        'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/7e8aca56-bbde-425e-a28d-d09bd9492411_logo-nagoya.png?alt=media&token=fdf90c8a-d021-49d1-a61e-531ff1fcbff9' 
+      ),
+      (
+        'PIZZARIA', 'PizzGo', 'pizzgo@email.com', '42555342300195', 
+        NOW(), NOW(), 4.5, 623, 623, '13908006555', 
+        'Pizzas artesanais com massa leve e crocante, preparadas com ingredientes de alta qualidade.',
+        -- senhas 123456Bb*
+        '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q',
+        'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/9e41710d-8fd6-4c85-a627-2ad09ee9ede2_banner-pizza.png?alt=media&token=9a5c4d4a-8637-4d82-b541-4e22b9763158',
+        'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/66d2c733-d4f8-4819-b828-a4df7e0ca83f_logo-pizza.png?alt=media&token=1f40a1ae-0fb8-40af-bf8d-c8eb398082fd' 
+      ),
+      (
+        'LANCHONETE', 'Seven Kings', 'sevenkings@email.com', '42666342300195', 
+        NOW(), NOW(), 5.0, 1007, 1007, '13908006666', 
+        'Burgers suculentos, porCOes generosas e bebidas refrescantes para acompanhar momentos descontraIdos',
+        -- senhas 123456Bb*
+        '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q',
+        'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/7bf7a11f-bec0-44bb-a933-66a0e51f4d7c_banner-burguer.png?alt=media&token=d27781c8-4d9b-46e8-b1f1-4cdfd61c3540',
+        'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/7cac0054-e0b7-4cd7-b280-c7f4c3b232e2_logo-burguer.png?alt=media&token=d1247359-e57a-4ae2-89f4-c97e4711d7a4' 
+      ),
+      (
+        'SUPERMERCADO', 'Farmers Market', 'farmersmarket@email.com', '42777342300195', 
+        NOW(), NOW(), 3.5, 927, 927, '13908006777', 
+        'Tudo o que você precisa em um sO lugar: alimentos frescos, produtos de limpeza e itens essenciais.',
+        -- senhas 123456Bb*
+        '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q',
+        'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/26b04c08-6659-4b66-90d2-969bedfdaf6a_banner-market.png?alt=media&token=3a39bb3f-0f9b-4346-b817-3447bcebefab',
+        'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/6319886f-276a-471c-83b0-a94e21fe9504_logo-market.png?alt=media&token=25a1348b-470e-4c5a-aab5-a8954fdaf0b4' 
+      ),
+      (
+        'CONFEITARIA', 'Sodie Doces', 'sodie@email.com', '42888342300195', 
+        NOW(), NOW(), 3.5, 132, 132, '13908006888', 
+        'Bolos e tortas feitos com amor, perfeitos para celebrar momentos especiais ou adoCar o seu dia.',
+        -- senhas 123456Bb*
+        '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q',
+        'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/475487c3-e83a-423b-b9b7-f66d4a49d67f_banner-bake.png?alt=media&token=93e412a7-cb80-4211-92ae-1323c1275383',
+        'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/8edc871c-9012-49f0-8a0b-4e8bd5110fa8_logo-bake.png?alt=media&token=419f664f-ac2d-4a0a-8bae-2be244261bc5' 
+      );
+
+
+
+
+
+INSERT INTO tb_restaurant_hours (day_of_week, opening_time, closing_time, restaurant_id)
+VALUES
+-- Horários para o restaurante com ID 1
+('MONDAY', '08:00', '18:00', 1),
+('TUESDAY', '08:00', '18:00', 1),
+('WEDNESDAY', '08:00', '18:00', 1),
+('THURSDAY', '08:00', '20:00', 1),
+('FRIDAY', '08:00', '22:00', 1),
+('SATURDAY', '10:00', '22:00', 1),
+('SUNDAY', '10:00', '16:00', 1),
+
+-- Horários para o restaurante com ID 2
+('MONDAY', '09:00', '17:00', 2),
+('TUESDAY', '09:00', '17:00', 2),
+('WEDNESDAY', '09:00', '17:00', 2),
+('THURSDAY', '09:00', '19:00', 2),
+('FRIDAY', '09:00', '21:00', 2),
+('SATURDAY', '11:00', '21:00', 2),
+
+-- Horários para o restaurante com ID 3
+('MONDAY', '07:00', '15:00', 3),
+('TUESDAY', '07:00', '15:00', 3),
+('WEDNESDAY', '07:00', '15:00', 3),
+('THURSDAY', '07:00', '18:00', 3),
+('FRIDAY', '07:00', '20:00', 3),
+('SATURDAY', '08:00', '20:00', 3),
+('SUNDAY', '08:00', '14:00', 3),
+
+-- Horários para o restaurante com ID 4
+('MONDAY', '06:00', '14:00', 4),
+('TUESDAY', '06:00', '14:00', 4),
+('WEDNESDAY', '06:00', '14:00', 4),
+('THURSDAY', '06:00', '17:00', 4),
+('FRIDAY', '06:00', '19:00', 4),
+('SATURDAY', '07:00', '19:00', 4),
+('SUNDAY', '07:00', '13:00', 4),
+
+-- Horários para o restaurante com ID 5
+('MONDAY', '05:00', '13:00', 5),
+('TUESDAY', '05:00', '13:00', 5),
+('WEDNESDAY', '05:00', '13:00', 5),
+('THURSDAY', '05:00', '16:00', 5),
+('FRIDAY', '05:00', '18:00', 5),
+('SATURDAY', '06:00', '18:00', 5),
+('SUNDAY', '06:00', '12:00', 5),
+
+-- Horários para o restaurante com ID 6
+('MONDAY', '04:00', '12:00', 6),
+('TUESDAY', '04:00', '12:00', 6),
+('WEDNESDAY', '04:00', '12:00', 6),
+('THURSDAY', '04:00', '15:00', 6),
+('FRIDAY', '04:00', '17:00', 6),
+('SATURDAY', '05:00', '17:00', 6),
+('SUNDAY', '05:00', '11:00', 6),
+
+-- Horários para o restaurante com ID 7
+('MONDAY', '03:00', '11:00', 7),
+('TUESDAY', '03:00', '11:00', 7),
+('WEDNESDAY', '03:00', '11:00', 7),
+('THURSDAY', '03:00', '14:00', 7),
+('FRIDAY', '03:00', '16:00', 7),
+('SATURDAY', '04:00', '16:00', 7),
+('SUNDAY', '04:00', '10:00', 7),
+
+-- Horários para o restaurante com ID 8
+('MONDAY', '02:00', '10:00', 8),
+('TUESDAY', '02:00', '10:00', 8),
+('WEDNESDAY', '02:00', '10:00', 8),
+('THURSDAY', '02:00', '13:00', 8),
+('FRIDAY', '02:00', '15:00', 8),
+('SATURDAY', '03:00', '15:00', 8),
+('SUNDAY', '03:00', '09:00', 8);
+
+
 
 
 -- -- Inserindo dados na tabela tb_addresses
@@ -34,15 +189,12 @@ VALUES
     ('USER', '11045123', 'Apto 101', 'Jardins', TRUE, '12', 'SP', 'Rua Dom', 'Santos', 'Casa', NULL, 1 ),
     ('USER', '11045321', 'Apto 202', 'Centro', FALSE, '45', 'SP', 'Av Pedro Pessoa', 'Santos', 'Trabalho', NULL, 1),
     ('USER', '11045456', 'Apto 103', 'Jardins', TRUE, '56', 'SP', 'Rua Pinheiros', 'Sao Vicente', 'Casa', NULL, 2),
+    ('USER', '11045654', 'Apto 203', 'Jardins', FALSE, '03', 'SP', 'Rua Boeto', 'Sao Vicente', 'Casa da Mamae', NULL, 2),
     ('USER', '11045654', 'Apto 203', 'Jardins', FALSE, '03', 'SP', 'Rua Boeto', 'Sao Vicente', 'Casa da Mamae', NULL, 2);
 
--- -- Inserindo dados na tabela tb_cards
-INSERT INTO tb_cards (cpf, cvv, number, validity, holder_name, user_id) VALUES 
-('42302050000', '123', '3333111122223333', '12/25', 'Hortencia Flores', 1), 
-('42302050000', '244', '3000111122223000', '10/26', 'Hortencia Flores', 1), 
-('42402050110', '456', '5173000033335173', '01/26', 'Isaac Bezerra', 2),
-('40002050000', '123', '4111111111111111', '12/25', 'hortencia', 1), 
-('11102050110', '456', '5500000000000004', '01/24', 'Isaac', 2);;
+
+
+
 
 -- -- Inserindo dados na tabela tb_contacts
 INSERT INTO tb_contacts (description, phone, restaurant_id)
@@ -52,161 +204,5 @@ VALUES
     ('Contato Principal', '1112223333', 3),
     ('Contato Alternativo', '4445556666', 3);
 
--- -- Inserindo dados na tabela tb_products
-INSERT INTO tb_products (active, addition_date, description_product, sell_price, name_product, category, url_img_product, original_price, expiration_date, quantity, restaurant_id)
-VALUES 
-    (TRUE, NOW(), 'Bolo de cenoura com cobertura de chocolate, delicioso e fresquinho', 18.0, 'Bolo de Cenoura com Chocolate', 'DOCE', 
-    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
-    20.0, '2024-11-17', 50, 1),
-    (TRUE, NOW(), 'Pao Frances crocante por fora e macio por dentro', 0.8, 'Pao Frances', 'SALGADO', 
-    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
-    1.0, '2024-11-17', 800, 1),
-    (TRUE, NOW(), 'Pastel assado de frango com catupiry', 5.5, 'Pastel de Frango com Catupiry', 'SALGADO', 
-    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
-    6.0, '2024-11-17', 150, 1),
-    (TRUE, NOW(), 'Biscoito caseiro amanteigado, derrete na boca', 7.5, 'Biscoito Amanteigado', 'DOCE', 
-    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/Default_Product_Images.png?alt=media&token=7b5f5565-c02b-4b7b-9cde-9f5170ce8e14', 
-
-    8.0, '2024-11-17', 80, 1),
-    (TRUE, NOW(), 'Pao doce recheado com creme de baunilha', 3.5, 'Pao Doce com Creme', 'DOCE', 
-    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
-    4.0, '2024-11-17', 100, 1),
-    (TRUE, NOW(), 'Croissant folhado e amanteigado, perfeito para o cafe da manha', 6.0, 'Croissant', 'SALGADO', 
-    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
-    6.0, '2024-11-17', 70, 1),
-    (TRUE, NOW(), 'Sonho com recheio de doce de leite', 4.2, 'Sonho de Doce de Leite', 'DOCE', 
-    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
-    4.5, '2024-11-17', 60, 1),
-    (TRUE, NOW(), 'Torta de Maca com massa crocante e recheio cremoso', 12, 'Torta de Maca', 'DOCE', 
-    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
-    12.0, '2024-11-17', 30, 1),
-    (TRUE, NOW(), 'Empadao de palmito, delicioso e bem temperado', 20, 'Empadao de Palmito', 'SALGADO', 
-    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
-    20.0, '2024-11-17', 20, 1),
-    (TRUE, NOW(), 'Enroladinho de salsicha, ideal para lanches rapidos', 3, 'Enroladinho de Salsicha', 'SALGADO', 
-    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
-    3.0, '2024-11-17', 200, 1),
-    (TRUE, NOW(), 'Rosquinha de coco com acucar por cima', 3, 'Rosquinha de Coco', 'DOCE', 
-    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
-    3.5, '2024-11-17', 90, 1),
-    (TRUE, NOW(), 'Quiche de queijo com espinafre', 12.9, 'Quiche de Queijo e Espinafre', 'SALGADO', 
-    'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
-    15.0, '2024-11-17', 40, 1),
-    --
-       (TRUE, NOW(), 'Pao de queijo mineiro, ideal para o cafe da manha', 5.0, 'Pao de Queijo', 'SALGADO',
-        'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
-        6.0, '2024-11-17', 30, 1),
-
-        (TRUE, NOW(), 'Bolo de Fuba com um toque de erva-doce', 12.0, 'Bolo de Fuba', 'DOCE',
-        'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
-        15.0, '2024-11-18', 20, 2),
-
-        (TRUE, NOW(), 'Salgado de presunto e queijo com massa crocante', 7.0, 'Enrolado de Presunto e Queijo', 'SALGADO',
-        'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
-        8.0, '2024-11-19', 50, 3),
-
-        (TRUE, NOW(), 'Biscoito caseiro de polvilho crocante', 4.0, 'Biscoito de Polvilho', 'MISTO',
-        'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
-        5.0, '2024-11-20', 40, 1),
-
-        (TRUE, NOW(), 'Bolo de chocolate com recheio cremoso', 18.0, 'Bolo de Chocolate', 'DOCE',
-        'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
-        22.0, '2024-11-21', 15, 2),
-
-        (TRUE, NOW(), 'Sanduiche natural de frango com alface e tomate', 9.0, 'Sanduiche Natural', 'SALGADO',
-        'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
-        10.0, '2024-11-22', 35, 3),
-
-        (TRUE, NOW(), 'Torta de morango com chantilly, perfeita para sobremesa', 20.0, 'Torta de Morango', 'DOCE',
-        'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
-        25.0, '2024-11-30', 25, 1),
-
-        (TRUE, NOW(), 'Empada de frango com tempero especial', 6.5, 'Empada de Frango', 'SALGADO',
-        'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
-        7.5, '2024-11-28', 45, 2),
-
-        (TRUE, NOW(), 'Salgadinho de batata recheado com queijo', 5.0, 'Coxinha de Batata com Queijo', 'SALGADO',
-        'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
-        6.0, '2024-11-27', 50, 3),
-
-        (TRUE, NOW(), 'Pao Frances fresquinho, ideal para o cafe da manha', 0.5, 'Pao Frances', 'SALGADO',
-            'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
-            0.8, '2024-11-23', 100, 1),
-
-            (TRUE, NOW(), 'Bolo de laranja com pedaços da fruta, ótimo para o lanche', 10.0, 'Bolo de Laranja', 'DOCE',
-            'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
-            12.0, '2024-11-25', 20, 2),
-
-            (TRUE, NOW(), 'Coxinha de frango crocante e saborosa', 5.0, 'Coxinha de Frango', 'SALGADO',
-            'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
-            6.0, '2024-11-26', 40, 3),
-
-            (TRUE, NOW(), 'Torta salgada de legumes com queijo', 8.0, 'Torta de Legumes', 'MISTO',
-            'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
-            10.0, '2024-11-27', 15, 1),
-
-            (TRUE, NOW(), 'Queijo minas frescal, ideal para acompanhar paes', 20.0, 'Queijo Minas', 'MISTO',
-            'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
-            25.0, '2024-11-28', 10, 2),
-
-            (TRUE, NOW(), 'Biscoito amanteigado caseiro', 3.5, 'Biscoito Amanteigado', 'DOCE',
-            'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
-            4.5, '2024-11-29', 50, 3),
-
-            (TRUE, NOW(), 'Sanduiche de atum com salada', 12.0, 'Sanduiche de Atum', 'SALGADO',
-            'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
-            13.0, '2024-11-30', 30, 1),
-
-            (TRUE, NOW(), 'Bolo de milho cremoso, feito com milho fresco', 8.0, 'Bolo de Milho', 'DOCE',
-            'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
-            9.0, '2024-12-01', 25, 2),
-
-            (TRUE, NOW(), 'Empadao de palmito com azeitonas', 15.0, 'Empadao de Palmito', 'MISTO',
-            'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
-            18.0, '2024-12-02', 12, 3),
-
-            (TRUE, NOW(), 'Pastel de carne crocante e recheado', 4.5, 'Pastel de Carne', 'SALGADO',
-            'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
-            5.5, '2024-12-03', 45, 1),
-
-            (TRUE, NOW(), 'Bolo de coco gelado, ideal para sobremesa', 12.0, 'Bolo de Coco Gelado', 'DOCE',
-            'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
-            14.0, '2024-12-04', 20, 2),
-
-            (TRUE, NOW(), 'Croissant de presunto e queijo', 7.0, 'Croissant de Presunto e Queijo', 'SALGADO',
-            'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
-            8.5, '2024-12-05', 35, 3),
-
-            (TRUE, NOW(), 'Torrada com manteiga e alho', 2.0, 'Torrada com Manteiga e Alho', 'MISTO',
-            'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
-            3.0, '2024-12-06', 60, 1),
-
-            (TRUE, NOW(), 'Torta de frango com requeijao', 16.0, 'Torta de Frango', 'MISTO',
-            'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
-            18.0, '2024-12-07', 10, 2),
-
-            (TRUE, NOW(), 'Cupcake de chocolate com cobertura de morango', 6.5, 'Cupcake de Chocolate', 'DOCE',
-            'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/05c9fcc9-061f-43e2-bcfc-1fdb23f83704_abhishek-hajare-kkrXVKK-jhg-unsplash.jpg?alt=media&token=61be4f49-cf40-4d7b-b305-107a07972668',
-            7.5, '2024-12-08', 40, 3);
-
--- -- Inserindo dados na tabela tb_cart
-INSERT INTO tb_cart (total_value, user_id)
-VALUES
-    (100.8, 1),
-    (34.1, 2);
 
 
--- -- Inserindo dados na tabela tb_cart_items
-INSERT INTO tb_cart_items (cart_id, product_id, quantity, unit_value, subtotal, added_at, restaurant_id)
-VALUES 
-    (2, 1, 1, 18.0, 18.0, NOW(), 1),  -- Bolo de Cenoura com Chocolate
-    (2, 2, 2, 0.8, 1.6, NOW(), 1),    -- Pao Frances
-    (2, 5, 2, 3.5, 7.0, NOW(), 1),    -- Pao Doce com Creme
-    (2, 4, 1, 7.5, 7.5, NOW(), 1),    -- Biscoito Amanteigado
-    (1, 2, 1, 0.8, 0.8, NOW(), 1),    -- Pao Frances
-    (1, 1, 2, 18.0, 36.0, NOW(), 1),  -- Bolo de Cenoura com Chocolate
-    (1, 3, 3, 5.5, 16.5, NOW(), 1),   -- Pastel de Frango com Catupiry
-    (1, 4, 1, 7.5, 7.5, NOW(), 1),    -- Biscoito Amanteigado
-    (1, 5, 2, 3.5, 7.0, NOW(), 1),    -- Pao Doce com Creme
-    (1, 6, 4, 6.0, 24.0, NOW(), 1),   -- Croissant
-    (1, 9, 3, 3.0, 9.0, NOW(), 1);    -- Enroladinho de Salsicha
