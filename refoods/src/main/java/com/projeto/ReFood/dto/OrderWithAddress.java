@@ -15,6 +15,7 @@ public class OrderWithAddress {
   private float totalValue;
   private Long userId;
   private Long restaurantId;
+  private HourDTO timesOfTheDay;
   private AddressDetailsDTO addressDetails;
   private Long reviewId;
   private Long transactionId;
@@ -24,7 +25,7 @@ public class OrderWithAddress {
   }
 
   public OrderWithAddress(Long orderId, Date orderDate, Date deliveryDate, EnumOrderStatus orderStatus,
-      EnumDeliveryType deliveryType, float totalValue, Long userId, Long restaurantId, AddressDetailsDTO addressDetails,
+      EnumDeliveryType deliveryType, float totalValue, Long userId, Long restaurantId, HourDTO timesOfTheDay, AddressDetailsDTO addressDetails,
       Long reviewId,
       Long transactionId, List<OrderItemDTO> orderItems) {
     this.orderId = orderId;
@@ -35,6 +36,7 @@ public class OrderWithAddress {
     this.totalValue = totalValue;
     this.userId = userId;
     this.restaurantId = restaurantId;
+    this.timesOfTheDay = timesOfTheDay;
     this.addressDetails = addressDetails;
     this.reviewId = reviewId;
     this.transactionId = transactionId;
@@ -135,5 +137,13 @@ public class OrderWithAddress {
 
   public void setDeliveryDate(Date deliveryDate) {
     this.deliveryDate = deliveryDate;
+  }
+
+  public HourDTO getTimesOfTheDay() {
+    return timesOfTheDay;
+  }
+
+  public void setTimesOfTheDay(HourDTO timesOfTheDay) {
+    this.timesOfTheDay = timesOfTheDay;
   }
 }
