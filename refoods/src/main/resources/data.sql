@@ -50,7 +50,7 @@ VALUES
       (
         'RESTAURANTE', 'Preston Salad', 'preston@email.com', '42333342300195', 
         NOW(), NOW(), 3.0, 327, 327, '13908006333', 
-        'Deliciosas saladas frescas, ingredientes selecionados e opções leves para uma refeicao saudavel.',
+        'Deliciosas saladas frescas, ingredientes selecionados e opcoes leves para uma refeicao saudavel.',
         -- senhas 123456Bb*
         '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q',
         'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/81a927c4-67e7-4d96-a942-003bac94c609_banner-preston.png?alt=media&token=639f9704-13bd-42b8-b9e5-9eead6b41800',
@@ -77,7 +77,7 @@ VALUES
       (
         'LANCHONETE', 'Seven Kings', 'sevenkings@email.com', '42666342300195', 
         NOW(), NOW(), 5.0, 1007, 1007, '13908006666', 
-        'Burgers suculentos, porCOes generosas e bebidas refrescantes para acompanhar momentos descontraIdos',
+        'Burgers suculentos, porcoes generosas e bebidas refrescantes para acompanhar momentos descontraidos',
         -- senhas 123456Bb*
         '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q',
         'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/7bf7a11f-bec0-44bb-a933-66a0e51f4d7c_banner-burguer.png?alt=media&token=d27781c8-4d9b-46e8-b1f1-4cdfd61c3540',
@@ -86,7 +86,7 @@ VALUES
       (
         'SUPERMERCADO', 'Farmers Market', 'farmersmarket@email.com', '42777342300195', 
         NOW(), NOW(), 3.5, 927, 927, '13908006777', 
-        'Tudo o que você precisa em um sO lugar: alimentos frescos, produtos de limpeza e itens essenciais.',
+        'Tudo o que voce precisa em um so lugar: alimentos frescos, produtos de limpeza e itens essenciais.',
         -- senhas 123456Bb*
         '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q',
         'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/26b04c08-6659-4b66-90d2-969bedfdaf6a_banner-market.png?alt=media&token=3a39bb3f-0f9b-4346-b817-3447bcebefab',
@@ -95,7 +95,7 @@ VALUES
       (
         'CONFEITARIA', 'Sodie Doces', 'sodie@email.com', '42888342300195', 
         NOW(), NOW(), 3.5, 132, 132, '13908006888', 
-        'Bolos e tortas feitos com amor, perfeitos para celebrar momentos especiais ou adoCar o seu dia.',
+        'Bolos e tortas feitos com amor, perfeitos para celebrar momentos especiais ou adocar o seu dia.',
         -- senhas 123456Bb*
         '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q',
         'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/475487c3-e83a-423b-b9b7-f66d4a49d67f_banner-bake.png?alt=media&token=93e412a7-cb80-4211-92ae-1323c1275383',
