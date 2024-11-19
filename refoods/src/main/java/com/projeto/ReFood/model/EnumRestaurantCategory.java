@@ -15,5 +15,6 @@ public enum EnumRestaurantCategory {
   CHURRASCARIA,
   CONFEITARIA,
   HORTIFRUTI,
+  PIZZARIA,
   OUTROS
 }

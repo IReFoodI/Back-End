@@ -41,4 +41,24 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
 
   @Query(value = "SELECT * FROM TB_ADDRESSES WHERE ADDRESS_TYPE = 'RESTAURANT' AND RESTAURANT_ID = :restaurantId AND ADDRESS_ID = :addressId", nativeQuery = true)
   Address nativeSearchByRestaurantIdAndAddressId(Long restaurantId, Long addressId);
+
+  @Query(value = """
+      SELECT
+          a.address_id,
+          a.cep,
+          a.state,
+          a.city,
+          a.district,
+          a.street,
+          a.number,
+          a.type,
+          a.complement,
+          a.address_type,
+          a.is_standard
+      FROM
+          tb_addresses a
+      WHERE
+          a.restaurant_id = :restaurantId
+      """, nativeQuery = true)
+  List<Object[]> findAddressesByRestaurantIdNative(@Param("restaurantId") Long restaurantId);
 }
