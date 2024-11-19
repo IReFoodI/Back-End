@@ -1,6 +1,7 @@
 package com.projeto.ReFood.service;
 
 import com.projeto.ReFood.dto.AddressDetailsDTO;
+import com.projeto.ReFood.dto.HourDTO;
 import com.projeto.ReFood.dto.OrderItemDTO;
 import com.projeto.ReFood.dto.OrderRequestDTO;
 import com.projeto.ReFood.dto.OrderResponseDTO;
@@ -11,13 +12,18 @@ import com.projeto.ReFood.model.*;
 import com.projeto.ReFood.repository.OrderItemRepository;
 import com.projeto.ReFood.repository.OrderRepository;
 import com.projeto.ReFood.repository.ProductRepository;
+import com.projeto.ReFood.repository.RestaurantHoursRepository;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,6 +35,7 @@ public class OrderService {
   private final UtilityService utilityService;
   private final OrderItemRepository orderItemRepository;
   private final ProductRepository productRepository;
+  private final RestaurantHoursRepository restaurantHoursRepository;
 
   @Transactional(readOnly = true)
   public List<OrderResponseDTO> getAllOrders() {
@@ -71,6 +78,25 @@ public class OrderService {
     List<OrderWithAddress> response = orders.stream()
         .map(this::convertOrderWithAddressToDTO)
         .collect(Collectors.toList());
+
+    // adicionar timesOfTheDay ao response
+    for (OrderWithAddress order : response) {
+      Long restaurantId = order.getRestaurantId();
+
+      // Buscando horário do restaurante para o dia de hoje
+      DayOfWeek currentDay = LocalDate.now().getDayOfWeek();
+      EnumDayOfWeek dayEnum = EnumDayOfWeek.valueOf(currentDay.name());
+      RestaurantHours restaurantHour = Optional.ofNullable(
+          restaurantHoursRepository.findTodayHoursByRestaurantId(restaurantId, dayEnum))
+          .orElseThrow(() -> new NotFoundException());
+
+      HourDTO timesOfTheDay = new HourDTO(
+          restaurantHour.getId(),
+          restaurantHour.getDayOfWeek(),
+          restaurantHour.getOpeningTime(),
+          restaurantHour.getClosingTime());
+      order.setTimesOfTheDay(timesOfTheDay);
+    }
 
     // buscar order items
     for (OrderWithAddress order : response) {
@@ -170,20 +196,22 @@ public class OrderService {
 
     // Verifica a quantidade disponível em estoque para cada item do pedido
     // for (OrderItemDTO itemDTO : orderRequestDTO.getOrderItems()) {
-    //   Product product = productRepository.findById(itemDTO.productId())
-    //       .orElseThrow(NotFoundException::new);
+    // Product product = productRepository.findById(itemDTO.productId())
+    // .orElseThrow(NotFoundException::new);
 
-    //   // Adiciona informações para debug
-    //   System.out.println("DEBUG: Verificando estoque para o produto:");
-    //   System.out.println("    Produto ID: " + product.getProductId());
-    //   System.out.println("    Nome: " + product.getNameProduct());
-    //   System.out.println("    Quantidade disponível em estoque: " + product.getQuantity());
-    //   System.out.println("    Quantidade solicitada: " + itemDTO.quantity());
+    // // Adiciona informações para debug
+    // System.out.println("DEBUG: Verificando estoque para o produto:");
+    // System.out.println(" Produto ID: " + product.getProductId());
+    // System.out.println(" Nome: " + product.getNameProduct());
+    // System.out.println(" Quantidade disponível em estoque: " +
+    // product.getQuantity());
+    // System.out.println(" Quantidade solicitada: " + itemDTO.quantity());
 
-    //   if (product.getQuantity() < itemDTO.quantity()) {
-    //     throw new BadRequestException(
-    //         "Quantidade de produto insuficiente em estoque para o produto: " + product.getNameProduct());
-    //   }
+    // if (product.getQuantity() < itemDTO.quantity()) {
+    // throw new BadRequestException(
+    // "Quantidade de produto insuficiente em estoque para o produto: " +
+    // product.getNameProduct());
+    // }
     // }
 
     orderRepository.save(order);
