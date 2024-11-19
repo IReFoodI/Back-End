@@ -200,7 +200,7 @@ public class CartService {
     int totalQuantityRequested = totalQuantityInCart + quantity;
 
     // Valida a quantidade total (já no carrinho + nova quantidade)
-    if (product.getQuantity() < totalQuantityRequested) {
+    if (product.getQuantity() < quantity) {
       throw new IllegalArgumentException("Quantidade solicitada maior que a quantidade disponível.");
     }
 

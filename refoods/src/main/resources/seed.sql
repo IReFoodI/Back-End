@@ -143,7 +143,7 @@ INSERT INTO tb_products (
 
 ( 
   5, 25.0, 28.0, 'Pizza Margherita', 10, 'SALGADO', TRUE, '2024-11-17', NOW(), 
-  'Classica pizza com molho de tomate, mussarela, manjericão fresco e azeite de oliva',
+  'Classica pizza com molho de tomate, mussarela, manjericao fresco e azeite de oliva',
   'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/8ec9e17d-5c50-41fd-b5dd-d3c9fab9f167_marguerita.png?alt=media&token=4237203f-9fc8-4b5d-9ba0-00a1c6bec165'
 ),
 (
@@ -173,7 +173,7 @@ INSERT INTO tb_products (
 ),
 (
   5, 29.0, 34.0, 'Pizza Vegetariana', 14, 'SALGADO', TRUE, '2024-11-17', NOW(), 
-  'Pizza com cogumelos, abobrinha, pimentões e queijo mussarela',
+  'Pizza com cogumelos, abobrinha, pimentoes e queijo mussarela',
   'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/6dc40af5-3830-42c2-bee0-b4ee172d1e23_vegetariana.png?alt=media&token=13a04fbb-592d-4150-9455-4f5ac67b1343'
 ),
 
