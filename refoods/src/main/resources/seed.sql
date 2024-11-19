@@ -258,7 +258,7 @@ INSERT INTO tb_products (
   'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/2e687889-3ac7-4539-ba0d-2d03f5056f04_cogumelo.png?alt=media&token=8a094aea-0059-4cb2-88af-8abbe9effd62'
 ),
 (
-  6, 11.0, 14.0, 'Spicy Jalapeño Burger', 18, 'SALGADO', TRUE, '2024-11-17', NOW(), 
+  6, 11.0, 14.0, 'Spicy Jalapeno Burger', 18, 'SALGADO', TRUE, '2024-11-17', NOW(), 
   'Hamburguer apimentado com jalapenos, queijo cheddar e molho chipotle',
   'https://firebasestorage.googleapis.com/v0/b/refood-storage.appspot.com/o/1d0cc600-1fd9-4948-a81f-5aad05741914_spicy.png?alt=media&token=037e1a99-5e36-4231-a3d3-998d2dd75afd'
 ),
@@ -410,22 +410,22 @@ VALUES
 (1, 1, 1, 0, 0),
 (1, 4, 3, 0, 0),
 
-(2, 3, 2, 0, 0),
-(2, 4, 1, 0, 0),
-(2, 5, 2, 0, 0),
+(2, 13, 2, 0, 0),
+(2, 14, 1, 0, 0),
+(2, 15, 2, 0, 0),
 
-(3, 6, 4, 0, 0),
-(3, 7, 1, 0, 0),
+(3, 36, 4, 0, 0),
+(3, 37, 1, 0, 0),
 
-(4, 8, 2, 0, 0),
-(4, 9, 3, 0, 0),
+(4, 48, 2, 0, 0),
+(4, 49, 3, 0, 0),
 
-(5, 1, 2, 0, 0),
-(5, 2, 1, 0, 0),
-(5, 3, 3, 0, 0),
+(5, 51, 2, 0, 0),
+(5, 52, 1, 0, 0),
+(5, 53, 3, 0, 0),
 
-(6, 10, 1, 0, 0),
-(6, 11, 5, 0, 0);
+(6, 60, 1, 0, 0),
+(6, 61, 5, 0, 0);
 
 -- Atualizar os valores unitários e subtotais dos itens da Order
 UPDATE tb_order_items
