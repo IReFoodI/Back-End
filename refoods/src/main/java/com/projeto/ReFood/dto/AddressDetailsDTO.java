@@ -25,6 +25,4 @@ public record AddressDetailsDTO(
 
     boolean isStandard// default = false
 
-    ) {
-
-}
+) {}

@@ -107,19 +107,23 @@ public class OrderService {
     orderWithAddress.setReviewId(order.getReview() != null ? order.getReview().getReviewId() : null);
     orderWithAddress
         .setTransactionId(order.getTransaction() != null ? order.getTransaction().getTransactionId() : null);
-    orderWithAddress.setAddressDetails(
-        new AddressDetailsDTO(
-            order.getAssociatedAddress().getAddressId(),
-            order.getAssociatedAddress().getStreet(),
-            order.getAssociatedAddress().getNumber(),
-            order.getAssociatedAddress().getComplement(),
-            order.getAssociatedAddress().getCity(),
-            order.getAssociatedAddress().getState(),
-            order.getAssociatedAddress().getCity(),
-            order.getAssociatedAddress().getCep(),
-            order.getAssociatedAddress().getComplement(),
-            order.getAssociatedAddress().getAddressType(),
-            order.getAssociatedAddress().isStandard()));
+
+    Address associatedAddress = order.getAssociatedAddress();
+    if (associatedAddress != null) {
+      orderWithAddress.setAddressDetails(
+          new AddressDetailsDTO(
+              associatedAddress.getAddressId(),
+              associatedAddress.getCep(),
+              associatedAddress.getState(),
+              associatedAddress.getCity(),
+              associatedAddress.getType(),
+              associatedAddress.getDistrict(),
+              associatedAddress.getStreet(),
+              associatedAddress.getNumber(),
+              associatedAddress.getComplement(),
+              associatedAddress.getAddressType(),
+              associatedAddress.isStandard()));
+    }
     return orderWithAddress;
   }
 
