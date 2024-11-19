@@ -2,7 +2,7 @@
 
 -- Inserindo dados na tabela tb_users
 INSERT INTO tb_users (date_creation, email, last_login, name, password, phone)
-VALUES -- -- as senhas são 123456Bb*
+VALUES -- -- as senhas Sao 123456Bb*
     (NOW(), 'hortencia@email.com', NOW(), 'Hortencia Flores', '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', '1399998888' ),
     (NOW(), 'isaaclovehortencia@email.com', NOW(), 'Isaac Bezerra', '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', '1399997777' ),
     (NOW(), 'user1@example.com', NOW(), 'Samilis Brito', '$2a$10$neEHRrvLQ5COJvr8rgWxiubCTD19fGjKto88fvlDSO.r2AFkqUp9q', '91912345678' );
@@ -12,11 +12,11 @@ VALUES -- -- as senhas são 123456Bb*
 
 -- -- Inserindo dados na tabela tb_cards
 INSERT INTO tb_cards (cpf, cvv, number, validity, holder_name, user_id) VALUES 
-('42302050000', '123', '3333111122223333', '12/25', 'Hortencia Flores', 1), 
-('42302050000', '244', '3000111122223000', '10/26', 'Hortencia Flores', 1), 
-('42402050110', '456', '5173000033335173', '01/26', 'Isaac Bezerra', 2),
-('40002050000', '123', '4111111111111111', '12/25', 'Hortencia F.', 1), 
-('11102050110', '456', '5500000000000004', '01/24', 'Isaac B.', 2);
+('42302050000', '123', '3387347648771333', '12/25', 'Hortencia Flores', 1), 
+('42302050000', '244', '3068230489089000', '10/26', 'Hortencia Flores', 1), 
+('42402050110', '456', '5173006443335173', '01/26', 'Isaac Bezerra', 2),
+('40002050000', '123', '4902462084552211', '12/25', 'Hortencia F.', 1), 
+('11102050110', '456', '5500043940254504', '01/24', 'Isaac B.', 2);
 
 
 
@@ -185,12 +185,24 @@ VALUES
 -- -- Inserindo dados na tabela tb_addresses
 INSERT INTO tb_addresses (address_type, cep, complement, district, is_standard, number, state, street, city, type, restaurant_id, user_id)
 VALUES
-    ('RESTAURANT', '11060470', 'Rua Gastronômica', 'Gonzaga', TRUE, '55', 'SP', 'Rua Tolentino Filgueiras', 'Santos', 'Filial Santos', 1, NULL),
+    ('RESTAURANT', '11060470', 'Rua Gastronomica', 'Gonzaga', TRUE, '55', 'SP', 'Rua Tolentino Filgueiras', 'Santos', 'Filial Santos', 1, NULL),
     ('USER', '11045123', 'Apto 101', 'Jardins', TRUE, '12', 'SP', 'Rua Dom', 'Santos', 'Casa', NULL, 1 ),
     ('USER', '11045321', 'Apto 202', 'Centro', FALSE, '45', 'SP', 'Av Pedro Pessoa', 'Santos', 'Trabalho', NULL, 1),
     ('USER', '11045456', 'Apto 103', 'Jardins', TRUE, '56', 'SP', 'Rua Pinheiros', 'Sao Vicente', 'Casa', NULL, 2),
     ('USER', '11045654', 'Apto 203', 'Jardins', FALSE, '03', 'SP', 'Rua Boeto', 'Sao Vicente', 'Casa da Mamae', NULL, 2),
-    ('USER', '11045654', 'Apto 203', 'Jardins', FALSE, '03', 'SP', 'Rua Boeto', 'Sao Vicente', 'Casa da Mamae', NULL, 2);
+    ('USER', '11045654', 'Apto 203', 'Jardins', FALSE, '03', 'SP', 'Rua Boeto', 'Sao Vicente', 'Casa da Mamae', NULL, 2),
+    --------
+    -- Novos endereços
+    ('RESTAURANT', '01310300', '10 Andar', 'Centro', TRUE, '1000', 'SP', 'Avenida Paulista', 'Sao Paulo', 'Comercial', 2, NULL),
+    ('RESTAURANT', '01033010', 'Loja A', 'Centro', TRUE, '200', 'SP', 'Rua Sao Bento', 'Sao Paulo', 'Comercial', 3, NULL),
+    ('RESTAURANT', '04007100', 'Sala 02', 'Centro', TRUE, '1200', 'SP', 'Rua Pamplona', 'Sao Paulo', 'Comercial', 4, NULL),
+    ('RESTAURANT', '05002000', 'Loja 3', 'Centro', TRUE, '1500', 'SP', 'Avenida Francisco Matarazzo', 'Sao Paulo', 'Comercial', 5, NULL),
+    ('RESTAURANT', '01512000', 'Conjunto 5', 'Centro', TRUE, '900', 'SP', 'Rua Vergueiro', 'Sao Paulo', 'Comercial', 6, NULL),
+    ('RESTAURANT', '05413000', 'Loja B', 'Centro', TRUE, '800', 'SP', 'Rua dos Pinheiros', 'Sao Paulo', 'Comercial', 7, NULL),
+    ('RESTAURANT', '02010000', 'Quiosque 12', 'Centro', TRUE, '1800', 'SP', 'Avenida Cruzeiro do Sul', 'Sao Paulo', 'Comercial', 8, NULL),
+    ('RESTAURANT', '02010000', 'Quiosque 12', 'Centro', TRUE, '1800', 'SP', 'Avenida Cruzeiro do Sul', 'Sao Paulo', 'Comercial', 8, NULL);
+    
+
 
 
 

@@ -35,12 +35,32 @@ public class AddressService {
   private final JwtTokenProvider jwtTokenProvider;
 
   @Transactional(readOnly = true)
-  public List<AddressDTO> getAddressesByRestaurantId(Long restaurantId) {
-      List<Address> addresses = addressRepository.findAddressesByRestaurantId(restaurantId);
-      return addresses.stream()
-              .map(this::convertToDTO)
-              .collect(Collectors.toList());
+  public List<Address> getAddressesByRestaurantIdNative(Long restaurantId) {
+    List<Object[]> results = addressRepository.findAddressesByRestaurantIdNative(restaurantId);
+
+    return results.stream().map(record -> {
+      Address address = new Address();
+      address.setAddressId(((Number) record[0]).longValue()); // address_id
+      address.setCep((String) record[1]); // cep
+      address.setState((String) record[2]); // state
+      address.setCity((String) record[3]); // city
+      address.setDistrict((String) record[4]); // district
+      address.setStreet((String) record[5]); // street
+      address.setNumber((String) record[6]); // number
+      address.setType((String) record[7]); // type
+      address.setComplement((String) record[8]); // complement
+      address.setAddressType(EnumAddressType.valueOf((String) record[9])); // address_type
+      address.setStandard((Boolean) record[10]); // is_standard
+      return address;
+    }).collect(Collectors.toList());
   }
+  // public List<AddressDTO> getAddressesByRestaurantId(Long restaurantId) {
+  // List<Address> addresses =
+  // addressRepository.findAddressesByRestaurantId(restaurantId);
+  // return addresses.stream()
+  // .map(this::convertToDTO)
+  // .collect(Collectors.toList());
+  // }
 
   @Transactional(readOnly = true)
   public List<AddressDTO> getAllAddresses() {
@@ -55,19 +75,19 @@ public class AddressService {
   public List<AddressDTO> getAddressesByUserId(String token) {
     Long id = jwtTokenProvider.extractUserId(token);
     String role = jwtTokenProvider.extractUserRoles(token).toString();
-    if(Objects.equals(role, "[ROLE_USER]")) {
+    if (Objects.equals(role, "[ROLE_USER]")) {
       return addressRepository
-              .findAddressesByUserId(id)
-              .stream()
-              .map(this::convertToDTO)
-              .collect(Collectors.toList());
+          .findAddressesByUserId(id)
+          .stream()
+          .map(this::convertToDTO)
+          .collect(Collectors.toList());
     }
-    if(Objects.equals(role, "[ROLE_RESTAURANT]")) {
+    if (Objects.equals(role, "[ROLE_RESTAURANT]")) {
       return addressRepository
-              .findAddressesByRestaurantId(id)
-              .stream()
-              .map(this::convertToDTO)
-              .collect(Collectors.toList());
+          .findAddressesByRestaurantId(id)
+          .stream()
+          .map(this::convertToDTO)
+          .collect(Collectors.toList());
     }
     return null;
   }
@@ -174,7 +194,7 @@ public class AddressService {
       address.setStandard(true);
     }
 
-    if(Objects.equals(role, "[ROLE_USER]")) {
+    if (Objects.equals(role, "[ROLE_USER]")) {
       if (addressDTO.userId() != null || id != null) {
         Long userId = addressDTO.userId();
         if (userId == null) {
@@ -182,8 +202,7 @@ public class AddressService {
         }
         utilityService.associateUser(address::setUser, userId);
       }
-    } else
-      if(Objects.equals(role, "[ROLE_RESTAURANT]")) {
+    } else if (Objects.equals(role, "[ROLE_RESTAURANT]")) {
       if (addressDTO.restaurantId() != null || id != null) {
         Long restaurantId = addressDTO.restaurantId();
         if (restaurantId == null) {
@@ -210,16 +229,16 @@ public class AddressService {
     Long id = jwtTokenProvider.extractUserId(token);
     String role = jwtTokenProvider.extractUserRoles(token).toString();
     Address address;
-    if(Objects.equals(role, "[ROLE_USER]")) {
+    if (Objects.equals(role, "[ROLE_USER]")) {
       address = addressRepository.findByIdAndUserId(addressId, id)
-              .orElseThrow(() -> {
-                return new NotFoundException();
-              });
+          .orElseThrow(() -> {
+            return new NotFoundException();
+          });
     } else {
       address = addressRepository.findByIdAndRestaurantId(addressId, id)
-                .orElseThrow(() -> {
-              return new NotFoundException();
-            });
+          .orElseThrow(() -> {
+            return new NotFoundException();
+          });
     }
 
     address.setStreet(addressDTO.street());
