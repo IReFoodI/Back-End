@@ -95,18 +95,31 @@ public class OrderController {
       @Parameter(description = "Status do pedido") @PathVariable String orderStatus) {
     return orderService.getOrdersByRestaurantIdAndStatus(restaurantId, orderStatus);
   }
-  
+
   @Operation(summary = "Atualiza o status de um pedido", description = "Atualiza o status do pedido com base no ID.")
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "Status do pedido atualizado com sucesso"),
-          @ApiResponse(responseCode = "404", description = "Pedido não encontrado")
+      @ApiResponse(responseCode = "200", description = "Status do pedido atualizado com sucesso"),
+      @ApiResponse(responseCode = "404", description = "Pedido não encontrado")
   })
   @PatchMapping("/{orderId}/status")
   public ResponseEntity<OrderResponseDTO> updateOrderStatus(
-          @PathVariable Long orderId,
-          @RequestParam EnumOrderStatus newStatus) {
-    
+      @PathVariable Long orderId,
+      @RequestParam EnumOrderStatus newStatus) {
+
     OrderResponseDTO updatedOrder = orderService.updateOrderStatus(orderId, newStatus);
     return ResponseEntity.ok(updatedOrder);
   }
+
+  @Operation(summary = "Cancela um pedido", description = "Cancela um pedido pelo ID e devolve os produtos ao estoque.")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Pedido cancelado com sucesso"),
+      @ApiResponse(responseCode = "404", description = "Pedido não encontrado"),
+      @ApiResponse(responseCode = "400", description = "Erro ao cancelar o pedido")
+  })
+  @PatchMapping("/{orderId}/cancel")
+  public ResponseEntity<Void> cancelOrder(@PathVariable Long orderId) {
+    orderService.cancelOrder(orderId);
+    return ResponseEntity.ok().build();
+  }
+
 }

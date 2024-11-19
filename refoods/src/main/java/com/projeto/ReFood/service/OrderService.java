@@ -265,4 +265,29 @@ public class OrderService {
     order = orderRepository.save(order);
     return convertToDTO(order);
   }
+
+  @Transactional
+  public void cancelOrder(Long orderId) {
+    // Busca o pedido pelo ID
+    Order order = orderRepository.findById(orderId)
+        .orElseThrow(() -> new NotFoundException());
+
+    // Verifica se o pedido já está cancelado
+    if (order.getOrderStatus() == EnumOrderStatus.CANCELADO) {
+      throw new BadRequestException("O pedido já está cancelado.");
+    }
+
+    // Atualiza o status do pedido para cancelado
+    order.setOrderStatus(EnumOrderStatus.CANCELADO);
+    orderRepository.save(order);
+
+    // Retorna os produtos ao estoque
+    List<OrderItem> orderItems = orderItemRepository.findByOrder_OrderId(orderId);
+    for (OrderItem item : orderItems) {
+      Product product = item.getProduct();
+      product.setQuantity(product.getQuantity() + item.getQuantity());
+      productRepository.save(product);
+    }
+  }
+
 }
