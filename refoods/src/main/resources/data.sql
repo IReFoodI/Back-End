@@ -191,8 +191,7 @@ VALUES
     ('USER', '11045456', 'Apto 103', 'Jardins', TRUE, '56', 'SP', 'Rua Pinheiros', 'Sao Vicente', 'Casa', NULL, 2),
     ('USER', '11045654', 'Apto 203', 'Jardins', FALSE, '03', 'SP', 'Rua Boeto', 'Sao Vicente', 'Casa da Mamae', NULL, 2),
     ('USER', '11045654', 'Apto 203', 'Jardins', FALSE, '03', 'SP', 'Rua Boeto', 'Sao Vicente', 'Casa da Mamae', NULL, 2),
-    --------
-    -- Novos endereços
+    ---------
     ('RESTAURANT', '01310300', '10 Andar', 'Centro', TRUE, '1000', 'SP', 'Avenida Paulista', 'Sao Paulo', 'Comercial', 2, NULL),
     ('RESTAURANT', '01033010', 'Loja A', 'Centro', TRUE, '200', 'SP', 'Rua Sao Bento', 'Sao Paulo', 'Comercial', 3, NULL),
     ('RESTAURANT', '04007100', 'Sala 02', 'Centro', TRUE, '1200', 'SP', 'Rua Pamplona', 'Sao Paulo', 'Comercial', 4, NULL),

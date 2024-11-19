@@ -397,10 +397,10 @@ UPDATE tb_cart SET total_value = (
 INSERT INTO tb_orders (order_date, delivery_date, order_status, delivery_type, user_id, restaurant_id, address_id, total_value, review_id, transaction_id)
 VALUES 
 ('2024-10-31', '2024-11-01', 'CONCLUIDO', 'RETIRADA', 1, 1, 1, 0, NULL, NULL),
-('2024-11-03', '2024-11-04', 'CONCLUIDO', 'RETIRADA', 1, 3, 1, 0, NULL, NULL),
+('2024-11-03', '2024-11-04', 'CONCLUIDO', 'RETIRADA', 1, 2, 1, 0, NULL, NULL),
 ('2024-11-04', '2024-11-04', 'PENDENTE', 'RETIRADA', 1, 1, 1, 0, NULL, NULL),
 ('2024-11-01', '2024-11-03', 'PREPARANDO', 'RETIRADA', 2, 1, 1, 0, NULL, NULL),
-('2024-11-05', '2024-11-07', 'CANCELADO', 'RETIRADA',1, 2, 1, 0, NULL, NULL),
+('2024-11-05', '2024-11-07', 'CANCELADO', 'RETIRADA',1, 3, 1, 0, NULL, NULL),
 ('2024-11-02', '2024-11-04', 'AGUARDANDO_RETIRADA', 'RETIRADA', 1, 3, 1, 0, NULL, NULL);
 
 -- SEED para tabela tb_order_items

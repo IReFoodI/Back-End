@@ -191,9 +191,9 @@ public class OrderService {
       orderItem.setOrderItemId(orderItemPK);
 
       // Subtrai a quantidade do produto do estoque
-      // Product product = orderItem.getProduct();
-      // product.setQuantity(product.getQuantity() - itemDTO.quantity());
-      // productRepository.save(product);
+      Product product = orderItem.getProduct();
+      product.setQuantity(product.getQuantity() - itemDTO.quantity());
+      productRepository.save(product);
 
       orderItems.add(orderItem);
     }
