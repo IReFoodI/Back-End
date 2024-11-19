@@ -34,6 +34,27 @@ public class AddressService {
   private final UtilityService utilityService;
   private final JwtTokenProvider jwtTokenProvider;
 
+  @Transactional
+  public AddressDTO editAddress(Long addressId, @Valid AddressDTO addressDTO) {
+    Address address = addressRepository.findById(addressId)
+        .orElseThrow(() -> new NotFoundException());
+
+    address.setCep(addressDTO.cep());
+    address.setState(addressDTO.state());
+    address.setCity(addressDTO.city());
+    address.setDistrict(addressDTO.district());
+    address.setStreet(addressDTO.street());
+    address.setNumber(addressDTO.number());
+    address.setType(addressDTO.type());
+    address.setComplement(addressDTO.complement());
+    address.setAddressType(addressDTO.addressType());
+    address.setStandard(addressDTO.isStandard());
+
+    Address updatedAddress = addressRepository.save(address);
+
+    return convertToDTO(updatedAddress);
+  }
+
   @Transactional(readOnly = true)
   public List<Address> getAddressesByRestaurantIdNative(Long restaurantId) {
     List<Object[]> results = addressRepository.findAddressesByRestaurantIdNative(restaurantId);

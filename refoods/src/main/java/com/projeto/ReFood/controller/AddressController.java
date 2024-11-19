@@ -26,6 +26,16 @@ public class AddressController {
   @Autowired
   private AddressService addressService;
 
+  @Operation(summary = "Edita um endereço existente")
+  @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_RESTAURANT')")
+  @PutMapping("/{addressId}/edit")
+  public ResponseEntity<AddressDTO> editAddress(
+      @PathVariable Long addressId,
+      @Valid @RequestBody AddressDTO addressDTO) {
+    AddressDTO updatedAddress = addressService.editAddress(addressId, addressDTO);
+    return ResponseEntity.ok(updatedAddress);
+  }
+
   @GetMapping("/restaurant/{restaurantId}")
   public ResponseEntity<List<Address>> getAddressesByRestaurantId(@PathVariable Long restaurantId) {
     List<Address> addresses = addressService.getAddressesByRestaurantIdNative(restaurantId);
