@@ -33,7 +33,7 @@ public class Order {
   private EnumOrderStatus orderStatus;
 
   @Enumerated(EnumType.STRING)
-  @Column(nullable = false, columnDefinition = "enum('RETIRADA', 'ENTREGA') default 'RETIRADA'")
+  @Column(nullable = false)
   private EnumDeliveryType deliveryType;
 
   @Column(nullable = false)

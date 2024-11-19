@@ -51,8 +51,8 @@ public class ProductController {
     if (restaurantInfo == null) {
       return ResponseEntity.notFound().build();
     }
-    System.out.println("restaurantInfo: ");
-    System.out.println(restaurantInfo);
+    // System.out.println("restaurantInfo: ");
+    // System.out.println(restaurantInfo);
     return ResponseEntity.ok(restaurantInfo);
   }
 
