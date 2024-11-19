@@ -24,225 +24,241 @@ import java.util.stream.Collectors;
 @Validated
 @RequiredArgsConstructor
 public class OrderService {
-    
-    private final OrderRepository orderRepository;
-    private final UtilityService utilityService;
-    private final OrderItemRepository orderItemRepository;
-    private final ProductRepository productRepository;
-    
-    @Transactional(readOnly = true)
-    public List<OrderResponseDTO> getAllOrders() {
-        
-        return orderRepository.findAll().stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-    }
-    
-    @Transactional(readOnly = true)
-    public OrderResponseDTO getOrderById(Long orderId) {
-        
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(NotFoundException::new);
-        
-        return convertToDTO(order);
-    }
-    
-    @Transactional(readOnly = true)
-    public List<OrderResponseDTO> getOrdersByRestaurantId(Long restaurantId) {
-        List<Order> orders = orderRepository.findByRestaurant_RestaurantId(restaurantId);
-        
-        if (orders.isEmpty()) {
-            throw new NotFoundException();
-        }
-        
-        return orders.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-    }
-    
-    @Transactional(readOnly = true)
-    public List<OrderWithAddress> getOrdersByUserId(Long userId) {
-        List<Order> orders = orderRepository.findByUser_UserId(userId);
-        
-        if (orders.isEmpty()) {
-            throw new NotFoundException();
-        }
 
-        return orders.stream()
-                .map(this::convertOrderWithAddressToDTO)
-                .collect(Collectors.toList());
-        
-        // return orders.stream()
-        //         .map(this::convertToDTO)
-        //         .collect(Collectors.toList());
+  private final OrderRepository orderRepository;
+  private final UtilityService utilityService;
+  private final OrderItemRepository orderItemRepository;
+  private final ProductRepository productRepository;
+
+  @Transactional(readOnly = true)
+  public List<OrderResponseDTO> getAllOrders() {
+
+    return orderRepository.findAll().stream()
+        .map(this::convertToDTO)
+        .collect(Collectors.toList());
+  }
+
+  @Transactional(readOnly = true)
+  public OrderResponseDTO getOrderById(Long orderId) {
+
+    Order order = orderRepository.findById(orderId)
+        .orElseThrow(NotFoundException::new);
+
+    return convertToDTO(order);
+  }
+
+  @Transactional(readOnly = true)
+  public List<OrderResponseDTO> getOrdersByRestaurantId(Long restaurantId) {
+    List<Order> orders = orderRepository.findByRestaurant_RestaurantId(restaurantId);
+
+    if (orders.isEmpty()) {
+      throw new NotFoundException();
     }
 
-    private OrderWithAddress convertOrderWithAddressToDTO(Order order) {
-        OrderWithAddress orderWithAddress = new OrderWithAddress();
-        orderWithAddress.setOrderId(order.getOrderId());
-        orderWithAddress.setOrderDate(order.getOrderDate());
-        orderWithAddress.setDeliveryDate(order.getDeliveryDate());
-        orderWithAddress.setOrderStatus(order.getOrderStatus());
-        orderWithAddress.setDeliveryType(order.getDeliveryType());
-        orderWithAddress.setTotalValue(order.getTotalValue());
-        orderWithAddress.setUserId(order.getUser().getUserId());
-        orderWithAddress.setRestaurantId(order.getRestaurant().getRestaurantId());
-        orderWithAddress.setReviewId(order.getReview() != null ? order.getReview().getReviewId() : null);
-        orderWithAddress.setTransactionId(order.getTransaction() != null ? order.getTransaction().getTransactionId() : null);
-        orderWithAddress.setAddressDetails(
-                new AddressDetailsDTO(
-                        order.getAssociatedAddress().getAddressId(),
-                        order.getAssociatedAddress().getStreet(),
-                        order.getAssociatedAddress().getNumber(),
-                        order.getAssociatedAddress().getComplement(),
-                        order.getAssociatedAddress().getCity(),
-                        order.getAssociatedAddress().getState(),
-                        order.getAssociatedAddress().getCity(),
-                        order.getAssociatedAddress().getCep(),
-                        order.getAssociatedAddress().getComplement(),
-                        order.getAssociatedAddress().getAddressType(),
-                        order.getAssociatedAddress().isStandard()
-                )
-        );
-        return orderWithAddress;
+    return orders.stream()
+        .map(this::convertToDTO)
+        .collect(Collectors.toList());
+  }
+
+  @Transactional(readOnly = true)
+  public List<OrderWithAddress> getOrdersByUserId(Long userId) {
+    List<Order> orders = orderRepository.findByUser_UserId(userId);
+
+    if (orders.isEmpty()) {
+      throw new NotFoundException();
     }
-    
-    @Transactional
-    public List<OrderResponseDTO> getOrdersByUserIdAndStatus(Long userId, String orderStatus) {
-        List<Order> orders = orderRepository.findByUserIdAndOrderStatus(userId, orderStatus);
-        if (orders.isEmpty()) {
-            throw new NotFoundException();
-        }
-        return orders.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+
+    List<OrderWithAddress> response = orders.stream()
+        .map(this::convertOrderWithAddressToDTO)
+        .collect(Collectors.toList());
+
+    // buscar order items
+    for (OrderWithAddress order : response) {
+      List<OrderItem> orderItems = orderItemRepository.findByOrder_OrderId(order.getOrderId());
+      // converter orderitem para ordemitemDTO
+      List<OrderItemDTO> orderItemDTOs = orderItems.stream()
+          .map(item -> new OrderItemDTO(
+              item.getOrderItemId(),
+              item.getQuantity(),
+              item.getUnitValue(),
+              item.getSubtotal(),
+              item.getOrder().getOrderId(),
+              item.getProduct().getProductId(),
+              item.getProduct().getNameProduct()))
+          .collect(Collectors.toList());
+
+      order.setOrderItems(orderItemDTOs);
     }
-    
-    @Transactional
-    public List<OrderResponseDTO> getOrdersByRestaurantIdAndStatus(Long restaurantId, String orderStatus) {
-        List<Order> orders = orderRepository.findByRestaurantIdAndOrderStatus(restaurantId, orderStatus);
-        if (orders.isEmpty()) {
-            throw new NotFoundException();
-        }
-        return orders.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+
+    return response;
+
+  }
+
+  private OrderWithAddress convertOrderWithAddressToDTO(Order order) {
+    OrderWithAddress orderWithAddress = new OrderWithAddress();
+    orderWithAddress.setOrderId(order.getOrderId());
+    orderWithAddress.setOrderDate(order.getOrderDate());
+    orderWithAddress.setDeliveryDate(order.getDeliveryDate());
+    orderWithAddress.setOrderStatus(order.getOrderStatus());
+    orderWithAddress.setDeliveryType(order.getDeliveryType());
+    orderWithAddress.setTotalValue(order.getTotalValue());
+    orderWithAddress.setUserId(order.getUser().getUserId());
+    orderWithAddress.setRestaurantId(order.getRestaurant().getRestaurantId());
+    orderWithAddress.setReviewId(order.getReview() != null ? order.getReview().getReviewId() : null);
+    orderWithAddress
+        .setTransactionId(order.getTransaction() != null ? order.getTransaction().getTransactionId() : null);
+    orderWithAddress.setAddressDetails(
+        new AddressDetailsDTO(
+            order.getAssociatedAddress().getAddressId(),
+            order.getAssociatedAddress().getStreet(),
+            order.getAssociatedAddress().getNumber(),
+            order.getAssociatedAddress().getComplement(),
+            order.getAssociatedAddress().getCity(),
+            order.getAssociatedAddress().getState(),
+            order.getAssociatedAddress().getCity(),
+            order.getAssociatedAddress().getCep(),
+            order.getAssociatedAddress().getComplement(),
+            order.getAssociatedAddress().getAddressType(),
+            order.getAssociatedAddress().isStandard()));
+    return orderWithAddress;
+  }
+
+  @Transactional
+  public List<OrderResponseDTO> getOrdersByUserIdAndStatus(Long userId, String orderStatus) {
+    List<Order> orders = orderRepository.findByUserIdAndOrderStatus(userId, orderStatus);
+    if (orders.isEmpty()) {
+      throw new NotFoundException();
     }
-    
-    @Transactional
-    public OrderResponseDTO createOrder(OrderRequestDTO orderRequestDTO) {
-        Order order = new Order();
-        order.setOrderDate(orderRequestDTO.getOrderDate());
-        order.setDeliveryDate(orderRequestDTO.getDeliveryDate());
-        order.setOrderStatus(orderRequestDTO.getOrderStatus());
-        order.setDeliveryType(orderRequestDTO.getDeliveryType());
-        order.setTotalValue(orderRequestDTO.getTotalValue());
-        
-        utilityService.associateUser(order::setUser, orderRequestDTO.getUserId());
-        utilityService.associateRestaurant(order::setRestaurant, orderRequestDTO.getRestaurantId());
-        utilityService.associateAddress(order::setAssociatedAddress, orderRequestDTO.getAddressId());
-        if (orderRequestDTO.getReviewId() != null) {
-            utilityService.associateReview(order::setReview, orderRequestDTO.getReviewId());
-        }
-        if (orderRequestDTO.getTransactionId() != null) {
-            utilityService.associateTransaction(order::setTransaction, orderRequestDTO.getTransactionId());
-        }
-        
-        // Verifica a quantidade disponível em estoque para cada item do pedido
-        for (OrderItemDTO itemDTO : orderRequestDTO.getOrderItems()) {
-            Product product = productRepository.findById(itemDTO.productId())
-                    .orElseThrow(NotFoundException::new);
-            
-            if (product.getQuantity() < itemDTO.quantity()) {
-                throw new BadRequestException(
-                        "Quantidade de produto insuficiente em estoque para o produto: " + product.getNameProduct());
-            }
-        }
-        
-        orderRepository.save(order);
-        
-        List<OrderItem> orderItems = new ArrayList<>();
-        for (OrderItemDTO itemDTO : orderRequestDTO.getOrderItems()) {
-            OrderItem orderItem = new OrderItem();
-            orderItem.setQuantity(itemDTO.quantity());
-            orderItem.setUnitValue(itemDTO.unitValue());
-            orderItem.setSubtotal(itemDTO.unitValue() * itemDTO.quantity());
-            orderItem.setOrder(order);
-            
-            utilityService.associateProduct(orderItem::setProduct, itemDTO.productId());
-            
-            OrderItemPK orderItemPK = new OrderItemPK(order.getOrderId(), itemDTO.productId());
-            orderItem.setOrderItemId(orderItemPK);
-            
-            // Subtrai a quantidade do produto do estoque
-            // Product product = orderItem.getProduct();
-            // product.setQuantity(product.getQuantity() - itemDTO.quantity());
-            // productRepository.save(product);
-            
-            orderItems.add(orderItem);
-        }
-        
-        orderItemRepository.saveAll(orderItems);
-        
-        List<OrderItemDTO> orderItemDTOs = orderItems.stream()
-                .map(item -> new OrderItemDTO(
-                        item.getOrderItemId(),
-                        item.getQuantity(),
-                        item.getUnitValue(),
-                        item.getSubtotal(),
-                        item.getOrder().getOrderId(),
-                        item.getProduct().getProductId(),
-                        item.getProduct().getNameProduct()))
-                .collect(Collectors.toList());
-        
-        return new OrderResponseDTO(
-                order.getOrderId(),
-                order.getOrderDate(),
-                order.getDeliveryDate(),
-                order.getOrderStatus(),
-                order.getDeliveryType(),
-                order.getTotalValue(),
-                order.getUser().getUserId(),
-                order.getRestaurant().getRestaurantId(),
-                order.getAssociatedAddress().getAddressId(),
-                order.getReview() != null ? order.getReview().getReviewId() : null,
-                order.getTransaction() != null ? order.getTransaction().getTransactionId() : null,
-                orderItemDTOs);
+    return orders.stream()
+        .map(this::convertToDTO)
+        .collect(Collectors.toList());
+  }
+
+  @Transactional
+  public List<OrderResponseDTO> getOrdersByRestaurantIdAndStatus(Long restaurantId, String orderStatus) {
+    List<Order> orders = orderRepository.findByRestaurantIdAndOrderStatus(restaurantId, orderStatus);
+    if (orders.isEmpty()) {
+      throw new NotFoundException();
     }
-    
-    private OrderResponseDTO convertToDTO(Order order) {
-        List<OrderItemDTO> orderItemDTOs = order.getOrderItems().stream()
-                .map(item -> new OrderItemDTO(
-                        item.getOrderItemId(),
-                        item.getQuantity(),
-                        item.getUnitValue(),
-                        item.getSubtotal(),
-                        item.getOrder().getOrderId(),
-                        item.getProduct().getProductId(),
-                        item.getProduct().getNameProduct()))
-                .collect(Collectors.toList());
-        
-        return new OrderResponseDTO(
-                order.getOrderId(),
-                order.getOrderDate(),
-                order.getDeliveryDate(),
-                order.getOrderStatus(),
-                order.getDeliveryType(),
-                order.getTotalValue(),
-                order.getUser().getUserId(),
-                order.getRestaurant().getRestaurantId(),
-                order.getAssociatedAddress().getAddressId(),
-                order.getReview() != null ? order.getReview().getReviewId() : null,
-                order.getTransaction() != null ? order.getTransaction().getTransactionId() : null,
-                orderItemDTOs);
+    return orders.stream()
+        .map(this::convertToDTO)
+        .collect(Collectors.toList());
+  }
+
+  @Transactional
+  public OrderResponseDTO createOrder(OrderRequestDTO orderRequestDTO) {
+    Order order = new Order();
+    order.setOrderDate(orderRequestDTO.getOrderDate());
+    order.setDeliveryDate(orderRequestDTO.getDeliveryDate());
+    order.setOrderStatus(orderRequestDTO.getOrderStatus());
+    order.setDeliveryType(orderRequestDTO.getDeliveryType());
+    order.setTotalValue(orderRequestDTO.getTotalValue());
+
+    utilityService.associateUser(order::setUser, orderRequestDTO.getUserId());
+    utilityService.associateRestaurant(order::setRestaurant, orderRequestDTO.getRestaurantId());
+    utilityService.associateAddress(order::setAssociatedAddress, orderRequestDTO.getAddressId());
+    if (orderRequestDTO.getReviewId() != null) {
+      utilityService.associateReview(order::setReview, orderRequestDTO.getReviewId());
     }
-    
-    @Transactional
-    public OrderResponseDTO updateOrderStatus(Long orderId, EnumOrderStatus newStatus) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(NotFoundException::new);
-        order.setOrderStatus(newStatus);
-        order = orderRepository.save(order);
-        return convertToDTO(order);
+    if (orderRequestDTO.getTransactionId() != null) {
+      utilityService.associateTransaction(order::setTransaction, orderRequestDTO.getTransactionId());
     }
+
+    // Verifica a quantidade disponível em estoque para cada item do pedido
+    for (OrderItemDTO itemDTO : orderRequestDTO.getOrderItems()) {
+      Product product = productRepository.findById(itemDTO.productId())
+          .orElseThrow(NotFoundException::new);
+
+      if (product.getQuantity() < itemDTO.quantity()) {
+        throw new BadRequestException(
+            "Quantidade de produto insuficiente em estoque para o produto: " + product.getNameProduct());
+      }
+    }
+
+    orderRepository.save(order);
+
+    List<OrderItem> orderItems = new ArrayList<>();
+    for (OrderItemDTO itemDTO : orderRequestDTO.getOrderItems()) {
+      OrderItem orderItem = new OrderItem();
+      orderItem.setQuantity(itemDTO.quantity());
+      orderItem.setUnitValue(itemDTO.unitValue());
+      orderItem.setSubtotal(itemDTO.unitValue() * itemDTO.quantity());
+      orderItem.setOrder(order);
+
+      utilityService.associateProduct(orderItem::setProduct, itemDTO.productId());
+
+      OrderItemPK orderItemPK = new OrderItemPK(order.getOrderId(), itemDTO.productId());
+      orderItem.setOrderItemId(orderItemPK);
+
+      // Subtrai a quantidade do produto do estoque
+      // Product product = orderItem.getProduct();
+      // product.setQuantity(product.getQuantity() - itemDTO.quantity());
+      // productRepository.save(product);
+
+      orderItems.add(orderItem);
+    }
+
+    orderItemRepository.saveAll(orderItems);
+
+    List<OrderItemDTO> orderItemDTOs = orderItems.stream()
+        .map(item -> new OrderItemDTO(
+            item.getOrderItemId(),
+            item.getQuantity(),
+            item.getUnitValue(),
+            item.getSubtotal(),
+            item.getOrder().getOrderId(),
+            item.getProduct().getProductId(),
+            item.getProduct().getNameProduct()))
+        .collect(Collectors.toList());
+
+    return new OrderResponseDTO(
+        order.getOrderId(),
+        order.getOrderDate(),
+        order.getDeliveryDate(),
+        order.getOrderStatus(),
+        order.getDeliveryType(),
+        order.getTotalValue(),
+        order.getUser().getUserId(),
+        order.getRestaurant().getRestaurantId(),
+        order.getAssociatedAddress().getAddressId(),
+        order.getReview() != null ? order.getReview().getReviewId() : null,
+        order.getTransaction() != null ? order.getTransaction().getTransactionId() : null,
+        orderItemDTOs);
+  }
+
+  private OrderResponseDTO convertToDTO(Order order) {
+    List<OrderItemDTO> orderItemDTOs = order.getOrderItems().stream()
+        .map(item -> new OrderItemDTO(
+            item.getOrderItemId(),
+            item.getQuantity(),
+            item.getUnitValue(),
+            item.getSubtotal(),
+            item.getOrder().getOrderId(),
+            item.getProduct().getProductId(),
+            item.getProduct().getNameProduct()))
+        .collect(Collectors.toList());
+
+    return new OrderResponseDTO(
+        order.getOrderId(),
+        order.getOrderDate(),
+        order.getDeliveryDate(),
+        order.getOrderStatus(),
+        order.getDeliveryType(),
+        order.getTotalValue(),
+        order.getUser().getUserId(),
+        order.getRestaurant().getRestaurantId(),
+        order.getAssociatedAddress().getAddressId(),
+        order.getReview() != null ? order.getReview().getReviewId() : null,
+        order.getTransaction() != null ? order.getTransaction().getTransactionId() : null,
+        orderItemDTOs);
+  }
+
+  @Transactional
+  public OrderResponseDTO updateOrderStatus(Long orderId, EnumOrderStatus newStatus) {
+    Order order = orderRepository.findById(orderId)
+        .orElseThrow(NotFoundException::new);
+    order.setOrderStatus(newStatus);
+    order = orderRepository.save(order);
+    return convertToDTO(order);
+  }
 }
