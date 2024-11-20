@@ -62,7 +62,7 @@ public class Address {
   private EnumAddressType addressType;
 
   @Column(nullable = false)
-  private boolean isStandard; // default = false
+  private boolean isStandard;
 
   @ManyToOne
   @JoinColumn(name = "user_id")

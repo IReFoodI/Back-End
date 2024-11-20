@@ -45,10 +45,20 @@ public class AddressService {
     address.setDistrict(addressDTO.district());
     address.setStreet(addressDTO.street());
     address.setNumber(addressDTO.number());
-    address.setType(addressDTO.type());
-    address.setComplement(addressDTO.complement());
+    // address.setType(addressDTO.type());
+    // address.setComplement(addressDTO.complement());
     address.setAddressType(addressDTO.addressType());
-    address.setStandard(addressDTO.isStandard());
+    // address.setStandard(addressDTO.isStandard());
+
+    if (addressDTO.type() != null) {
+      address.setType(addressDTO.type());
+    }
+    if (addressDTO.complement() != null) {
+      address.setComplement(addressDTO.complement());
+    }
+    if (addressDTO.isStandard()) {
+      address.setStandard(addressDTO.isStandard());
+    }
 
     Address updatedAddress = addressRepository.save(address);
 

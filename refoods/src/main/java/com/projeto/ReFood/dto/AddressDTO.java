@@ -10,7 +10,7 @@ public record AddressDTO(
         Long addressId,
 
         @NotBlank(message = "O CEP é obrigatório.")
-    String cep,
+        String cep,
 
         @NotBlank(message = "O estado é obrigatório.")
         @Size(min = 2, max = 2, message = "O estado deve ter exatamente 2 letras.")
