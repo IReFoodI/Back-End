@@ -302,7 +302,7 @@ public class OrderService {
   }
 
   @Transactional
-  public void cancelOrder(Long orderId) {
+  public OrderResponseDTO cancelOrder(Long orderId) {
     // Busca o pedido pelo ID
     Order order = orderRepository.findById(orderId)
         .orElseThrow(() -> new NotFoundException());
@@ -314,7 +314,7 @@ public class OrderService {
 
     // Atualiza o status do pedido para cancelado
     order.setOrderStatus(EnumOrderStatus.CANCELADO);
-    orderRepository.save(order);
+    Order response =  orderRepository.save(order);
 
     // Retorna os produtos ao estoque
     List<OrderItem> orderItems = orderItemRepository.findByOrder_OrderId(orderId);
@@ -323,6 +323,8 @@ public class OrderService {
       product.setQuantity(product.getQuantity() + item.getQuantity());
       productRepository.save(product);
     }
+
+    return convertToDTO(response);
   }
 
 }

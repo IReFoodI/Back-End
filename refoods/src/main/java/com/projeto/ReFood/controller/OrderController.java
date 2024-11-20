@@ -117,9 +117,9 @@ public class OrderController {
       @ApiResponse(responseCode = "400", description = "Erro ao cancelar o pedido")
   })
   @PatchMapping("/{orderId}/cancel")
-  public ResponseEntity<Void> cancelOrder(@PathVariable Long orderId) {
-    orderService.cancelOrder(orderId);
-    return ResponseEntity.ok().build();
+  public ResponseEntity<OrderResponseDTO> cancelOrder(@PathVariable Long orderId) {
+    OrderResponseDTO response = orderService.cancelOrder(orderId);
+    return ResponseEntity.ok(response);
   }
 
 }
