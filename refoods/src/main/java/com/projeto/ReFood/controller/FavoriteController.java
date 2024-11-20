@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.projeto.ReFood.dto.FavoriteDTO;
+import com.projeto.ReFood.dto.FavoriteDetailsDTO;
 
 import java.net.URI;
 import java.util.List;
@@ -34,8 +35,8 @@ public class FavoriteController {
   }
 
   @GetMapping("/user")
-  public ResponseEntity<List<FavoriteDTO>> getFavoritesByUserId(@RequestHeader("Authorization") String token) {
-    List<FavoriteDTO> favorites = favoriteService.getFavoriteByUserId(token);
+  public ResponseEntity<List<FavoriteDetailsDTO>> getFavoritesByUserId(@RequestHeader("Authorization") String token) {
+    List<FavoriteDetailsDTO> favorites = favoriteService.getFavoriteByUserId(token);
     return ResponseEntity.ok(favorites);
   }
 

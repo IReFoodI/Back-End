@@ -1,7 +1,7 @@
 package com.projeto.ReFood.service;
 
 import com.projeto.ReFood.repository.FavoriteRepository;
-
+import com.projeto.ReFood.repository.RestaurantHoursRepository;
 import com.projeto.ReFood.security.JwtTokenProvider;
 import jakarta.validation.Valid;
 
@@ -11,10 +11,19 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import com.projeto.ReFood.dto.FavoriteDTO;
+import com.projeto.ReFood.dto.FavoriteDetailsDTO;
+import com.projeto.ReFood.dto.HourDTO;
+import com.projeto.ReFood.dto.RestaurantInfoDTO;
 import com.projeto.ReFood.exception.GlobalExceptionHandler.NotFoundException;
+import com.projeto.ReFood.model.EnumDayOfWeek;
 import com.projeto.ReFood.model.Favorite;
+import com.projeto.ReFood.model.Restaurant;
+import com.projeto.ReFood.model.RestaurantHours;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,6 +34,9 @@ public class FavoriteService {
   private FavoriteRepository favoriteRepository;
 
   @Autowired
+  private RestaurantHoursRepository restaurantHoursRepository;
+
+  @Autowired
   private UtilityService utilityService;
 
   @Autowired
@@ -33,10 +45,10 @@ public class FavoriteService {
   @Transactional(readOnly = true)
   public List<FavoriteDTO> getAllFavorites() {
     return favoriteRepository
-            .findAll()
-            .stream()
-            .map(this::convertToDTO)
-            .collect(Collectors.toList());
+        .findAll()
+        .stream()
+        .map(this::convertToDTO)
+        .collect(Collectors.toList());
   }
 
   @Transactional(readOnly = true)
@@ -47,12 +59,54 @@ public class FavoriteService {
   }
 
   @Transactional(readOnly = true)
-  public List<FavoriteDTO> getFavoriteByUserId(String token) {
+  public List<FavoriteDetailsDTO> getFavoriteByUserId(String token) {
     Long userId = jwtTokenProvider.extractUserId(token);
-    return favoriteRepository.findByUser_UserId(userId)
-            .stream()
-            .map(this::convertToDTO)
-            .collect(Collectors.toList());
+
+    List<Favorite> favorites = favoriteRepository.findByUser_UserId(userId);
+
+    // converte Favorite to FavoriteDetailsDTO
+    List<FavoriteDetailsDTO> response = favorites.stream()
+        .map(favorite -> {
+          Long restaurantId = favorite.getRestaurant().getRestaurantId();
+
+          // Buscando horário do restaurante para o dia de hoje
+          DayOfWeek currentDay = LocalDate.now().getDayOfWeek();
+          EnumDayOfWeek dayEnum = EnumDayOfWeek.valueOf(currentDay.name());
+          RestaurantHours restaurantHour = Optional.ofNullable(
+              restaurantHoursRepository.findTodayHoursByRestaurantId(restaurantId, dayEnum))
+              .orElseThrow(() -> new NotFoundException());
+          // cria objeto HourDTO
+          HourDTO timesOfTheDay = new HourDTO(
+              restaurantHour.getId(),
+              restaurantHour.getDayOfWeek(),
+              restaurantHour.getOpeningTime(),
+              restaurantHour.getClosingTime());
+
+          // Converte Restaurant para RestaurantInfoDTO
+          Restaurant restaurant = favorite.getRestaurant();
+          RestaurantInfoDTO restaurantInfoDTO = new RestaurantInfoDTO(
+              restaurant.getRestaurantId(),
+              restaurant.getFantasy(),
+              restaurant.getEmail(),
+              restaurant.getDateCreation(),
+              restaurant.getCategory(),
+              restaurant.getUrlBanner(),
+              restaurant.getUrlLogo(),
+              restaurant.getQuantityEvaluations(),
+              restaurant.getTotalEvaluations(),
+              restaurant.getPhone(),
+              restaurant.getDescription(),
+              restaurant.getAverageRating());
+
+          return new FavoriteDetailsDTO(
+              favorite.getFavoriteId(),
+              userId,
+              timesOfTheDay,
+              restaurantInfoDTO);
+        })
+        .collect(Collectors.toList());
+
+    return response;
   }
 
   @Transactional
