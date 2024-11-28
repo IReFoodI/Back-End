@@ -18,6 +18,7 @@ jwt.expirationTime=
 
 # FIREBASE
 image.base.url=
+FIREBASE_CONFIG_PATH=
 
 # Configurações do Firebase
 firebase.client.email=

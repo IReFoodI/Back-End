@@ -12,6 +12,7 @@ import java.io.IOException;
 @Configuration
 public class FirebaseConfig {
 
+  // FIREBASE_CONFIG_PATH=
   String pathKey = "/refoods/src/main/java/com/projeto/ReFood/firebase/refood-firebase-key.jsonc";
 
   @Bean
