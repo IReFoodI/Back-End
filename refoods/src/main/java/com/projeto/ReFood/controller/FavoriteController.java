@@ -22,17 +22,17 @@ public class FavoriteController {
   @Autowired
   private FavoriteService favoriteService;
 
-  @GetMapping
-  public ResponseEntity<List<FavoriteDTO>> getAllFavorites() {
-    List<FavoriteDTO> favorites = favoriteService.getAllFavorites();
-    return ResponseEntity.ok(favorites);
-  }
+  // @GetMapping
+  // public ResponseEntity<List<FavoriteDTO>> getAllFavorites() {
+  //   List<FavoriteDTO> favorites = favoriteService.getAllFavorites();
+  //   return ResponseEntity.ok(favorites);
+  // }
 
-  @GetMapping("/{favoriteId}")
-  public ResponseEntity<FavoriteDTO> getFavoriteById(@PathVariable Long favoriteId) {
-    FavoriteDTO favoriteDTO = favoriteService.getFavoriteById(favoriteId);
-    return ResponseEntity.ok(favoriteDTO);
-  }
+  // @GetMapping("/{favoriteId}")
+  // public ResponseEntity<FavoriteDTO> getFavoriteById(@PathVariable Long favoriteId) {
+  //   FavoriteDTO favoriteDTO = favoriteService.getFavoriteById(favoriteId);
+  //   return ResponseEntity.ok(favoriteDTO);
+  // }
 
   @GetMapping("/user")
   public ResponseEntity<List<FavoriteDetailsDTO>> getFavoritesByUserId(@RequestHeader("Authorization") String token) {
@@ -50,12 +50,12 @@ public class FavoriteController {
     return ResponseEntity.created(location).body(createdFavorite);
   }
 
-  @PutMapping("/{favoriteId}")
-  public ResponseEntity<FavoriteDTO> updateFavorite(@PathVariable Long favoriteId,
-      @Valid @RequestBody FavoriteDTO favoriteDTO) {
-    FavoriteDTO updatedFavorite = favoriteService.updateFavorite(favoriteId, favoriteDTO);
-    return ResponseEntity.ok(updatedFavorite);
-  }
+  // @PutMapping("/{favoriteId}")
+  // public ResponseEntity<FavoriteDTO> updateFavorite(@PathVariable Long favoriteId,
+  //     @Valid @RequestBody FavoriteDTO favoriteDTO) {
+  //   FavoriteDTO updatedFavorite = favoriteService.updateFavorite(favoriteId, favoriteDTO);
+  //   return ResponseEntity.ok(updatedFavorite);
+  // }
 
   @DeleteMapping("/{favoriteId}")
   public ResponseEntity<Void> deleteFavorite(@PathVariable Long favoriteId) {

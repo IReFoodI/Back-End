@@ -33,11 +33,11 @@ public class RestaurantController {
   @Autowired
   private RestaurantHoursService restaurantHoursService;
 
-  @GetMapping("/allRestaurants")
-  public ResponseEntity<List<RestaurantDTO>> getAllRestaurants() {
-    List<RestaurantDTO> restaurants = restaurantService.getAllRestaurants();
-    return ResponseEntity.ok(restaurants);
-  }
+  // @GetMapping("/allRestaurants")
+  // public ResponseEntity<List<RestaurantDTO>> getAllRestaurants() {
+  //   List<RestaurantDTO> restaurants = restaurantService.getAllRestaurants();
+  //   return ResponseEntity.ok(restaurants);
+  // }
 
   @GetMapping("/restaurants")
   public ResponseEntity<PagedModel<EntityModel<Map<String, Object>>>> getRestaurants(
@@ -109,11 +109,11 @@ public class RestaurantController {
     return ResponseEntity.noContent().build();
   }
 
-  @DeleteMapping("/{restaurantId}")
-  public ResponseEntity<Void> deleteRestaurant(@PathVariable Long restaurantId) {
-    restaurantService.deleteRestaurant(restaurantId);
-    return ResponseEntity.noContent().build();
-  }
+  // @DeleteMapping("/{restaurantId}")
+  // public ResponseEntity<Void> deleteRestaurant(@PathVariable Long restaurantId) {
+  //   restaurantService.deleteRestaurant(restaurantId);
+  //   return ResponseEntity.noContent().build();
+  // }
 
   @GetMapping("/today")
   public ResponseEntity<PagedModel<EntityModel<Map<String, Object>>>> getTodayHours(

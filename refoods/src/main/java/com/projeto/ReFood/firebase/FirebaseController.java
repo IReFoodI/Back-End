@@ -34,10 +34,10 @@ public class FirebaseController {
     }
   }
 
-    @DeleteMapping("/image/{imageName}")
-    public ResponseEntity<Void> deleteImage(@PathVariable String imageName) {
-        firebaseService.deleteImage(imageName);
-        return ResponseEntity.noContent().build(); // 204 No Content em todos os casos
-    }
+    // @DeleteMapping("/image/{imageName}")
+    // public ResponseEntity<Void> deleteImage(@PathVariable String imageName) {
+    //     firebaseService.deleteImage(imageName);
+    //     return ResponseEntity.noContent().build(); // 204 No Content em todos os casos
+    // }
 
 }

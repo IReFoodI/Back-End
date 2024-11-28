@@ -21,11 +21,11 @@ public class RestaurantHoursController {
   @Autowired
   private RestaurantHoursService restaurantHoursService;
 
-  @GetMapping
-  public ResponseEntity<List<RestaurantHoursDTO>> listAllHours() {
-    List<RestaurantHoursDTO> hours = restaurantHoursService.getAllHours();
-    return ResponseEntity.ok(hours);
-  }
+  // @GetMapping
+  // public ResponseEntity<List<RestaurantHoursDTO>> listAllHours() {
+  //   List<RestaurantHoursDTO> hours = restaurantHoursService.getAllHours();
+  //   return ResponseEntity.ok(hours);
+  // }
 
   @GetMapping("/{hoursId}")
   public ResponseEntity<RestaurantHoursDTO> getHoursById(@PathVariable Long hoursId) {

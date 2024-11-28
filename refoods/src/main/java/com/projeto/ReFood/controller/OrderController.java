@@ -5,7 +5,6 @@ import com.projeto.ReFood.service.OrderService;
 import com.projeto.ReFood.model.EnumOrderStatus;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
@@ -43,24 +42,24 @@ public class OrderController {
     return ResponseEntity.created(location).body(createdOrder);
   }
 
-  @Operation(summary = "Lista todos os pedidos", description = "Retorna uma lista de todos os pedidos.")
-  @ApiResponse(responseCode = "200", description = "Pedidos listados com sucesso")
-  @GetMapping
-  public ResponseEntity<List<OrderResponseDTO>> listAllOrders() {
-    List<OrderResponseDTO> orders = orderService.getAllOrders();
-    return ResponseEntity.ok(orders);
-  }
+  // @Operation(summary = "Lista todos os pedidos", description = "Retorna uma lista de todos os pedidos.")
+  // @ApiResponse(responseCode = "200", description = "Pedidos listados com sucesso")
+  // @GetMapping
+  // public ResponseEntity<List<OrderResponseDTO>> listAllOrders() {
+  //   List<OrderResponseDTO> orders = orderService.getAllOrders();
+  //   return ResponseEntity.ok(orders);
+  // }
 
-  @Operation(summary = "Obtém detalhes de um pedido", description = "Retorna as informações de um pedido pelo ID.")
-  @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Pedido encontrado"),
-      @ApiResponse(responseCode = "404", description = "Pedido não encontrado")
-  })
-  @GetMapping("/{orderId}")
-  public ResponseEntity<OrderResponseDTO> getOrderById(@PathVariable Long orderId) {
-    OrderResponseDTO orderResponse = orderService.getOrderById(orderId);
-    return ResponseEntity.ok(orderResponse);
-  }
+  // @Operation(summary = "Obtém detalhes de um pedido", description = "Retorna as informações de um pedido pelo ID.")
+  // @ApiResponses(value = {
+  //     @ApiResponse(responseCode = "200", description = "Pedido encontrado"),
+  //     @ApiResponse(responseCode = "404", description = "Pedido não encontrado")
+  // })
+  // @GetMapping("/{orderId}")
+  // public ResponseEntity<OrderResponseDTO> getOrderById(@PathVariable Long orderId) {
+  //   OrderResponseDTO orderResponse = orderService.getOrderById(orderId);
+  //   return ResponseEntity.ok(orderResponse);
+  // }
 
   @Operation(summary = "Lista pedidos de um restaurante", description = "Retorna uma lista de pedidos realizados em um restaurante.")
   @ApiResponse(responseCode = "200", description = "Pedidos listados com sucesso")
@@ -78,23 +77,23 @@ public class OrderController {
     return ResponseEntity.ok(orders);
   }
 
-  @Operation(summary = "Lista pedidos de um usuário com status específico", description = "Retorna os pedidos de um usuário com um status específico.")
-  @ApiResponse(responseCode = "200", description = "Pedidos listados com sucesso")
-  @GetMapping("/user/{userId}/status/{orderStatus}")
-  public List<OrderResponseDTO> getOrdersByUserIdAndStatus(
-      @Parameter(description = "ID do usuário") @PathVariable Long userId,
-      @Parameter(description = "Status do pedido") @PathVariable String orderStatus) {
-    return orderService.getOrdersByUserIdAndStatus(userId, orderStatus);
-  }
+  // @Operation(summary = "Lista pedidos de um usuário com status específico", description = "Retorna os pedidos de um usuário com um status específico.")
+  // @ApiResponse(responseCode = "200", description = "Pedidos listados com sucesso")
+  // @GetMapping("/user/{userId}/status/{orderStatus}")
+  // public List<OrderResponseDTO> getOrdersByUserIdAndStatus(
+  //     @Parameter(description = "ID do usuário") @PathVariable Long userId,
+  //     @Parameter(description = "Status do pedido") @PathVariable String orderStatus) {
+  //   return orderService.getOrdersByUserIdAndStatus(userId, orderStatus);
+  // }
 
-  @Operation(summary = "Lista pedidos de um restaurante com status específico", description = "Retorna os pedidos de um restaurante com um status específico.")
-  @ApiResponse(responseCode = "200", description = "Pedidos listados com sucesso")
-  @GetMapping("/restaurant/{restaurantId}/status/{orderStatus}")
-  public List<OrderResponseDTO> getOrdersByRestaurantIdAndStatus(
-      @Parameter(description = "ID do restaurante") @PathVariable Long restaurantId,
-      @Parameter(description = "Status do pedido") @PathVariable String orderStatus) {
-    return orderService.getOrdersByRestaurantIdAndStatus(restaurantId, orderStatus);
-  }
+  // @Operation(summary = "Lista pedidos de um restaurante com status específico", description = "Retorna os pedidos de um restaurante com um status específico.")
+  // @ApiResponse(responseCode = "200", description = "Pedidos listados com sucesso")
+  // @GetMapping("/restaurant/{restaurantId}/status/{orderStatus}")
+  // public List<OrderResponseDTO> getOrdersByRestaurantIdAndStatus(
+  //     @Parameter(description = "ID do restaurante") @PathVariable Long restaurantId,
+  //     @Parameter(description = "Status do pedido") @PathVariable String orderStatus) {
+  //   return orderService.getOrdersByRestaurantIdAndStatus(restaurantId, orderStatus);
+  // }
 
   @Operation(summary = "Atualiza o status de um pedido", description = "Atualiza o status do pedido com base no ID.")
   @ApiResponses(value = {

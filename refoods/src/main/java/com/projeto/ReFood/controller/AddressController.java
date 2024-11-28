@@ -55,27 +55,27 @@ public class AddressController {
     return ResponseEntity.ok(addresses);
   }
 
-  @GetMapping("/user/all-addresses")
-  public ResponseEntity<List<AddressDTO>> listUserAddresses() {
-    List<AddressDTO> addresses = addressService.getAllUserAddresses();
-    return ResponseEntity.ok(addresses);
-  }
+  // @GetMapping("/user/all-addresses")
+  // public ResponseEntity<List<AddressDTO>> listUserAddresses() {
+  //   List<AddressDTO> addresses = addressService.getAllUserAddresses();
+  //   return ResponseEntity.ok(addresses);
+  // }
 
-  @Operation(summary = "Busca um endereço por ID", description = "Retorna os detalhes de um endereço específico com base no ID fornecido.", responses = {
-      @ApiResponse(responseCode = "200", description = "Endereço encontrado e retornado com sucesso"),
-      @ApiResponse(responseCode = "404", description = "Endereço não encontrado")
-  })
-  @GetMapping("/{addressId}")
-  public ResponseEntity<AddressDTO> getAddressById(@PathVariable Long addressId) {
-    AddressDTO addressDTO = addressService.getAddressById(addressId);
-    return ResponseEntity.ok(addressDTO);
-  }
+  // @Operation(summary = "Busca um endereço por ID", description = "Retorna os detalhes de um endereço específico com base no ID fornecido.", responses = {
+  //     @ApiResponse(responseCode = "200", description = "Endereço encontrado e retornado com sucesso"),
+  //     @ApiResponse(responseCode = "404", description = "Endereço não encontrado")
+  // })
+  // @GetMapping("/{addressId}")
+  // public ResponseEntity<AddressDTO> getAddressById(@PathVariable Long addressId) {
+  //   AddressDTO addressDTO = addressService.getAddressById(addressId);
+  //   return ResponseEntity.ok(addressDTO);
+  // }
 
-  @GetMapping("/user/{addressId}")
-  public ResponseEntity<AddressDTO> getUserAddressById(@PathVariable Long addressId) {
-    AddressDTO addressDTO = addressService.getUserAddressById(addressId);
-    return ResponseEntity.ok(addressDTO);
-  }
+  // @GetMapping("/user/{addressId}")
+  // public ResponseEntity<AddressDTO> getUserAddressById(@PathVariable Long addressId) {
+  //   AddressDTO addressDTO = addressService.getUserAddressById(addressId);
+  //   return ResponseEntity.ok(addressDTO);
+  // }
 
   @Operation(summary = "Cria um novo endereço para o usuário", description = "Permite a criação de um novo endereço associado ao usuário autenticado. O token de autorização deve ser fornecido no cabeçalho da requisição.", responses = {
       @ApiResponse(responseCode = "201", description = "Endereço criado com sucesso"),
@@ -93,19 +93,19 @@ public class AddressController {
     return ResponseEntity.created(location).body(createdAddress);
   }
 
-  @Operation(summary = "Atualiza um endereço específico do usuário", description = "Atualiza os detalhes de um endereço associado ao usuário autenticado, com base no token de autorização e no ID do endereço fornecidos. O corpo da requisição deve conter as novas informações do endereço.", responses = {
-      @ApiResponse(responseCode = "200", description = "Endereço atualizado com sucesso"),
-      @ApiResponse(responseCode = "404", description = "Endereço ou usuário não encontrado"),
-      @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos na requisição"),
-      @ApiResponse(responseCode = "401", description = "Token de autorização inválido ou não fornecido")
-  })
-  @PutMapping("/{addressId}")
-  public ResponseEntity<AddressDTO> updateAddress(@RequestHeader("Authorization") String token,
-      @PathVariable Long addressId, @Valid @RequestBody AddressDTO addressDTO)
-      throws NotFoundException {
-    AddressDTO updatedAddress = addressService.updateAddress(token, addressId, addressDTO);
-    return ResponseEntity.ok(updatedAddress);
-  }
+  // @Operation(summary = "Atualiza um endereço específico do usuário", description = "Atualiza os detalhes de um endereço associado ao usuário autenticado, com base no token de autorização e no ID do endereço fornecidos. O corpo da requisição deve conter as novas informações do endereço.", responses = {
+  //     @ApiResponse(responseCode = "200", description = "Endereço atualizado com sucesso"),
+  //     @ApiResponse(responseCode = "404", description = "Endereço ou usuário não encontrado"),
+  //     @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos na requisição"),
+  //     @ApiResponse(responseCode = "401", description = "Token de autorização inválido ou não fornecido")
+  // })
+  // @PutMapping("/{addressId}")
+  // public ResponseEntity<AddressDTO> updateAddress(@RequestHeader("Authorization") String token,
+  //     @PathVariable Long addressId, @Valid @RequestBody AddressDTO addressDTO)
+  //     throws NotFoundException {
+  //   AddressDTO updatedAddress = addressService.updateAddress(token, addressId, addressDTO);
+  //   return ResponseEntity.ok(updatedAddress);
+  // }
 
   @Operation(summary = "Atualiza parcialmente um endereço para definir como padrão", description = "Atualiza o endereço especificado como o endereço padrão do usuário autenticado. O token de autorização deve ser fornecido no cabeçalho da requisição.", responses = {
       @ApiResponse(responseCode = "204", description = "Endereço atualizado com sucesso para padrão"),
