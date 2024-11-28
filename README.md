@@ -81,27 +81,35 @@
 1. Clone o repositório
 
 ```shellscript
-git clone https://github.com/seu-usuario/refoods-api.git
-cd refoods-api
+git clone git@github.com:IReFoodI/Back-End.git
+cd Back-End
 ```
 
 
-2. Configure o banco de dados
+2. Escolha seu perfil no application.propertie
+
+    - Abra o arquivo `src/main/resources/application.properties`
+    - Comente a linha `spring.profiles.active=dev` e descomente a linha `spring.profiles.active=test` para rodar em desenvolvimento com H2
+    - Comente a linha `spring.profiles.active=test` e descomente a linha `spring.profiles.active=dev` para rodar em desenvolvimento com PostgreSQL
+    - Comente as linhas `spring.profiles.active=test` e `spring.profiles.active=dev` e descomente a linha `spring.profiles.active=prod` para rodar em produção
+
+
+3. Configure o banco de dados PostgreSQL ou H2
 
 ```plaintext
 # src/main/resources/application.properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/refoods
+spring.datasource.url=jdbc:postgresql://localhost:5432/db_refood
 spring.datasource.username=seu_usuario
 spring.datasource.password=sua_senha
 ```
 
 
-3. Configure o Firebase
+4. Configure o Firebase
 
     - Adicione o arquivo de configuração do Firebase (`firebase-config.json`) ao diretório `src/main/resources`
 
 
-4. Configure as variáveis de ambiente
+5. Configure as variáveis de ambiente
 
 ```plaintext
 JWT_SECRET=seu_jwt_secret
@@ -131,7 +139,7 @@ mvn spring-boot:run
 3. Acesse a documentação Swagger
 
 ```plaintext
-http://localhost:8080/swagger-ui.html
+http://localhost:8080/swagger-ui/index.html
 ```
 
 </div>
